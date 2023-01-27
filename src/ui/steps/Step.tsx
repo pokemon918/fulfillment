@@ -97,7 +97,7 @@ const useStyles = makeStyles(
             height: '100%',
             background: '#B1DA50',
             top: 0,
-            left: 'calc(50% - 1px)',
+            left: 'calc(50% - 0.5px)',
             zIndex: -1,
           }
         : undefined,
@@ -145,7 +145,7 @@ const useStyles = makeStyles(
         height: 1,
         background: '#B1DA50',
         position: 'absolute',
-        top: 'calc(50% - 1px)',
+        top: 'calc(50% - 0.5px)',
         right: 0,
       },
     },

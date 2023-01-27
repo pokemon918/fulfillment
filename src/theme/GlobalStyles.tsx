@@ -36,6 +36,7 @@ const globalStyles = css`
     );
     --container-width-lg: 1472px;
     --container-width-md: 1252px;
+    --container-width-sm: 802px;
     --container-md-margin: max(calc((100vw - 1252px) / 2), 0px);
   }
 `

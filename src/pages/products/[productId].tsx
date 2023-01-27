@@ -1,9 +1,11 @@
+import Faq from '@/components/Faq'
 import Footer from '@/components/Footer'
 import Navbar from '@/components/Navbar'
 import ProductIntro from '@/components/ProductIntro'
 import RelatedProducts from '@/components/RelatedProducts'
 import fonts from '@/theme/fonts'
 import { BaseProduct, DetailedProduct } from '@/types/product'
+import Button from '@/ui/Button'
 import Container from '@/ui/Container'
 import PageBgColor from '@/ui/PageBgColor'
 import Steps from '@/ui/steps/Steps'
@@ -30,12 +32,32 @@ const ProductPage: FC<ProductPageProps> = (props) => {
       {/* </Container> */}
 
       <Container style={{ marginBottom: 100 }} maxWidth="md">
-        <ProductIntro style={{ marginBottom: 120 }} gallery={product.gallery} product={product} />
+        <ProductIntro
+          style={{ marginBottom: 120 }}
+          gallery={product.gallery}
+          product={product}
+        />
+
+        <div css={styles.toggleButtons}>
+          <Button css={styles.toggleBtn}>Product Details</Button>
+          <Button css={styles.toggleBtn} data-inactive="true">
+            Gallery
+          </Button>
+        </div>
+
+        <h2 css={styles.heading}>Our Process from Farm to Buyer</h2>
 
         <Steps />
       </Container>
 
-      <RelatedProducts products={products} style={{ marginBottom: 162, marginTop: 120 }} />
+      <RelatedProducts
+        products={products}
+        style={{ marginBottom: 162, marginTop: 120 }}
+      />
+
+      <Container style={{ marginBottom: 100 }} maxWidth="sm">
+        <Faq />
+      </Container>
 
       <Footer />
     </div>
@@ -45,6 +67,30 @@ const ProductPage: FC<ProductPageProps> = (props) => {
 const useStyles = makeStyles((props: ProductPageProps) => ({
   root: {
     fontFamily: fonts.secondary.style.fontFamily,
+  },
+  heading: {
+    fontSize: 30,
+    fontWeight: 700,
+    textAlign: 'center',
+    color: '#B1DA50',
+    marginBottom: 56,
+  },
+  toggleButtons: {
+    display: 'flex',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
+    marginBottom: 56,
+  },
+  toggleBtn: {
+    padding: '10px 20px',
+    minWidth: 'inherit',
+    '&:not(:last-of-type)': {
+      marginRight: 20,
+    },
+    '&[data-inactive="true"]': {
+      background: '#fff',
+      color: '#434343',
+    },
   },
 }))
 
