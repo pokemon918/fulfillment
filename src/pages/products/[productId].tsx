@@ -1,19 +1,20 @@
-import Faq from '@/components/Faq'
 import Footer from '@/components/Footer'
 import Navbar from '@/components/Navbar'
+import Gallery from '@/components/Gallery'
 import ProductIntro from '@/components/ProductIntro'
-import RelatedProducts from '@/components/RelatedProducts'
 import fonts from '@/theme/fonts'
 import { BaseProduct, DetailedProduct } from '@/types/product'
 import Button from '@/ui/Button'
 import Container from '@/ui/Container'
 import PageBgColor from '@/ui/PageBgColor'
-import Steps from '@/ui/steps/Steps'
 import graphqlRequest from '@/utils/graphqlRequest'
 import makeStyles from '@/utils/makeStyles'
 import { gql } from 'graphql-request'
 import { GetServerSideProps } from 'next'
-import { FC } from 'react'
+import { FC, useState } from 'react'
+import RelatedProducts from '@/components/RelatedProducts'
+import Faq from '@/components/Faq'
+import Steps from '@/ui/steps/Steps'
 
 interface ProductPageProps {
   product: DetailedProduct
@@ -24,12 +25,12 @@ const ProductPage: FC<ProductPageProps> = (props) => {
   const { product, products } = props
   const styles = useStyles(props)
 
+  const [view, setView] = useState<'details' | 'gallery'>('details')
+
   return (
     <div css={styles.root}>
       <PageBgColor bgColor="#f8f8f8" />
-      {/* <Container style={{ paddingTop: 24,  }}> */}
       <Navbar style={{ marginBottom: 100 }} />
-      {/* </Container> */}
 
       <Container style={{ marginBottom: 100 }} maxWidth="md">
         <ProductIntro
@@ -39,20 +40,36 @@ const ProductPage: FC<ProductPageProps> = (props) => {
         />
 
         <div css={styles.toggleButtons}>
-          <Button css={styles.toggleBtn}>Product Details</Button>
-          <Button css={styles.toggleBtn} data-inactive="true">
+          <Button
+            css={styles.toggleBtn}
+            data-inactive={view !== 'details'}
+            onClick={() => setView('details')}
+          >
+            Product Details
+          </Button>
+          
+          <Button
+            css={styles.toggleBtn}
+            data-inactive={view !== 'gallery'}
+            onClick={() => setView('gallery')}
+          >
             Gallery
           </Button>
         </div>
 
-        <h2 css={styles.heading}>Our Process from Farm to Buyer</h2>
+        {view === 'gallery' && <Gallery gallery={product.gallery} />}
 
-        <Steps />
+        {view === 'details' && (
+          <>
+            <h2 css={styles.heading}>Our Process from Farm to Buyer</h2>
+            <Steps />
+          </>
+        )}
       </Container>
 
       <RelatedProducts
         products={products}
-        style={{ marginBottom: 162, marginTop: 120 }}
+        style={{ marginBottom: 122, marginTop: 120 }}
       />
 
       <Container style={{ marginBottom: 100 }} maxWidth="sm">

@@ -3,7 +3,8 @@ import { DetailedProduct } from '@/types/product'
 import Button from '@/ui/Button'
 import makeStyles from '@/utils/makeStyles'
 import { FC, HTMLAttributes, useMemo } from 'react'
-import Gallery from './Gallery'
+import ExcerptGallery from './ExcerptGallery'
+import MonthsRange from './MonthsRange'
 
 interface ProductIntroProps extends HTMLAttributes<HTMLDivElement> {
   gallery: string[]
@@ -27,13 +28,14 @@ const ProductIntro: FC<ProductIntroProps> = (props) => {
 
   return (
     <div css={styles.root} {...divProps}>
-      <Gallery gallery={gallery} />
+      <ExcerptGallery gallery={gallery.slice(0, 5)} />
+
       <div>
         <h2 css={styles.title}>
           {countryName} - {product.name}
         </h2>
 
-        <p css={styles.subtitle}>
+        <p css={styles.subtitle} style={{ marginBottom: 46 }}>
           HS Code: 080810 - Fruit, edible; apples, fresh
         </p>
 
@@ -51,6 +53,14 @@ const ProductIntro: FC<ProductIntroProps> = (props) => {
             </div>
           ))}
         </div>
+
+        <p css={styles.subtitle} style={{ marginBottom: 10 }}>
+          Harvesting Seasonality
+        </p>
+        <MonthsRange
+          style={{ marginBottom: 46, maxWidth: 200 }}
+          picked={[0, 9, 10, 11]}
+        />
 
         <Button fullWidth style={{ paddingTop: 12, paddingBottom: 12 }}>
           Get a Quote
@@ -72,7 +82,6 @@ const useStyles = makeStyles((props: ProductIntroProps) => ({
   },
   subtitle: {
     fontSize: 12,
-    marginBottom: 46,
   },
   price: {
     fontSize: 30,
@@ -90,7 +99,7 @@ const useStyles = makeStyles((props: ProductIntroProps) => ({
   offers: {
     display: 'flex',
     marginBottom: 46,
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
   },
   offer: {
     padding: 12,

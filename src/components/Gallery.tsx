@@ -1,64 +1,49 @@
 import makeStyles from '@/utils/makeStyles'
-import { FC, useEffect, useState } from 'react'
+import { FC, HTMLAttributes, useMemo } from 'react'
 
-interface GalleryProps {
+interface GalleryProps extends HTMLAttributes<HTMLDivElement> {
   gallery: string[]
 }
 
 const Gallery: FC<GalleryProps> = (props) => {
   const styles = useStyles(props)
 
-  const { gallery } = props
+  const { gallery, ...divProps } = props
 
-  const firstImage = gallery[0]
-
-  const [selected, setSelected] = useState(firstImage)
-
-  useEffect(() => {
-    setSelected(firstImage)
-  }, [firstImage])
+  const rows = useMemo(() => {
+    const result: string[][] = [[], [], []]
+    gallery.map((img, imgIdx) => result[imgIdx % 3].push(img))
+    return result
+  }, [gallery])
 
   return (
-    <div css={styles.root}>
-      <img css={styles.selectedImage} src={selected} alt="" />
-
-      <div css={styles.gallerySidebar}>
-        {gallery.map((image, idx) => (
-          <img
-            key={image + idx}
-            css={styles.galleryImage}
-            src={image}
-            alt=""
-            onClick={() => setSelected(image)}
-          />
-        ))}
-      </div>
+    <div css={styles.root} {...divProps}>
+      {rows.map((row, rowIdx) => (
+        <div css={styles.column} key={rowIdx}>
+          {rows[rowIdx].map((img, imgIdx) => (
+            <img key={'' + rowIdx + imgIdx} css={styles.img} src={img} alt="" />
+          ))}
+        </div>
+      ))}
     </div>
   )
 }
 
 const useStyles = makeStyles(({}: GalleryProps) => ({
   root: {
-    width: '100%',
-  },
-  selectedImage: {
-    width: '100%',
-    height: 400,
-    objectFit: 'cover',
-    marginBottom: 8,
-    borderRadius: 12
-  },
-  gallerySidebar: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(5, 1fr)',
-    gap: 4
+    gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
+    gap: 20,
   },
-  galleryImage: {
+  column: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  img: {
     width: '100%',
-    height: 100,
-    objectFit: 'cover',
-    borderRadius: 12,
-    cursor: 'pointer'
+    '&:not(:last-of-type)': {
+      marginBottom: 20,
+    },
   },
 }))
 
