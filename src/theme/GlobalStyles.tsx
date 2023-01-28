@@ -39,6 +39,17 @@ const globalStyles = css`
     --container-width-sm: 802px;
     --container-md-margin: max(calc((100vw - 1252px) / 2), 0px);
   }
+
+  .MuiSvgIcon {
+    fill: currentColor;
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+    font-size: 1.5rem;
+    transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    flex-shrink: 0;
+    user-select: none;
+  }
 `
 
 const GlobalStyles = () => {

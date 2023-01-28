@@ -11,6 +11,7 @@ export interface ButtonProps extends HTMLAttributes<HTMLButtonElement> {
   rounded?: boolean
   fullWidth?: boolean
   fontColor?: string
+  type?: 'submit' | 'reset' | 'button';
 }
 
 const Button: FC<ButtonProps> = (originalProps) => {

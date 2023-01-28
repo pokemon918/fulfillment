@@ -15,12 +15,13 @@ import { FC, useState } from 'react'
 import RelatedProducts from '@/components/RelatedProducts'
 import Faq from '@/components/Faq'
 import Steps from '@/ui/steps/Steps'
+import QuotePrompt from '@/components/quote/QuotePrompt'
+import NoSSR from '@/components/NoSSR'
 
 interface ProductPageProps {
   product: DetailedProduct
   products: BaseProduct[]
 }
-
 
 const steps: {
   title: string
@@ -30,22 +31,22 @@ const steps: {
   {
     title: 'Plantation',
     desc: 'Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size. Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.',
-    media: ["/images/grape.png"]
+    media: ['/images/grape.png'],
   },
   {
     title: 'Plantation',
     desc: 'Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size. Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.',
-    media: ["/images/grape.png", "/images/grape.png"]
+    media: ['/images/grape.png', '/images/grape.png'],
   },
   {
     title: 'Plantation',
     desc: 'Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size. Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.',
-    media: ["/images/grape.png"]
+    media: ['/images/grape.png'],
   },
   {
     title: 'Plantation',
     desc: 'Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size. Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.',
-    media: ["/images/grape.png", "/images/grape.png"]
+    media: ['/images/grape.png', '/images/grape.png'],
   },
 ]
 
@@ -54,6 +55,14 @@ const ProductPage: FC<ProductPageProps> = (props) => {
   const styles = useStyles(props)
 
   const [view, setView] = useState<'details' | 'gallery'>('details')
+
+  return (
+    <div css={styles.root}>
+      <NoSSR>
+        <QuotePrompt product={product} fontFamily={fonts.secondary.style.fontFamily} />
+      </NoSSR>
+    </div>
+  )
 
   return (
     <div css={styles.root}>
@@ -75,7 +84,7 @@ const ProductPage: FC<ProductPageProps> = (props) => {
           >
             Product Details
           </Button>
-          
+
           <Button
             css={styles.toggleBtn}
             data-inactive={view !== 'gallery'}
