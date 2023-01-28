@@ -21,6 +21,34 @@ interface ProductPageProps {
   products: BaseProduct[]
 }
 
+
+const steps: {
+  title: string
+  desc: string
+  media: string[]
+}[] = [
+  {
+    title: 'Plantation',
+    desc: 'Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size. Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.',
+    media: ["/images/grape.png"]
+  },
+  {
+    title: 'Plantation',
+    desc: 'Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size. Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.',
+    media: ["/images/grape.png", "/images/grape.png"]
+  },
+  {
+    title: 'Plantation',
+    desc: 'Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size. Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.',
+    media: ["/images/grape.png"]
+  },
+  {
+    title: 'Plantation',
+    desc: 'Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size. Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.',
+    media: ["/images/grape.png", "/images/grape.png"]
+  },
+]
+
 const ProductPage: FC<ProductPageProps> = (props) => {
   const { product, products } = props
   const styles = useStyles(props)
@@ -62,7 +90,7 @@ const ProductPage: FC<ProductPageProps> = (props) => {
         {view === 'details' && (
           <>
             <h2 css={styles.heading}>Our Process from Farm to Buyer</h2>
-            <Steps />
+            <Steps steps={steps} />
           </>
         )}
       </Container>
