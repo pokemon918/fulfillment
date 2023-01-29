@@ -8,6 +8,7 @@ import { useForm, FormProvider } from 'react-hook-form'
 import { QuoteInput, QuoteProduct } from './quote.types'
 import QuoteStep2 from './QuoteStep2'
 import BackIcon from '@/icons/BackIcon'
+import QuoteOrderSent from './QuoteOrderSent'
 
 interface QuotePromptProps extends HTMLAttributes<HTMLDivElement> {
   product: QuoteProduct
@@ -17,7 +18,7 @@ interface QuotePromptProps extends HTMLAttributes<HTMLDivElement> {
 const QuotePrompt: FC<QuotePromptProps> = (props) => {
   const styles = useStyles(props)
 
-  const [step, setStep] = useState<1 | 2 | 3>(1)
+  const [step, setStep] = useState<1 | 2 | 3>(2)
 
   const { product, fontFamily, ...divProps } = props
 
@@ -40,14 +41,24 @@ const QuotePrompt: FC<QuotePromptProps> = (props) => {
       needs: '',
       purchaseVolume: '',
       paymentTerms: [
-        { placeholder: 'Down payment', title: '', amount: '', paidPercent: '' },
         {
-          placeholder: 'Cash Against Documents',
-          title: '',
+          placeholder: 'Down payment',
+          title: 'Down payment',
           amount: '',
           paidPercent: '',
         },
-        { placeholder: 'On Arrival', title: '', amount: '', paidPercent: '' },
+        {
+          placeholder: 'Cash Against Documents',
+          title: 'Cash Against Documents',
+          amount: '',
+          paidPercent: '',
+        },
+        {
+          placeholder: 'On Arrival',
+          title: 'On Arrival',
+          amount: '',
+          paidPercent: '',
+        },
       ],
     },
   })
@@ -61,11 +72,18 @@ const QuotePrompt: FC<QuotePromptProps> = (props) => {
     setStep((prevStep) => (prevStep - 1) as typeof step)
   }
 
-  const QuoteStep = {
-    1: QuoteStep1,
-    2: QuoteStep2,
-    3: QuoteStep1,
+  const stepInterface = {
+    1: <QuoteStep1 product={product} onNextStep={nextStep} />,
+    2: <QuoteStep2 product={product} onNextStep={nextStep} />,
+    3: <QuoteOrderSent />,
   }[step]
+
+  const displaySteps = {
+    1: 1,
+    2: 2,
+  }
+
+  const displayStep = (displaySteps as any)[step]
 
   return (
     <Portal>
@@ -74,11 +92,9 @@ const QuotePrompt: FC<QuotePromptProps> = (props) => {
           {step > 1 ? <BackIcon /> : <CloseIcon />}
         </button>
 
-        <div css={styles.stepHeader}>{step} of 3</div>
+        {displayStep && <div css={styles.stepHeader}>{displayStep} of 3</div>}
 
-        <FormProvider {...formMethods}>
-          <QuoteStep product={product} onNextStep={nextStep} />
-        </FormProvider>
+        <FormProvider {...formMethods}>{stepInterface}</FormProvider>
       </Dialog>
     </Portal>
   )

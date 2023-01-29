@@ -33,7 +33,7 @@ const QuoteStep1: FC<QuoteStep1Props> = (props) => {
   const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault()
 
-    const { phone, purchaseVolume } = getValues()
+    const { phone } = getValues()
 
     if (phone.length < 6) {
       alert('Please enter a valid phone number')

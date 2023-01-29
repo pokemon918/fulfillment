@@ -5,11 +5,12 @@ import Input from '@/ui/Input'
 import makeStyles from '@/utils/makeStyles'
 import { FC, FormEventHandler, HTMLAttributes, useMemo } from 'react'
 import QuoteFeatures from './QuoteFeatures'
-import { useFieldArray, useFormContext } from 'react-hook-form'
+import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
 import { QuoteInput, QuoteProduct } from './quote.types'
 import AddIcon from '@/icons/AddIcon'
 import Button from '@/ui/Button'
 import countries from '@/data/countries'
+import FieldValue from '../FieldValue'
 
 export interface Step2Values {}
 
@@ -37,15 +38,13 @@ const QuoteStep2: FC<QuoteStep2Props> = (props) => {
       paidPercent: '',
     })
 
-  const {
-    company,
-    name,
-    phone,
-    email,
-    landingPort,
-    destinationPort,
-    purchaseVolume,
-  } = getValues()
+  const company = useWatch({ control, name: 'company' })
+  const name = useWatch({ control, name: 'name' })
+  const phone = useWatch({ control, name: 'phone' })
+  const email = useWatch({ control, name: 'email' })
+  const landingPort = useWatch({ control, name: 'landingPort' })
+  const destinationPort = useWatch({ control, name: 'destinationPort' })
+  const purchaseVolume = useWatch({ control, name: 'purchaseVolume' })
 
   const landingCountry = useMemo(
     () => countries.find((c) => c.code === landingPort.country)?.name,
@@ -94,7 +93,7 @@ const QuoteStep2: FC<QuoteStep2Props> = (props) => {
               </td>
               <td css={styles.detailEmphasizeVal}>{purchaseVolume} kg</td>
               <td css={styles.detailEmphasizeVal}>
-                ${product.price * Number(purchaseVolume)}
+                ${+(product.price * Number(purchaseVolume)).toFixed(2)}
               </td>
             </tr>
           </tbody>
@@ -175,6 +174,24 @@ const QuoteStep2: FC<QuoteStep2Props> = (props) => {
         >
           Add Terms
         </Button>
+
+        <FieldValue control={control} name="paymentTerms">
+          {(paymentTerms: QuoteInput['paymentTerms']) => {
+            const total = paymentTerms.reduce((acc, paymentTerm) => {
+              const amount = !Number.isNaN(Number(paymentTerm.amount))
+                ? Number(paymentTerm.amount)
+                : 0
+              return acc + amount
+            }, 0)
+
+            return (
+              <p style={{ textAlign: 'right' }}>
+                <span style={{ marginRight: 40 }}>Total price</span>
+                $ {+total.toFixed(2)}
+              </p>
+            )
+          }}
+        </FieldValue>
       </div>
 
       <QuoteFeatures />
@@ -204,7 +221,7 @@ const useStyles = makeStyles(({}: QuoteStep2Props) => {
       width: '100%',
       height: '100%',
       overflowY: 'auto',
-      padding: '46px 38px',
+      padding: '46px 38px 40px',
     },
     details: {
       width: '100%',
