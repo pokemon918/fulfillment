@@ -2,7 +2,7 @@ import fonts from '@/theme/fonts'
 import makeStyles from '@/utils/makeStyles'
 import mergeProps from '@/utils/mergeProps'
 import { css } from '@emotion/react'
-import { FC, HTMLAttributes } from 'react'
+import { FC, HTMLAttributes, ReactNode } from 'react'
 
 export interface ButtonProps extends HTMLAttributes<HTMLButtonElement> {
   variant?: 'contained' | 'outlined'
@@ -11,7 +11,8 @@ export interface ButtonProps extends HTMLAttributes<HTMLButtonElement> {
   rounded?: boolean
   fullWidth?: boolean
   fontColor?: string
-  type?: 'submit' | 'reset' | 'button';
+  type?: 'submit' | 'reset' | 'button'
+  startIcon?: ReactNode
 }
 
 const Button: FC<ButtonProps> = (originalProps) => {
@@ -33,12 +34,14 @@ const Button: FC<ButtonProps> = (originalProps) => {
     rounded,
     fullWidth,
     fontColor,
+    startIcon,
     ...btnProps
   } = props
 
   return (
     <button css={styles.root} {...btnProps}>
-      {children}
+      {startIcon}
+      <span style={{ marginLeft: startIcon ? 10 : 0 }}>{children}</span>
     </button>
   )
 }
@@ -63,7 +66,7 @@ const useButtonStyles = makeStyles(
         fontSize: 16,
         cursor: 'pointer',
         width: fullWidth ? '100%' : undefined,
-        fontWeight: 400
+        fontWeight: 400,
       },
     }
   }

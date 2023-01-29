@@ -3,7 +3,7 @@ export interface BaseProduct {
   name: string;
   thumbnail: string;
   country: string;
-  price: string;
+  price: number;
   categoryId: string;
   availableSpecs: string;
 }

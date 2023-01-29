@@ -1,26 +1,24 @@
 import CountryLabel from '@/ui/CountryLabel'
-import Dialog from '@/ui/Dialog'
 import Input from '@/ui/Input'
-import Portal from '@/components/Portal'
 import makeStyles from '@/utils/makeStyles'
-import { FC, HTMLAttributes } from 'react'
+import { FC, HTMLAttributes, FormEventHandler } from 'react'
 import ShipIcon from '@/icons/ShipIcon'
 import countries from '@/data/countries'
 import Button from '@/ui/Button'
+import { useFormContext } from 'react-hook-form'
+import { QuoteInput, QuoteProduct } from './quote.types'
 
-interface QuoteStep1Props extends HTMLAttributes<HTMLDivElement> {
-  product: {
-    name: string
-    thumbnail: string
-    country: string
-  }
+interface QuoteStep1Props extends HTMLAttributes<HTMLFormElement> {
+  product: QuoteProduct
   onNextStep: () => void
 }
 
 const QuoteStep1: FC<QuoteStep1Props> = (props) => {
   const styles = useStyles(props)
 
-  const { product, onNextStep, ...divProps } = props
+  const { control, getValues } = useFormContext<QuoteInput>()
+
+  const { product, onNextStep, ...formProps } = props
 
   const shippingTypes = ['FOB', 'EXW', 'CFR', 'DDP'].map((option) => ({
     name: option,
@@ -32,16 +30,35 @@ const QuoteStep1: FC<QuoteStep1Props> = (props) => {
     value: country.code,
   }))
 
+  const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
+    e.preventDefault()
+
+    const { phone, purchaseVolume } = getValues()
+
+    if (phone.length < 6) {
+      alert('Please enter a valid phone number')
+    } else {
+      onNextStep()
+    }
+  }
+
   return (
-    <form css={styles.root}>
+    <form css={styles.root} onSubmit={handleSubmit} {...formProps}>
       <div>
         <div css={styles.header}>
           <img css={styles.thumbnail} src={product.thumbnail} alt="" />
 
           <div css={styles.productDetails}>
-            <h3 css={styles.heading} style={{ marginBottom: 6 }}>
-              Fresh Blueberries
-            </h3>
+            <div css={styles.subheader} style={{ marginBottom: 6 }}>
+              <h3 css={styles.heading}>Fresh Blueberries</h3>
+
+              <div css={styles.priceHead}>
+                <span style={{ marginRight: 8 }}>Price</span>
+                <b style={{ color: '#B1DA50', fontSize: 16 }}>
+                  ${product.price}
+                </b>
+              </div>
+            </div>
             <CountryLabel countryCode={product.country} fontWeight={400} />
           </div>
         </div>
@@ -55,6 +72,8 @@ const QuoteStep1: FC<QuoteStep1Props> = (props) => {
           </h3>
 
           <Input
+            name="company"
+            control={control}
             css={styles.input}
             label="Company"
             placeholder="Your Company Name"
@@ -62,6 +81,8 @@ const QuoteStep1: FC<QuoteStep1Props> = (props) => {
           />
 
           <Input
+            name="name"
+            control={control}
             css={styles.input}
             label="Name"
             placeholder="Your Name"
@@ -69,6 +90,8 @@ const QuoteStep1: FC<QuoteStep1Props> = (props) => {
           />
 
           <Input
+            name="email"
+            control={control}
             css={styles.input}
             type="email"
             label="Email address"
@@ -76,7 +99,14 @@ const QuoteStep1: FC<QuoteStep1Props> = (props) => {
             required
           />
 
-          <Input css={styles.input} type="tel" label="Phone" required />
+          <Input
+            name="phone"
+            control={control}
+            css={styles.input}
+            type="tel"
+            label="Phone"
+            required
+          />
         </div>
       </div>
 
@@ -84,48 +114,59 @@ const QuoteStep1: FC<QuoteStep1Props> = (props) => {
         <h6 css={styles.reqTitle}>YOUR REQUIREMENTS</h6>
 
         <Input
+          control={control}
+          name="landingPort.name"
           css={styles.input}
           placeholder="Port of Loading"
           theme="dark"
           startIcon={<ShipIcon />}
           startSelect={{
+            name: 'landingPort.shippingType',
             options: shippingTypes,
           }}
           endSelect={{
+            name: 'landingPort.country',
             options: countriesOptions,
-            defaultValue: 'PE',
           }}
           required
         />
 
         <Input
+          control={control}
+          name="destinationPort.name"
           css={styles.input}
           placeholder="Port of Destination"
           theme="dark"
           startIcon={<ShipIcon />}
           startSelect={{
+            name: 'destinationPort.shippingType',
             options: shippingTypes,
           }}
           endSelect={{
+            name: 'destinationPort.country',
             options: countriesOptions,
-            defaultValue: 'PE',
           }}
           required
         />
 
         <Input
+          control={control}
+          name="purchaseVolume"
           css={styles.input}
           label="Purchase volume"
           endAdornment="kg"
           theme="dark"
           required
+          pattern="[0-9]+(\.[0-9]+)?"
         />
 
         <Input
+          control={control}
+          name="needs"
           placeholder="Specify your needs"
           theme="dark"
           multiline
-          rows={5}
+          rows={4}
           required
         />
 
@@ -134,8 +175,8 @@ const QuoteStep1: FC<QuoteStep1Props> = (props) => {
           sales team via your specified contact information.
         </p>
 
-        <Button type="button" fullWidth onClick={onNextStep}>
-          Send
+        <Button type="submit" fullWidth>
+          Next
         </Button>
       </div>
     </form>
@@ -144,14 +185,31 @@ const QuoteStep1: FC<QuoteStep1Props> = (props) => {
 
 const useStyles = makeStyles(({}: QuoteStep1Props) => ({
   root: {
-    padding: '42px 54px 32px',
+    padding: '42px 54px 28px',
     display: 'grid',
-    gridTemplateColumns: '0.8fr 1fr',
+    gridTemplateColumns: '0.9fr 1fr',
     gap: 72,
   },
   header: {
     display: 'flex',
     marginBottom: 46,
+  },
+  subheader: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    flexWrap: 'wrap',
+  },
+  heading: {
+    fontSize: 18,
+    fontWeight: 700,
+    marginRight: 10,
+    flexShrink: 0,
+  },
+  priceHead: {
+    display: 'flex',
+    alignItems: 'center',
+    flexShrink: 0,
+    fontSize: 14,
   },
   thumbnail: {
     flexShrink: 0,
@@ -167,10 +225,7 @@ const useStyles = makeStyles(({}: QuoteStep1Props) => ({
     flexDirection: 'column',
     justifyContent: 'center',
   },
-  heading: {
-    fontSize: 18,
-    fontWeight: 700,
-  },
+
   contactForm: {
     width: '100%',
     maxWidth: '306px',

@@ -10,6 +10,7 @@ import makeStyles from '@/utils/makeStyles'
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 import mergeProps from '@/utils/mergeProps'
+import { Controller, Control } from 'react-hook-form'
 
 type NativeInputProps = DetailedHTMLProps<
   InputHTMLAttributes<HTMLInputElement>,
@@ -26,16 +27,22 @@ interface InputProps {
   startIcon?: ReactNode
   theme?: 'light' | 'dark'
   startSelect?: {
-    defaultValue?: string
+    name: string
     options: { name: string; value: string }[]
   }
   endSelect?: {
-    defaultValue?: string
+    name: string
     options: { name: string; value: string }[]
   }
+  startAdornment?: ReactNode
   endAdornment?: ReactNode
   multiline?: boolean
   required?: boolean
+  name: string
+  control?: Control<any>
+  pattern?: string
+  minLength?: number
+  maxLength?: number
 }
 
 const Input: FC<InputProps> = (originalProps) => {
@@ -54,26 +61,49 @@ const Input: FC<InputProps> = (originalProps) => {
     startIcon,
     startSelect,
     endSelect,
+    startAdornment,
     endAdornment,
     multiline,
     rows,
     theme,
+    name,
+    control,
     ...commonProps
   } = props
-
 
   let input: ReactNode
 
   if (multiline) {
     input = (
       <div css={styles.inputWrapper}>
-        <textarea css={styles.input} {...commonProps}  rows={rows}></textarea>
+        <Controller
+          name={name}
+          control={control}
+          render={({ field }) => (
+            <textarea
+              css={styles.input}
+              {...commonProps}
+              rows={rows}
+              {...field}
+            ></textarea>
+          )}
+        />
       </div>
     )
   } else if (type === 'tel') {
     input = (
       <div css={styles.telWrapper}>
-        <PhoneInput inputProps={{ id, ...commonProps }} country="us" />
+        <Controller
+          name={name}
+          control={control}
+          render={({ field: { ref, name, ...restProps } }) => (
+            <PhoneInput
+              inputProps={{ id, ...commonProps, name }}
+              country="us"
+              {...restProps}
+            />
+          )}
+        />
       </div>
     )
   } else {
@@ -84,31 +114,50 @@ const Input: FC<InputProps> = (originalProps) => {
       (selectOptions) =>
         selectOptions && (
           <div css={selectOptions.css}>
-            <select
-              css={styles.select}
-              defaultValue={selectOptions.defaultValue}
-            >
-              {selectOptions.options.map((option, idx) => (
-                <option
-                  key={idx}
-                  css={styles.selectOption}
-                  value={option.value}
-                >
-                  {option.name}
-                </option>
-              ))}
-            </select>
+            <Controller
+              name={selectOptions.name}
+              control={control}
+              render={({ field }) => (
+                <select css={styles.select} {...field}>
+                  {selectOptions.options.map((option, idx) => (
+                    <option
+                      key={idx}
+                      css={styles.selectOption}
+                      value={option.value}
+                    >
+                      {option.name}
+                    </option>
+                  ))}
+                </select>
+              )}
+            />
           </div>
         )
     )
 
     input = (
       <div css={styles.inputWrapper}>
+        {startAdornment && (
+          <div css={styles.startAdornment}>{startAdornment}</div>
+        )}
+
         {startIcon && <div css={styles.iconWrapper}>{startIcon}</div>}
 
         {startSelectNode}
 
-        <input id={id} type={type} css={styles.input} {...commonProps} />
+        <Controller
+          name={name}
+          control={control}
+          render={({ field }) => (
+            <input
+              id={id}
+              type={type}
+              css={styles.input}
+              {...commonProps}
+              {...field}
+            />
+          )}
+        />
 
         {endSelectNode}
 
@@ -136,7 +185,7 @@ const useStyles = makeStyles(({ theme, startSelect }: InputProps) => {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    color: theme === 'light' ? '#000' : '#f3f3f3',
+    color: '#CACACA',
   }
 
   return {
@@ -166,18 +215,20 @@ const useStyles = makeStyles(({ theme, startSelect }: InputProps) => {
       border: 'none',
       width: '100%',
       fontFamily: 'inherit',
-      padding: startSelect ? '12px 10px' : 12,
+      padding: startSelect ? '11px 10px' : '11px 12px',
       color: 'inherit',
       background: 'transparent',
       resize: 'none',
+      fontSize: 16,
       '::placeholder': {
         color: '#AEAEAE',
       },
     },
     telWrapper: {
       '> div > input': {
+        fontSize: '16px !important',
         background: 'transparent !important',
-        padding: '8px 12px 8px 48px !important',
+        padding: '6px 12px 6px 48px !important',
         height: 'initial !important',
         width: '100% !important',
         border: `2px solid ${borderColor} !important`,

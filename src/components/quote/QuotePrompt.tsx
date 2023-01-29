@@ -4,14 +4,13 @@ import makeStyles from '@/utils/makeStyles'
 import { FC, HTMLAttributes, useState } from 'react'
 import QuoteStep1 from './QuoteStep1'
 import CloseIcon from '@/icons/CloseIcon'
-import IconButton from '@/ui/IconButton'
+import { useForm, FormProvider } from 'react-hook-form'
+import { QuoteInput, QuoteProduct } from './quote.types'
+import QuoteStep2 from './QuoteStep2'
+import BackIcon from '@/icons/BackIcon'
 
 interface QuotePromptProps extends HTMLAttributes<HTMLDivElement> {
-  product: {
-    name: string
-    thumbnail: string
-    country: string
-  }
+  product: QuoteProduct
   fontFamily?: string
 }
 
@@ -22,28 +21,64 @@ const QuotePrompt: FC<QuotePromptProps> = (props) => {
 
   const { product, fontFamily, ...divProps } = props
 
+  const formMethods = useForm<QuoteInput>({
+    defaultValues: {
+      company: '',
+      name: '',
+      email: '',
+      phone: '',
+      destinationPort: {
+        shippingType: 'FOB',
+        country: 'PE',
+        name: 'FOB',
+      },
+      landingPort: {
+        shippingType: 'FOB',
+        country: 'PE',
+        name: 'FOB',
+      },
+      needs: '',
+      purchaseVolume: '',
+      paymentTerms: [
+        { placeholder: 'Down payment', title: '', amount: '', paidPercent: '' },
+        {
+          placeholder: 'Cash Against Documents',
+          title: '',
+          amount: '',
+          paidPercent: '',
+        },
+        { placeholder: 'On Arrival', title: '', amount: '', paidPercent: '' },
+      ],
+    },
+  })
+
   const nextStep = () =>
     setStep((prevStep) => (prevStep < 3 ? prevStep + 1 : 3) as typeof step)
 
-  const prevStep = () =>
-    setStep((prevStep) => (prevStep > 0 ? prevStep - 1 : 0) as typeof step)
+  const prevStep = () => {
+    if (step <= 1) return
 
-  let stepInterface
-
-  if (step === 1) {
-    stepInterface = <QuoteStep1 product={product} onNextStep={nextStep} />
+    setStep((prevStep) => (prevStep - 1) as typeof step)
   }
+
+  const QuoteStep = {
+    1: QuoteStep1,
+    2: QuoteStep2,
+    3: QuoteStep1,
+  }[step]
 
   return (
     <Portal>
       <Dialog css={styles.dialog} {...divProps}>
-        <button css={styles.dialogBtn}>
-          <CloseIcon />
+        <button css={styles.dialogBtn} onClick={prevStep}>
+          {step > 1 ? <BackIcon /> : <CloseIcon />}
         </button>
 
         <div css={styles.stepHeader}>{step} of 3</div>
 
-        {stepInterface}
+        <FormProvider {...formMethods}>
+          <QuoteStep product={product} onNextStep={nextStep} />
+        </FormProvider>
       </Dialog>
     </Portal>
   )
@@ -62,7 +97,7 @@ const useStyles = makeStyles(({ fontFamily }: QuotePromptProps) => ({
   },
   dialogBtn: {
     position: 'absolute',
-    left: 10,
+    left: 8,
     top: 6,
     display: 'inline-flex',
     border: 'none',
