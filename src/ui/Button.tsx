@@ -1,4 +1,4 @@
-import fonts from '@/theme/fonts'
+import theme from '@/theme'
 import makeStyles from '@/utils/makeStyles'
 import mergeProps from '@/utils/mergeProps'
 import { css } from '@emotion/react'
@@ -57,7 +57,7 @@ const useButtonStyles = makeStyles(
           (size == 'sm' ? 9 : 16) - (variant === 'contained' ? 0 : 1) + 'px',
         minWidth: 146,
         color: fontColor ? fontColor : '#000',
-        fontFamily: fonts.secondary.style.fontFamily,
+        fontFamily: theme.fonts.secondary,
         background:
           variant === 'contained' ? `var(--color-${color})` : 'transparent',
         border:

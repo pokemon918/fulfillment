@@ -1,5 +1,5 @@
 // import '@/styles/globals.css'
-import GlobalStyles from '@/theme/GlobalStyles'
+import GlobalStyles from '@/GlobalStyles'
 import type { AppProps } from 'next/app'
 import 'flag-icons/css/flag-icons.min.css'
 import smoothScroll from 'smoothscroll-polyfill';

@@ -1,7 +1,7 @@
 import Footer from '@/components/Footer'
 import Navbar from '@/components/Navbar'
 import ProductIntro from '@/components/ProductIntro'
-import fonts from '@/theme/fonts'
+import theme from '@/theme'
 import { BaseProduct, DetailedProduct } from '@/types/product'
 import Container from '@/ui/Container'
 import PageBgColor from '@/ui/PageBgColor'
@@ -30,7 +30,7 @@ const ProductPage: FC<ProductPageProps> = (props) => {
   return (
     <div css={styles.root}>
       <PageBgColor bgColor="#f8f8f8" />
-      <Navbar style={{ marginBottom: 100 }} />
+      <Navbar style={{ marginBottom: 72 }} />
 
       <Container style={{ marginBottom: 100 }} maxWidth="md">
         <ProductIntro
@@ -69,7 +69,7 @@ const ProductPage: FC<ProductPageProps> = (props) => {
 
 const useStyles = makeStyles((props: ProductPageProps) => ({
   root: {
-    fontFamily: fonts.secondary.style.fontFamily,
+    fontFamily: theme.fonts.secondary,
   },
 }))
 
@@ -135,7 +135,6 @@ export const getServerSideProps: GetServerSideProps<ProductPageProps> = async (
         ...product,
         name: product.name.en,
         availableSpecs: product.availableSpecs.en,
-        
       })),
     },
   }

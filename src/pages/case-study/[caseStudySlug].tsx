@@ -2,7 +2,7 @@ import CaseStudyIntro from '@/components/CaseStudyIntro'
 import Footer from '@/components/Footer'
 import Navbar from '@/components/Navbar'
 import ProfileHeader from '@/components/ProfileHeader'
-import fonts from '@/theme/fonts'
+import theme from '@/theme'
 import Container from '@/ui/Container'
 import PageBgColor from '@/ui/PageBgColor'
 import Steps from '@/ui/steps/Steps'
@@ -79,7 +79,7 @@ const CaseStudyPage: FC<CaseStudyPageProps> = (props) => {
 
 const useStyles = makeStyles(({}: CaseStudyPageProps) => ({
   root: {
-    fontFamily: fonts.secondary.style.fontFamily,
+    fontFamily: theme.fonts.secondary,
   },
   cover: {
     width: '100%',

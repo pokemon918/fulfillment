@@ -1,5 +1,5 @@
 import ArrowRight from '@/icons/ArrowRight'
-import fonts from '@/theme/fonts'
+import theme from '@/theme'
 import { BaseArticle } from '@/types/article'
 import Container from '@/ui/Container'
 import makeStyles from '@/utils/makeStyles'
@@ -96,7 +96,7 @@ const useStyles = makeStyles((props: FooterProps) => {
       color: '#fff',
       fontWeight: 400,
       marginBottom: 8,
-      fontFamily: fonts.secondary.style.fontFamily
+      fontFamily: theme.fonts.secondary
     },
     desc: {
       fontSize: 13

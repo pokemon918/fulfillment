@@ -1,7 +1,10 @@
 import countries from '@/data/countries'
+import ArrowBackIcon from '@/icons/ArrowBackIcon'
+import theme from '@/theme'
 import { DetailedProduct } from '@/types/product'
 import Button from '@/ui/Button'
 import makeStyles from '@/utils/makeStyles'
+import Link from 'next/link'
 import { FC, HTMLAttributes, useMemo } from 'react'
 import ExcerptGallery from './ExcerptGallery'
 import MonthsRange from './MonthsRange'
@@ -28,48 +31,56 @@ const ProductIntro: FC<ProductIntroProps> = (props) => {
   )
 
   return (
-    <div css={styles.root} {...divProps}>
-      <ExcerptGallery gallery={gallery.slice(0, 5)} />
+    <div {...divProps}>
+      <Link css={styles.back} href="/">
+        <ArrowBackIcon style={{ marginRight: 6 }} />
 
-      <div>
-        <h2 css={styles.title}>
-          {countryName} - {product.name}
-        </h2>
+        <span>Browse Market</span>
+      </Link>
 
-        <p css={styles.subtitle} style={{ marginBottom: 46 }}>
-          HS Code: 080810 - Fruit, edible; apples, fresh
-        </p>
+      <div css={styles.root}>
+        <ExcerptGallery gallery={gallery.slice(0, 5)} />
 
-        <h3 css={styles.price}>$6 ~</h3>
+        <div>
+          <h2 css={styles.title}>
+            {countryName} - {product.name}
+          </h2>
 
-        <p css={styles.unitPhrase}>USD / KG, November 7, 2022</p>
+          <p css={styles.subtitle} style={{ marginBottom: 46 }}>
+            HS Code: 080810 - Fruit, edible; apples, fresh
+          </p>
 
-        <h4 css={styles.offerTitle}>Current Offer Base Prices</h4>
+          <h3 css={styles.price}>$6 ~</h3>
 
-        <div css={styles.offers}>
-          {offers.map((offer, idx) => (
-            <div key={idx} css={styles.offer}>
-              <span css={styles.offerName}>{offer.name}</span>
-              <span css={styles.offerValue}>{offer.value}</span>
-            </div>
-          ))}
+          <p css={styles.unitPhrase}>USD / KG, November 7, 2022</p>
+
+          <h4 css={styles.offerTitle}>Current Offer Base Prices</h4>
+
+          <div css={styles.offers}>
+            {offers.map((offer, idx) => (
+              <div key={idx} css={styles.offer}>
+                <span css={styles.offerName}>{offer.name}</span>
+                <span css={styles.offerValue}>{offer.value}</span>
+              </div>
+            ))}
+          </div>
+
+          <p css={styles.subtitle} style={{ marginBottom: 10 }}>
+            Harvesting Seasonality
+          </p>
+          <MonthsRange
+            style={{ marginBottom: 46, maxWidth: 200 }}
+            picked={[0, 9, 10, 11]}
+          />
+
+          <Button
+            fullWidth
+            style={{ paddingTop: 12, paddingBottom: 12 }}
+            onClick={onClickGetQuote}
+          >
+            Get a Quote
+          </Button>
         </div>
-
-        <p css={styles.subtitle} style={{ marginBottom: 10 }}>
-          Harvesting Seasonality
-        </p>
-        <MonthsRange
-          style={{ marginBottom: 46, maxWidth: 200 }}
-          picked={[0, 9, 10, 11]}
-        />
-
-        <Button
-          fullWidth
-          style={{ paddingTop: 12, paddingBottom: 12 }}
-          onClick={onClickGetQuote}
-        >
-          Get a Quote
-        </Button>
       </div>
     </div>
   )
@@ -78,8 +89,19 @@ const ProductIntro: FC<ProductIntroProps> = (props) => {
 const useStyles = makeStyles((props: ProductIntroProps) => ({
   root: {
     display: 'grid',
-    gridTemplateColumns: '1fr 1.4fr',
+    gridTemplateColumns: 'minmax(440px, 1fr) 1.4fr',
     gap: 60,
+    [`@media (max-width: ${theme.widths.tablet})`]: {
+      gridTemplateColumns: '1fr',
+    },
+  },
+  back: {
+    color: '#000',
+    textDecoration: 'none',
+    fontSize: 14,
+    display: 'flex',
+    alignItems: 'center',
+    marginBottom: 12
   },
   title: {
     fontSize: 34,

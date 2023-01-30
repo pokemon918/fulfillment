@@ -131,6 +131,9 @@ const useStyles = makeStyles(
       fontSize: 16,
       paddingLeft: reversed ? 0 : 146,
       paddingRight: reversed ? 146 : 0,
+      '@media (max-width: 1172px)': {
+        paddingRight: reversed ? 60 : undefined,
+      },
     },
     subDotWrapper: {
       position: 'relative',

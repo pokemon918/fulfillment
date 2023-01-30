@@ -1,7 +1,9 @@
 import makeStyles from '@/utils/makeStyles'
 import { FC, HTMLAttributes } from 'react'
 
-interface IconButtonProps extends HTMLAttributes<HTMLButtonElement> {}
+interface IconButtonProps extends HTMLAttributes<HTMLButtonElement> {
+  bordered?: boolean
+}
 
 const IconButton: FC<IconButtonProps> = (props) => {
   const styles = useStyles(props)
@@ -15,17 +17,18 @@ const IconButton: FC<IconButtonProps> = (props) => {
   )
 }
 
-const useStyles = makeStyles(({}: IconButtonProps) => ({
+const useStyles = makeStyles(({ bordered }: IconButtonProps) => ({
   root: {
-    border: '2px solid #000000',
-    height: 42,
-    width: 42,
+    border: bordered ? '2px solid #000000' : 'none',
+    height: bordered ? 42 : 40,
+    width: bordered ? 42 : 40,
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: '50%',
     background: 'transparent',
-    cursor: 'pointer'
+    cursor: 'pointer',
+    color: 'inherit'
   },
 }))
 

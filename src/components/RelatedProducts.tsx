@@ -53,11 +53,12 @@ const RelatedProducts: FC<RelatedProductsProps> = (props) => {
 
           <div>
             <IconButton
+              bordered
               style={{ marginRight: 16 }}
               children={<ArrowLeft />}
               onClick={prev}
             />
-            <IconButton children={<ArrowRight />} onClick={next} />
+            <IconButton bordered children={<ArrowRight />} onClick={next} />
           </div>
         </div>
       </Container>

@@ -1,5 +1,5 @@
 import { css, Global } from '@emotion/react'
-import fonts from './fonts'
+import theme from './theme'
 
 const globalStyles = css`
   * {
@@ -22,7 +22,7 @@ const globalStyles = css`
   }
 
   body {
-    font-family: ${fonts.primary.style.fontFamily};
+    font-family: ${theme.fonts.primary};
     line-height: 1.3;
     font-size: 16px;
   }

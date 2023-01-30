@@ -1,13 +1,15 @@
-import fonts from '@/theme/fonts'
+import MenuIcon from '@/icons/MenuIcon'
+import theme from '@/theme'
 import Button from '@/ui/Button'
 import Container from '@/ui/Container'
+import IconButton from '@/ui/IconButton'
 import makeStyles from '@/utils/makeStyles'
 import mergeProps from '@/utils/mergeProps'
 import Link from 'next/link'
 import { FC, HTMLAttributes } from 'react'
 
 interface NavbarProps extends HTMLAttributes<HTMLDivElement> {
-  fontColor?: 'black' | 'white'
+  mode?: 'light' | 'dark'
 }
 
 const links: {
@@ -34,95 +36,114 @@ const links: {
 
 const Navbar: FC<NavbarProps> = (originalProps) => {
   const props = mergeProps(originalProps, {
-    fontColor: 'black',
+    mode: 'light',
   })
 
   const styles = useStyles(props)
 
-  const { fontColor, ...divProps } = props
+  const { mode, ...divProps } = props
 
-  const fontColorHex = fontColor === 'black' ? '#000' : '#fff'
+  const fontColor = mode === 'light' ? '#000' : '#fff'
 
   return (
     <div css={styles.root} {...divProps}>
       <Container css={styles.nav}>
         <Link href="/">
-          <img
-            src={`/trumarket-logo-${fontColor}.svg`}
-            style={{ height: 90 }}
-          />
+          <img src={`/trumarket-logo-${mode}.svg`} css={styles.logo} />
         </Link>
 
-        <div>
+        <div css={styles.deskLinks}>
           {links.map((link) => (
-            <Link key={link.to} href={link.to} passHref css={styles.link}>
+            <Link key={link.to} href={link.to} passHref css={styles.deskLink}>
               {link.title}
             </Link>
           ))}
         </div>
 
-        <div css={styles.buttons}>
+        <div css={styles.deskButtons}>
           <Button
-            css={styles.button}
+            css={styles.deskButton}
             variant="outlined"
             size="lg"
             rounded
-            fontColor={fontColorHex}
+            fontColor={fontColor}
           >
             Invest Now
           </Button>
 
           <Button
-            css={styles.button}
+            css={styles.deskButton}
             size="lg"
             rounded
-            fontColor={fontColorHex}
+            fontColor={fontColor}
           >
             Fulfillment
           </Button>
         </div>
+
+        <IconButton css={styles.menuBtn}>
+          <MenuIcon />
+        </IconButton>
       </Container>
     </div>
   )
 }
 
-const useStyles = makeStyles(({ fontColor }: NavbarProps) => {
-  const fontColorHex = fontColor === 'black' ? '#000' : '#fff'
-
-  return {
-    root: {
-      width: '100%',
-      background: fontColor === 'black' ? '#fff' : undefined,
-      boxShadow:
-        fontColor === 'black'
-          ? '0 2px 4px -1px rgb(0 0 0 / 20%), 0 4px 5px 0 rgb(0 0 0 / 14%), 0 1px 10px 0 rgb(0 0 0 / 12%)'
-          : undefined,
+const useStyles = makeStyles(({ mode }: NavbarProps) => ({
+  root: {
+    width: '100%',
+    background: mode === 'light' ? '#fff' : undefined,
+    boxShadow:
+      mode === 'light'
+        ? '0 2px 4px -1px rgb(0 0 0 / 20%), 0 4px 5px 0 rgb(0 0 0 / 14%), 0 1px 10px 0 rgb(0 0 0 / 12%)'
+        : undefined,
+  },
+  logo: {
+    height: 70,
+    [`@media (max-width: ${theme.widths.tablet})`]: {
+      height: 55,
     },
-    nav: {
-      width: '100%',
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      padding: '6px 24px',
+  },
+  nav: {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: '6px 16px',
+    color: mode === 'light' ? '#000' : '#fff',
+  },
+  deskLinks: {
+    display: 'flex',
+    maxWidth: 450 + 64,
+    width: '100%',
+    justifyContent: 'space-between',
+    padding: '0 32px',
+    [`@media (max-width: ${theme.widths.tablet})`]: {
+      display: 'none',
     },
-    link: {
-      color: fontColorHex,
-      fontFamily: fonts.secondary.style.fontFamily,
-      textDecoration: 'none',
-
-      '&:not(:last-of-type)': {
-        marginRight: 46,
-      },
+  },
+  deskLink: {
+    color: 'inherit',
+    fontFamily: theme.fonts.secondary,
+    textDecoration: 'none',
+  },
+  deskButtons: {
+    display: 'flex',
+    [`@media (max-width: ${theme.widths.tablet})`]: {
+      display: 'none',
     },
-    buttons: {
-      display: 'flex',
+  },
+  deskButton: {
+    '&:not(:last-of-type)': {
+      marginRight: 16,
     },
-    button: {
-      '&:not(:last-of-type)': {
-        marginRight: 16,
-      },
+  },
+  menuBtn: {
+    display: 'none',
+    [`@media (max-width: ${theme.widths.tablet})`]: {
+      display: 'inline-flex',
     },
-  }
-})
+  },
+}))
 
 export default Navbar

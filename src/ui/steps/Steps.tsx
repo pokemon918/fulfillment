@@ -1,5 +1,6 @@
 import makeStyles from '@/utils/makeStyles'
-import { FC, ReactNode } from 'react'
+import { FC } from 'react'
+import BoxRation from '../BoxRatio'
 import Step from './Step'
 
 interface StepsProps {
@@ -26,35 +27,23 @@ const Steps: FC<StepsProps> = (props) => {
                 galleryItem.split('.').at(-1) as any
               )
 
-              if (isVideo) {
-                return (
-                  <video
-                    key={galleryItem + idx}
-                    css={
-                      step.gallery.length > 1
-                        ? styles.smCircleImg
-                        : styles.lgCircleImg
-                    }
-                    width="320"
-                    height="240"
-                    controls
-                    src={galleryItem}
-                  />
-                )
-              }
-
               return (
-                <img
+                <BoxRation
                   key={galleryItem + idx}
-                  style={{ marginRight: 12 }}
-                  css={
-                    step.gallery.length > 1
-                      ? styles.smCircleImg
-                      : styles.lgCircleImg
-                  }
-                  src={galleryItem}
-                  alt=""
-                />
+                  css={styles.galleryItemBox}
+                  ration={1}
+                  data-size={step.gallery.length > 1 ? 'sm' : 'lg'}
+                >
+                  {isVideo ? (
+                    <video
+                      css={styles.galleryItem}
+                      controls
+                      src={galleryItem}
+                    />
+                  ) : (
+                    <img css={styles.galleryItem} src={galleryItem} />
+                  )}
+                </BoxRation>
               )
             })}
           </div>
@@ -79,17 +68,10 @@ const Steps: FC<StepsProps> = (props) => {
 }
 
 const useStyles = makeStyles(({}: StepsProps) => {
-  const circle = {
-    borderRadius: '50%',
-    background: '#212121',
-    objectFit: 'cover' as const,
-    ':not(:last-of-type)': {
-      marginRight: 12,
-    },
-  }
-
   return {
-    root: {},
+    root: {
+      
+    },
     step: {},
     startPoint: {
       position: 'relative',
@@ -115,22 +97,32 @@ const useStyles = makeStyles(({}: StepsProps) => {
         zIndex: -1,
       },
     },
-
-    smCircleImg: {
-      width: 210,
-      height: 210,
-      ...circle,
+    galleryItemBox: {
+      marginRight: 12,
+      marginBottom: 12,
+      width: 'calc(100% - 12px)',
+      '&[data-size="sm"]': {
+        maxWidth: 210,
+      },
+      '&[data-size="lg"]': {
+        maxWidth: 360,
+      },
     },
-    lgCircleImg: {
-      width: 360,
-      height: 360,
-      ...circle,
+    galleryItem: {
+      borderRadius: '50%',
+      background: '#212121',
+      objectFit: 'cover',
+      height: '100%',
+      width: '100%',
     },
     gallery: {
+      width: '100%',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       flexWrap: 'wrap',
+      marginRight: -12,
+      marginBottom: -12,
     },
   }
 })

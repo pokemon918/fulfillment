@@ -18,7 +18,7 @@ const HomeBanner: FC<HomeBannerProps> = (props) => {
     <>
       <div css={styles.root} {...divProps}>
         <Container css={styles.content}>
-          <Navbar css={styles.navbar} fontColor="white" />
+          <Navbar css={styles.navbar} mode="dark" />
 
           <div css={styles.body}>
             <h1 css={styles.heading}>
