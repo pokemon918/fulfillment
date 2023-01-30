@@ -10,7 +10,7 @@ import { QuoteInput, QuoteProduct } from './quote.types'
 
 interface QuoteStep1Props extends HTMLAttributes<HTMLFormElement> {
   product: QuoteProduct
-  onNextStep: () => void
+  onNextSlide: () => void
 }
 
 const QuoteStep1: FC<QuoteStep1Props> = (props) => {
@@ -18,7 +18,7 @@ const QuoteStep1: FC<QuoteStep1Props> = (props) => {
 
   const { control, getValues } = useFormContext<QuoteInput>()
 
-  const { product, onNextStep, ...formProps } = props
+  const { product, onNextSlide, ...formProps } = props
 
   const shippingTypes = ['FOB', 'EXW', 'CFR', 'DDP'].map((option) => ({
     name: option,
@@ -38,7 +38,7 @@ const QuoteStep1: FC<QuoteStep1Props> = (props) => {
     if (phone.length < 6) {
       alert('Please enter a valid phone number')
     } else {
-      onNextStep()
+      onNextSlide()
     }
   }
 
@@ -189,6 +189,9 @@ const useStyles = makeStyles(({}: QuoteStep1Props) => ({
     display: 'grid',
     gridTemplateColumns: '0.9fr 1fr',
     gap: 72,
+    width: '100%',
+    minHeight: '100%',
+    background: '#F8F8F8',
   },
   header: {
     display: 'flex',

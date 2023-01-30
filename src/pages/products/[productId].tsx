@@ -15,7 +15,7 @@ import { FC, useState } from 'react'
 import RelatedProducts from '@/components/RelatedProducts'
 import Faq from '@/components/Faq'
 import Steps from '@/ui/steps/Steps'
-import QuotePrompt from '@/components/quote/QuotePrompt'
+import QuotePrompt from '@/components/quote-prompt'
 import NoSSR from '@/components/NoSSR'
 
 interface ProductPageProps {

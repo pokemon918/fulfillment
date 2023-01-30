@@ -1,7 +1,7 @@
 import Dialog from '@/ui/Dialog'
 import Portal from '@/components/Portal'
 import makeStyles from '@/utils/makeStyles'
-import { FC, HTMLAttributes, useState } from 'react'
+import { FC, HTMLAttributes, FunctionComponent, useState } from 'react'
 import QuoteStep1 from './QuoteStep1'
 import CloseIcon from '@/icons/CloseIcon'
 import { useForm, FormProvider } from 'react-hook-form'
@@ -9,6 +9,7 @@ import { QuoteInput, QuoteProduct } from './quote.types'
 import QuoteStep2 from './QuoteStep2'
 import BackIcon from '@/icons/BackIcon'
 import QuoteOrderSent from './QuoteOrderSent'
+import QuoteEvaluate from './QuoteEvaluate'
 
 interface QuotePromptProps extends HTMLAttributes<HTMLDivElement> {
   product: QuoteProduct
@@ -18,7 +19,7 @@ interface QuotePromptProps extends HTMLAttributes<HTMLDivElement> {
 const QuotePrompt: FC<QuotePromptProps> = (props) => {
   const styles = useStyles(props)
 
-  const [step, setStep] = useState<1 | 2 | 3>(2)
+  const [slideIdx, setSlideIdx] = useState<number>(0)
 
   const { product, fontFamily, ...divProps } = props
 
@@ -63,38 +64,81 @@ const QuotePrompt: FC<QuotePromptProps> = (props) => {
     },
   })
 
-  const nextStep = () =>
-    setStep((prevStep) => (prevStep < 3 ? prevStep + 1 : 3) as typeof step)
+  const nextSlide = () =>
+    setSlideIdx(
+      (prevSlideIdx) =>
+        (prevSlideIdx < 3 ? prevSlideIdx + 1 : 3) as typeof slideIdx
+    )
 
-  const prevStep = () => {
-    if (step <= 1) return
+  const slides: {
+    component: FunctionComponent<{
+      product: QuoteProduct
+      onNextSlide: () => void
+    }>
+    isStep?: boolean
+    isHideToggleBtn?: boolean
+    isHideStepsDisplay?: boolean
+  }[] = [
+    {
+      component: QuoteStep1,
+      isStep: true,
+    },
+    {
+      component: QuoteEvaluate,
+      isHideToggleBtn: true,
+    },
+    {
+      component: QuoteStep2,
+    },
+    {
+      component: QuoteOrderSent,
+      isStep: true,
+      isHideStepsDisplay: true,
+      isHideToggleBtn: true,
+    },
+  ]
 
-    setStep((prevStep) => (prevStep - 1) as typeof step)
+  const prevSlide = () => {
+    let prevSlideIndex = -1
+
+    const slicedSlides = slides.slice(0, slideIdx)
+    for (let i = slicedSlides.length - 1; i >= 0; i--) {
+      if (slicedSlides[i].isStep) {
+        prevSlideIndex = i
+        break
+      }
+    }
+
+    console.log(prevSlideIndex)
+
+    if (prevSlideIndex > -1) {
+      setSlideIdx(prevSlideIndex)
+    } else {
+    }
   }
 
-  const stepInterface = {
-    1: <QuoteStep1 product={product} onNextStep={nextStep} />,
-    2: <QuoteStep2 product={product} onNextStep={nextStep} />,
-    3: <QuoteOrderSent />,
-  }[step]
+  const slide = slides[slideIdx]
 
-  const displaySteps = {
-    1: 1,
-    2: 2,
-  }
-
-  const displayStep = (displaySteps as any)[step]
+  let stepNum = slide.isStep
+    ? slides.slice(0, slideIdx).filter((s) => s.isStep).length + 1
+    : null
 
   return (
     <Portal>
       <Dialog css={styles.dialog} {...divProps}>
-        <button css={styles.dialogBtn} onClick={prevStep}>
-          {step > 1 ? <BackIcon /> : <CloseIcon />}
-        </button>
+        {!slide.isHideToggleBtn && (
+          <button css={styles.dialogBtn} onClick={prevSlide}>
+            {slideIdx <= 0 ? <CloseIcon /> : <BackIcon />}
+          </button>
+        )}
 
-        {displayStep && <div css={styles.stepHeader}>{displayStep} of 3</div>}
+        {stepNum && !slide.isHideStepsDisplay && (
+          <div css={styles.stepHeader}>{stepNum} of 3</div>
+        )}
 
-        <FormProvider {...formMethods}>{stepInterface}</FormProvider>
+        <FormProvider {...formMethods}>
+          <slide.component product={product} onNextSlide={nextSlide} />
+        </FormProvider>
       </Dialog>
     </Portal>
   )

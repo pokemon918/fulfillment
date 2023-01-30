@@ -1,8 +1,12 @@
 import Button from '@/ui/Button'
 import makeStyles from '@/utils/makeStyles'
 import { FC } from 'react'
+import { QuoteProduct } from './quote.types'
 
-interface QuoteOrderSentProps {}
+interface QuoteOrderSentProps {
+  product: QuoteProduct
+  onNextSlide: () => void
+}
 
 const QuoteOrderSent: FC<QuoteOrderSentProps> = (props) => {
   const styles = useStyles(props)
@@ -36,6 +40,7 @@ const useStyles = makeStyles(({}: QuoteOrderSentProps) => ({
     textAlign: 'center',
     alignItems: 'center',
     padding: '100px 30px',
+    background: '#F8F8F8',
   },
   heading: {
     fontSize: 30,

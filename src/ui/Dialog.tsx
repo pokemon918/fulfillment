@@ -31,7 +31,6 @@ const useStyles = makeStyles(({}: DialogProps) => ({
     justifyContent: 'center',
   },
   dialog: {
-    background: '#F8F8F8',
     width: 'calc(100% - 3rem)',
     height: 'calc(100% - 3rem)',
     maxWidth: '1000px',

@@ -16,15 +16,15 @@ export interface Step2Values {}
 
 interface QuoteStep2Props extends HTMLAttributes<HTMLFormElement> {
   product: QuoteProduct
-  onNextStep: () => void
+  onNextSlide: () => void
 }
 
 const QuoteStep2: FC<QuoteStep2Props> = (props) => {
   const styles = useStyles(props)
 
-  const { product, onNextStep, ...formProps } = props
+  const { product, onNextSlide, ...formProps } = props
 
-  const { control, getValues } = useFormContext<QuoteInput>()
+  const { control } = useFormContext<QuoteInput>()
 
   const paymentTermsControl = useFieldArray({
     name: 'paymentTerms',
@@ -59,7 +59,7 @@ const QuoteStep2: FC<QuoteStep2Props> = (props) => {
   const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault()
 
-    onNextStep()
+    onNextSlide()
   }
 
   return (
@@ -194,7 +194,7 @@ const QuoteStep2: FC<QuoteStep2Props> = (props) => {
         </FieldValue>
       </div>
 
-      <QuoteFeatures />
+      <QuoteFeatures css={styles.features} />
     </form>
   )
 }
@@ -213,7 +213,6 @@ const useStyles = makeStyles(({}: QuoteStep2Props) => {
     root: {
       display: 'grid',
       gridTemplateColumns: '1fr 355px',
-      gridTemplateRows: '100%',
       width: '100%',
       height: '100%',
     },
@@ -222,6 +221,10 @@ const useStyles = makeStyles(({}: QuoteStep2Props) => {
       height: '100%',
       overflowY: 'auto',
       padding: '46px 38px 40px',
+      background: '#F8F8F8',
+    },
+    features: {
+      overflow: 'auto'
     },
     details: {
       width: '100%',
