@@ -126,6 +126,7 @@ const useStyles = makeStyles(({}: ProductInfoProps) => ({
     flexWrap: 'wrap',
     marginRight: -20,
     marginBottom: -12,
+    width: '100%'
   },
   toggleBtn: {
     padding: '10px 20px',

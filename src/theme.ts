@@ -44,6 +44,7 @@ const theme = {
     tabletXs: new Width(520),
     mobile: new Width(480),
     mobileSm: new Width(380),
+    mobileXs: new Width(320),
   },
 }
 
