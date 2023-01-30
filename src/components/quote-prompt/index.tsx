@@ -64,12 +64,6 @@ const QuotePrompt: FC<QuotePromptProps> = (props) => {
     },
   })
 
-  const nextSlide = () =>
-    setSlideIdx(
-      (prevSlideIdx) =>
-        (prevSlideIdx < 3 ? prevSlideIdx + 1 : 3) as typeof slideIdx
-    )
-
   const slides: {
     component: FunctionComponent<{
       product: QuoteProduct
@@ -89,6 +83,7 @@ const QuotePrompt: FC<QuotePromptProps> = (props) => {
     },
     {
       component: QuoteStep2,
+      isStep: true,
     },
     {
       component: QuoteOrderSent,
@@ -97,6 +92,11 @@ const QuotePrompt: FC<QuotePromptProps> = (props) => {
       isHideToggleBtn: true,
     },
   ]
+
+  const nextSlide = () =>
+    setSlideIdx((prevSlideIdx) =>
+      prevSlideIdx < slides.length ? prevSlideIdx + 1 : slides.length - 1
+    )
 
   const prevSlide = () => {
     let prevSlideIndex = -1
