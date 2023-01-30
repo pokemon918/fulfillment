@@ -35,7 +35,7 @@ const Steps: FC<StepsProps> = (props) => {
         ))}
       </div>
 
-      <div css={styles.steps}>
+      <div css={styles.mobileSteps}>
         {steps.map((step, stepIdx) => {
           return (
             <div css={styles.step} key={stepIdx}>
@@ -67,7 +67,12 @@ const useStyles = makeStyles(({}: StepsProps) => {
         display: 'none',
       },
     },
-    steps: {},
+    mobileSteps: {
+      display: 'none',
+      [`@media (max-width: ${theme.widths.tablet})`]: {
+        display: 'block',
+      },
+    },
     stepHeader: {
       display: 'flex',
       alignItems: 'center',

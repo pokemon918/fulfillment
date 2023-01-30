@@ -61,6 +61,7 @@ const ProductInfo: FC<ProductInfoProps> = (props) => {
 
   return (
     <div css={styles.root} {...divProps}>
+      <div css={styles.toggleNav}>
       <div css={styles.toggleButtons}>
         <Button
           css={styles.toggleBtn}
@@ -78,6 +79,8 @@ const ProductInfo: FC<ProductInfoProps> = (props) => {
           Gallery
         </Button>
       </div>
+      </div>
+      
 
       <Gallery
         style={{ display: view === 'gallery' ? undefined : 'none' }}
@@ -113,18 +116,22 @@ const useStyles = makeStyles(({}: ProductInfoProps) => ({
     color: '#B1DA50',
     marginBottom: 56,
   },
+  toggleNav: {
+    width: '100%',
+    marginBottom: 56
+  },
   toggleButtons: {
     display: 'flex',
     justifyContent: 'center',
     flexWrap: 'wrap',
-    marginBottom: 56,
+    marginRight: -20,
+    marginBottom: -12,
   },
   toggleBtn: {
     padding: '10px 20px',
     minWidth: 'inherit',
-    '&:not(:last-of-type)': {
-      marginRight: 20,
-    },
+    marginRight: 20,
+    marginBottom: 12,
     '&[data-inactive="true"]': {
       background: '#fff',
       color: '#434343',

@@ -56,13 +56,15 @@ const ProductIntro: FC<ProductIntroProps> = (props) => {
 
           <h4 css={styles.offerTitle}>Current Offer Base Prices</h4>
 
-          <div css={styles.offers}>
-            {offers.map((offer, idx) => (
-              <div key={idx} css={styles.offer}>
-                <span css={styles.offerName}>{offer.name}</span>
-                <span css={styles.offerValue}>{offer.value}</span>
-              </div>
-            ))}
+          <div css={styles.offersWrapper}>
+            <div css={styles.offers}>
+              {offers.map((offer, idx) => (
+                <div key={idx} css={styles.offer}>
+                  <span css={styles.offerName}>{offer.name}</span>
+                  <span css={styles.offerValue}>{offer.value}</span>
+                </div>
+              ))}
+            </div>
           </div>
 
           <p css={styles.subtitle} style={{ marginBottom: 10 }}>
@@ -101,7 +103,7 @@ const useStyles = makeStyles((props: ProductIntroProps) => ({
     fontSize: 14,
     display: 'flex',
     alignItems: 'center',
-    marginBottom: 12
+    marginBottom: 12,
   },
   title: {
     fontSize: 34,
@@ -123,18 +125,22 @@ const useStyles = makeStyles((props: ProductIntroProps) => ({
     fontSize: 16,
     marginBottom: 24,
   },
+  offersWrapper: {
+    width: '100%',
+    marginBottom: 46,
+  },
   offers: {
     display: 'flex',
-    marginBottom: 46,
     flexWrap: 'wrap',
+    marginRight: -16,
+    marginBottom: -8,
   },
   offer: {
     padding: 12,
     backgroundColor: '#fff',
     flexShrink: 0,
-    '&:not(:last-of-type)': {
-      marginRight: 16,
-    },
+    marginRight: 16,
+    marginBottom: 8,
   },
   offerName: {
     fontSize: 14,

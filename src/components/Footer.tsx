@@ -27,7 +27,7 @@ const Footer: FC<FooterProps> = (props) => {
   return (
     <div css={styles.root} {...divProps}>
       <Container maxWidth="md">
-        <img src="/trumarket-logo.png" />
+        <img css={styles.logo} src="/trumarket-logo.png" />
 
         <div css={styles.content}>
           <div css={styles.desc}>
@@ -43,7 +43,7 @@ const Footer: FC<FooterProps> = (props) => {
 
                 <ul css={styles.links}>
                   {groupLinks.map((link, linkIdx) => (
-                    <li key={linkIdx}>
+                    <li key={linkIdx} css={styles.linkLi}>
                       <Link href={link.href} css={styles.link}>
                         {link.title}
                       </Link>
@@ -54,7 +54,7 @@ const Footer: FC<FooterProps> = (props) => {
             ))}
           </div>
 
-          <div>
+          <div css={styles.inputWrapper}>
             <h6 css={styles.subheading}>Apply Now</h6>
 
             <div css={styles.inputBox}>
@@ -89,28 +89,58 @@ const useStyles = makeStyles((props: FooterProps) => {
     content: {
       display: 'grid',
       gridTemplateColumns: '300px 1fr 300px',
-      gap: 24
+      gap: 24,
+      [`@media (max-width: ${theme.widths.tablet})`]: {
+        gridTemplateColumns: '1fr',
+        gap: 0,
+      },
     },
     subheading: {
       fontSize: 16,
       color: '#fff',
       fontWeight: 400,
       marginBottom: 8,
-      fontFamily: theme.fonts.secondary
+      fontFamily: theme.fonts.secondary,
     },
     desc: {
-      fontSize: 13
+      fontSize: 13,
+      [`@media (max-width: ${theme.widths.tablet})`]: {
+        width: '100%',
+        maxWidth: 300,
+        margin: '0 auto',
+        textAlign: 'center',
+        marginBottom: 24,
+      },
+    },
+
+    logo: {
+      [`@media (max-width: ${theme.widths.tablet})`]: {
+        display: 'block',
+        margin: '0 auto 12px',
+      },
     },
 
     // linkGroups
     linkGroups: {
       display: 'flex',
-      gridTemplateColumns: 'auto auto',
       justifyContent: 'center',
-      gap: 46
+      gap: 46,
+      [`@media (max-width: ${theme.widths.tablet})`]: {
+        textAlign: 'center',
+        marginBottom: 32,
+      },
+      [`@media (max-width: 380px)`]: {
+        flexDirection: 'column',
+        gap: 20
+      },
     },
     links: {
       listStyle: 'none',
+    },
+    linkLi: {
+      ':not(:last-of-type)': {
+        marginBottom: 5
+      }
     },
     link: {
       color: '#c5c5c5',
@@ -122,6 +152,13 @@ const useStyles = makeStyles((props: FooterProps) => {
     },
 
     // input
+    inputWrapper: {
+      [`@media (max-width: ${theme.widths.tablet})`]: {
+        width: '100%',
+        maxWidth: 600,
+        margin: '0 auto',
+      },
+    },
     inputBox: {
       display: 'flex',
       height: 56,

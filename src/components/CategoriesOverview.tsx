@@ -15,16 +15,19 @@ const CategoriesOverview: FC<CategoriesOverviewProps> = (props) => {
   const { categories, ...divProps } = props
 
   return (
-    <div css={styles.wrapper} {...divProps} >
-      <div css={styles.root} >
-      <h4 css={styles.heading} style={{ marginBottom: 34 }}>
-        Categories
-      </h4>
+    <div css={styles.wrapper} {...divProps}>
+      <div css={styles.root}>
+        <h4 css={styles.heading} style={{ marginBottom: 34 }}>
+          Categories
+        </h4>
 
-      <ContainerWide scrollable endBlur>
-        <Categories categories={categories} />
-      </ContainerWide>
-    </div>
+        <ContainerWide
+          scrollable
+          endBlur="linear-gradient(269.92deg, #FFFFFF 0.05%, rgba(255, 255, 255, 0) 99.9%)"
+        >
+          <Categories categories={categories} />
+        </ContainerWide>
+      </div>
     </div>
   )
 }
@@ -40,14 +43,14 @@ const useStyles = makeStyles((props: CategoriesOverviewProps) => ({
     //   left: 0,
     //   width: '93%',
     //   height: 373,
-     
+
     //   zIndex: -1
     // }
   },
   root: {
     position: 'relative',
     paddingTop: 74,
-    paddingBottom: 74
+    paddingBottom: 74,
   },
   heading: {
     fontWeight: 700,
@@ -55,7 +58,7 @@ const useStyles = makeStyles((props: CategoriesOverviewProps) => ({
     lineHeight: 1.25,
     textAlign: 'center',
     color: '#69832C',
-    marginBottom: 44
+    marginBottom: 44,
   },
 }))
 

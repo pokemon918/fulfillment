@@ -13,7 +13,7 @@ import {
 interface ContainerWideProps extends HTMLAttributes<HTMLDivElement> {
   maxWidth?: 'md'
   scrollable?: boolean
-  endBlur?: boolean
+  endBlur?: string
   contentEndWidth?: number
 }
 
@@ -22,7 +22,6 @@ const ContainerWide = forwardRef<HTMLDivElement, ContainerWideProps>(
     const props = mergeProps(originalProps, {
       maxWidth: 'md',
       scrollable: false,
-      endBlur: false,
       contentEndWidth: 0,
     })
 
@@ -39,22 +38,24 @@ const ContainerWide = forwardRef<HTMLDivElement, ContainerWideProps>(
 
     const containerRef = useRef<HTMLDivElement>(null)
 
-    const [showBlur, setShowBlur] = useSameState(true)
+    const [showBlur, setShowBlur] = useSameState(false)
 
     useImperativeHandle(ref, () => containerRef.current!)
 
     useEffect(() => {
       const container = containerRef.current!
 
-      const handleScroll = () => {
+      const updateShowBlur = () => {
         const remainScroll =
           container.scrollWidth - container.offsetWidth - container.scrollLeft
         setShowBlur(remainScroll > contentEndWidth)
       }
 
-      container.addEventListener('scroll', handleScroll, { passive: true })
+      updateShowBlur()
 
-      return () => container.removeEventListener('scroll', handleScroll)
+      container.addEventListener('scroll', updateShowBlur, { passive: true })
+
+      return () => container.removeEventListener('scroll', updateShowBlur)
     }, [])
 
     return (
@@ -63,7 +64,7 @@ const ContainerWide = forwardRef<HTMLDivElement, ContainerWideProps>(
           {children}
         </div>
 
-        <div css={styles.endBlur} data-hide={!showBlur} />
+        {endBlur && <div css={styles.endBlur} data-hide={!showBlur} />}
       </div>
     )
   }
@@ -97,13 +98,15 @@ const useStyles = makeStyles(
       width: 224,
       top: 0,
       right: 0,
-      background:
-        'linear-gradient(269.92deg, #FFFFFF 0.05%, rgba(255, 255, 255, 0) 99.9%)',
+      background: endBlur,
       pointerEvents: 'none',
       transition: 'opacity 0.25s',
       '&[data-hide="true"]': {
         opacity: 0,
       },
+      "@media (max-width: 480px)": {
+        width: '20%'
+      }
     },
   })
 )

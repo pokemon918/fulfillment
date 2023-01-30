@@ -62,7 +62,7 @@ const useStyles = makeStyles(({}: AccordionProps) => ({
   },
   itemTitle: {
     fontWeight: 500,
-    fontSize: 20,
+    fontSize: 16,
   },
   content: {
     overflow: 'hidden',

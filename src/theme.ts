@@ -40,6 +40,10 @@ const theme = {
   },
   widths: {
     tablet: new Width(992),
+    tabletSm: new Width(768),
+    tabletXs: new Width(520),
+    mobile: new Width(480),
+    mobileSm: new Width(380),
   },
 }
 

@@ -1,3 +1,4 @@
+import theme from '@/theme'
 import makeStyles from '@/utils/makeStyles'
 import { FC, useEffect, useState } from 'react'
 
@@ -22,16 +23,18 @@ const ExcerptGallery: FC<ExcerptGalleryProps> = (props) => {
     <div css={styles.root}>
       <img css={styles.selectedImage} src={selected} alt="" />
 
-      <div css={styles.gallerySidebar}>
-        {gallery.map((image, idx) => (
-          <img
-            key={image + idx}
-            css={styles.galleryImage}
-            src={image}
-            alt=""
-            onClick={() => setSelected(image)}
-          />
-        ))}
+      <div css={styles.sidebarWrapper}>
+        <div css={styles.sidebar}>
+          {gallery.map((image, idx) => (
+            <img
+              key={image + idx}
+              css={styles.galleryImage}
+              src={image}
+              alt=""
+              onClick={() => setSelected(image)}
+            />
+          ))}
+        </div>
       </div>
     </div>
   )
@@ -46,19 +49,32 @@ const useStyles = makeStyles(({}: ExcerptGalleryProps) => ({
     height: 400,
     objectFit: 'cover',
     marginBottom: 8,
-    borderRadius: 12
+    borderRadius: 12,
   },
-  gallerySidebar: {
+  sidebarWrapper: {
+    width: '100%',
+    height: 100,
+    overflow: 'hidden'
+  },
+  sidebar: {
     display: 'grid',
     gridTemplateColumns: 'repeat(5, 1fr)',
-    gap: 4
+    gap: 4,
+    height: '100%',
+    gridTemplateRows: '100%',
+    [`@media (max-width: ${theme.widths.mobile})`]: {
+      gridTemplateColumns: 'repeat(4, 1fr)',
+    },
+    [`@media (max-width: ${theme.widths.mobileSm})`]: {
+      gridTemplateColumns: 'repeat(3, 1fr)',
+    }
   },
   galleryImage: {
     width: '100%',
-    height: 100,
+    height: '100%',
     objectFit: 'cover',
     borderRadius: 12,
-    cursor: 'pointer'
+    cursor: 'pointer',
   },
 }))
 
