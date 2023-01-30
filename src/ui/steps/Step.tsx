@@ -1,11 +1,12 @@
 import makeStyles from '@/utils/makeStyles'
 import { FC, HTMLAttributes, ReactNode } from 'react'
+import StepGallery from './StepGallery'
 
 interface StepProps extends HTMLAttributes<HTMLDivElement> {
   title: string
-  desc: string
+  description: string
   stepNum: string
-  gallery?: ReactNode
+  gallery: string[]
   reversed?: boolean
   bottomSpace?: number
   verticalConnect?: boolean
@@ -16,7 +17,7 @@ const Step: FC<StepProps> = (props) => {
 
   const {
     title,
-    desc,
+    description,
     gallery,
     stepNum,
     reversed,
@@ -25,7 +26,11 @@ const Step: FC<StepProps> = (props) => {
     ...divProps
   } = props
 
-  const galleryNode = <div css={styles.gallery}>{gallery}</div>
+  const galleryNode = (
+    <div css={styles.gallery}>
+      <StepGallery gallery={gallery} />
+    </div>
+  )
 
   const dotNode = (
     <span css={styles.subDotWrapper}>
@@ -41,7 +46,7 @@ const Step: FC<StepProps> = (props) => {
         {reversed && dotNode}
       </div>
 
-      <p css={styles.stepDesc}>{desc}</p>
+      <p css={styles.stepDesc}>{description}</p>
     </div>
   )
 

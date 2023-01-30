@@ -8,7 +8,7 @@ interface IconButtonProps extends HTMLAttributes<HTMLButtonElement> {
 const IconButton: FC<IconButtonProps> = (props) => {
   const styles = useStyles(props)
 
-  const { children, ...btnProps } = props
+  const { children, bordered, ...btnProps } = props
 
   return (
     <button css={styles.root} {...btnProps}>

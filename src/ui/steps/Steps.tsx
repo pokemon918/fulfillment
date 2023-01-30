@@ -1,7 +1,9 @@
+import theme from '@/theme'
 import makeStyles from '@/utils/makeStyles'
 import { FC } from 'react'
-import BoxRation from '../BoxRatio'
 import Step from './Step'
+import StepGallery from './StepGallery'
+import StepsStartPoint from './StepsStartPoint'
 
 interface StepsProps {
   steps: {
@@ -17,113 +19,88 @@ const Steps: FC<StepsProps> = (props) => {
   const { steps } = props
 
   return (
-    <div css={styles.root}>
-      <div css={styles.startPoint} />
-      {steps.map((step, stepIdx) => {
-        const galleryNode = (
-          <div css={styles.gallery}>
-            {step.gallery.map((galleryItem, idx) => {
-              let isVideo = ['webm', 'mp4'].includes(
-                galleryItem.split('.').at(-1) as any
-              )
+    <div>
+      <div css={styles.deskSteps}>
+        <StepsStartPoint />
 
-              return (
-                <BoxRation
-                  key={galleryItem + idx}
-                  css={styles.galleryItemBox}
-                  ration={1}
-                  data-size={step.gallery.length > 1 ? 'sm' : 'lg'}
-                >
-                  {isVideo ? (
-                    <video
-                      css={styles.galleryItem}
-                      controls
-                      src={galleryItem}
-                    />
-                  ) : (
-                    <img css={styles.galleryItem} src={galleryItem} />
-                  )}
-                </BoxRation>
-              )
-            })}
-          </div>
-        )
-
-        return (
+        {steps.map((step, stepIdx) => (
           <Step
             key={stepIdx}
-            css={styles.step}
-            title={step.title}
-            desc={step.description}
-            gallery={galleryNode}
+            {...step}
             stepNum={('0' + (stepIdx + 1)).slice(-2)}
             reversed={stepIdx % 2 == 1}
             bottomSpace={80}
             verticalConnect={stepIdx + 1 < steps.length}
           />
-        )
-      })}
+        ))}
+      </div>
+
+      <div css={styles.steps}>
+        {steps.map((step, stepIdx) => {
+          return (
+            <div css={styles.step} key={stepIdx}>
+              <div css={styles.stepHeader}>
+                <span css={styles.stepNum}>
+                  {('0' + (stepIdx + 1)).slice(-2)}
+                </span>
+                <h3 css={styles.heading}>{step.title}</h3>
+              </div>
+
+              <div css={styles.desc}>{step.description}</div>
+
+              <div css={styles.gallery} data-reversed={stepIdx % 2 == 0}>
+                <StepGallery gallery={step.gallery} />
+              </div>
+            </div>
+          )
+        })}
+      </div>
     </div>
   )
 }
 
 const useStyles = makeStyles(({}: StepsProps) => {
   return {
-    root: {
-      
-    },
-    step: {},
-    startPoint: {
-      position: 'relative',
-      height: 100,
-      '::after': {
-        content: '""',
-        position: 'absolute',
-        height: 16,
-        width: 16,
-        background: '#B1DA50',
-        borderRadius: '50%',
-        left: '50%',
-        transform: 'translateX(-50%)',
-      },
-      '::before': {
-        content: '""',
-        position: 'absolute',
-        width: 1,
-        height: '100%',
-        background: '#B1DA50',
-        top: 0,
-        left: 'calc(50% - 0.5px)',
-        zIndex: -1,
+    deskSteps: {
+      display: 'block',
+      [`@media (max-width: ${theme.widths.tablet})`]: {
+        display: 'none',
       },
     },
-    galleryItemBox: {
-      marginRight: 12,
-      marginBottom: 12,
-      width: 'calc(100% - 12px)',
-      '&[data-size="sm"]': {
-        maxWidth: 210,
-      },
-      '&[data-size="lg"]': {
-        maxWidth: 360,
-      },
-    },
-    galleryItem: {
-      borderRadius: '50%',
-      background: '#212121',
-      objectFit: 'cover',
-      height: '100%',
-      width: '100%',
-    },
-    gallery: {
-      width: '100%',
+    steps: {},
+    stepHeader: {
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'center',
-      flexWrap: 'wrap',
-      marginRight: -12,
-      marginBottom: -12,
+      marginBottom: 20,
     },
+    heading: {
+      fontSize: 20,
+      fontWeight: 700,
+    },
+    stepNum: {
+      position: 'relative',
+      width: 40,
+      height: 40,
+      background: '#B1DA50',
+      color: '#fff',
+      fontSize: 18,
+      fontWeight: 700,
+      display: 'inline-flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderRadius: '50%',
+      lineHeight: 0,
+      marginRight: 16,
+    },
+    step: {
+      ':not(:last-of-type)': {
+        marginBottom: 80,
+      },
+    },
+    desc: {
+      marginBottom: 30,
+    },
+    gallery: {},
   }
 })
 
