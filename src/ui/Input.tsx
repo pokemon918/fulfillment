@@ -256,7 +256,7 @@ const useStyles = makeStyles(({ theme, startSelect }: InputProps) => {
       maxWidth: 82,
       background: 'transparent',
       color: 'inherit',
-      border: 'none',
+      border: 'none'
     },
     selectOption: {
       color: '#000',

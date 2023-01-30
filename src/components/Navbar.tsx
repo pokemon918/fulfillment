@@ -93,6 +93,10 @@ const useStyles = makeStyles(({ fontColor }: NavbarProps) => {
     root: {
       width: '100%',
       background: fontColor === 'black' ? '#fff' : undefined,
+      boxShadow:
+        fontColor === 'black'
+          ? '0 2px 4px -1px rgb(0 0 0 / 20%), 0 4px 5px 0 rgb(0 0 0 / 14%), 0 1px 10px 0 rgb(0 0 0 / 12%)'
+          : undefined,
     },
     nav: {
       width: '100%',

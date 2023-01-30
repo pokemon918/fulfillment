@@ -1,5 +1,4 @@
 import Dialog from '@/ui/Dialog'
-import Portal from '@/components/Portal'
 import makeStyles from '@/utils/makeStyles'
 import { FC, HTMLAttributes, FunctionComponent, useState } from 'react'
 import QuoteStep1 from './QuoteStep1'
@@ -13,7 +12,8 @@ import QuoteEvaluate from './QuoteEvaluate'
 
 interface QuotePromptProps extends HTMLAttributes<HTMLDivElement> {
   product: QuoteProduct
-  fontFamily?: string
+  open: boolean
+  onClose: () => void
 }
 
 const QuotePrompt: FC<QuotePromptProps> = (props) => {
@@ -21,7 +21,7 @@ const QuotePrompt: FC<QuotePromptProps> = (props) => {
 
   const [slideIdx, setSlideIdx] = useState<number>(0)
 
-  const { product, fontFamily, ...divProps } = props
+  const { product, open, onClose, ...divProps } = props
 
   const formMethods = useForm<QuoteInput>({
     defaultValues: {
@@ -32,12 +32,12 @@ const QuotePrompt: FC<QuotePromptProps> = (props) => {
       destinationPort: {
         shippingType: 'FOB',
         country: 'PE',
-        name: 'FOB',
+        name: '',
       },
       landingPort: {
         shippingType: 'FOB',
         country: 'PE',
-        name: 'FOB',
+        name: '',
       },
       needs: '',
       purchaseVolume: '',
@@ -109,11 +109,10 @@ const QuotePrompt: FC<QuotePromptProps> = (props) => {
       }
     }
 
-    console.log(prevSlideIndex)
-
     if (prevSlideIndex > -1) {
       setSlideIdx(prevSlideIndex)
     } else {
+      onClose()
     }
   }
 
@@ -124,30 +123,31 @@ const QuotePrompt: FC<QuotePromptProps> = (props) => {
     : null
 
   return (
-    <Portal>
-      <Dialog css={styles.dialog} {...divProps}>
-        {!slide.isHideToggleBtn && (
-          <button css={styles.dialogBtn} onClick={prevSlide}>
-            {slideIdx <= 0 ? <CloseIcon /> : <BackIcon />}
-          </button>
-        )}
+    <Dialog
+      css={styles.dialog}
+      dialogStyle={{ display: open ? undefined : 'none' }}
+      {...divProps}
+    >
+      {!slide.isHideToggleBtn && (
+        <button css={styles.dialogBtn} onClick={prevSlide}>
+          {slideIdx <= 0 ? <CloseIcon /> : <BackIcon />}
+        </button>
+      )}
 
-        {stepNum && !slide.isHideStepsDisplay && (
-          <div css={styles.stepHeader}>{stepNum} of 3</div>
-        )}
+      {stepNum && !slide.isHideStepsDisplay && (
+        <div css={styles.stepHeader}>{stepNum} of 3</div>
+      )}
 
-        <FormProvider {...formMethods}>
-          <slide.component product={product} onNextSlide={nextSlide} />
-        </FormProvider>
-      </Dialog>
-    </Portal>
+      <FormProvider {...formMethods}>
+        <slide.component product={product} onNextSlide={nextSlide} />
+      </FormProvider>
+    </Dialog>
   )
 }
 
-const useStyles = makeStyles(({ fontFamily }: QuotePromptProps) => ({
+const useStyles = makeStyles(({}: QuotePromptProps) => ({
   dialog: {
     position: 'relative',
-    fontFamily,
   },
   stepHeader: {
     position: 'absolute',

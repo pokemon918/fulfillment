@@ -51,6 +51,7 @@ const useStyles = makeStyles(({}: CaseStudyIntroProps) => ({
   wrapper: {
     position: 'relative',
     paddingTop: 46,
+    overflow: 'hidden'
   },
   decorate: {
     position: 'absolute',

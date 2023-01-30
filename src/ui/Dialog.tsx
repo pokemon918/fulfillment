@@ -1,20 +1,21 @@
 import makeStyles from '@/utils/makeStyles'
-import { FC, HTMLAttributes, ReactNode } from 'react'
-import Portal from '../components/Portal'
+import { CSSProperties, FC, HTMLAttributes, ReactNode } from 'react'
 
 interface DialogProps extends HTMLAttributes<HTMLDivElement> {
+  dialogClassName?: string
+  dialogStyle?: CSSProperties
   children: ReactNode
 }
 
 const Dialog: FC<DialogProps> = (props) => {
   const styles = useStyles(props)
 
+  const { dialogClassName, dialogStyle, ...divProps } = props
+
   return (
-    <Portal>
-      <div css={styles.backdrop}>
-        <div css={styles.dialog} {...props} />
-      </div>
-    </Portal>
+    <div css={styles.backdrop} className={dialogClassName} style={dialogStyle}>
+      <div css={styles.dialog} {...divProps} />
+    </div>
   )
 }
 
@@ -29,6 +30,7 @@ const useStyles = makeStyles(({}: DialogProps) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    zIndex: 256
   },
   dialog: {
     width: 'calc(100% - 3rem)',
@@ -36,7 +38,7 @@ const useStyles = makeStyles(({}: DialogProps) => ({
     maxWidth: '1000px',
     maxHeight: '600px',
     borderRadius: 4,
-    overflow: 'auto'
+    overflow: 'auto',
   },
 }))
 

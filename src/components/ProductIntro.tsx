@@ -9,6 +9,7 @@ import MonthsRange from './MonthsRange'
 interface ProductIntroProps extends HTMLAttributes<HTMLDivElement> {
   gallery: string[]
   product: DetailedProduct
+  onClickGetQuote: () => void
 }
 
 const offers = [
@@ -19,7 +20,7 @@ const offers = [
 const ProductIntro: FC<ProductIntroProps> = (props) => {
   const styles = useStyles(props)
 
-  const { gallery, product, ...divProps } = props
+  const { gallery, product, onClickGetQuote, ...divProps } = props
 
   const countryName = useMemo(
     () => countries.find((c) => c.code === product.country)?.name,
@@ -62,7 +63,11 @@ const ProductIntro: FC<ProductIntroProps> = (props) => {
           picked={[0, 9, 10, 11]}
         />
 
-        <Button fullWidth style={{ paddingTop: 12, paddingBottom: 12 }}>
+        <Button
+          fullWidth
+          style={{ paddingTop: 12, paddingBottom: 12 }}
+          onClick={onClickGetQuote}
+        >
           Get a Quote
         </Button>
       </div>

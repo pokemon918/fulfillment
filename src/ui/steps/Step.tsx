@@ -5,7 +5,7 @@ interface StepProps extends HTMLAttributes<HTMLDivElement> {
   title: string
   desc: string
   stepNum: string
-  media?: ReactNode
+  gallery?: ReactNode
   reversed?: boolean
   bottomSpace?: number
   verticalConnect?: boolean
@@ -17,7 +17,7 @@ const Step: FC<StepProps> = (props) => {
   const {
     title,
     desc,
-    media,
+    gallery,
     stepNum,
     reversed,
     bottomSpace,
@@ -25,7 +25,7 @@ const Step: FC<StepProps> = (props) => {
     ...divProps
   } = props
 
-  const mediaNode = <div css={styles.media}>{media}</div>
+  const galleryNode = <div css={styles.gallery}>{gallery}</div>
 
   const dotNode = (
     <span css={styles.subDotWrapper}>
@@ -47,13 +47,13 @@ const Step: FC<StepProps> = (props) => {
 
   return (
     <div css={styles.root} {...divProps}>
-      {reversed ? contentNode : mediaNode}
+      {reversed ? contentNode : galleryNode}
 
       <div css={styles.stepNumWrapper}>
         <div css={styles.stepNum}>{stepNum}</div>
       </div>
 
-      {reversed ? mediaNode : contentNode}
+      {reversed ? galleryNode : contentNode}
     </div>
   )
 }
@@ -64,7 +64,7 @@ const useStyles = makeStyles(
       display: 'grid',
       gridTemplateColumns: 'calc(50% - 44px) 88px calc(50% - 44px)',
     },
-    media: {
+    gallery: {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',

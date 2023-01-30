@@ -1,10 +1,8 @@
 import Footer from '@/components/Footer'
 import Navbar from '@/components/Navbar'
-import Gallery from '@/components/Gallery'
 import ProductIntro from '@/components/ProductIntro'
 import fonts from '@/theme/fonts'
 import { BaseProduct, DetailedProduct } from '@/types/product'
-import Button from '@/ui/Button'
 import Container from '@/ui/Container'
 import PageBgColor from '@/ui/PageBgColor'
 import graphqlRequest from '@/utils/graphqlRequest'
@@ -14,55 +12,20 @@ import { GetServerSideProps } from 'next'
 import { FC, useState } from 'react'
 import RelatedProducts from '@/components/RelatedProducts'
 import Faq from '@/components/Faq'
-import Steps from '@/ui/steps/Steps'
 import QuotePrompt from '@/components/quote-prompt'
 import NoSSR from '@/components/NoSSR'
+import QuoteSticky from '@/components/QuoteSticky'
+import ProductInfo from '@/components/product-view/ProductInfo'
 
 interface ProductPageProps {
   product: DetailedProduct
   products: BaseProduct[]
 }
 
-const steps: {
-  title: string
-  desc: string
-  media: string[]
-}[] = [
-  {
-    title: 'Plantation',
-    desc: 'Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size. Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.',
-    media: ['/images/grape.png'],
-  },
-  {
-    title: 'Plantation',
-    desc: 'Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size. Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.',
-    media: ['/images/grape.png', '/images/grape.png'],
-  },
-  {
-    title: 'Plantation',
-    desc: 'Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size. Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.',
-    media: ['/images/grape.png'],
-  },
-  {
-    title: 'Plantation',
-    desc: 'Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size. Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.',
-    media: ['/images/grape.png', '/images/grape.png'],
-  },
-]
-
 const ProductPage: FC<ProductPageProps> = (props) => {
   const { product, products } = props
   const styles = useStyles(props)
-
-  const [view, setView] = useState<'details' | 'gallery'>('details')
-
-  return (
-    <div css={styles.root}>
-      <NoSSR>
-        <QuotePrompt product={product} fontFamily={fonts.secondary.style.fontFamily} />
-      </NoSSR>
-    </div>
-  )
+  const [openQuote, setOpenQuote] = useState(false)
 
   return (
     <div css={styles.root}>
@@ -74,34 +37,10 @@ const ProductPage: FC<ProductPageProps> = (props) => {
           style={{ marginBottom: 120 }}
           gallery={product.gallery}
           product={product}
+          onClickGetQuote={() => setOpenQuote(true)}
         />
 
-        <div css={styles.toggleButtons}>
-          <Button
-            css={styles.toggleBtn}
-            data-inactive={view !== 'details'}
-            onClick={() => setView('details')}
-          >
-            Product Details
-          </Button>
-
-          <Button
-            css={styles.toggleBtn}
-            data-inactive={view !== 'gallery'}
-            onClick={() => setView('gallery')}
-          >
-            Gallery
-          </Button>
-        </div>
-
-        {view === 'gallery' && <Gallery gallery={product.gallery} />}
-
-        {view === 'details' && (
-          <>
-            <h2 css={styles.heading}>Our Process from Farm to Buyer</h2>
-            <Steps steps={steps} />
-          </>
-        )}
+        <ProductInfo product={product} />
       </Container>
 
       <RelatedProducts
@@ -114,6 +53,16 @@ const ProductPage: FC<ProductPageProps> = (props) => {
       </Container>
 
       <Footer />
+
+      <NoSSR>
+        <QuotePrompt
+          product={product}
+          open={openQuote}
+          onClose={() => setOpenQuote(false)}
+        />
+      </NoSSR>
+
+      <QuoteSticky onClickGetQuote={() => setOpenQuote(true)} />
     </div>
   )
 }
@@ -121,30 +70,6 @@ const ProductPage: FC<ProductPageProps> = (props) => {
 const useStyles = makeStyles((props: ProductPageProps) => ({
   root: {
     fontFamily: fonts.secondary.style.fontFamily,
-  },
-  heading: {
-    fontSize: 30,
-    fontWeight: 700,
-    textAlign: 'center',
-    color: '#B1DA50',
-    marginBottom: 56,
-  },
-  toggleButtons: {
-    display: 'flex',
-    justifyContent: 'center',
-    flexWrap: 'wrap',
-    marginBottom: 56,
-  },
-  toggleBtn: {
-    padding: '10px 20px',
-    minWidth: 'inherit',
-    '&:not(:last-of-type)': {
-      marginRight: 20,
-    },
-    '&[data-inactive="true"]': {
-      background: '#fff',
-      color: '#434343',
-    },
   },
 }))
 
@@ -163,6 +88,13 @@ const GET_DATA = gql`
         en
       }
       gallery
+      traces {
+        type
+        gallery
+        description {
+          en
+        }
+      }
     }
 
     products {
@@ -194,11 +126,16 @@ export const getServerSideProps: GetServerSideProps<ProductPageProps> = async (
         ...product,
         name: product.name.en,
         availableSpecs: product.availableSpecs.en,
+        traces: product.traces.map((trace: any) => ({
+          ...trace,
+          description: trace.description.en,
+        })),
       },
       products: products.map((product: any) => ({
         ...product,
         name: product.name.en,
         availableSpecs: product.availableSpecs.en,
+        
       })),
     },
   }
