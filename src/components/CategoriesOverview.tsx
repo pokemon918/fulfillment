@@ -32,20 +32,22 @@ const CategoriesOverview: FC<CategoriesOverviewProps> = (props) => {
 const useStyles = makeStyles((props: CategoriesOverviewProps) => ({
   wrapper: {
     position: 'relative',
-    '::before': {
-      content: "''",
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      width: '93%',
-      height: 373,
-      background: 'rgba(176, 217, 80, 0.3)',
-      zIndex: -1
-    }
+    background: 'rgba(176, 217, 80, 0.3)',
+    // '::before': {
+    //   content: "''",
+    //   position: 'absolute',
+    //   top: 0,
+    //   left: 0,
+    //   width: '93%',
+    //   height: 373,
+     
+    //   zIndex: -1
+    // }
   },
   root: {
     position: 'relative',
     paddingTop: 74,
+    paddingBottom: 74
   },
   heading: {
     fontWeight: 700,
