@@ -19,7 +19,7 @@ interface QuotePromptProps extends HTMLAttributes<HTMLDivElement> {
 const QuotePrompt: FC<QuotePromptProps> = (props) => {
   const styles = useStyles(props)
 
-  const [slideIdx, setSlideIdx] = useState<number>(2)
+  const [stepIdx, setStepIdx] = useState<number>(0)
 
   const { product, onClose, ...divProps } = props
 
@@ -64,78 +64,56 @@ const QuotePrompt: FC<QuotePromptProps> = (props) => {
     },
   })
 
-  const slides: {
+  const steps: {
     component: FunctionComponent<{
       product: QuoteProduct
-      onNextSlide: () => void
+      onNextStep: () => void
     }>
-    isStep?: boolean
     isHideToggleBtn?: boolean
     isHideStepsDisplay?: boolean
   }[] = [
     {
       component: QuoteStep1,
-      isStep: true,
-    },
-    {
-      component: QuoteEvaluate,
-      isHideToggleBtn: true,
     },
     {
       component: QuoteStep2,
-      isStep: true,
     },
     {
       component: QuoteOrderSent,
-      isStep: true,
       isHideStepsDisplay: true,
       isHideToggleBtn: true,
     },
   ]
 
-  const nextSlide = () =>
-    setSlideIdx((prevSlideIdx) =>
-      prevSlideIdx < slides.length ? prevSlideIdx + 1 : slides.length - 1
+  const nextStep = () =>
+    setStepIdx((prevStepIdx) =>
+      prevStepIdx < steps.length ? prevStepIdx + 1 : steps.length - 1
     )
 
-  const prevSlide = () => {
-    let prevSlideIndex = -1
-
-    const slicedSlides = slides.slice(0, slideIdx)
-    for (let i = slicedSlides.length - 1; i >= 0; i--) {
-      if (slicedSlides[i].isStep) {
-        prevSlideIndex = i
-        break
-      }
-    }
-
-    if (prevSlideIndex > -1) {
-      setSlideIdx(prevSlideIndex)
+  const prevStep = () => {
+    if (stepIdx > 0) {
+      setStepIdx((prevStepIdx) => (prevStepIdx > 0 ? prevStepIdx - 1 : 0))
     } else {
       onClose()
     }
   }
 
-  const slide = slides[slideIdx]
-
-  let stepNum = slide.isStep
-    ? slides.slice(0, slideIdx).filter((s) => s.isStep).length + 1
-    : null
+  const step = steps[stepIdx]
 
   return (
     <Dialog css={styles.dialog} {...divProps}>
-      {!slide.isHideToggleBtn && (
-        <button css={styles.dialogBtn} onClick={prevSlide}>
-          {slideIdx <= 0 ? <CloseIcon /> : <BackIcon />}
+      {!step.isHideToggleBtn && (
+        <button css={styles.dialogBtn} onClick={prevStep}>
+          {stepIdx <= 0 ? <CloseIcon /> : <BackIcon />}
         </button>
       )}
 
-      {stepNum && !slide.isHideStepsDisplay && (
-        <div css={styles.stepHeader}>{stepNum} of 3</div>
+      {!step.isHideStepsDisplay && (
+        <div css={styles.stepHeader}>{stepIdx + 1} of 3</div>
       )}
 
       <FormProvider {...formMethods}>
-        <slide.component product={product} onNextSlide={nextSlide} />
+        <step.component product={product} onNextStep={nextStep} />
       </FormProvider>
     </Dialog>
   )

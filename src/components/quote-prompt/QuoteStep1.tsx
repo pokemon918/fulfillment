@@ -1,25 +1,27 @@
 import CountryLabel from '@/ui/CountryLabel'
 import Input from '@/ui/Input'
 import makeStyles from '@/utils/makeStyles'
-import { FC, HTMLAttributes, FormEventHandler } from 'react'
+import { FC, HTMLAttributes, FormEventHandler, useState } from 'react'
 import ShipIcon from '@/icons/ShipIcon'
 import countries from '@/data/countries'
 import Button from '@/ui/Button'
 import { useFormContext } from 'react-hook-form'
 import { QuoteInput, QuoteProduct } from './quote.types'
 import theme from '@/theme'
+import QuoteEvaluate from './QuoteEvaluate'
 
 interface QuoteStep1Props extends HTMLAttributes<HTMLFormElement> {
   product: QuoteProduct
-  onNextSlide: () => void
+  onNextStep: () => void
 }
 
 const QuoteStep1: FC<QuoteStep1Props> = (props) => {
   const styles = useStyles(props)
 
   const { control, getValues } = useFormContext<QuoteInput>()
+  const [evaluating, setEvaluating] = useState(false)
 
-  const { product, onNextSlide, ...formProps } = props
+  const { product, onNextStep, ...formProps } = props
 
   const shippingTypes = ['FOB', 'EXW', 'CFR', 'DDP'].map((option) => ({
     name: option,
@@ -39,148 +41,155 @@ const QuoteStep1: FC<QuoteStep1Props> = (props) => {
     if (phone.length < 6) {
       alert('Please enter a valid phone number')
     } else {
-      onNextSlide()
+      setEvaluating(true)
+      // onNextStep()
     }
   }
 
   return (
-    <form css={styles.root} onSubmit={handleSubmit} {...formProps}>
-      <div css={styles.contactView}>
-        <div css={styles.header}>
-          <img css={styles.thumbnail} src={product.thumbnail} alt="" />
+    <>
+      {!evaluating && (
+        <form css={styles.root} onSubmit={handleSubmit} {...formProps}>
+          <div css={styles.contactView}>
+            <div css={styles.header}>
+              <img css={styles.thumbnail} src={product.thumbnail} alt="" />
 
-          <div css={styles.productDetails}>
-            <div css={styles.subheader} style={{ marginBottom: 6 }}>
-              <h3 css={styles.heading}>Fresh Blueberries</h3>
+              <div css={styles.productDetails}>
+                <div css={styles.subheader} style={{ marginBottom: 6 }}>
+                  <h3 css={styles.heading}>Fresh Blueberries</h3>
 
-              <div css={styles.priceHead}>
-                <span style={{ marginRight: 8 }}>Price</span>
-                <b style={{ color: '#B1DA50', fontSize: 16 }}>
-                  ${product.price}
-                </b>
+                  <div css={styles.priceHead}>
+                    <span style={{ marginRight: 8 }}>Price</span>
+                    <b style={{ color: '#B1DA50', fontSize: 16 }}>
+                      ${product.price}
+                    </b>
+                  </div>
+                </div>
+                <CountryLabel countryCode={product.country} fontWeight={400} />
               </div>
             </div>
-            <CountryLabel countryCode={product.country} fontWeight={400} />
+
+            <div css={styles.contactForm}>
+              <h3
+                css={styles.heading}
+                style={{ color: '#B1DA50', marginBottom: 20 }}
+              >
+                CONTACT FORM
+              </h3>
+
+              <Input
+                name="company"
+                control={control}
+                css={styles.input}
+                label="Company"
+                placeholder="Your Company Name"
+                required
+              />
+
+              <Input
+                name="name"
+                control={control}
+                css={styles.input}
+                label="Name"
+                placeholder="Your Name"
+                required
+              />
+
+              <Input
+                name="email"
+                control={control}
+                css={styles.input}
+                type="email"
+                label="Email address"
+                placeholder="Your Email address"
+                required
+              />
+
+              <Input
+                name="phone"
+                control={control}
+                css={styles.input}
+                type="tel"
+                label="Phone"
+                required
+              />
+            </div>
           </div>
-        </div>
 
-        <div css={styles.contactForm}>
-          <h3
-            css={styles.heading}
-            style={{ color: '#B1DA50', marginBottom: 20 }}
-          >
-            CONTACT FORM
-          </h3>
+          <div css={styles.requirementsForm}>
+            <h6 css={styles.reqTitle}>YOUR REQUIREMENTS</h6>
 
-          <Input
-            name="company"
-            control={control}
-            css={styles.input}
-            label="Company"
-            placeholder="Your Company Name"
-            required
-          />
+            <Input
+              control={control}
+              name="landingPort.name"
+              css={styles.input}
+              placeholder="Port of Loading"
+              theme="dark"
+              startIcon={<ShipIcon />}
+              startSelect={{
+                name: 'landingPort.shippingType',
+                options: shippingTypes,
+              }}
+              endSelect={{
+                name: 'landingPort.country',
+                options: countriesOptions,
+              }}
+              required
+            />
 
-          <Input
-            name="name"
-            control={control}
-            css={styles.input}
-            label="Name"
-            placeholder="Your Name"
-            required
-          />
+            <Input
+              control={control}
+              name="destinationPort.name"
+              css={styles.input}
+              placeholder="Port of Destination"
+              theme="dark"
+              startIcon={<ShipIcon />}
+              startSelect={{
+                name: 'destinationPort.shippingType',
+                options: shippingTypes,
+              }}
+              endSelect={{
+                name: 'destinationPort.country',
+                options: countriesOptions,
+              }}
+              required
+            />
 
-          <Input
-            name="email"
-            control={control}
-            css={styles.input}
-            type="email"
-            label="Email address"
-            placeholder="Your Email address"
-            required
-          />
+            <Input
+              control={control}
+              name="purchaseVolume"
+              css={styles.input}
+              label="Purchase volume"
+              endAdornment="kg"
+              theme="dark"
+              required
+              pattern="[0-9]+(\.[0-9]+)?"
+            />
 
-          <Input
-            name="phone"
-            control={control}
-            css={styles.input}
-            type="tel"
-            label="Phone"
-            required
-          />
-        </div>
-      </div>
+            <Input
+              control={control}
+              name="needs"
+              placeholder="Specify your needs"
+              theme="dark"
+              multiline
+              rows={4}
+              required
+            />
 
-      <div css={styles.requirementsForm}>
-        <h6 css={styles.reqTitle}>YOUR REQUIREMENTS</h6>
+            <p css={styles.note}>
+              By sending a message to TRU MARKET, you agree to be contacted by
+              our sales team via your specified contact information.
+            </p>
 
-        <Input
-          control={control}
-          name="landingPort.name"
-          css={styles.input}
-          placeholder="Port of Loading"
-          theme="dark"
-          startIcon={<ShipIcon />}
-          startSelect={{
-            name: 'landingPort.shippingType',
-            options: shippingTypes,
-          }}
-          endSelect={{
-            name: 'landingPort.country',
-            options: countriesOptions,
-          }}
-          required
-        />
+            <Button type="submit" fullWidth>
+              Next
+            </Button>
+          </div>
+        </form>
+      )}
 
-        <Input
-          control={control}
-          name="destinationPort.name"
-          css={styles.input}
-          placeholder="Port of Destination"
-          theme="dark"
-          startIcon={<ShipIcon />}
-          startSelect={{
-            name: 'destinationPort.shippingType',
-            options: shippingTypes,
-          }}
-          endSelect={{
-            name: 'destinationPort.country',
-            options: countriesOptions,
-          }}
-          required
-        />
-
-        <Input
-          control={control}
-          name="purchaseVolume"
-          css={styles.input}
-          label="Purchase volume"
-          endAdornment="kg"
-          theme="dark"
-          required
-          pattern="[0-9]+(\.[0-9]+)?"
-        />
-
-        <Input
-          control={control}
-          name="needs"
-          placeholder="Specify your needs"
-          theme="dark"
-          multiline
-          rows={4}
-          required
-        />
-
-        <p css={styles.note}>
-          By sending a message to TRU MARKET, you agree to be contacted by our
-          sales team via your specified contact information.
-        </p>
-
-        <Button type="submit" fullWidth>
-          Next
-        </Button>
-      </div>
-    </form>
+      {evaluating && <QuoteEvaluate product={product} onNextStep={onNextStep} />}
+    </>
   )
 }
 
@@ -203,7 +212,7 @@ const useStyles = makeStyles(({}: QuoteStep1Props) => ({
     [`@media (max-width: ${theme.widths.mobile})`]: {
       paddingRight: 0,
       paddingLeft: 0,
-      paddingBottom: 0
+      paddingBottom: 0,
     },
   },
   header: {

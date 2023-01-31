@@ -7,13 +7,13 @@ import { QuoteInput, QuoteProduct } from './quote.types'
 
 interface QuoteEvaluateProps {
   product: QuoteProduct
-  onNextSlide: () => void
+  onNextStep: () => void
 }
 
 const QuoteEvaluate: FC<QuoteEvaluateProps> = (props) => {
   const styles = useStyles(props)
 
-  const { product, onNextSlide } = props
+  const { product, onNextStep } = props
 
   const { getValues } = useFormContext<QuoteInput>()
 
@@ -33,7 +33,7 @@ const QuoteEvaluate: FC<QuoteEvaluateProps> = (props) => {
     }, 200)
 
     const timeout = setTimeout(() => {
-      onNextSlide()
+      onNextStep()
     }, 1600)
 
     return () => {

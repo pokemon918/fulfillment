@@ -5,7 +5,7 @@ import { QuoteProduct } from './quote.types'
 
 interface QuoteOrderSentProps {
   product: QuoteProduct
-  onNextSlide: () => void
+  onNextStep: () => void
 }
 
 const QuoteOrderSent: FC<QuoteOrderSentProps> = (props) => {

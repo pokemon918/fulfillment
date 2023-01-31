@@ -17,13 +17,13 @@ export interface Step2Values {}
 
 interface QuoteStep2Props extends HTMLAttributes<HTMLFormElement> {
   product: QuoteProduct
-  onNextSlide: () => void
+  onNextStep: () => void
 }
 
 const QuoteStep2: FC<QuoteStep2Props> = (props) => {
   const styles = useStyles(props)
 
-  const { product, onNextSlide, ...formProps } = props
+  const { product, onNextStep, ...formProps } = props
 
   const { control } = useFormContext<QuoteInput>()
 
@@ -60,7 +60,7 @@ const QuoteStep2: FC<QuoteStep2Props> = (props) => {
   const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault()
 
-    onNextSlide()
+    onNextStep()
   }
 
   const roundedPrice = +(product.price * Number(purchaseVolume)).toFixed(2)
@@ -152,12 +152,12 @@ const QuoteStep2: FC<QuoteStep2Props> = (props) => {
           <div css={styles.infoSection}>
             <p css={styles.infoVal}>
               <PhoneIcon css={styles.infoValIcon} />
-              <span css={styles.infoValText}>+{phone}</span>
+              <span css={styles.infoValText} data-nowrap="true">+{phone}</span>
             </p>
 
             <p css={styles.infoVal}>
               <EmailIcon css={styles.infoValIcon} />
-              <span css={styles.infoValText}>{email}</span>
+              <span css={styles.infoValText} data-nowrap="true">{email}</span>
             </p>
           </div>
         </div>
@@ -381,9 +381,11 @@ const useStyles = makeStyles(({}: QuoteStep2Props) => ({
   },
   infoValText: {
     flexGrow: 1,
-    textOverflow: 'ellipsis',
-    overflow: 'hidden',
-    whiteSpace: 'nowrap',
+    '&[data-nowrap="true"]': {
+      textOverflow: 'ellipsis',
+      overflow: 'hidden',
+      whiteSpace: 'nowrap',
+    },
   },
   termWrapper: {
     width: '100%',
@@ -434,12 +436,12 @@ const useStyles = makeStyles(({}: QuoteStep2Props) => ({
   totalPrice: {
     textAlign: 'right',
     [`@media (max-width: ${theme.widths.mobile})`]: {
-      marginTop: 12
-    }
+      marginTop: 12,
+    },
   },
   totalPriceHeading: {
     marginRight: 40,
-    
+
     [`@media (max-width: ${theme.widths.mobile})`]: {
       marginRight: 12,
     },
