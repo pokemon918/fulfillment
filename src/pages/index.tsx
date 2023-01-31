@@ -49,9 +49,9 @@ export default function Home(props: HomeProps) {
         <Products products={products} style={{ marginBottom: 162 }} />
       </Container>
 
-      <ContainerWide>
+       {/* <ContainerWide>
         <BlogOverview style={{ marginBottom: 122 }} articles={articles} />
-      </ContainerWide>
+      </ContainerWide> */}
 
       <Footer />
     </>
@@ -61,7 +61,7 @@ export default function Home(props: HomeProps) {
 const useStyles = makeStyles((props: HomeProps) => ({
   heading: {
     fontWeight: 700,
-    fontSize: 36,
+    fontSize: 30,
     lineHeight: 1.25,
     textAlign: 'center',
     color: '#69832C',

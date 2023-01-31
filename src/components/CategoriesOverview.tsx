@@ -1,9 +1,8 @@
 import { BaseCategory } from '@/types/category'
-import Container from '@/ui/Container'
 import ContainerWide from '@/ui/ContainerWide'
 import makeStyles from '@/utils/makeStyles'
 import { FC, HTMLAttributes } from 'react'
-import Categories from './Categories'
+import Category from './Category'
 
 interface CategoriesOverviewProps extends HTMLAttributes<HTMLDivElement> {
   categories: BaseCategory[]
@@ -23,43 +22,66 @@ const CategoriesOverview: FC<CategoriesOverviewProps> = (props) => {
 
         <ContainerWide
           scrollable
-          endBlur="linear-gradient(269.92deg, #FFFFFF 0.05%, rgba(255, 255, 255, 0) 99.9%)"
+          endBlur="linear-gradient(269.92deg, #e7f4ca 0.05%, rgba(231, 244, 202, 0) 99.9%)"
         >
-          <Categories categories={categories} />
+          <div css={styles.categories}>
+            {categories.map((category) => (
+              <Category
+                css={styles.category}
+                key={category._id}
+                category={category}
+              />
+            ))}
+
+            <div css={styles.emptyBox} />
+          </div>
         </ContainerWide>
       </div>
     </div>
   )
 }
 
-const useStyles = makeStyles((props: CategoriesOverviewProps) => ({
-  wrapper: {
-    position: 'relative',
-    background: 'rgba(176, 217, 80, 0.3)',
-    // '::before': {
-    //   content: "''",
-    //   position: 'absolute',
-    //   top: 0,
-    //   left: 0,
-    //   width: '93%',
-    //   height: 373,
+const useStyles = makeStyles((props: CategoriesOverviewProps) => {
+  const box = {
+    width: 265,
+    flexShrink: 0,
+    "@media (max-width: 360px)": {
+    width: 'calc(100% - 64px)'
+    }
+  }
 
-    //   zIndex: -1
-    // }
-  },
-  root: {
-    position: 'relative',
-    paddingTop: 74,
-    paddingBottom: 74,
-  },
-  heading: {
-    fontWeight: 700,
-    fontSize: 36,
-    lineHeight: 1.25,
-    textAlign: 'center',
-    color: '#69832C',
-    marginBottom: 44,
-  },
-}))
+  return {
+    wrapper: {
+      position: 'relative',
+      background: 'rgba(176, 217, 80, 0.3)',
+    },
+    root: {
+      position: 'relative',
+      paddingTop: 74,
+      paddingBottom: 74,
+    },
+    heading: {
+      fontWeight: 700,
+      fontSize: 36,
+      lineHeight: 1.25,
+      textAlign: 'center',
+      color: '#69832C',
+      marginBottom: 44,
+    },
+    categories: {
+      height: 'auto',
+      display: 'flex',
+      padding: '0 16px'
+    },
+    category: { 
+      marginRight: 36,
+      ...box
+    },
+    emptyBox: {
+      flexShrink: 0,
+      width: 16
+    }
+  }
+})
 
 export default CategoriesOverview

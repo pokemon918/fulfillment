@@ -1,6 +1,6 @@
 import Footer from '@/components/Footer'
 import Navbar from '@/components/Navbar'
-import ProductIntro from '@/components/ProductIntro'
+import ProductIntro from '@/components/product-view/ProductIntro'
 import theme from '@/theme'
 import { BaseProduct, DetailedProduct } from '@/types/product'
 import Container from '@/ui/Container'

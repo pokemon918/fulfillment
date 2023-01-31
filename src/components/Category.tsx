@@ -1,4 +1,5 @@
 import { BaseCategory } from '@/types/category'
+import BoxRation from '@/ui/BoxRatio'
 import makeStyles from '@/utils/makeStyles'
 import { FC, HTMLAttributes } from 'react'
 
@@ -12,9 +13,9 @@ const Category: FC<CategoryProps> = (props) => {
   const { category, ...divProps } = props
 
   return (
-    <div css={styles.root} {...divProps}>
+    <BoxRation ration={1.18} css={styles.root} {...divProps}>
       <img css={styles.img} src={category.thumbnail} alt={category.name} />
-    </div>
+    </BoxRation>
   )
 }
 
@@ -22,13 +23,13 @@ const useStyles = makeStyles((props: CategoryProps) => ({
   root: {
     display: 'flex',
     width: '100%',
+    borderRadius: 20,
+    overflow: 'hidden',
   },
   img: {
     width: '100%',
     height: '100%',
     objectFit: 'cover',
-    overflow: 'hidden',
-    borderRadius: 20,
   }
 }))
 

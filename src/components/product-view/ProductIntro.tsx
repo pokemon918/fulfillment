@@ -6,8 +6,8 @@ import Button from '@/ui/Button'
 import makeStyles from '@/utils/makeStyles'
 import Link from 'next/link'
 import { FC, HTMLAttributes, useMemo } from 'react'
-import ExcerptGallery from './ExcerptGallery'
-import MonthsRange from './MonthsRange'
+import ExcerptGallery from '../ExcerptGallery'
+import MonthsRange from '../MonthsRange'
 
 interface ProductIntroProps extends HTMLAttributes<HTMLDivElement> {
   gallery: string[]

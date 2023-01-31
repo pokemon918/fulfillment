@@ -1,3 +1,4 @@
+import theme from '@/theme'
 import { BaseProduct } from '@/types/product'
 import Button from '@/ui/Button'
 import CountryLabel from '@/ui/CountryLabel'
@@ -62,20 +63,36 @@ const useStyles = makeStyles(
       transform: 'translateZ(10px)',
       width: '100%',
       display: 'grid',
-      gridTemplateColumns: horizontal ? '63% 37%' : '1fr',
-      border: bordered ? '1px solid #CFCFCF' : 'none',
-      borderRadius: bordered ? 16 : 0,
+      gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 0.8fr)',
+      border: '1px solid #CFCFCF',
+      borderRadius: 16,
       fontWeight: 500,
       overflow: 'hidden',
       color: '#000',
       textDecoration: 'none',
+      [`@media (max-width: ${theme.widths.tabletXs})`]: {
+        maxWidth: 300,
+        gridTemplateColumns: 'minmax(0, 1fr)',
+        margin: '0 auto',
+      },
     },
     imgWrapper: {
       position: 'relative',
       width: '100%',
-      height: imgHeight,
+      height: '100%',
       borderRadius: 16,
       overflow: 'hidden',
+      [`@media (max-width: ${theme.widths.tabletXs})`]: {
+        height: 'auto',
+        position: 'relative',
+        width: '100%',
+        '::before': {
+          content: '""',
+          display: 'block',
+          width: '100%',
+          paddingTop: `100%`,
+        },
+      },
     },
     img: {
       position: 'absolute',
@@ -89,13 +106,18 @@ const useStyles = makeStyles(
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',
-      padding: horizontal ? '20px 30px' : '18px 0 0',
-      minHeight: horizontal ? 290 : undefined,
-      alignItems: horizontal ? 'stretch' : 'start',
+      padding: '20px 30px',
+      minHeight: 290,
+      alignItems: 'stretch',
+      [`@media (max-width: ${theme.widths.tabletXs})`]: {
+        padding: '20px 16px',
+        minHeight: 'initial',
+        alignItems: 'start',
+      },
     },
     heading: {
-      fontSize: horizontal ? 25 : 20,
-      fontWeight: horizontal ? 500 : 700,
+      fontSize: 25,
+      fontWeight: 500,
       lineHeight: 1.2,
       marginBottom: 6,
     },
@@ -108,6 +130,7 @@ const useStyles = makeStyles(
       marginRight: 5,
     },
     specs: {
+      width: '100%',
       color: 'rgba(5, 5, 5, 0.5)',
       marginBottom: 16,
     },

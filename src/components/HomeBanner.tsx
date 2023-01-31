@@ -5,9 +5,7 @@ import makeStyles from '@/utils/makeStyles'
 import { css } from '@emotion/react'
 import { FC, HTMLAttributes } from 'react'
 
-interface HomeBannerProps extends HTMLAttributes<HTMLDivElement> {
-
-}
+interface HomeBannerProps extends HTMLAttributes<HTMLDivElement> {}
 
 const HomeBanner: FC<HomeBannerProps> = (props) => {
   const styles = useHomeBannerStyles(props)
@@ -17,9 +15,9 @@ const HomeBanner: FC<HomeBannerProps> = (props) => {
   return (
     <>
       <div css={styles.root} {...divProps}>
-        <Container css={styles.content}>
-          <Navbar css={styles.navbar} mode="dark" />
+        <Navbar css={styles.navbar} mode="dark" />
 
+        <Container css={styles.content}>
           <div css={styles.body}>
             <h1 css={styles.heading}>
               Start importing fresh products safely and reliably.
@@ -61,6 +59,7 @@ const useHomeBannerStyles = makeStyles(() => ({
     background-position: center;
     background-size: cover;
     height: 65vh;
+    min-height: 620px;
   `,
   content: {
     display: 'flex',

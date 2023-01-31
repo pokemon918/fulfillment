@@ -1,3 +1,4 @@
+import theme from '@/theme'
 import makeStyles from '@/utils/makeStyles'
 import { FC, HTMLAttributes } from 'react'
 
@@ -32,8 +33,21 @@ const useStyles = makeStyles((props: OverviewProps) => ({
     gridTemplateColumns: '416px 1fr',
     alignItems: 'center',
     gap: 72,
+    [`@media (max-width: ${theme.widths.tablet})`]: {
+      flexDirection: 'column',
+      display: 'flex',
+      maxWidth: 600,
+      width: '100%',
+      margin: '0 auto',
+      gap: 0,
+      textAlign: 'center'
+    }
   },
-  content: {},
+  content: {
+    [`@media (max-width: ${theme.widths.tablet})`]: {
+      marginBottom: 24
+    }
+  },
   heading: {
     fontWeight: 500,
     fontSize: 25,
@@ -42,7 +56,7 @@ const useStyles = makeStyles((props: OverviewProps) => ({
   },
   desc: {
     fontSize: 18,
-    lineHeight: 1.5
+    lineHeight: 1.5,
   },
   gif: {
     width: '100%',

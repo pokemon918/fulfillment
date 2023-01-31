@@ -6,6 +6,7 @@ import IconButton from '@/ui/IconButton'
 import makeStyles from '@/utils/makeStyles'
 import mergeProps from '@/utils/mergeProps'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { FC, HTMLAttributes } from 'react'
 
 interface NavbarProps extends HTMLAttributes<HTMLDivElement> {
@@ -45,6 +46,8 @@ const Navbar: FC<NavbarProps> = (originalProps) => {
 
   const fontColor = mode === 'light' ? '#000' : '#fff'
 
+  const { pathname } = useRouter()
+
   return (
     <div css={styles.root} {...divProps}>
       <Container css={styles.nav}>
@@ -54,7 +57,13 @@ const Navbar: FC<NavbarProps> = (originalProps) => {
 
         <div css={styles.deskLinks}>
           {links.map((link) => (
-            <Link key={link.to} href={link.to} passHref css={styles.deskLink}>
+            <Link
+              key={link.to}
+              href={link.to}
+              passHref
+              css={styles.deskLink}
+              data-active={link.to === pathname}
+            >
               {link.title}
             </Link>
           ))}
@@ -123,9 +132,26 @@ const useStyles = makeStyles(({ mode }: NavbarProps) => ({
     },
   },
   deskLink: {
+    position: 'relative',
     color: 'inherit',
     fontFamily: theme.fonts.secondary,
     textDecoration: 'none',
+    ':hover': {
+      color: '#B0D950',
+    },
+    '&[data-active="true"]': {
+      color: '#B0D950',
+      '::after': {
+        content: '""',
+        position: 'absolute',
+        width: 6,
+        height: 6,
+        background: '#B0D950',
+        borderRadius: '50%',
+        bottom: -6,
+        left: 'calc(50% - 3px)',
+      },
+    },
   },
   deskButtons: {
     display: 'flex',
