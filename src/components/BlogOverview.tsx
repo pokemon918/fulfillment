@@ -1,10 +1,10 @@
 import ArrowLeft from '@/icons/ArrowLeft'
 import ArrowRight from '@/icons/ArrowRight'
+import theme from '@/theme'
 import { BaseArticle } from '@/types/article'
 import Button from '@/ui/Button'
 import ContainerWide from '@/ui/ContainerWide'
 import makeStyles from '@/utils/makeStyles'
-import mergeProps from '@/utils/mergeProps'
 import { FC, HTMLAttributes } from 'react'
 import Article from './Article'
 
@@ -18,19 +18,54 @@ const BlogOverview: FC<BlogOverviewProps> = (props) => {
   const { articles, ...divProps } = props
   return (
     <div css={styles.root} {...divProps}>
-      <div css={styles.mainView}>
-        <div>
-          <h3 css={styles.heading}>Blog</h3>
+      <div css={styles.view}>
+        <div css={styles.mainView}>
+          <div>
+            <h3 css={styles.heading}>Blog</h3>
 
-          <p css={styles.desc}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lacus,
-            fermentum amet faucibus sed id nisi lectus at.
-          </p>
+            <p css={styles.desc}>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lacus,
+              fermentum amet faucibus sed id nisi lectus at.
+            </p>
 
-          <Button style={{ minWidth: 205 }}>See More</Button>
+            <Button css={styles.deskBtn} style={{ minWidth: 205 }}>
+              See More
+            </Button>
+          </div>
+
+          <div css={styles.deskNavigators}>
+            <button css={styles.swapBtn}>
+              <ArrowLeft />
+            </button>
+
+            <button css={styles.swapBtn}>
+              <ArrowRight />
+            </button>
+          </div>
         </div>
 
-        <div>
+        <ContainerWide
+          scrollable
+          maxWidth="none"
+          endBlur="linear-gradient(269.92deg, #FFFFFF 0.05%, rgba(255, 255, 255, 0) 99.9%);"
+          contentEndWidth={54}
+        >
+          <div css={styles.articles}>
+            {articles.map((article) => (
+              <Article
+                key={article._id}
+                css={styles.article}
+                article={article}
+              />
+            ))}
+
+            <div css={styles.emptyArticle} />
+          </div>
+        </ContainerWide>
+      </div>
+
+      <div css={styles.mobileFooter}>
+        <div css={styles.mobileNavigators}>
           <button css={styles.swapBtn}>
             <ArrowLeft />
           </button>
@@ -39,32 +74,24 @@ const BlogOverview: FC<BlogOverviewProps> = (props) => {
             <ArrowRight />
           </button>
         </div>
+        <Button style={{ minWidth: 205 }}>See More</Button>
       </div>
-
-      <ContainerWide
-        scrollable
-        maxWidth="none"
-        endBlur="linear-gradient(269.92deg, #FFFFFF 0.05%, rgba(255, 255, 255, 0) 99.9%);"
-        contentEndWidth={40}
-      >
-        <div css={styles.articles}>
-          {articles.map((article) => (
-            <Article key={article._id} css={styles.article} article={article} />
-          ))}
-
-          <div css={styles.emptyArticle} />
-        </div>
-      </ContainerWide>
     </div>
   )
 }
 
 const useStyles = makeStyles((props: BlogOverviewProps) => {
   return {
-    root: {
+    root: {},
+    view: {
       display: 'grid',
       gridTemplateColumns: '355px minmax(0, 1fr)',
       gap: 50,
+      paddingLeft: 16,
+      [`@media (max-width: ${theme.widths.tablet})`]: {
+        gridTemplateColumns: 'minmax(0, 1fr)',
+        gap: 40,
+      },
     },
     heading: {
       fontWeight: 700,
@@ -77,23 +104,39 @@ const useStyles = makeStyles((props: BlogOverviewProps) => {
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'space-between',
+      [`@media (max-width: ${theme.widths.tablet})`]: {
+        maxWidth: 600,
+        width: '100%',
+        margin: '0 auto',
+        textAlign: 'center',
+        paddingRight: 16,
+      },
+    },
+    deskBtn: {
+      [`@media (max-width: ${theme.widths.tablet})`]: {
+        display: 'none',
+      },
+    },
+    deskNavigators: {
+      [`@media (max-width: ${theme.widths.tablet})`]: {
+        display: 'none',
+      },
     },
     desc: {
       fontSize: 18,
       marginBottom: 40,
+      [`@media (max-width: ${theme.widths.tablet})`]: {
+        marginBottom: 0,
+        fontSize: 16,
+      },
     },
     articlesView: {
-      // position: 'relative',
       width: '100%',
       background: 'red',
-      // height: 'auto',
-      // display: 'grid',
-      // gridTemplateColumns: '100%',
     },
     articles: {
       height: 'auto',
       display: 'flex',
-      padding: '0 16px',
     },
     article: {
       flexShrink: 0,
@@ -101,10 +144,26 @@ const useStyles = makeStyles((props: BlogOverviewProps) => {
       '&:not(:last-of-type)': {
         marginRight: 30,
       },
+      [`@media (max-width: ${theme.widths.mobileSm})`]: {
+        width: 'calc(100% - 56px)',
+      },
     },
     emptyArticle: {
       width: 24,
       flexShrink: 0,
+    },
+    mobileFooter: {
+      display: 'none',
+      [`@media (max-width: ${theme.widths.tablet})`]: {
+        display: 'flex',
+        justifyContent: 'center',
+        flexDirection: 'column',
+        alignItems: 'center',
+        marginTop: 20,
+      },
+    },
+    mobileNavigators: {
+      marginBottom: 16,
     },
     shadow: {
       position: 'absolute',
@@ -127,6 +186,9 @@ const useStyles = makeStyles((props: BlogOverviewProps) => {
       background: 'transparent',
       '&:not(:last-of-type)': {
         marginRight: 16,
+        [`@media (max-width: ${theme.widths.tablet})`]: {
+          marginRight: 20,
+        },
       },
     },
   }

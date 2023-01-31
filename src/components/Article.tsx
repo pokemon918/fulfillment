@@ -1,4 +1,6 @@
+import theme from '@/theme'
 import { BaseArticle } from '@/types/article'
+import BoxRation from '@/ui/BoxRatio'
 import makeStyles from '@/utils/makeStyles'
 import mergeProps from '@/utils/mergeProps'
 import { FC, HTMLAttributes } from 'react'
@@ -14,7 +16,9 @@ const Article: FC<ArticleProps> = (props) => {
 
   return (
     <div css={styles.root} {...divProps}>
-      <img src={article.thumbnail} css={styles.img} />
+      <BoxRation css={styles.imgWrapper} ration={1.2}>
+        <img src={article.thumbnail} css={styles.img} />
+      </BoxRation>
 
       <h3 css={styles.heading}>{article.title}</h3>
 
@@ -28,12 +32,16 @@ const useStyles = makeStyles((props: ArticleProps) => {
     root: {
       cursor: 'pointer',
     },
-    img: {
+    imgWrapper: {
       width: '100%',
-      height: 372,
-      objectFit: 'cover',
       marginBottom: 14,
       borderRadius: 16,
+      overflow: 'hidden'
+    },
+    img: {
+      width: '100%',
+      height: '100%',
+      objectFit: 'cover',
     },
     heading: {
       fontSize: 18,
