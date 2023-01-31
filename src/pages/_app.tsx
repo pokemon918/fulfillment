@@ -3,6 +3,7 @@ import GlobalStyles from '@/GlobalStyles'
 import type { AppProps } from 'next/app'
 import 'flag-icons/css/flag-icons.min.css'
 import smoothScroll from 'smoothscroll-polyfill'
+import NavigatingIndicator from '@/components/NavigatingIndicator'
 
 declare global {
   interface Window {
@@ -19,6 +20,9 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <GlobalStyles />
+
+      <NavigatingIndicator />
+      
       <Component {...pageProps} />
     </>
   )
