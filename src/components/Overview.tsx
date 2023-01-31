@@ -12,7 +12,9 @@ const Overview: FC<OverviewProps> = (props) => {
 
   return (
     <div css={styles.wrapper} {...divProps}>
-      <img src="/images/curvy-dots.png" css={styles.decorate} />
+      <div css={styles.imgWrapper}>
+        <img src="/images/curvy-dots.png"  />
+      </div>
 
       <Container maxWidth="md">
         <h4 css={styles.heading} style={{ marginBottom: 52 }}>
@@ -46,11 +48,15 @@ const useStyles = makeStyles((props: OverviewProps) => ({
     position: 'relative',
     zIndex: -1,
   },
-  decorate: {
+  imgWrapper: {
     position: 'absolute',
+    width: '100%',
     right: 0,
     top: -260,
+    overflow: 'hidden',
     zIndex: -1,
+    display: 'flex',
+    justifyContent: 'flex-end'
   },
   root: {
     display: 'grid',

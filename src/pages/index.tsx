@@ -1,4 +1,4 @@
-import Products from '@/components/Products'
+import Products from '@/components/ProductsOverview'
 import HomeBanner from '@/components/HomeBanner'
 import Overview from '@/components/Overview'
 import { BaseProduct } from '@/types/product'
@@ -14,6 +14,7 @@ import Footer from '@/components/Footer'
 import CategoriesOverview from '@/components/CategoriesOverview'
 import RelatedProducts from '@/components/RelatedProducts'
 import ContainerWide from '@/ui/ContainerWide'
+import ProductsOverview from '@/components/ProductsOverview'
 
 interface HomeProps {
   categories: BaseCategory[]
@@ -39,13 +40,7 @@ export default function Home(props: HomeProps) {
 
       <Overview style={{ marginBottom: 82 }} />
 
-      <Container maxWidth="md">
-        <h4 css={styles.heading} style={{ marginBottom: 34 }}>
-          DEAL OPPORTUNITIES
-        </h4>
-
-        <Products products={products} style={{ marginBottom: 162 }} />
-      </Container>
+      <ProductsOverview style={{ marginBottom: 162 }} products={products} />
 
       <ContainerWide>
         <BlogOverview style={{ marginBottom: 122 }} articles={articles} />
@@ -57,13 +52,7 @@ export default function Home(props: HomeProps) {
 }
 
 const useStyles = makeStyles((props: HomeProps) => ({
-  heading: {
-    fontWeight: 700,
-    fontSize: 30,
-    lineHeight: 1.25,
-    textAlign: 'center',
-    color: '#69832C',
-  },
+ 
 }))
 
 const GET_DATA = gql`
