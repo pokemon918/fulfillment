@@ -52,13 +52,6 @@ const ProductInfo: FC<ProductInfoProps> = (props) => {
 
   const { product, ...divProps } = props
 
-  console.log(
-    product.traces.map((trace) => ({
-      ...trace,
-      title: 'Plantation',
-    }))
-  )
-
   return (
     <div css={styles.root} {...divProps}>
       <div css={styles.toggleNav}>

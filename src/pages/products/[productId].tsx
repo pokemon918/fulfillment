@@ -55,11 +55,9 @@ const ProductPage: FC<ProductPageProps> = (props) => {
       <Footer />
 
       <NoSSR>
-        <QuotePrompt
-          product={product}
-          open={openQuote}
-          onClose={() => setOpenQuote(false)}
-        />
+        <div css={{ display: openQuote ? undefined : 'none' }}>
+          <QuotePrompt product={product} onClose={() => setOpenQuote(false)} />
+        </div>
       </NoSSR>
 
       <QuoteSticky onClickGetQuote={() => setOpenQuote(true)} />

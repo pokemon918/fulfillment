@@ -1,6 +1,6 @@
 import Dialog from '@/ui/Dialog'
 import makeStyles from '@/utils/makeStyles'
-import { FC, HTMLAttributes, FunctionComponent, useState } from 'react'
+import { FC, HTMLAttributes, FunctionComponent, useState, memo } from 'react'
 import QuoteStep1 from './QuoteStep1'
 import CloseIcon from '@/icons/CloseIcon'
 import { useForm, FormProvider } from 'react-hook-form'
@@ -13,7 +13,6 @@ import theme from '@/theme'
 
 interface QuotePromptProps extends HTMLAttributes<HTMLDivElement> {
   product: QuoteProduct
-  open: boolean
   onClose: () => void
 }
 
@@ -22,7 +21,7 @@ const QuotePrompt: FC<QuotePromptProps> = (props) => {
 
   const [slideIdx, setSlideIdx] = useState<number>(0)
 
-  const { product, open, onClose, ...divProps } = props
+  const { product, onClose, ...divProps } = props
 
   const formMethods = useForm<QuoteInput>({
     defaultValues: {
@@ -124,11 +123,7 @@ const QuotePrompt: FC<QuotePromptProps> = (props) => {
     : null
 
   return (
-    <Dialog
-      css={styles.dialog}
-      dialogStyle={{ display: open ? undefined : 'none' }}
-      {...divProps}
-    >
+    <Dialog css={styles.dialog} {...divProps}>
       {!slide.isHideToggleBtn && (
         <button css={styles.dialogBtn} onClick={prevSlide}>
           {slideIdx <= 0 ? <CloseIcon /> : <BackIcon />}
@@ -149,7 +144,7 @@ const QuotePrompt: FC<QuotePromptProps> = (props) => {
 const useStyles = makeStyles(({}: QuotePromptProps) => ({
   dialog: {
     position: 'relative',
-    fontFamily: theme.fonts.secondary
+    fontFamily: theme.fonts.secondary,
   },
   stepHeader: {
     position: 'absolute',
@@ -172,4 +167,4 @@ const useStyles = makeStyles(({}: QuotePromptProps) => ({
   },
 }))
 
-export default QuotePrompt
+export default memo(QuotePrompt, () => true)
