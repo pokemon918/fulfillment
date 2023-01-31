@@ -7,7 +7,7 @@ import makeStyles from '@/utils/makeStyles'
 import mergeProps from '@/utils/mergeProps'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { FC, HTMLAttributes } from 'react'
+import { FC, HTMLAttributes, useState } from 'react'
 
 interface NavbarProps extends HTMLAttributes<HTMLDivElement> {
   mode?: 'light' | 'dark'
@@ -48,8 +48,12 @@ const Navbar: FC<NavbarProps> = (originalProps) => {
 
   const { pathname } = useRouter()
 
+  const [open, setOpen] = useState(false)
+
+  const toggleOpen = () => setOpen((prevOpen) => !prevOpen)
+
   return (
-    <div css={styles.root} {...divProps}>
+    <div css={styles.root} {...divProps} data-open={open}>
       <Container css={styles.nav}>
         <Link href="/">
           <img src={`/trumarket-logo-${mode}.svg`} css={styles.logo} />
@@ -90,22 +94,63 @@ const Navbar: FC<NavbarProps> = (originalProps) => {
           </Button>
         </div>
 
-        <IconButton css={styles.menuBtn}>
+        <IconButton css={styles.menuBtn} onClick={toggleOpen}>
           <MenuIcon />
         </IconButton>
       </Container>
+
+      <div css={styles.collapseMenu} data-open={open}>
+        <div css={styles.mobileLinks}>
+          {links.map((link) => (
+            <Link
+              key={link.to}
+              href={link.to}
+              passHref
+              css={styles.mobileLink}
+              data-active={link.to === pathname}
+            >
+              {link.title}
+            </Link>
+          ))}
+
+          <Button
+            css={styles.mobileButton}
+            variant="outlined"
+            size="lg"
+            rounded
+            fontColor={fontColor}
+          >
+            Invest Now
+          </Button>
+
+          <Button
+            css={styles.mobileButton}
+            size="lg"
+            rounded
+            fontColor={fontColor}
+          >
+            Fulfillment
+          </Button>
+        </div>
+      </div>
     </div>
   )
 }
 
 const useStyles = makeStyles(({ mode }: NavbarProps) => ({
   root: {
+    position: 'relative',
     width: '100%',
     background: mode === 'light' ? '#fff' : undefined,
     boxShadow:
       mode === 'light'
         ? '0 2px 4px -1px rgb(0 0 0 / 20%), 0 4px 5px 0 rgb(0 0 0 / 14%), 0 1px 10px 0 rgb(0 0 0 / 12%)'
         : undefined,
+    transition: 'opacity 0.25s',
+    '&[data-open="true"]': {
+      opacity: '1 !important',
+    },
+    zIndex: 2,
   },
   logo: {
     height: 70,
@@ -169,6 +214,41 @@ const useStyles = makeStyles(({ mode }: NavbarProps) => ({
     [`@media (max-width: ${theme.widths.tablet})`]: {
       display: 'inline-flex',
     },
+  },
+  collapseMenu: {
+    position: 'absolute',
+    width: '100%',
+    background: mode === 'light' ? '#fff' : '#212121',
+    transition: 'height 0.25s',
+    overflow: 'hidden',
+    height: 0,
+    '&[data-open="true"]': {
+      height: 314,
+      borderBottom: '1px solid #212121',
+    },
+  },
+  mobileLinks: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    width: '100%',
+    textAlign: 'center',
+    padding: '32px 16px 16px 16px',
+  },
+  mobileLink: {
+    color: mode === 'light' ? '#000' : '#fff',
+    marginBottom: 16,
+    textDecoration: 'none',
+    ':hover': {
+      textDecoration: 'underline',
+    },
+    '&[data-active="true"]': {
+      color: '#B0D950',
+    },
+  },
+  mobileButton: {
+    padding: '12px 8px',
+    marginBottom: 16,
   },
 }))
 
