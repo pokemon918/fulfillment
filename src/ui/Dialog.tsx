@@ -15,15 +15,9 @@ const Dialog: FC<DialogProps> = (props) => {
   const { dialogClassName, dialogStyle, ...divProps } = props
 
   return (
-    <Portal>
-      <div
-        css={styles.backdrop}
-        className={dialogClassName}
-        style={dialogStyle}
-      >
-        <div css={styles.dialog} {...divProps} />
-      </div>
-    </Portal>
+    <div css={styles.backdrop} className={dialogClassName} style={dialogStyle}>
+      <div css={styles.dialog} {...divProps} />
+    </div>
   )
 }
 

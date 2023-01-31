@@ -23,6 +23,9 @@ const globalStyles = css`
 
   #__next {
     overflow: auto;
+    position: fixed;
+    top: 0;
+    left: 0;
   }
 
   body {

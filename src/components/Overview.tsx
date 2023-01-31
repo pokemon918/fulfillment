@@ -13,7 +13,7 @@ const Overview: FC<OverviewProps> = (props) => {
   return (
     <div css={styles.wrapper} {...divProps}>
       <div css={styles.imgWrapper}>
-        <img src="/images/curvy-dots.png"  />
+        <img src="/images/curvy-dots.png" />
       </div>
 
       <Container maxWidth="md">
@@ -56,7 +56,8 @@ const useStyles = makeStyles((props: OverviewProps) => ({
     overflow: 'hidden',
     zIndex: -1,
     display: 'flex',
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
+    pointerEvents: 'none',
   },
   root: {
     display: 'grid',

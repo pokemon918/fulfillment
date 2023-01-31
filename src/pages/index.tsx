@@ -36,8 +36,6 @@ export default function Home(props: HomeProps) {
         style={{ marginBottom: 114, position: 'relative' }}
       />
 
-      
-
       <Overview style={{ marginBottom: 82 }} />
 
       <ProductsOverview style={{ marginBottom: 162 }} products={products} />
@@ -51,9 +49,7 @@ export default function Home(props: HomeProps) {
   )
 }
 
-const useStyles = makeStyles((props: HomeProps) => ({
- 
-}))
+const useStyles = makeStyles((props: HomeProps) => ({}))
 
 const GET_DATA = gql`
   query {

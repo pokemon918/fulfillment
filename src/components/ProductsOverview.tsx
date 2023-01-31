@@ -48,6 +48,7 @@ const useStyles = makeStyles((props: ProductsOverviewProps) => ({
     top: 0,
     overflow: 'hidden',
     zIndex: -1,
+    pointerEvents: 'none',
   },
   root: {
     display: 'grid',
