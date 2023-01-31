@@ -21,6 +21,10 @@ const globalStyles = css`
     height: 100%;
   }
 
+  #__next {
+    overflow: auto;
+  }
+
   body {
     font-family: ${theme.fonts.primary};
     line-height: 1.3;

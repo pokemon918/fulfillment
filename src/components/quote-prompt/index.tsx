@@ -9,6 +9,7 @@ import QuoteStep2 from './QuoteStep2'
 import BackIcon from '@/icons/BackIcon'
 import QuoteOrderSent from './QuoteOrderSent'
 import QuoteEvaluate from './QuoteEvaluate'
+import theme from '@/theme'
 
 interface QuotePromptProps extends HTMLAttributes<HTMLDivElement> {
   product: QuoteProduct
@@ -148,12 +149,16 @@ const QuotePrompt: FC<QuotePromptProps> = (props) => {
 const useStyles = makeStyles(({}: QuotePromptProps) => ({
   dialog: {
     position: 'relative',
+    fontFamily: theme.fonts.secondary
   },
   stepHeader: {
     position: 'absolute',
     right: 54,
     top: 18,
     fontSize: 14,
+    [`@media (max-width: ${theme.widths.tablet})`]: {
+      right: 16,
+    },
   },
   dialogBtn: {
     position: 'absolute',

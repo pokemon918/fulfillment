@@ -1,3 +1,5 @@
+import Portal from '@/components/Portal'
+import theme from '@/theme'
 import makeStyles from '@/utils/makeStyles'
 import { CSSProperties, FC, HTMLAttributes, ReactNode } from 'react'
 
@@ -13,9 +15,15 @@ const Dialog: FC<DialogProps> = (props) => {
   const { dialogClassName, dialogStyle, ...divProps } = props
 
   return (
-    <div css={styles.backdrop} className={dialogClassName} style={dialogStyle}>
-      <div css={styles.dialog} {...divProps} />
-    </div>
+    <Portal>
+      <div
+        css={styles.backdrop}
+        className={dialogClassName}
+        style={dialogStyle}
+      >
+        <div css={styles.dialog} {...divProps} />
+      </div>
+    </Portal>
   )
 }
 
@@ -30,15 +38,24 @@ const useStyles = makeStyles(({}: DialogProps) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    zIndex: 256
+    zIndex: 256,
   },
   dialog: {
-    width: 'calc(100% - 3rem)',
-    height: 'calc(100% - 3rem)',
+    width: 'calc(100% - 2rem)',
+    height: 'calc(100% - 2rem)',
     maxWidth: '1000px',
     maxHeight: '600px',
     borderRadius: 4,
     overflow: 'auto',
+    [`@media (max-width: ${theme.widths.tablet})`]: {
+      maxHeight: 'initial',
+      maxWidth: 'initial',
+    },
+    [`@media (max-width: ${theme.widths.mobile})`]: {
+      width: '100%',
+      height: '100%',
+      borderRadius: 0,
+    },
   },
 }))
 

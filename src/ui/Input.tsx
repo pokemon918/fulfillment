@@ -122,7 +122,7 @@ const Input: FC<InputProps> = (originalProps) => {
                   {selectOptions.options.map((option, idx) => (
                     <option
                       key={idx}
-                      css={styles.selectOption}
+                      style={{ color: '#000' }}
                       value={option.value}
                     >
                       {option.name}
@@ -256,7 +256,10 @@ const useStyles = makeStyles(({ theme, startSelect }: InputProps) => {
       maxWidth: 82,
       background: 'transparent',
       color: 'inherit',
-      border: 'none'
+      border: 'none',
+      '@media (max-width: 360px)': {
+        maxWidth: 52,
+      }
     },
     selectOption: {
       color: '#000',

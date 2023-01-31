@@ -15,11 +15,11 @@ const QuoteSticky: FC<QuoteStickyProps> = (props) => {
   const { onClickGetQuote } = props
 
   useEffect(() => {
-    const updateShow = () => setShow(window.scrollY > 500)
+    const updateShow = () => setShow(window.root.scrollTop > 500)
 
     updateShow()
-    window.addEventListener('scroll', updateShow)
-    return () => window.removeEventListener('scroll', updateShow)
+    window.root.addEventListener('scroll', updateShow)
+    return () => window.root.removeEventListener('scroll', updateShow)
   }, [])
 
   return (

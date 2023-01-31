@@ -7,6 +7,7 @@ import countries from '@/data/countries'
 import Button from '@/ui/Button'
 import { useFormContext } from 'react-hook-form'
 import { QuoteInput, QuoteProduct } from './quote.types'
+import theme from '@/theme'
 
 interface QuoteStep1Props extends HTMLAttributes<HTMLFormElement> {
   product: QuoteProduct
@@ -44,7 +45,7 @@ const QuoteStep1: FC<QuoteStep1Props> = (props) => {
 
   return (
     <form css={styles.root} onSubmit={handleSubmit} {...formProps}>
-      <div>
+      <div css={styles.contactView}>
         <div css={styles.header}>
           <img css={styles.thumbnail} src={product.thumbnail} alt="" />
 
@@ -192,6 +193,18 @@ const useStyles = makeStyles(({}: QuoteStep1Props) => ({
     width: '100%',
     minHeight: '100%',
     background: '#F8F8F8',
+    [`@media (max-width: ${theme.widths.tablet})`]: {
+      gridTemplateColumns: '1fr',
+    },
+    [`@media (max-width: ${theme.widths.tabletSm})`]: {
+      paddingRight: 16,
+      paddingLeft: 16,
+    },
+    [`@media (max-width: ${theme.widths.mobile})`]: {
+      paddingRight: 0,
+      paddingLeft: 0,
+      paddingBottom: 0
+    },
   },
   header: {
     display: 'flex',
@@ -228,15 +241,28 @@ const useStyles = makeStyles(({}: QuoteStep1Props) => ({
     flexDirection: 'column',
     justifyContent: 'center',
   },
-
+  contactView: {
+    [`@media (max-width: ${theme.widths.mobile})`]: {
+      paddingRight: 16,
+      paddingLeft: 16,
+    },
+  },
   contactForm: {
     width: '100%',
     maxWidth: '306px',
+    [`@media (max-width: ${theme.widths.tablet})`]: {
+      maxWidth: 'initial',
+    },
   },
   requirementsForm: {
     background: '#393939',
     padding: '26px 34px 20px',
     borderRadius: 4,
+    [`@media (max-width: ${theme.widths.mobile})`]: {
+      paddingRight: 16,
+      paddingLeft: 16,
+      borderRadius: 0,
+    },
   },
   input: {
     ':not(:last-of-type)': {
