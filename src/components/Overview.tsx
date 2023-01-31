@@ -1,4 +1,5 @@
 import theme from '@/theme'
+import Container from '@/ui/Container'
 import makeStyles from '@/utils/makeStyles'
 import { FC, HTMLAttributes } from 'react'
 
@@ -10,24 +11,47 @@ const Overview: FC<OverviewProps> = (props) => {
   const { ...divProps } = props
 
   return (
-    <div css={styles.root} {...divProps}>
-      <div css={styles.content}>
-        <h3 css={styles.heading}>TRU Market</h3>
-        <p css={styles.desc}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lacus,
-          fermentum amet faucibus sed id nisi lectus at. Lorem ipsum dolor sit
-          amet, consectetur adipiscing elit. Lacus, fermentum amet faucibus sed
-          id nisi lectus at. Lorem ipsum dolor sit amet, consectetur adipiscing
-          elit. Lacus, fermentum amet faucibus sed id nisi lectus at.
-        </p>
-      </div>
+    <div css={styles.wrapper} {...divProps}>
+      <img src="/images/curvy-dots.png" css={styles.decorate} />
 
-      <img css={styles.gif} src="/images/fruits-overview.gif" alt="" />
+      <Container maxWidth="md">
+        <h4 css={styles.heading} style={{ marginBottom: 52 }}>
+          Overview of TRU MARKET Fulfillment Solution
+        </h4>
+      </Container>
+
+      <Container maxWidth="md" style={{ position: 'relative' }}>
+        <div css={styles.root}>
+          <div css={styles.content}>
+            <h3 css={styles.subheading}>TRU Market</h3>
+            <p css={styles.desc}>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lacus,
+              fermentum amet faucibus sed id nisi lectus at. Lorem ipsum dolor
+              sit amet, consectetur adipiscing elit. Lacus, fermentum amet
+              faucibus sed id nisi lectus at. Lorem ipsum dolor sit amet,
+              consectetur adipiscing elit. Lacus, fermentum amet faucibus sed id
+              nisi lectus at.
+            </p>
+          </div>
+
+          <img css={styles.gif} src="/images/fruits-overview.gif" alt="" />
+        </div>
+      </Container>
     </div>
   )
 }
 
 const useStyles = makeStyles((props: OverviewProps) => ({
+  wrapper: {
+    position: 'relative',
+    zIndex: -1,
+  },
+  decorate: {
+    position: 'absolute',
+    right: 0,
+    top: -260,
+    zIndex: -1,
+  },
   root: {
     display: 'grid',
     gridTemplateColumns: '416px 1fr',
@@ -40,19 +64,26 @@ const useStyles = makeStyles((props: OverviewProps) => ({
       width: '100%',
       margin: '0 auto',
       gap: 0,
-      textAlign: 'center'
-    }
+      textAlign: 'center',
+    },
   },
   content: {
     [`@media (max-width: ${theme.widths.tablet})`]: {
-      marginBottom: 24
-    }
+      marginBottom: 24,
+    },
   },
   heading: {
+    fontWeight: 700,
+    fontSize: 30,
+    lineHeight: 1.25,
+    textAlign: 'center',
+    color: '#69832C',
+  },
+  subheading: {
     fontWeight: 500,
     fontSize: 25,
     lineHeight: 1.25,
-    marginBottom: 8
+    marginBottom: 8,
   },
   desc: {
     fontSize: 18,

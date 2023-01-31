@@ -60,12 +60,14 @@ const useHomeBannerStyles = makeStyles(() => ({
     background-size: cover;
     height: 65vh;
     min-height: 620px;
+    display: flex;
+    flex-direction: column;
   `,
   content: {
     display: 'flex',
     flexDirection: 'column',
     width: '100%',
-    height: '100%',
+    flexGrow: 1
   },
   navbar: {
     flexShrink: 0,

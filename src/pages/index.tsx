@@ -32,16 +32,14 @@ export default function Home(props: HomeProps) {
 
       <CategoriesOverview
         categories={categories}
-        style={{ marginBottom: 114 }}
+        style={{ marginBottom: 114, position: 'relative' }}
       />
 
+      
+
+      <Overview style={{ marginBottom: 82 }} />
+
       <Container maxWidth="md">
-        <h4 css={styles.heading} style={{ marginBottom: 52 }}>
-          Overview of TRU MARKET Fulfillment Solution
-        </h4>
-
-        <Overview style={{ marginBottom: 82 }} />
-
         <h4 css={styles.heading} style={{ marginBottom: 34 }}>
           DEAL OPPORTUNITIES
         </h4>
