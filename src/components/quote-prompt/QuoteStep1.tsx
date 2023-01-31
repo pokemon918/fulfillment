@@ -9,6 +9,7 @@ import { useFormContext } from 'react-hook-form'
 import { QuoteInput, QuoteProduct } from './quote.types'
 import theme from '@/theme'
 import QuoteEvaluate from './QuoteEvaluate'
+import useBase64 from '@/hooks/useBase64'
 
 interface QuoteStep1Props extends HTMLAttributes<HTMLFormElement> {
   product: QuoteProduct
@@ -17,6 +18,8 @@ interface QuoteStep1Props extends HTMLAttributes<HTMLFormElement> {
 
 const QuoteStep1: FC<QuoteStep1Props> = (props) => {
   const styles = useStyles(props)
+
+  const blockchainBgUrl = useBase64('/images/quote-blockchain.png')
 
   const { control, getValues } = useFormContext<QuoteInput>()
   const [evaluating, setEvaluating] = useState(false)
@@ -188,7 +191,7 @@ const QuoteStep1: FC<QuoteStep1Props> = (props) => {
         </form>
       )}
 
-      {evaluating && <QuoteEvaluate product={product} onNextStep={onNextStep} />}
+      {evaluating && <QuoteEvaluate product={product} onNextStep={onNextStep} bgUrl={blockchainBgUrl} />}
     </>
   )
 }

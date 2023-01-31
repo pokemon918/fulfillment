@@ -8,6 +8,7 @@ import { QuoteInput, QuoteProduct } from './quote.types'
 interface QuoteEvaluateProps {
   product: QuoteProduct
   onNextStep: () => void
+  bgUrl?: string | null
 }
 
 const QuoteEvaluate: FC<QuoteEvaluateProps> = (props) => {
@@ -44,7 +45,11 @@ const QuoteEvaluate: FC<QuoteEvaluateProps> = (props) => {
 
   return (
     <div css={styles.root}>
-      <img css={styles.decorate} src="/images/quote-blockchain.png" alt="" />
+      <img
+        css={styles.decorate}
+        src={props.bgUrl ?? '/images/quote-blockchain.png'}
+        alt=""
+      />
 
       <div css={styles.main}>
         <div css={styles.box}>
@@ -71,10 +76,13 @@ const useStyles = makeStyles(({}: QuoteEvaluateProps) => ({
     background: '#393939',
     borderRadius: 4,
     overflow: 'hidden',
+    padding: '0 16px',
   },
   decorate: {
     position: 'absolute',
     width: '100%',
+    height: '100%',
+    objectFit: 'cover',
     top: 0,
     left: 0,
   },
