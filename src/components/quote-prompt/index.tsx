@@ -69,7 +69,6 @@ const QuotePrompt: FC<QuotePromptProps> = (props) => {
       product: QuoteProduct
       onNextStep: () => void
     }>
-    isHideToggleBtn?: boolean
     isHideStepsDisplay?: boolean
   }[] = [
     {
@@ -81,9 +80,11 @@ const QuotePrompt: FC<QuotePromptProps> = (props) => {
     {
       component: QuoteOrderSent,
       isHideStepsDisplay: true,
-      isHideToggleBtn: true,
     },
   ]
+
+  const isLast = stepIdx + 1 >= steps.length
+  const isPromptClosable = stepIdx <= 0 || isLast
 
   const nextStep = () =>
     setStepIdx((prevStepIdx) =>
@@ -91,10 +92,15 @@ const QuotePrompt: FC<QuotePromptProps> = (props) => {
     )
 
   const prevStep = () => {
-    if (stepIdx > 0) {
+    if (!isPromptClosable) {
       setStepIdx((prevStepIdx) => (prevStepIdx > 0 ? prevStepIdx - 1 : 0))
     } else {
       onClose()
+
+      if (isLast) {
+        setStepIdx(0)
+        formMethods.reset()
+      }
     }
   }
 
@@ -102,11 +108,9 @@ const QuotePrompt: FC<QuotePromptProps> = (props) => {
 
   return (
     <Dialog css={styles.dialog} {...divProps}>
-      {!step.isHideToggleBtn && (
-        <button css={styles.dialogBtn} onClick={prevStep}>
-          {stepIdx <= 0 ? <CloseIcon /> : <BackIcon />}
-        </button>
-      )}
+      <button css={styles.dialogBtn} onClick={prevStep}>
+        {isPromptClosable ? <CloseIcon /> : <BackIcon />}
+      </button>
 
       {!step.isHideStepsDisplay && (
         <div css={styles.stepHeader}>{stepIdx + 1} of 3</div>

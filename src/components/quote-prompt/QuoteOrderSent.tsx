@@ -1,3 +1,4 @@
+import theme from '@/theme'
 import Button from '@/ui/Button'
 import makeStyles from '@/utils/makeStyles'
 import { FC } from 'react'
@@ -41,6 +42,10 @@ const useStyles = makeStyles(({}: QuoteOrderSentProps) => ({
     alignItems: 'center',
     padding: '100px 30px',
     background: '#F8F8F8',
+    [`@media (max-width: ${theme.widths.mobile})`]: {
+      paddingLeft: 16,
+      paddingRight: 16,
+    },
   },
   heading: {
     fontSize: 30,
