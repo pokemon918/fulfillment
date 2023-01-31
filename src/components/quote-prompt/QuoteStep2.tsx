@@ -166,44 +166,49 @@ const QuoteStep2: FC<QuoteStep2Props> = (props) => {
           PAYMENT TERMS
         </h2>
 
-        {/* <div style={{ marginBottom: 8 }}>
+        <div style={{ marginBottom: 8 }}>
           {paymentTermsControl.fields.map((paymentTerm, idx) => (
-            <div css={styles.term} key={paymentTerm.id}>
-              <span>{idx + 1}</span>
-              <div css={styles.termInputWrapper}>
-                <Input
-                  control={control}
-                  placeholder={paymentTerm.placeholder}
-                  name={`paymentTerms.${idx}.title`}
-                  required
-                />
-              </div>
+            <div css={styles.termWrapper} key={paymentTerm.id}>
+              <span css={styles.termKey}>{idx + 1}</span>
 
-              <div css={styles.termInputWrapper}>
-                <Input
-                  endAdornment="%"
-                  control={control}
-                  name={`paymentTerms.${idx}.paidPercent`}
-                  required
-                  pattern="(100|[0-9]{1,2})(\.[0-9]+)?"
-                />
-              </div>
+              <div css={styles.term}>
+                <div css={styles.termInputWrapper} data-term-title="true">
+                  <Input
+                    control={control}
+                    placeholder={paymentTerm.placeholder}
+                    name={`paymentTerms.${idx}.title`}
+                    required
+                  />
+                </div>
 
-              <div css={styles.termInputWrapper}>
-                <Input
-                  startAdornment="$"
-                  placeholder="0.00"
-                  control={control}
-                  name={`paymentTerms.${idx}.amount`}
-                  required
-                  pattern="[0-9]+(\.[0-9]+)?"
-                />
+                <div css={styles.termPayment}>
+                  <div css={styles.termInputWrapper}>
+                    <Input
+                      endAdornment="%"
+                      control={control}
+                      name={`paymentTerms.${idx}.paidPercent`}
+                      required
+                      pattern="(100|[0-9]{1,2})(\.[0-9]+)?"
+                    />
+                  </div>
+
+                  <div css={styles.termInputWrapper}>
+                    <Input
+                      startAdornment="$"
+                      placeholder="0.00"
+                      control={control}
+                      name={`paymentTerms.${idx}.amount`}
+                      required
+                      pattern="[0-9]+(\.[0-9]+)?"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           ))}
-        </div> */}
+        </div>
 
-        {/* <Button
+        <Button
           style={{
             background: 'transparent',
             minWidth: 'initial',
@@ -225,13 +230,13 @@ const QuoteStep2: FC<QuoteStep2Props> = (props) => {
             }, 0)
 
             return (
-              <p style={{ textAlign: 'right' }}>
-                <span style={{ marginRight: 40 }}>Total price</span>${' '}
+              <p css={styles.totalPrice}>
+                <span css={styles.totalPriceHeading}>Total price</span>${' '}
                 {+total.toFixed(2)}
               </p>
             )
           }}
-        </FieldValue> */}
+        </FieldValue>
       </div>
 
       <QuoteFeatures css={styles.features} />
@@ -351,7 +356,7 @@ const useStyles = makeStyles(({}: QuoteStep2Props) => ({
     [`@media (max-width: ${theme.widths.tabletSm})`]: {
       gridTemplateColumns: '1fr',
       gap: 8,
-      fontSize: 14
+      fontSize: 14,
     },
   },
   infoSection: {
@@ -380,20 +385,63 @@ const useStyles = makeStyles(({}: QuoteStep2Props) => ({
     overflow: 'hidden',
     whiteSpace: 'nowrap',
   },
-  term: {
+  termWrapper: {
     width: '100%',
-    display: 'grid',
-    gridTemplateColumns:
-      '25px minmax(0, 1fr) minmax(0, 0.4fr) minmax(0, 0.7fr)',
+    display: 'flex',
     alignItems: 'center',
     ':not(:last-of-type)': {
       marginBottom: 15,
     },
+    '@media (max-width: 520px)': {
+      alignItems: 'start',
+    },
+  },
+  termKey: {
+    width: 25,
+    flexShrink: 0,
+    '@media (max-width: 520px)': {
+      paddingTop: 10,
+    },
+  },
+  term: {
+    width: '100%',
+    display: 'grid',
+    gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)',
+    flexGrow: 1,
+    '@media (max-width: 520px)': {
+      gridTemplateColumns: 'minmax(0, 1fr)',
+    },
+  },
+  termPayment: {
+    display: 'grid',
+    gridTemplateColumns: 'minmax(0, 0.4fr) minmax(0, 0.6fr)',
   },
   termInputWrapper: {
     width: '100%',
     ':not(:last-of-type)': {
       paddingRight: 15,
+    },
+    '@media (max-width: 520px)': {
+      ':not(:last-of-type)': {
+        paddingRight: 8,
+      },
+      '&[data-term-title="true"]': {
+        paddingRight: 0,
+        paddingBottom: 4,
+      },
+    },
+  },
+  totalPrice: {
+    textAlign: 'right',
+    [`@media (max-width: ${theme.widths.mobile})`]: {
+      marginTop: 12
+    }
+  },
+  totalPriceHeading: {
+    marginRight: 40,
+    
+    [`@media (max-width: ${theme.widths.mobile})`]: {
+      marginRight: 12,
     },
   },
 }))
