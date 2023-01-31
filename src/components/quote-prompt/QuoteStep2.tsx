@@ -11,6 +11,7 @@ import AddIcon from '@/icons/AddIcon'
 import Button from '@/ui/Button'
 import countries from '@/data/countries'
 import FieldValue from '../FieldValue'
+import theme from '@/theme'
 
 export interface Step2Values {}
 
@@ -62,19 +63,21 @@ const QuoteStep2: FC<QuoteStep2Props> = (props) => {
     onNextSlide()
   }
 
+  const roundedPrice = +(product.price * Number(purchaseVolume)).toFixed(2)
+
   return (
     <form onSubmit={handleSubmit} css={styles.root} {...formProps}>
       <div css={styles.mainSection}>
-        <table css={styles.details}>
+        <table css={styles.deskDetails}>
           <thead>
             <tr>
-              <th css={styles.detailHead}>{product.name}</th>
-              <th css={styles.detailKey}>Port of Loading</th>
-              <th css={styles.detailKey}>Port of Destination</th>
-              <th css={styles.detailKey} style={{ textAlign: 'right' }}>
+              <th css={styles.deskDetailHead}>{product.name}</th>
+              <th css={styles.deskDetailKey}>Port of Loading</th>
+              <th css={styles.deskDetailKey}>Port of Destination</th>
+              <th css={styles.deskDetailKey} style={{ textAlign: 'right' }}>
                 Volume
               </th>
-              <th css={styles.detailKey} style={{ textAlign: 'right' }}>
+              <th css={styles.deskDetailKey} style={{ textAlign: 'right' }}>
                 Price
               </th>
             </tr>
@@ -82,42 +85,79 @@ const QuoteStep2: FC<QuoteStep2Props> = (props) => {
 
           <tbody>
             <tr>
-              <th css={styles.detailVal}>
+              <th css={styles.deskDetailVal}>
                 <CountryLabel countryCode={product.country} fontWeight={400} />
               </th>
-              <th css={styles.detailVal}>
+              <th css={styles.deskDetailVal}>
                 {landingPort.name}, {landingCountry}
               </th>
-              <td css={styles.detailVal}>
+              <td css={styles.deskDetailVal}>
                 {destinationPort.name}, {destCountry}
               </td>
-              <td css={styles.detailEmphasizeVal}>{purchaseVolume} kg</td>
-              <td css={styles.detailEmphasizeVal}>
-                ${+(product.price * Number(purchaseVolume)).toFixed(2)}
+              <td css={styles.deskDetailVal} data-emphasize="true">
+                {purchaseVolume} kg
+              </td>
+              <td css={styles.deskDetailVal} data-emphasize="true">
+                ${roundedPrice}
               </td>
             </tr>
           </tbody>
         </table>
+
+        <div css={styles.mobileDetailsHeader}>
+          <h3 css={styles.mobileDetailsHeading}>{product.name}</h3>
+          <CountryLabel countryCode={product.country} fontWeight={400} />
+        </div>
+
+        <div css={styles.mobileDetails}>
+          <div css={styles.mobileDetail}>
+            <span css={styles.mobileDetailKey}>Port of Loading</span>
+            <span css={styles.mobileDetailVal}>
+              {landingPort.name} {landingCountry}
+            </span>
+          </div>
+
+          <div css={styles.mobileDetail}>
+            <span css={styles.mobileDetailKey}>Port of Destination</span>
+            <span css={styles.mobileDetailVal}>
+              {destinationPort.name}, {destCountry}
+            </span>
+          </div>
+
+          <div css={styles.mobileDetail}>
+            <span css={styles.mobileDetailKey}>Volume</span>
+            <span css={styles.mobileDetailVal} data-emphasize="true">
+              {purchaseVolume} kg
+            </span>
+          </div>
+
+          <div css={styles.mobileDetail}>
+            <span css={styles.mobileDetailKey}>Price</span>
+            <span css={styles.mobileDetailVal} data-emphasize="true">
+              ${roundedPrice}
+            </span>
+          </div>
+        </div>
 
         <h2 css={styles.subHeading} style={{ marginBottom: 20 }}>
           YOUR INFORMATION
         </h2>
 
         <div css={styles.info} style={{ marginBottom: 38 }}>
-          <div>
+          <div css={styles.infoSection}>
             <p css={styles.infoVal}>{company}</p>
             <p css={styles.infoVal}>{name}</p>
           </div>
 
-          <div>
+          <div css={styles.infoSection}>
             <p css={styles.infoVal}>
-              <PhoneIcon style={{ marginRight: 16 }} />
-              <span>+{phone}</span>
+              <PhoneIcon css={styles.infoValIcon} />
+              <span css={styles.infoValText}>+{phone}</span>
             </p>
 
             <p css={styles.infoVal}>
-              <EmailIcon style={{ marginRight: 16 }} />
-              <span>{email}</span>
+              <EmailIcon css={styles.infoValIcon} />
+              <span css={styles.infoValText}>{email}</span>
             </p>
           </div>
         </div>
@@ -126,7 +166,7 @@ const QuoteStep2: FC<QuoteStep2Props> = (props) => {
           PAYMENT TERMS
         </h2>
 
-        <div style={{ marginBottom: 8 }}>
+        {/* <div style={{ marginBottom: 8 }}>
           {paymentTermsControl.fields.map((paymentTerm, idx) => (
             <div css={styles.term} key={paymentTerm.id}>
               <span>{idx + 1}</span>
@@ -161,9 +201,9 @@ const QuoteStep2: FC<QuoteStep2Props> = (props) => {
               </div>
             </div>
           ))}
-        </div>
+        </div> */}
 
-        <Button
+        {/* <Button
           style={{
             background: 'transparent',
             minWidth: 'initial',
@@ -186,12 +226,12 @@ const QuoteStep2: FC<QuoteStep2Props> = (props) => {
 
             return (
               <p style={{ textAlign: 'right' }}>
-                <span style={{ marginRight: 40 }}>Total price</span>
-                $ {+total.toFixed(2)}
+                <span style={{ marginRight: 40 }}>Total price</span>${' '}
+                {+total.toFixed(2)}
               </p>
             )
           }}
-        </FieldValue>
+        </FieldValue> */}
       </div>
 
       <QuoteFeatures css={styles.features} />
@@ -199,95 +239,163 @@ const QuoteStep2: FC<QuoteStep2Props> = (props) => {
   )
 }
 
-const useStyles = makeStyles(({}: QuoteStep2Props) => {
-  const detailKeyCommon = {
+const useStyles = makeStyles(({}: QuoteStep2Props) => ({
+  root: {
+    display: 'grid',
+    gridTemplateColumns: '1fr 355px',
+    width: '100%',
+    height: '100%',
+    [`@media (max-width: ${theme.widths.tablet})`]: {
+      gridTemplateColumns: '1fr',
+    },
+  },
+  mainSection: {
+    width: '100%',
+    height: '100%',
+    overflowY: 'auto',
+    padding: '46px 38px 40px',
+    background: '#F8F8F8',
+    [`@media (max-width: ${theme.widths.tablet})`]: {
+      overflowY: 'initial',
+    },
+    [`@media (max-width: ${theme.widths.tabletSm})`]: {
+      paddingLeft: 32,
+      paddingRight: 32,
+    },
+    [`@media (max-width: ${theme.widths.mobile})`]: {
+      paddingLeft: 16,
+      paddingRight: 16,
+    },
+  },
+  features: {
+    overflowY: 'auto',
+    [`@media (max-width: ${theme.widths.tablet})`]: {
+      overflowY: 'initial',
+    },
+  },
+  deskDetails: {
+    width: '100%',
+    textAlign: 'left',
+    marginBottom: 46,
+    [`@media (max-width: ${theme.widths.tabletSm})`]: {
+      display: 'none',
+    },
+  },
+  deskDetailKey: {
     padding: '0 6px 6px',
-  }
-
-  const detailValCommon = {
+    fontSize: 12,
+    fontWeight: 400,
+    whiteSpace: 'nowrap',
+  },
+  deskDetailHead: {
+    padding: '0 6px 6px',
+    fontSize: 18,
+    fontWeight: 700,
+    // color: '#B1DA50',
+  },
+  deskDetailVal: {
     fontWeight: 400,
     padding: '0 6px',
-  }
-
-  return {
-    root: {
-      display: 'grid',
-      gridTemplateColumns: '1fr 355px',
-      width: '100%',
-      height: '100%',
-    },
-    mainSection: {
-      width: '100%',
-      height: '100%',
-      overflowY: 'auto',
-      padding: '46px 38px 40px',
-      background: '#F8F8F8',
-    },
-    features: {
-      overflow: 'auto'
-    },
-    details: {
-      width: '100%',
-      textAlign: 'left',
-      marginBottom: 46,
-    },
-    detailKey: {
-      ...detailKeyCommon,
-      fontSize: 12,
-      fontWeight: 400,
-      whiteSpace: 'nowrap',
-    },
-    detailHead: {
-      ...detailKeyCommon,
-      fontSize: 18,
-      fontWeight: 700,
-      color: '#B1DA50',
-    },
-    detailVal: detailValCommon,
-    detailEmphasizeVal: {
-      ...detailValCommon,
+    '&[data-emphasize="true"]': {
       textAlign: 'right',
       color: '#B1DA50',
       fontWeight: 700,
       padding: '0 6px',
     },
-    right: {
-      textAlign: 'right',
+  },
+  mobileDetails: {
+    marginBottom: 46,
+    display: 'none',
+    [`@media (max-width: ${theme.widths.tabletSm})`]: {
+      fontSize: 14,
+      display: 'block',
     },
-    subHeading: {
-      fontSize: 16,
-      fontWeight: 700,
+  },
+  mobileDetailsHeader: {
+    marginBottom: 20,
+    display: 'none',
+    [`@media (max-width: ${theme.widths.tabletSm})`]: {
+      display: 'block',
+    },
+  },
+  mobileDetailsHeading: {
+    marginBottom: 4,
+    fontSize: 18,
+    fontWeight: 700,
+  },
+  mobileDetail: {
+    marginBottom: 8,
+  },
+  mobileDetailKey: {
+    color: '#9e9e9e',
+    marginRight: 12,
+  },
+  mobileDetailVal: {
+    '&[data-emphasize="true"]': {
       color: '#B1DA50',
+      fontWeight: 700,
     },
-    info: {
-      display: 'grid',
-      gridTemplateColumns: 'auto 1fr',
-      gap: 42,
+  },
+  right: {
+    textAlign: 'right',
+  },
+  subHeading: {
+    fontSize: 16,
+    fontWeight: 700,
+    color: '#B1DA50',
+  },
+  info: {
+    display: 'grid',
+    gridTemplateColumns: 'auto 1fr',
+    gap: 42,
+    [`@media (max-width: ${theme.widths.tabletSm})`]: {
+      gridTemplateColumns: '1fr',
+      gap: 8,
+      fontSize: 14
     },
-    infoVal: {
-      display: 'flex',
-      alignItems: 'center',
-      ':not(:last-of-type)': {
-        marginBottom: 10,
-      },
-    },
-    term: {
+  },
+  infoSection: {
+    [`@media (max-width: ${theme.widths.tabletSm})`]: {
       width: '100%',
-      display: 'grid',
-      gridTemplateColumns:
-        '25px minmax(0, 1fr) minmax(0, 0.4fr) minmax(0, 0.7fr)',
-      alignItems: 'center',
-      ':not(:last-of-type)': {
-        marginBottom: 15,
+      overflow: 'hidden',
+    },
+  },
+  infoVal: {
+    display: 'flex',
+    alignItems: 'center',
+    ':not(:last-of-type)': {
+      marginBottom: 10,
+      [`@media (max-width: ${theme.widths.tabletSm})`]: {
+        marginBottom: 8,
       },
     },
-    termInputWrapper: {
-      width: '100%',
-      ':not(:last-of-type)': {
-        paddingRight: 15,
-      },
+  },
+  infoValIcon: {
+    marginRight: 16,
+    flexShrink: 0,
+  },
+  infoValText: {
+    flexGrow: 1,
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+  },
+  term: {
+    width: '100%',
+    display: 'grid',
+    gridTemplateColumns:
+      '25px minmax(0, 1fr) minmax(0, 0.4fr) minmax(0, 0.7fr)',
+    alignItems: 'center',
+    ':not(:last-of-type)': {
+      marginBottom: 15,
     },
-  }
-})
+  },
+  termInputWrapper: {
+    width: '100%',
+    ':not(:last-of-type)': {
+      paddingRight: 15,
+    },
+  },
+}))
 
 export default QuoteStep2

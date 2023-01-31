@@ -1,3 +1,4 @@
+import theme from '@/theme'
 import Button from '@/ui/Button'
 import makeStyles from '@/utils/makeStyles'
 import { FC, HTMLAttributes } from 'react'
@@ -65,11 +66,18 @@ const useStyles = makeStyles(({}: QuoteFeaturesProps) => ({
     width: '100%',
     height: '100%',
     padding: '65px 36px 36px',
+    [`@media (max-width: ${theme.widths.mobile})`]: {
+      paddingLeft: 16,
+      paddingRight: 16,
+    },
   },
   heading: {
     fontWeight: 700,
     fontSize: 30,
     marginBottom: 34,
+    [`@media (max-width: ${theme.widths.mobile})`]: {
+      fontSize: 25,
+    },
   },
   features: {
     marginBottom: 40,

@@ -242,7 +242,7 @@ const useStyles = makeStyles(({}: QuoteStep1Props) => ({
     justifyContent: 'center',
   },
   contactView: {
-    [`@media (max-width: ${theme.widths.mobile})`]: {
+    [`@media (max-width: ${theme.widths.tabletSm})`]: {
       paddingRight: 16,
       paddingLeft: 16,
     },

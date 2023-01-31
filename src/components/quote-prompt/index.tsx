@@ -19,7 +19,7 @@ interface QuotePromptProps extends HTMLAttributes<HTMLDivElement> {
 const QuotePrompt: FC<QuotePromptProps> = (props) => {
   const styles = useStyles(props)
 
-  const [slideIdx, setSlideIdx] = useState<number>(0)
+  const [slideIdx, setSlideIdx] = useState<number>(2)
 
   const { product, onClose, ...divProps } = props
 
@@ -152,6 +152,9 @@ const useStyles = makeStyles(({}: QuotePromptProps) => ({
     top: 18,
     fontSize: 14,
     [`@media (max-width: ${theme.widths.tablet})`]: {
+      right: 32,
+    },
+    [`@media (max-width: ${theme.widths.mobile})`]: {
       right: 16,
     },
   },
