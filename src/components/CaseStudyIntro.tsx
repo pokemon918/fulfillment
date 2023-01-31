@@ -1,3 +1,4 @@
+import theme from '@/theme'
 import Container from '@/ui/Container'
 import makeStyles from '@/utils/makeStyles'
 import { FC, HTMLAttributes } from 'react'
@@ -16,7 +17,7 @@ const CaseStudyIntro: FC<CaseStudyIntroProps> = (props) => {
       <img css={styles.decorate} src="/images/blockchain.png" alt="" />
       <Container maxWidth="md">
         <div css={styles.root}>
-          <div>
+          <div css={styles.textWrapper}>
             <div css={styles.text}>
               Working in partnership with Catholic Relief Services, NCBA CLUSA
               will help establish a local Community Development Fund as part of
@@ -51,7 +52,7 @@ const useStyles = makeStyles(({}: CaseStudyIntroProps) => ({
   wrapper: {
     position: 'relative',
     paddingTop: 46,
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
   decorate: {
     position: 'absolute',
@@ -65,14 +66,38 @@ const useStyles = makeStyles(({}: CaseStudyIntroProps) => ({
     gridTemplateColumns: '1fr 0.63fr',
     gap: 100,
     alignItems: 'center',
+    [`@media (max-width: ${theme.widths.tablet})`]: {
+      gridTemplateColumns: '1fr',
+
+      justifyContent: 'center',
+      textAlign: 'center',
+    },
+  },
+  textWrapper: {
+    [`@media (max-width: ${theme.widths.tablet})`]: {
+      maxWidth: 800,
+      width: '100%',
+      margin: '0 auto',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center'
+    },
   },
   text: {
     fontSize: 18,
     lineHeight: 1.6,
-    marginBottom: 32
+    marginBottom: 32,
   },
   img: {
     width: '100%',
+
+    [`@media (max-width: ${theme.widths.tablet})`]: {
+      maxWidth: 450,
+      width: '100%',
+      margin: '0 auto',
+      gridColumn: 1,
+      gridRow: 1,
+    },
   },
   certificationsWrapper: {
     display: 'flex',
