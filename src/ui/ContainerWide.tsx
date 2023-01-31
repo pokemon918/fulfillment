@@ -11,7 +11,7 @@ import {
 } from 'react'
 
 interface ContainerWideProps extends HTMLAttributes<HTMLDivElement> {
-  maxWidth?: 'md'
+  maxWidth?: 'md' | 'none'
   scrollable?: boolean
   endBlur?: string
   contentEndWidth?: number
@@ -79,7 +79,10 @@ const useStyles = makeStyles(
     root: {
       display: 'block',
       width: '100%',
-      paddingLeft: `calc(50vw - (var(--container-width-${maxWidth}) / 2))`,
+      paddingLeft:
+        maxWidth === 'none'
+          ? 0
+          : `calc(50vw - (var(--container-width-${maxWidth}) / 2))`,
       ...(scrollable
         ? {
             overflowX: 'auto',
@@ -104,9 +107,9 @@ const useStyles = makeStyles(
       '&[data-hide="true"]': {
         opacity: 0,
       },
-      "@media (max-width: 480px)": {
-        width: '20%'
-      }
+      '@media (max-width: 480px)': {
+        width: '20%',
+      },
     },
   })
 )

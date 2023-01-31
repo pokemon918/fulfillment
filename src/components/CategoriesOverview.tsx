@@ -45,9 +45,9 @@ const useStyles = makeStyles((props: CategoriesOverviewProps) => {
   const box = {
     width: 265,
     flexShrink: 0,
-    "@media (max-width: 360px)": {
-    width: 'calc(100% - 64px)'
-    }
+    '@media (max-width: 360px)': {
+      width: 'calc(100% - 64px)',
+    },
   }
 
   return {
@@ -71,16 +71,16 @@ const useStyles = makeStyles((props: CategoriesOverviewProps) => {
     categories: {
       height: 'auto',
       display: 'flex',
-      padding: '0 16px'
+      padding: '0 16px',
     },
-    category: { 
+    category: {
       marginRight: 36,
-      ...box
+      ...box,
     },
     emptyBox: {
       flexShrink: 0,
-      width: 16
-    }
+      width: 16,
+    },
   }
 })
 

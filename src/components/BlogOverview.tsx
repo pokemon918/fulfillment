@@ -2,6 +2,7 @@ import ArrowLeft from '@/icons/ArrowLeft'
 import ArrowRight from '@/icons/ArrowRight'
 import { BaseArticle } from '@/types/article'
 import Button from '@/ui/Button'
+import ContainerWide from '@/ui/ContainerWide'
 import makeStyles from '@/utils/makeStyles'
 import mergeProps from '@/utils/mergeProps'
 import { FC, HTMLAttributes } from 'react'
@@ -15,7 +16,6 @@ const BlogOverview: FC<BlogOverviewProps> = (props) => {
   const styles = useStyles(props)
 
   const { articles, ...divProps } = props
-
   return (
     <div css={styles.root} {...divProps}>
       <div css={styles.mainView}>
@@ -41,15 +41,20 @@ const BlogOverview: FC<BlogOverviewProps> = (props) => {
         </div>
       </div>
 
-      <div css={styles.articlesView}>
+      <ContainerWide
+        scrollable
+        maxWidth="none"
+        endBlur="linear-gradient(269.92deg, #FFFFFF 0.05%, rgba(255, 255, 255, 0) 99.9%);"
+        contentEndWidth={40}
+      >
         <div css={styles.articles}>
           {articles.map((article) => (
             <Article key={article._id} css={styles.article} article={article} />
           ))}
-        </div>
 
-        <div css={styles.shadow}></div>
-      </div>
+          <div css={styles.emptyArticle} />
+        </div>
+      </ContainerWide>
     </div>
   )
 }
@@ -58,7 +63,7 @@ const useStyles = makeStyles((props: BlogOverviewProps) => {
   return {
     root: {
       display: 'grid',
-      gridTemplateColumns: '355px 1fr',
+      gridTemplateColumns: '355px minmax(0, 1fr)',
       gap: 50,
     },
     heading: {
@@ -71,28 +76,24 @@ const useStyles = makeStyles((props: BlogOverviewProps) => {
     mainView: {
       display: 'flex',
       flexDirection: 'column',
-      justifyContent: 'space-between'
+      justifyContent: 'space-between',
     },
     desc: {
       fontSize: 18,
       marginBottom: 40,
     },
     articlesView: {
-      position: 'relative',
+      // position: 'relative',
       width: '100%',
-      height: 'auto',
-      display: 'grid',
-      gridTemplateColumns: '100%',
+      background: 'red',
+      // height: 'auto',
+      // display: 'grid',
+      // gridTemplateColumns: '100%',
     },
     articles: {
-      position: 'relative',
+      height: 'auto',
       display: 'flex',
-      overflow: 'auto',
-      width: '100%',
-      scrollbarWidth: 'none',
-      '::-webkit-scrollbar': {
-        display: 'none',
-      },
+      padding: '0 16px',
     },
     article: {
       flexShrink: 0,
@@ -100,6 +101,10 @@ const useStyles = makeStyles((props: BlogOverviewProps) => {
       '&:not(:last-of-type)': {
         marginRight: 30,
       },
+    },
+    emptyArticle: {
+      width: 24,
+      flexShrink: 0,
     },
     shadow: {
       position: 'absolute',
@@ -121,8 +126,8 @@ const useStyles = makeStyles((props: BlogOverviewProps) => {
       borderRadius: '50%',
       background: 'transparent',
       '&:not(:last-of-type)': {
-        marginRight: 16
-      }
+        marginRight: 16,
+      },
     },
   }
 })

@@ -13,14 +13,12 @@ const Article: FC<ArticleProps> = (props) => {
   const { article, ...divProps } = props
 
   return (
-    <div css={styles.root} {...divProps} onClick={() => alert('Hi')}>
+    <div css={styles.root} {...divProps}>
       <img src={article.thumbnail} css={styles.img} />
 
       <h3 css={styles.heading}>{article.title}</h3>
 
-      <p css={styles.desc}>
-        {article.description}
-      </p>
+      <p css={styles.desc}>{article.description}</p>
     </div>
   )
 }
@@ -28,7 +26,7 @@ const Article: FC<ArticleProps> = (props) => {
 const useStyles = makeStyles((props: ArticleProps) => {
   return {
     root: {
-      cursor: 'pointer'
+      cursor: 'pointer',
     },
     img: {
       width: '100%',
@@ -40,13 +38,13 @@ const useStyles = makeStyles((props: ArticleProps) => {
     heading: {
       fontSize: 18,
       fontWeight: 700,
-      marginBottom: 5
+      marginBottom: 5,
     },
     desc: {
       fontSize: 12,
       lineHeight: 1.6,
       maxHeight: 58,
-      overflow: 'hidden'
+      overflow: 'hidden',
     },
   }
 })
