@@ -3,7 +3,7 @@ import HomeBanner from '@/components/HomeBanner'
 import Overview from '@/components/Overview'
 import { BaseProduct } from '@/types/product'
 import Container from '@/ui/Container'
-import graphqlRequest from '@/utils/graphqlRequest'
+import graphqlReq from '@/utils/graphqlReq'
 import makeStyles from '@/utils/makeStyles'
 import { gql } from 'graphql-request'
 import { GetServerSideProps } from 'next'
@@ -89,7 +89,7 @@ const GET_DATA = gql`
 `
 
 export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
-  const data = await graphqlRequest(GET_DATA, {}, {})
+  const data = await graphqlReq(GET_DATA, {}, {})
 
   return {
     props: {

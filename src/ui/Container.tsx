@@ -3,7 +3,7 @@ import mergeProps from '@/utils/mergeProps'
 import { FC, HTMLAttributes } from 'react'
 
 interface ContainerProps extends HTMLAttributes<HTMLDivElement> {
-  maxWidth?: 'lg' | 'md' | 'sm'
+  maxWidth?: 'lg' | 'md' | 'sm' | 'xs'
 }
 
 const Container: FC<ContainerProps> = (originalProps) => {

@@ -197,7 +197,7 @@ const useStyles = makeStyles(({ theme, startSelect }: InputProps) => {
     },
     label: {
       fontSize: 14,
-      marginBottom: 10,
+      marginBottom: 8,
     },
     inputWrapper: {
       border: `2px solid ${borderColor}`,

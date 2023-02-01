@@ -2,17 +2,20 @@ import theme from '@/theme'
 import makeStyles from '@/utils/makeStyles'
 import mergeProps from '@/utils/mergeProps'
 import { css } from '@emotion/react'
+import Link from 'next/link'
 import { FC, HTMLAttributes, ReactNode } from 'react'
 
-export interface ButtonProps extends HTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends HTMLAttributes<HTMLElement> {
   variant?: 'contained' | 'outlined'
   color?: 'primary' | 'primary-gradient'
-  size?: 'sm' | 'lg'
+  size?: 'sm' | 'md' | 'lg'
   rounded?: boolean
+  fullRounded?: boolean
   fullWidth?: boolean
   fontColor?: string
   type?: 'submit' | 'reset' | 'button'
   startIcon?: ReactNode
+  href?: string
 }
 
 const Button: FC<ButtonProps> = (originalProps) => {
@@ -22,6 +25,7 @@ const Button: FC<ButtonProps> = (originalProps) => {
     size: 'sm',
     rounded: false,
     fullWidth: false,
+    fullRounded: false,
   })
 
   const styles = useButtonStyles(props)
@@ -35,38 +39,74 @@ const Button: FC<ButtonProps> = (originalProps) => {
     fullWidth,
     fontColor,
     startIcon,
+    href,
+    fullRounded,
     ...btnProps
   } = props
 
-  return (
-    <button css={styles.root} {...btnProps}>
+  const content = (
+    <>
       {startIcon}
       <span style={{ marginLeft: startIcon ? 10 : 0 }}>{children}</span>
+    </>
+  )
+
+  if (href) {
+    return (
+      <Link href={href} css={styles.root} {...btnProps}>
+        {content}
+      </Link>
+    )
+  }
+
+  return (
+    <button css={styles.root} {...btnProps}>
+      {content}
     </button>
   )
 }
 
 const useButtonStyles = makeStyles(
-  ({ color, variant, size, rounded, fullWidth, fontColor }: ButtonProps) => {
+  ({
+    color,
+    variant,
+    size,
+    rounded,
+    fullRounded,
+    fullWidth,
+    fontColor,
+  }: ButtonProps) => {
+    const paddings = {
+      sm: 9,
+      md: 14,
+      lg: 16,
+    }
+
+    const widths = {
+      sm: 106,
+      md: 126,
+      lg: 146,
+    }
+
     return {
       root: {
         display: 'inline-flex',
         justifyContent: 'center',
         alignItems: 'center',
-        padding:
-          (size == 'sm' ? 9 : 16) - (variant === 'contained' ? 0 : 1) + 'px',
-        minWidth: 146,
+        padding: paddings[size!] - (variant === 'contained' ? 0 : 1) + 'px',
+        minWidth: widths[size!],
         color: fontColor ? fontColor : '#000',
         fontFamily: theme.fonts.secondary,
         background:
           variant === 'contained' ? `var(--color-${color})` : 'transparent',
         border:
           variant === 'contained' ? 'none' : `1px solid var(--color-${color})`,
-        borderRadius: rounded ? 10 : 4,
+        borderRadius: fullRounded ? 99 : rounded ? 10 : 4,
         fontSize: 16,
         cursor: 'pointer',
         width: fullWidth ? '100%' : undefined,
         fontWeight: 400,
+        textDecoration: 'none',
       },
     }
   }

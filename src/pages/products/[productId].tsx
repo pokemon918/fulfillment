@@ -5,7 +5,7 @@ import theme from '@/theme'
 import { BaseProduct, DetailedProduct } from '@/types/product'
 import Container from '@/ui/Container'
 import PageBgColor from '@/ui/PageBgColor'
-import graphqlRequest from '@/utils/graphqlRequest'
+import graphqlReq from '@/utils/graphqlReq'
 import makeStyles from '@/utils/makeStyles'
 import { gql } from 'graphql-request'
 import { GetServerSideProps } from 'next'
@@ -114,7 +114,7 @@ const GET_DATA = gql`
 export const getServerSideProps: GetServerSideProps<ProductPageProps> = async (
   ctx
 ) => {
-  const { product, products } = await graphqlRequest(GET_DATA, {
+  const { product, products } = await graphqlReq(GET_DATA, {
     productId: ctx.query.productId,
   })
 

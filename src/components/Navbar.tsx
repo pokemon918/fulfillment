@@ -1,3 +1,4 @@
+import { useUser } from '@/hooks/useUser'
 import MenuIcon from '@/icons/MenuIcon'
 import theme from '@/theme'
 import Button from '@/ui/Button'
@@ -52,6 +53,8 @@ const Navbar: FC<NavbarProps> = (originalProps) => {
 
   const toggleOpen = () => setOpen((prevOpen) => !prevOpen)
 
+  const user = useUser()
+
   return (
     <div css={styles.root} {...divProps} data-open={open}>
       <Container css={styles.nav}>
@@ -74,24 +77,32 @@ const Navbar: FC<NavbarProps> = (originalProps) => {
         </div>
 
         <div css={styles.deskButtons}>
-          <Button
-            css={styles.deskButton}
-            variant="outlined"
-            size="lg"
-            rounded
-            fontColor={fontColor}
-          >
-            Invest Now
-          </Button>
+          {user ? (
+            user.fullName
+          ) : (
+            <>
+              <Button
+                css={styles.deskButton}
+                variant="outlined"
+                size="lg"
+                rounded
+                fontColor={fontColor}
+                href="/login"
+              >
+                Login
+              </Button>
 
-          <Button
-            css={styles.deskButton}
-            size="lg"
-            rounded
-            fontColor={fontColor}
-          >
-            Fulfillment
-          </Button>
+              <Button
+                css={styles.deskButton}
+                size="lg"
+                rounded
+                fontColor={fontColor}
+                href="/signup"
+              >
+                Sign Up
+              </Button>
+            </>
+          )}
         </div>
 
         <IconButton css={styles.menuBtn} onClick={toggleOpen}>
@@ -113,24 +124,32 @@ const Navbar: FC<NavbarProps> = (originalProps) => {
             </Link>
           ))}
 
-          <Button
-            css={styles.mobileButton}
-            variant="outlined"
-            size="lg"
-            rounded
-            fontColor={fontColor}
-          >
-            Invest Now
-          </Button>
+          {user ? (
+            user.fullName
+          ) : (
+            <>
+              <Button
+                css={styles.mobileButton}
+                variant="outlined"
+                size="lg"
+                rounded
+                fontColor={fontColor}
+                href="/login"
+              >
+                Login
+              </Button>
 
-          <Button
-            css={styles.mobileButton}
-            size="lg"
-            rounded
-            fontColor={fontColor}
-          >
-            Fulfillment
-          </Button>
+              <Button
+                css={styles.mobileButton}
+                size="lg"
+                rounded
+                fontColor={fontColor}
+                href="/signup"
+              >
+                Sign Up
+              </Button>
+            </>
+          )}
         </div>
       </div>
     </div>

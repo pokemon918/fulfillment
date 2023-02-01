@@ -10,17 +10,17 @@ interface QuoteStickyProps {
 
 const QuoteSticky: FC<QuoteStickyProps> = (props) => {
   const styles = useStyles(props)
-  const [show, setShow] = useSameState(false)
+  const [show, setShow] = useSameState(true)
 
   const { onClickGetQuote } = props
 
-  useEffect(() => {
-    const updateShow = () => setShow(window.root.scrollTop > 500)
+  // useEffect(() => {
+  //   const updateShow = () => setShow(window.scrollY > 500)
 
-    updateShow()
-    window.root.addEventListener('scroll', updateShow)
-    return () => window.root.removeEventListener('scroll', updateShow)
-  }, [])
+  //   updateShow()
+  //   window.addEventListener('scroll', updateShow, { passive: true })
+  //   return () => window.removeEventListener('scroll', updateShow)
+  // }, [])
 
   return (
     <div

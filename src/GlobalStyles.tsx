@@ -21,13 +21,6 @@ const globalStyles = css`
     height: 100%;
   }
 
-  #__next {
-    overflow: auto;
-    position: fixed;
-    top: 0;
-    left: 0;
-  }
-
   body {
     font-family: ${theme.fonts.primary};
     line-height: 1.3;
@@ -44,6 +37,7 @@ const globalStyles = css`
     --container-width-lg: 1472px;
     --container-width-md: 1252px;
     --container-width-sm: 802px;
+    --container-width-xs: 544px;
     --container-md-margin: max(calc((100vw - 1252px) / 2), 0px);
   }
 

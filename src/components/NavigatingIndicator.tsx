@@ -12,7 +12,6 @@ const NavigatingIndicator = () => {
     }
 
     const onChangeComplete = () => {
-      window.root.scrollTop = 0
       setLoading(false)
     }
 
