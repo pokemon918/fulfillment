@@ -43,6 +43,7 @@ interface InputProps {
   pattern?: string
   minLength?: number
   maxLength?: number
+  readOnly?: boolean
 }
 
 const Input: FC<InputProps> = (originalProps) => {

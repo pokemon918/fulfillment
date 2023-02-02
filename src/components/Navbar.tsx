@@ -78,7 +78,7 @@ const Navbar: FC<NavbarProps> = (originalProps) => {
 
         <div css={styles.deskButtons}>
           {user ? (
-            user.fullName
+            <Link css={styles.userProfile} href="/profile">{user.fullName}</Link>
           ) : (
             <>
               <Button
@@ -184,6 +184,12 @@ const useStyles = makeStyles(({ mode }: NavbarProps) => ({
     alignItems: 'center',
     padding: '6px 16px',
     color: mode === 'light' ? '#000' : '#fff',
+  },
+  userProfile: {
+    color: mode === 'light' ? '#000' : '#fff',
+    ':hover': {
+      textDecoration: 'underline',
+    },
   },
   deskLinks: {
     display: 'flex',
