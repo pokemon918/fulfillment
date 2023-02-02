@@ -10,7 +10,7 @@ const countries = countriesData.map((country) => ({
   label: country.name,
 }))
 
-interface CountrySelectorProps {
+interface CountrySelectProps {
   className?: string
   style?: CSSProperties
   name: string
@@ -18,7 +18,7 @@ interface CountrySelectorProps {
   readOnly?: boolean
 }
 
-const CountrySelector: FC<CountrySelectorProps> = ({
+const CountrySelect: FC<CountrySelectProps> = ({
   className,
   style,
   name,
@@ -43,6 +43,7 @@ const CountrySelector: FC<CountrySelectorProps> = ({
             <Select
               css={styles.input}
               inputId={id}
+              instanceId={id}
               styles={{
                 control: (base) => ({
                   ...base,
@@ -91,4 +92,4 @@ const useStyles = makeStyles(() => ({
   },
 }))
 
-export default CountrySelector
+export default CountrySelect

@@ -11,7 +11,7 @@ import makeStyles from '@/utils/makeStyles'
 import StyledLink from '@/ui/StyledLink'
 import Navbar from '@/components/Navbar'
 import PageBgColor from '@/ui/PageBgColor'
-import setCookie from '@/utils/setCookie'
+import { setCookie } from '@/utils/cookies'
 
 const LOGIN = gql`
   mutation Login($input: LoginInput!) {

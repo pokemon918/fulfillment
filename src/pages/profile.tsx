@@ -108,6 +108,7 @@ const Profile = () => {
                 style={{ marginBottom: 24 }}
                 label="Phone"
                 name="user.phone"
+                type="tel"
                 required
                 control={control}
                 readOnly

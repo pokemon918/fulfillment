@@ -16,6 +16,7 @@ export interface ButtonProps extends HTMLAttributes<HTMLElement> {
   type?: 'submit' | 'reset' | 'button'
   startIcon?: ReactNode
   href?: string
+  disabled?: boolean
 }
 
 const Button: FC<ButtonProps> = (originalProps) => {
@@ -41,7 +42,8 @@ const Button: FC<ButtonProps> = (originalProps) => {
     startIcon,
     href,
     fullRounded,
-    ...btnProps
+    disabled,
+    ...elemProps
   } = props
 
   const content = (
@@ -53,14 +55,14 @@ const Button: FC<ButtonProps> = (originalProps) => {
 
   if (href) {
     return (
-      <Link href={href} css={styles.root} {...btnProps}>
+      <Link href={href} css={styles.root} {...elemProps}>
         {content}
       </Link>
     )
   }
 
   return (
-    <button css={styles.root} {...btnProps}>
+    <button css={styles.root} {...elemProps} disabled={disabled}>
       {content}
     </button>
   )

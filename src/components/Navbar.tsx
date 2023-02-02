@@ -84,7 +84,6 @@ const Navbar: FC<NavbarProps> = (originalProps) => {
               <Button
                 css={styles.deskButton}
                 variant="outlined"
-                size="lg"
                 rounded
                 fontColor={fontColor}
                 href="/login"
@@ -94,7 +93,6 @@ const Navbar: FC<NavbarProps> = (originalProps) => {
 
               <Button
                 css={styles.deskButton}
-                size="lg"
                 rounded
                 fontColor={fontColor}
                 href="/signup"
@@ -131,7 +129,6 @@ const Navbar: FC<NavbarProps> = (originalProps) => {
               <Button
                 css={styles.mobileButton}
                 variant="outlined"
-                size="lg"
                 rounded
                 fontColor={fontColor}
                 href="/login"
@@ -141,7 +138,6 @@ const Navbar: FC<NavbarProps> = (originalProps) => {
 
               <Button
                 css={styles.mobileButton}
-                size="lg"
                 rounded
                 fontColor={fontColor}
                 href="/signup"
@@ -225,11 +221,14 @@ const useStyles = makeStyles(({ mode }: NavbarProps) => ({
   },
   deskButtons: {
     display: 'flex',
+    alignItems: 'center',
     [`@media (max-width: ${theme.widths.tablet})`]: {
       display: 'none',
     },
   },
   deskButton: {
+    padding: 12,
+    minWidth: 116,
     '&:not(:last-of-type)': {
       marginRight: 16,
     },
