@@ -9,6 +9,7 @@ import PageBgColor from '@/ui/PageBgColor'
 import Container from '@/ui/Container'
 import ProductVertical from '@/components/ProductVertical'
 import { BaseCategory } from '@/types/category'
+import theme from '@/theme'
 
 export default function PageProducts(props: PageProductsProps) {
   const { products, category } = props
@@ -74,7 +75,16 @@ const useStyles = makeStyles((props: PageProductsProps) => ({
   products: {
     display: 'grid',
     gridTemplateColumns: 'repeat(4, 1fr)',
-    gap: 16,
+    gap: '48px 16px',
+    [`@media (max-width: ${theme.widths.tablet})`]: {
+      gridTemplateColumns: 'repeat(3, 1fr)',
+    },
+    [`@media (max-width: ${theme.widths.tabletSm})`]: {
+      gridTemplateColumns: 'repeat(2, 1fr)',
+    },
+    [`@media (max-width: ${theme.widths.mobile})`]: {
+      gridTemplateColumns: 'repeat(1, 1fr)',
+    }
   },
 }))
 

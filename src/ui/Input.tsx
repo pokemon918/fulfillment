@@ -44,6 +44,7 @@ interface InputProps {
   minLength?: number
   maxLength?: number
   readOnly?: boolean
+  autoFocus?: boolean
 }
 
 const Input: FC<InputProps> = (originalProps) => {
@@ -69,6 +70,7 @@ const Input: FC<InputProps> = (originalProps) => {
     theme,
     name,
     control,
+    autoFocus,
     ...commonProps
   } = props
 
@@ -151,6 +153,7 @@ const Input: FC<InputProps> = (originalProps) => {
           control={control}
           render={({ field }) => (
             <input
+              autoFocus={autoFocus}
               id={id}
               type={type}
               css={styles.input}
@@ -260,7 +263,7 @@ const useStyles = makeStyles(({ theme, startSelect }: InputProps) => {
       border: 'none',
       '@media (max-width: 360px)': {
         maxWidth: 52,
-      }
+      },
     },
     selectOption: {
       color: '#000',
