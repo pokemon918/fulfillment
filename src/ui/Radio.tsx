@@ -16,7 +16,15 @@ export interface RadioProps extends NativeInputProps {
 const Radio: FC<RadioProps> = (props) => {
   const styles = useStyles(props)
 
-  const { className, style, label, name, control, ...inputProps } = props
+  const {
+    className,
+    style,
+    label,
+    name,
+    control,
+    onChange: onChangeProp,
+    ...inputProps
+  } = props
 
   const id = useId()
 
@@ -24,11 +32,16 @@ const Radio: FC<RadioProps> = (props) => {
     <Controller
       name={name}
       control={control}
-      render={({ field: { ref, ...field } }) => (
+      render={({ field: { ref, onChange, ...field } }) => (
         <div css={styles.root} className={className} style={style}>
           <input
             css={styles.input}
             id={id}
+            type="radio"
+            onChange={(e) => {
+              onChange(e)
+              if (onChangeProp) onChangeProp(e)
+            }}
             {...field}
             {...inputProps}
           />
