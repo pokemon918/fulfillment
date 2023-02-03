@@ -53,7 +53,7 @@ const useFetchAuthUser = (storedUserString: string | null) => {
           
           setCookie(
             'token_user',
-            encodeURIComponent(JSON.stringify(user)),
+            encodeURIComponent(JSON.stringify(fetchedUser)),
             expireAt
           )
 

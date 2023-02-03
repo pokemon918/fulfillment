@@ -1,10 +1,9 @@
-import Footer from '@/components/Footer'
-import Navbar from '@/components/Navbar'
+import PageLayout from '@/components/PageLayout'
 import ProductForm, {
   ProductFormValue,
 } from '@/components/product-form/ProductForm'
+import withAuth from '@/hoc/withAuth'
 import Container from '@/ui/Container'
-import PageBgColor from '@/ui/PageBgColor'
 
 const ProductCreate = () => {
   const defaultValues: ProductFormValue = {
@@ -69,22 +68,12 @@ const ProductCreate = () => {
   }
 
   return (
-    <>
-      {/* <PageBgColor bgColor="#f8f8f8" /> */}
-
-      <Navbar />
-
-      <div style={{ height: 48 }} />
-
+    <PageLayout>
       <Container maxWidth="md">
         <ProductForm defaultValues={defaultValues} actionType="create" />
       </Container>
-
-      <div style={{ height: 96 }} />
-
-      <Footer />
-    </>
+    </PageLayout>
   )
 }
 
-export default ProductCreate
+export default withAuth(ProductCreate, 'admin')

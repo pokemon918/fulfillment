@@ -165,7 +165,7 @@ const ProductForm: FC<ProductFormProps> = ({ defaultValues, actionType }) => {
     }
   }
 
-  if (loading) return <p className="text-center mt-8">Loading...</p>
+  if (loading) return <p style={{ textAlign: 'center' }}>Loading...</p>
 
   const onSubmit = handleSubmit((product) => {
     const input = {
@@ -195,7 +195,11 @@ const ProductForm: FC<ProductFormProps> = ({ defaultValues, actionType }) => {
   })
 
   return (
-    <div className="w-full max-w-6xl mx-auto mt-12 mb-20 px-8">
+    <div>
+      <h1 style={{ fontSize: 25, marginBottom: '2rem' }}>
+        {actionType === 'create' ? 'Create' : 'Update'} Product
+      </h1>
+
       <form onSubmit={onSubmit}>
         <Input
           style={{ marginBottom: 16 }}
@@ -386,7 +390,7 @@ const ProductForm: FC<ProductFormProps> = ({ defaultValues, actionType }) => {
 
 const useStyles = makeStyles(() => ({
   heading: {
-    fontSize: 25,
+    fontSize: 20,
     fontWeight: 700,
   },
   trace: {

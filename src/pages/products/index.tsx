@@ -10,9 +10,14 @@ import Container from '@/ui/Container'
 import ProductVertical from '@/components/ProductVertical'
 import { BaseCategory } from '@/types/category'
 import theme from '@/theme'
+import Button from '@/ui/Button'
+import AddIcon from '@/icons/AddIcon'
+import { useUser } from '@/hooks/useUser'
 
 export default function PageProducts(props: PageProductsProps) {
   const { products, category } = props
+
+  const user = useUser()
 
   const styles = useStyles(props)
 
@@ -27,9 +32,21 @@ export default function PageProducts(props: PageProductsProps) {
           <div style={{ height: 48 }} />
 
           <Container maxWidth="md">
-            <h3 css={styles.heading}>
-              Products {category ? ` / ${category.name}` : null}
-            </h3>
+            <div css={styles.header}>
+              <h3 css={styles.heading}>
+                Products {category ? ` / ${category.name}` : null}
+              </h3>
+
+              {user?.role === 'admin' && (
+                <Button
+                  style={{ padding: '8px 12px' }}
+                  href="/products/create"
+                  startIcon={<AddIcon />}
+                >
+                  Create Product
+                </Button>
+              )}
+            </div>
 
             <div css={styles.products}>
               {products.map((product) => (
@@ -58,10 +75,15 @@ const useStyles = makeStyles((props: PageProductsProps) => ({
     flexDirection: 'column',
     minHeight: '100%',
   },
+  header: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 24,
+  },
   heading: {
     fontSize: 25,
     fontWeight: 700,
-    marginBottom: 24,
   },
   navbar: {
     flexShrink: 1,
@@ -84,7 +106,7 @@ const useStyles = makeStyles((props: PageProductsProps) => ({
     },
     [`@media (max-width: ${theme.widths.mobile})`]: {
       gridTemplateColumns: 'repeat(1, 1fr)',
-    }
+    },
   },
 }))
 
