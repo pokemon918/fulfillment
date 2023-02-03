@@ -243,6 +243,8 @@ const ProductForm: FC<ProductFormProps> = ({ defaultValues, actionType }) => {
           control={control}
           name="price"
           required
+          
+          pattern="[0-9]+(\.[0-9]+)?"
         />
 
         <Input

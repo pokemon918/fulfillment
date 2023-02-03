@@ -1,4 +1,6 @@
 import countries from '@/data/countries'
+import { useUser } from '@/hooks/useUser'
+import AddIcon from '@/icons/AddIcon'
 import ArrowBackIcon from '@/icons/ArrowBackIcon'
 import theme from '@/theme'
 import { DetailedProduct } from '@/types/product'
@@ -21,6 +23,7 @@ const offers = [
 ]
 
 const ProductIntro: FC<ProductIntroProps> = (props) => {
+  const user = useUser()
   const styles = useStyles(props)
 
   const { gallery, product, onClickGetQuote, ...divProps } = props
@@ -32,11 +35,22 @@ const ProductIntro: FC<ProductIntroProps> = (props) => {
 
   return (
     <div {...divProps}>
-      <Link css={styles.back} href="/">
-        <ArrowBackIcon style={{ marginRight: 6 }} />
+      <div css={styles.header}>
+        <Link css={styles.back} href="/">
+          <ArrowBackIcon style={{ marginRight: 6 }} />
+          <span>Browse Market</span>
+        </Link>
 
-        <span>Browse Market</span>
-      </Link>
+        {user?.role === 'admin' && (
+          <Button
+            variant="outlined"
+            fullRounded
+            href={`/products/${product._id}/update`}
+          >
+            Update
+          </Button>
+        )}
+      </div>
 
       <div css={styles.root}>
         <ExcerptGallery gallery={gallery.slice(0, 5)} />
@@ -97,13 +111,18 @@ const useStyles = makeStyles((props: ProductIntroProps) => ({
       gridTemplateColumns: '1fr',
     },
   },
+  header: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
   back: {
     color: '#000',
     textDecoration: 'none',
     fontSize: 14,
     display: 'flex',
     alignItems: 'center',
-    marginBottom: 12,
   },
   title: {
     fontSize: 34,
