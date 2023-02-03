@@ -6,6 +6,7 @@ import theme from '@/theme'
 import { DetailedProduct } from '@/types/product'
 import Button from '@/ui/Button'
 import makeStyles from '@/utils/makeStyles'
+import dayjs from 'dayjs'
 import Link from 'next/link'
 import { FC, HTMLAttributes, useMemo } from 'react'
 import ExcerptGallery from '../ExcerptGallery'
@@ -61,12 +62,14 @@ const ProductIntro: FC<ProductIntroProps> = (props) => {
           </h2>
 
           <p css={styles.subtitle} style={{ marginBottom: 46 }}>
-            HS Code: 080810 - Fruit, edible; apples, fresh
+            HS Code: {product.hsCode}
           </p>
 
-          <h3 css={styles.price}>$6 ~</h3>
+          <h3 css={styles.price}>${product.price} ~</h3>
 
-          <p css={styles.unitPhrase}>USD / KG, November 7, 2022</p>
+          <p css={styles.unitPhrase}>
+            USD / KG, {dayjs(product.createdAt).format('MMMM DD, YYYY')}
+          </p>
 
           <h4 css={styles.offerTitle}>Current Offer Base Prices</h4>
 

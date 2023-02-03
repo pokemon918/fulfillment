@@ -71,13 +71,7 @@ const RelatedProducts: FC<RelatedProductsProps> = (props) => {
         contentEndWidth={258 + 16}
       >
         <div css={styles.products}>
-          {[
-            ...products,
-            ...products,
-            ...products,
-            ...products,
-            ...products,
-          ].map((product, idx) => (
+          {products.map((product, idx) => (
             <ProductVertical key={idx} product={product} />
           ))}
 

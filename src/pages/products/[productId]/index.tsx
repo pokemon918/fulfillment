@@ -9,7 +9,7 @@ import graphqlReq from '@/utils/graphqlReq'
 import makeStyles from '@/utils/makeStyles'
 import { gql } from 'graphql-request'
 import { GetServerSideProps } from 'next'
-import { FC, useState } from 'react'
+import { FC, useMemo, useState } from 'react'
 import RelatedProducts from '@/components/RelatedProducts'
 import Faq from '@/components/Faq'
 import QuotePrompt from '@/components/quote-prompt'
@@ -24,6 +24,7 @@ interface ProductPageProps {
 
 const ProductPage: FC<ProductPageProps> = (props) => {
   const { product, products } = props
+
   const styles = useStyles(props)
   const [openQuote, setOpenQuote] = useState(false)
 
@@ -85,6 +86,9 @@ const GET_DATA = gql`
       availableSpecs {
         en
       }
+      hsCode {
+        en
+      }
       gallery
       traces {
         type
@@ -93,6 +97,7 @@ const GET_DATA = gql`
           en
         }
       }
+      createdAt
     }
 
     products {
@@ -124,6 +129,7 @@ export const getServerSideProps: GetServerSideProps<ProductPageProps> = async (
         ...product,
         name: product.name.en,
         availableSpecs: product.availableSpecs.en,
+        hsCode: product.hsCode.en,
         traces: product.traces.map((trace: any) => ({
           ...trace,
           description: trace.description.en,

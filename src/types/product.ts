@@ -9,10 +9,12 @@ export interface BaseProduct {
 }
 
 export interface DetailedProduct extends BaseProduct {
+  hsCode: string
   gallery: string[]
   traces: {
     type: string
     description: string
     gallery: string[]
   }[]
+  createdAt: string
 }
