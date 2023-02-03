@@ -42,7 +42,7 @@ const ProductVertical: FC<ProductProps> = (originalProps) => {
           <p css={styles.priceDesc}>per lb (Pound)</p>
         </div>
 
-        <Button>See Details</Button>
+        <Button style={{ minWidth: 146 }}>See Details</Button>
       </div>
     </Link>
   )

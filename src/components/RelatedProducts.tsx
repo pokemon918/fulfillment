@@ -7,7 +7,7 @@ import ContainerWide from '@/ui/ContainerWide'
 import IconButton from '@/ui/IconButton'
 import makeStyles from '@/utils/makeStyles'
 import { FC, HTMLAttributes, useRef } from 'react'
-import ProductVertical from './PorductVertical'
+import ProductVertical from './ProductVertical'
 
 interface RelatedProductsProps extends HTMLAttributes<HTMLDivElement> {
   products: BaseProduct[]
@@ -131,6 +131,7 @@ const useStyles = makeStyles(({}: RelatedProductsProps) => ({
     gridAutoColumns: 258,
     padding: '0 16px',
     gap: 18,
+    fontFamily: theme.fonts.primary,
     '@media (max-width: 320px)': {
       gridAutoColumns: 'calc(100% - 32px)',
     },

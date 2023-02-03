@@ -1,6 +1,7 @@
 import { BaseCategory } from '@/types/category'
 import BoxRation from '@/ui/BoxRatio'
 import makeStyles from '@/utils/makeStyles'
+import Link from 'next/link'
 import { FC, HTMLAttributes } from 'react'
 
 interface CategoryProps extends HTMLAttributes<HTMLDivElement> {
@@ -13,18 +14,26 @@ const Category: FC<CategoryProps> = (props) => {
   const { category, ...divProps } = props
 
   return (
-    <BoxRation ration={1.18} css={styles.root} {...divProps}>
-      <img css={styles.img} src={category.thumbnail} alt={category.name} />
+    <Link css={styles.root} href={`/products?categoryId=${category._id}`}>
+      <BoxRation ration={1.18} css={styles.box} {...divProps}>
+        <img css={styles.img} src={category.thumbnail} alt={category.name} />
 
-      <div css={styles.cover} data-cover="true"></div>
+        <div css={styles.cover} data-cover="true"></div>
 
-      <div css={styles.coverText} data-cover-text="true">{category.name}</div>
-    </BoxRation>
+        <div css={styles.coverText} data-cover-text="true">
+          {category.name}
+        </div>
+      </BoxRation>
+    </Link>
   )
 }
 
 const useStyles = makeStyles((props: CategoryProps) => ({
   root: {
+    color: 'inherit',
+    textDecoration: 'none'
+  },
+  box: {
     display: 'flex',
     width: '100%',
     borderRadius: 20,
@@ -35,7 +44,7 @@ const useStyles = makeStyles((props: CategoryProps) => ({
         opacity: '0.6',
       },
       '& [data-cover-text="true"]': {
-        display: 'flex'
+        display: 'flex',
       },
     },
   },
@@ -64,11 +73,11 @@ const useStyles = makeStyles((props: CategoryProps) => ({
     fontSize: 25,
     color: '#fff',
     padding: 16,
-    
+
     alignItems: 'center',
     justifyContent: 'center',
-    textAlign: 'center'
-  }
+    textAlign: 'center',
+  },
 }))
 
 export default Category

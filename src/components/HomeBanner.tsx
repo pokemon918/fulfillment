@@ -30,6 +30,7 @@ const HomeBanner: FC<HomeBannerProps> = (props) => {
             </p>
 
             <Button
+              href="/products"
               variant="outlined"
               style={{ paddingLeft: 34, paddingRight: 34 }}
               fontColor="#fff"
@@ -67,7 +68,7 @@ const useHomeBannerStyles = makeStyles(() => ({
     display: 'flex',
     flexDirection: 'column',
     width: '100%',
-    flexGrow: 1
+    flexGrow: 1,
   },
   navbar: {
     flexShrink: 0,
