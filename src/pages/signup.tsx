@@ -93,19 +93,17 @@ const SignUp: FC<SignUpProps> = ({ products }) => {
     [marketDestinations]
   )
 
-  const { control, handleSubmit, setValue, getValues, register } =
-    useForm<SignUpInfo>({
-      defaultValues: {
-        fullName: defaultFullName ?? '',
-        companyName: '',
-        email: '',
-        password: '',
-        country: 'US',
-        phone: '',
-        website: '',
-        role: null
-      },
-    })
+  const { control, handleSubmit, setValue } = useForm<SignUpInfo>({
+    defaultValues: {
+      fullName: defaultFullName ?? '',
+      companyName: '',
+      email: '',
+      password: '',
+      country: 'US',
+      phone: '',
+      website: '',
+    },
+  })
 
   const onSubmit = handleSubmit(async (data) => {
     if (data.phone.length < 6) {
@@ -131,8 +129,8 @@ const SignUp: FC<SignUpProps> = ({ products }) => {
       if (cInfo.fulfillmentProducts.length === 0)
         return alert('Please input the fulfillment products')
 
-        if (cInfo.certifications.length === 0)
-          return alert('Please select one certification at least')
+      if (cInfo.certifications.length === 0)
+        return alert('Please select one certification at least')
     }
 
     try {
@@ -226,7 +224,7 @@ const SignUp: FC<SignUpProps> = ({ products }) => {
           required
         />
 
-        <CreatableSelect
+        <Select
           style={{ marginBottom: 16 }}
           control={control}
           label="Fulfillment Countries"
@@ -358,7 +356,6 @@ const SignUp: FC<SignUpProps> = ({ products }) => {
               style={{ marginBottom: 16 }}
               control={control}
               name="country"
-              readOnly
             />
             {!pendingUserToken && (
               <>
