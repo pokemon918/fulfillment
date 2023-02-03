@@ -102,6 +102,8 @@ const SignUp: FC<SignUpProps> = ({ products }) => {
         password: '',
         country: 'US',
         phone: '',
+        website: '',
+        role: null
       },
     })
 
@@ -132,10 +134,6 @@ const SignUp: FC<SignUpProps> = ({ products }) => {
         if (cInfo.certifications.length === 0)
           return alert('Please select one certification at least')
     }
-
-    const cInfo = data.commercialInfo
-
-    return console.log('cInfo', cInfo)
 
     try {
       const mutation = pendingUserToken ? FINALIZE_SIGNUP : SIGNUP
@@ -201,12 +199,6 @@ const SignUp: FC<SignUpProps> = ({ products }) => {
   }
 
   const role = useWatch({ control, name: 'role' })
-  // const certificationsVal = useWatch({
-  //   control,
-  //   name: 'commercialInfo',
-  // })
-
-  // console.log('certificationsVal', certificationsVal)
 
   let commercialInfo
 
@@ -245,7 +237,7 @@ const SignUp: FC<SignUpProps> = ({ products }) => {
           required
         />
 
-        <CreatableSelect
+        <Select
           style={{ marginBottom: 16 }}
           control={control}
           label="Market Destinations"
@@ -351,6 +343,7 @@ const SignUp: FC<SignUpProps> = ({ products }) => {
               name="fullName"
               control={control}
               required
+              minLength={2}
             />
             <Input
               style={{ marginBottom: 16 }}
@@ -359,6 +352,7 @@ const SignUp: FC<SignUpProps> = ({ products }) => {
               name="companyName"
               control={control}
               required
+              minLength={2}
             />
             <CountrySelector
               style={{ marginBottom: 16 }}

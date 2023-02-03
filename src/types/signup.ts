@@ -6,7 +6,7 @@ export interface SignUpMainInfo {
   country: string
   phone: string
   website?: string
-  role?: 'buyer' | 'seller'
+  role: 'buyer' | 'seller' | null
 }
 
 export interface BuyerSignUpInfo extends SignUpMainInfo {
