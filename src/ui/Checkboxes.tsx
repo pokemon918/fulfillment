@@ -1,14 +1,6 @@
 import makeStyles from '@/utils/makeStyles'
-import {
-  ChangeEventHandler,
-  FC,
-  Fragment,
-  HTMLAttributes,
-  useId,
-  useState,
-} from 'react'
+import { ChangeEventHandler, FC, HTMLAttributes, useId, useState } from 'react'
 import { Control, Controller } from 'react-hook-form'
-import { optionCSS } from 'react-select/dist/declarations/src/components/Option'
 
 export interface CheckboxesProps extends HTMLAttributes<HTMLDivElement> {
   label: string
@@ -57,7 +49,9 @@ const Checkboxes: FC<CheckboxesProps> = (props) => {
       <Controller
         name={name}
         control={control}
-        render={({ field: { name, value, onChange } }) => {
+        render={({ field: { name, value: untypedValue, onChange } }) => {
+          const value = untypedValue as string[]
+
           const handleChange = (option: string) => {
             if (value.includes(option)) {
               onChange(value.filter((v: any) => v !== option))
@@ -65,6 +59,10 @@ const Checkboxes: FC<CheckboxesProps> = (props) => {
               onChange([...value, option])
             }
           }
+
+          const othersIndex = value.findIndex((v) => v.startsWith('Others:'))
+
+          const othersTitle = 'Others: '
 
           return (
             <>
@@ -79,41 +77,35 @@ const Checkboxes: FC<CheckboxesProps> = (props) => {
                 </div>
               ))}
 
-              <Controller
-                name={othersName}
-                control={control}
-                render={({ field: { name, value, onChange } }) => {
-                  const [checked, setChecked] = useState(false)
+              <div css={styles.boxWrapper}>
+                <InternalCheckbox
+                  name={name}
+                  option="Others: (input text)"
+                  onChange={() => {
+                    if (othersIndex > -1) {
+                      onChange(value.filter((v) => !v.startsWith(othersTitle)))
+                    } else {
+                      onChange([...value, othersTitle])
+                    }
+                  }}
+                  checked={othersIndex > -1}
+                />
 
-                  return (
-                    <div css={styles.boxWrapper}>
-                      <InternalCheckbox
-                        name={name}
-                        option="Others: (input text)"
-                        onChange={() => {
-                          if (checked) {
-                            setChecked(false)
-                            onChange('')
-                          } else {
-                            setChecked(true)
-                          }
-                        }}
-                        checked={checked}
-                      />
-
-                      {checked && (
-                        <input
-                          style={{ display: 'flex', marginTop: 4 }}
-                          type="text"
-                          css={styles.inputText}
-                          value={value}
-                          onChange={(e) => onChange(e.target.value)}
-                        />
-                      )}
-                    </div>
-                  )
-                }}
-              />
+                {othersIndex > -1 && (
+                  <input
+                    style={{ display: 'flex', marginTop: 4 }}
+                    type="text"
+                    css={styles.inputText}
+                    value={value[othersIndex].slice(othersTitle.length)}
+                    onChange={(e) => {
+                      const slicedValue = [...value]
+                      slicedValue[othersIndex] = othersTitle + e.target.value
+                      onChange(slicedValue)
+                    }}
+                    required
+                  />
+                )}
+              </div>
 
               <div css={styles.boxWrapper}>
                 <InternalCheckbox
@@ -163,7 +155,6 @@ const useStyles = makeStyles(() => ({
   },
   label: {
     cursor: 'pointer',
-    
   },
 }))
 

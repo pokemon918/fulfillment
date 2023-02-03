@@ -1,4 +1,3 @@
-
 export interface SignUpMainInfo {
   fullName: string
   companyName: string
@@ -6,11 +5,23 @@ export interface SignUpMainInfo {
   password: string
   country: string
   phone: string
+  website?: string
   role?: 'buyer' | 'seller'
 }
 
 export interface BuyerSignUpInfo extends SignUpMainInfo {
   role: 'buyer'
+  commercialInfo: {
+    buyerType: string
+    fulfillmentProducts: string[]
+    fulfillmentCountries: string[]
+    marketDestinations: string[]
+    annualImportVolume: string
+  }
+}
+
+export interface SupplierSignupInfo extends SignUpMainInfo {
+  role: 'seller'
   commercialInfo: {
     fulfillmentProducts: string[]
     ownsFields: boolean
@@ -18,18 +29,6 @@ export interface BuyerSignUpInfo extends SignUpMainInfo {
     availableVolume: string
     fobExportPerYear: string
     certifications: string[]
-    othersCertifications: string
-  }
-}
-
-export interface SupplierSignupInfo extends SignUpMainInfo {
-  role: 'seller'
-  commercialInfo: {
-    buyerType: string
-    fulfillmentProducts: string[]
-    fulfillmentCountries: string[]
-    marketDestinations: string[]
-    annualImportVolume: string
   }
 }
 

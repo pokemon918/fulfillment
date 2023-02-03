@@ -19,8 +19,8 @@ import { SignUpInfo } from '@/types/signup'
 import Select from '@/components/Select'
 import CreatableSelect from '@/components/CreatableSelect'
 import { GetServerSideProps } from 'next'
-import { FC, useMemo } from 'react'
-import { buyerTypes, certifications } from '@/data/singup'
+import { FC, Fragment, useMemo } from 'react'
+import { buyerTypes, certifications, marketDestinations } from '@/data/singup'
 import countries from '@/data/countries'
 import Checkbox from '@/ui/Checkbox'
 import Checkboxes from '@/ui/Checkboxes'
@@ -84,6 +84,15 @@ const SignUp: FC<SignUpProps> = ({ products }) => {
     [countries]
   )
 
+  const marketDestinationsOptions = useMemo(
+    () =>
+      marketDestinations.map((destination) => ({
+        label: destination,
+        value: destination,
+      })),
+    [marketDestinations]
+  )
+
   const { control, handleSubmit, setValue, getValues, register } =
     useForm<SignUpInfo>({
       defaultValues: {
@@ -97,6 +106,37 @@ const SignUp: FC<SignUpProps> = ({ products }) => {
     })
 
   const onSubmit = handleSubmit(async (data) => {
+    if (data.phone.length < 6) {
+      return alert('Please enter a valid phone number')
+    }
+
+    if (data.role === 'buyer') {
+      const cInfo = data.commercialInfo
+
+      if (!cInfo.buyerType) return alert('Please input the buyer type')
+
+      if (cInfo.fulfillmentProducts.length === 0)
+        return alert('Please input the fulfillment products')
+
+      if (cInfo.fulfillmentCountries.length === 0)
+        return alert('Please input the fulfillment countries')
+
+      if (cInfo.marketDestinations.length === 0)
+        return alert('Please input the market destinations')
+    } else if (data.role === 'seller') {
+      const cInfo = data.commercialInfo
+
+      if (cInfo.fulfillmentProducts.length === 0)
+        return alert('Please input the fulfillment products')
+
+        if (cInfo.certifications.length === 0)
+          return alert('Please select one certification at least')
+    }
+
+    const cInfo = data.commercialInfo
+
+    return console.log('cInfo', cInfo)
+
     try {
       const mutation = pendingUserToken ? FINALIZE_SIGNUP : SIGNUP
 
@@ -156,18 +196,23 @@ const SignUp: FC<SignUpProps> = ({ products }) => {
         availableVolume: '',
         fobExportPerYear: '',
         certifications: [],
-        othersCertifications: '',
       })
     }
   }
 
   const role = useWatch({ control, name: 'role' })
+  // const certificationsVal = useWatch({
+  //   control,
+  //   name: 'commercialInfo',
+  // })
+
+  // console.log('certificationsVal', certificationsVal)
 
   let commercialInfo
 
   if (role === 'buyer') {
     commercialInfo = (
-      <>
+      <Fragment key="buyer">
         <Select
           style={{ marginBottom: 16 }}
           control={control}
@@ -200,12 +245,14 @@ const SignUp: FC<SignUpProps> = ({ products }) => {
           required
         />
 
-        <Input
+        <CreatableSelect
           style={{ marginBottom: 16 }}
-          type="text"
-          label="Market Destinations"
-          name="commercialInfo.marketDestinations"
           control={control}
+          label="Market Destinations"
+          placeholder=""
+          name="commercialInfo.marketDestinations"
+          options={marketDestinationsOptions}
+          isMulti
           required
         />
 
@@ -216,11 +263,11 @@ const SignUp: FC<SignUpProps> = ({ products }) => {
           control={control}
           required
         />
-      </>
+      </Fragment>
     )
   } else if (role === 'seller') {
     commercialInfo = (
-      <>
+      <Fragment key="seller">
         <CreatableSelect
           style={{ marginBottom: 16 }}
           control={control}
@@ -252,7 +299,6 @@ const SignUp: FC<SignUpProps> = ({ products }) => {
           label="Available Volume"
           name="commercialInfo.availableVolume"
           control={control}
-          required
         />
 
         <Input
@@ -261,7 +307,6 @@ const SignUp: FC<SignUpProps> = ({ products }) => {
           label="FOB$ Exports / year"
           name="commercialInfo.fobExportPerYear"
           control={control}
-          required
         />
 
         <Checkboxes
@@ -271,7 +316,7 @@ const SignUp: FC<SignUpProps> = ({ products }) => {
           control={control}
           options={certifications}
         />
-      </>
+      </Fragment>
     )
   }
 
@@ -289,7 +334,6 @@ const SignUp: FC<SignUpProps> = ({ products }) => {
             <h2 css={styles.heading}>
               {pendingUserToken ? 'Finalize Sign Up' : 'Sign Up'}
             </h2>
-
             {!pendingUserToken && (
               <>
                 <GoogleAuthButton
@@ -300,7 +344,6 @@ const SignUp: FC<SignUpProps> = ({ products }) => {
                 <OrSeparator style={{ marginBottom: 12 }} />
               </>
             )}
-
             <Input
               style={{ marginBottom: 16 }}
               type="text"
@@ -309,7 +352,6 @@ const SignUp: FC<SignUpProps> = ({ products }) => {
               control={control}
               required
             />
-
             <Input
               style={{ marginBottom: 16 }}
               type="text"
@@ -318,14 +360,12 @@ const SignUp: FC<SignUpProps> = ({ products }) => {
               control={control}
               required
             />
-
             <CountrySelector
               style={{ marginBottom: 16 }}
               control={control}
               name="country"
               readOnly
             />
-
             {!pendingUserToken && (
               <>
                 <Input
@@ -347,7 +387,6 @@ const SignUp: FC<SignUpProps> = ({ products }) => {
                 />
               </>
             )}
-
             <Input
               style={{ marginBottom: 16 }}
               label="Phone"
@@ -357,8 +396,15 @@ const SignUp: FC<SignUpProps> = ({ products }) => {
               control={control}
             />
 
-            <p style={{ fontSize: 14, marginBottom: 8 }}>Access Type</p>
+            <Input
+              style={{ marginBottom: 16 }}
+              type="text"
+              label="Website"
+              name="website"
+              control={control}
+            />
 
+            <p style={{ fontSize: 14, marginBottom: 8 }}>Access Type</p>
             <div style={{ marginBottom: 24 }}>
               <Radio
                 style={{ marginRight: 16 }}
@@ -385,13 +431,11 @@ const SignUp: FC<SignUpProps> = ({ products }) => {
                 }
               />
             </div>
-
             {commercialInfo && (
               <div style={{ marginTop: 24, marginBottom: 24 }}>
                 {commercialInfo}
               </div>
             )}
-
             <Button type="submit" fullWidth fullRounded>
               Sign Up
             </Button>

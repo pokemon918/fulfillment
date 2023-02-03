@@ -18,3 +18,12 @@ export const certifications = [
   'Fair Trade',
   'HACCP',
 ]
+
+export const marketDestinations = [
+  'Central Europe',
+  'Eastern Europe',
+  'Western Europe',
+  'South East Asia',
+  'Asia Central',
+  'North America',
+]
