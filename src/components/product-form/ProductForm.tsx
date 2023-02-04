@@ -16,6 +16,8 @@ import makeStyles from '@/utils/makeStyles'
 import Paper from '@/ui/Paper'
 import Button from '@/ui/Button'
 import StyledLink from '@/ui/StyledLink'
+import DeleteIcon from '@/icons/DeleteIcon'
+import AddIcon from '@/icons/AddIcon'
 
 const GET_CATEGORIES = gql`
   {
@@ -78,7 +80,7 @@ export interface ProductFormValue {
   }[]
   availableSpecs: LangField
   traces: {
-    type: string
+    title: LangField
     description: LangField
     gallery: { src: string }[]
   }[]
@@ -137,10 +139,27 @@ const ProductForm: FC<ProductFormProps> = ({ defaultValues, actionType }) => {
     })()
   }, [])
 
-  const { fields: traces } = useFieldArray({
+  const {
+    fields: traces,
+    remove: removeTrace,
+    append: appendTrace,
+  } = useFieldArray({
     control,
     name: 'traces',
   })
+
+  const appendNewTrace = () =>
+    appendTrace({
+      title: {
+        en: '',
+        es: '',
+      },
+      description: {
+        en: '',
+        es: '',
+      },
+      gallery: [],
+    })
 
   const onDelete = () => {
     const isConfirmed = window.confirm(
@@ -329,9 +348,14 @@ const ProductForm: FC<ProductFormProps> = ({ defaultValues, actionType }) => {
             css={styles.trace}
             style={{ marginBottom: '2rem' }}
           >
-            <p style={{ marginBottom: '1.5rem' }}>
-              {traceTitles[trace.type as keyof typeof traceTitles].en}
-            </p>
+            <Input
+              style={{ marginBottom: '1.5rem' }}
+              label="Title"
+              placeholder="Title"
+              name={`traces.${index}.title.en`}
+              control={control}
+              required
+            />
 
             <Input
               style={{ marginBottom: '1.5rem' }}
@@ -351,8 +375,46 @@ const ProductForm: FC<ProductFormProps> = ({ defaultValues, actionType }) => {
               label="Gallery"
               onDelete={onAssetDelete}
             />
+
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                marginTop: 16,
+              }}
+            >
+              <Button
+                type="button"
+                variant="outlined"
+                style={{
+                  cursor: 'pointer',
+                  color: 'rgb(185, 28, 28)',
+                  borderColor: 'rgb(185, 28, 28)',
+                  padding: '6px 12px',
+                }}
+                tabIndex={-1}
+                startIcon={<DeleteIcon />}
+                onClick={() => removeTrace(index)}
+              >
+                Delete
+              </Button>
+            </div>
           </Paper>
         ))}
+
+        <Button
+          type="button"
+          variant="outlined"
+          style={{
+            cursor: 'pointer',
+            padding: '6px 12px',
+          }}
+          tabIndex={-1}
+          startIcon={<AddIcon />}
+          onClick={appendNewTrace}
+        >
+          New Trace
+        </Button>
 
         <h3
           style={{ marginTop: '5rem', marginBottom: '1rem' }}
@@ -393,7 +455,9 @@ const ProductForm: FC<ProductFormProps> = ({ defaultValues, actionType }) => {
           }}
         >
           Updated Successfully!{' '}
-          <StyledLink href={`/products/${defaultValues._id}`}>View it</StyledLink>
+          <StyledLink href={`/products/${defaultValues._id}`}>
+            View it
+          </StyledLink>
         </p>
       </form>
 

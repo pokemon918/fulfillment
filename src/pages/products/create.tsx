@@ -20,17 +20,17 @@ const ProductCreate = () => {
     availableSpecs: { en: '', es: '' },
     traces: [
       {
-        type: 'field',
+        title: 'field',
         description: { en: '', es: '' },
         gallery: [],
       },
       {
-        type: 'packing',
+        title: 'packing',
         description: { en: '', es: '' },
         gallery: [],
       },
       {
-        type: 'finalProduct',
+        title: 'finalProduct',
         description: { en: '', es: '' },
         gallery: [],
       },

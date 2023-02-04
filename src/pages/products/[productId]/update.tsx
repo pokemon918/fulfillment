@@ -60,7 +60,11 @@ const GET_PRODUCT = gql`
         es
       }
       traces {
-        type
+        title {
+          en
+          es
+        }
+        
         description {
           en
           es

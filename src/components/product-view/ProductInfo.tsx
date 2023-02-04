@@ -9,43 +9,6 @@ interface ProductInfoProps extends HTMLAttributes<HTMLDivElement> {
   product: DetailedProduct
 }
 
-const traceTitles = {
-  field: 'Field',
-  packing: 'Packing',
-  finalProduct: 'Final Product',
-}
-
-const steps: {
-  title: string
-  description: string
-  gallery: string[]
-}[] = [
-  {
-    title: 'Plantation',
-    description:
-      'Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size. Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.',
-    gallery: ['/images/grape.png'],
-  },
-  {
-    title: 'Plantation',
-    description:
-      'Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size. Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.',
-    gallery: ['/images/grape.png', '/images/grape.png'],
-  },
-  {
-    title: 'Plantation',
-    description:
-      'Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size. Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.',
-    gallery: ['/images/grape.png'],
-  },
-  {
-    title: 'Plantation',
-    description:
-      'Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size. Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.',
-    gallery: ['/images/grape.png', '/images/grape.png'],
-  },
-]
-
 const ProductInfo: FC<ProductInfoProps> = (props) => {
   const [view, setView] = useState<'details' | 'gallery'>('details')
   const styles = useStyles(props)
@@ -55,25 +18,24 @@ const ProductInfo: FC<ProductInfoProps> = (props) => {
   return (
     <div css={styles.root} {...divProps}>
       <div css={styles.toggleNav}>
-      <div css={styles.toggleButtons}>
-        <Button
-          css={styles.toggleBtn}
-          data-inactive={view !== 'details'}
-          onClick={() => setView('details')}
-        >
-          Product Details
-        </Button>
+        <div css={styles.toggleButtons}>
+          <Button
+            css={styles.toggleBtn}
+            data-inactive={view !== 'details'}
+            onClick={() => setView('details')}
+          >
+            Product Details
+          </Button>
 
-        <Button
-          css={styles.toggleBtn}
-          data-inactive={view !== 'gallery'}
-          onClick={() => setView('gallery')}
-        >
-          Gallery
-        </Button>
+          <Button
+            css={styles.toggleBtn}
+            data-inactive={view !== 'gallery'}
+            onClick={() => setView('gallery')}
+          >
+            Gallery
+          </Button>
+        </div>
       </div>
-      </div>
-      
 
       <Gallery
         style={{ display: view === 'gallery' ? undefined : 'none' }}
@@ -82,19 +44,7 @@ const ProductInfo: FC<ProductInfoProps> = (props) => {
 
       <div style={{ display: view === 'details' ? undefined : 'none' }}>
         <h2 css={styles.heading}>Our Process from Farm to Buyer</h2>
-        <Steps
-          steps={[
-            ...product.traces.map((trace) => ({
-              ...trace,
-              title: traceTitles[trace.type as keyof typeof traceTitles],
-            })),
-            {
-              title: 'Plantation',
-              description: 'Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size. Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.',
-              gallery: ['/images/grape.png', '/images/grape.png'],
-            },
-          ]}
-        />
+        <Steps steps={product.traces} />
       </div>
     </div>
   )
@@ -111,7 +61,7 @@ const useStyles = makeStyles(({}: ProductInfoProps) => ({
   },
   toggleNav: {
     width: '100%',
-    marginBottom: 56
+    marginBottom: 56,
   },
   toggleButtons: {
     display: 'flex',
@@ -119,7 +69,7 @@ const useStyles = makeStyles(({}: ProductInfoProps) => ({
     flexWrap: 'wrap',
     marginRight: -20,
     marginBottom: -12,
-    width: '100%'
+    width: '100%',
   },
   toggleBtn: {
     padding: '10px 20px',

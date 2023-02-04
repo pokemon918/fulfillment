@@ -100,7 +100,10 @@ const GET_DATA = gql`
       }
       gallery
       traces {
-        type
+        title {
+          en
+          es
+        }
         gallery
         description {
           en
@@ -143,6 +146,7 @@ export const getServerSideProps: GetServerSideProps<ProductPageProps> = async (
         hsCode: product.hsCode.en,
         traces: product.traces.map((trace: any) => ({
           ...trace,
+          title: trace.title.en,
           description: trace.description.en,
         })),
         offerPrices: product.offerPrices.map((offerPrice: any) => ({

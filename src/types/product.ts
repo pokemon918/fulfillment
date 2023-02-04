@@ -12,7 +12,7 @@ export interface DetailedProduct extends BaseProduct {
   hsCode: string
   gallery: string[]
   traces: {
-    type: string
+    title: string
     description: string
     gallery: string[]
   }[]
