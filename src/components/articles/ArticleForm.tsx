@@ -9,34 +9,29 @@ import ThumbnailInput from '@/components/ThumbnailInput'
 import makeStyles from '@/utils/makeStyles'
 import Button from '@/ui/Button'
 import StyledLink from '@/ui/StyledLink'
+import Editor from '../tinymce/Editor'
 
-const CREATE_CATEGORY = gql`
-  mutation CreateCategory(
-    $input: CreateCategoryInput!
-    $filenames: [String!]!
-  ) {
-    product: createCategory(input: $input) {
+const CREATE_ARTICLE = gql`
+  mutation CreateArticle($input: CreateArticleInput!, $filenames: [String!]!) {
+    article: createArticle(input: $input) {
       _id
     }
     deleteFiles(filenames: $filenames)
   }
 `
 
-const UPDATE_CATEGORY = gql`
-  mutation UpdateCategory(
-    $input: UpdateCategoryInput!
-    $filenames: [String!]!
-  ) {
-    Category: updateCategory(input: $input) {
+const UPDATE_ARTICLE = gql`
+  mutation UpdateArticle($input: UpdateArticleInput!, $filenames: [String!]!) {
+    article: updateArticle(input: $input) {
       _id
     }
     deleteFiles(filenames: $filenames)
   }
 `
 
-const DELETE_CATEGORY = gql`
+const DELETE_ARTICLE = gql`
   mutation ($_id: String!) {
-    deleteCategory(_id: $_id)
+    deleteArticle(_id: $_id)
   }
 `
 
@@ -46,18 +41,21 @@ const DELETE_FILES = gql`
   }
 `
 
-export interface CategoryFormValue {
+export interface ArticleFormValue {
   _id?: string
-  name: LangField
+  title: LangField
+  description: LangField
+  content: LangField
   thumbnail: string
+  keywordsIds: string[]
 }
 
-interface CategoryFormProps {
-  defaultValues: CategoryFormValue
+interface ArticleFormProps {
+  defaultValues: ArticleFormValue
   actionType: 'create' | 'update'
 }
 
-const CategoryForm: FC<CategoryFormProps> = ({ defaultValues, actionType }) => {
+const ArticleForm: FC<ArticleFormProps> = ({ defaultValues, actionType }) => {
   const styles = useStyles({})
 
   const [isSuccess, setIsSuccess] = useState(false)
@@ -74,17 +72,17 @@ const CategoryForm: FC<CategoryFormProps> = ({ defaultValues, actionType }) => {
 
   const { control, handleSubmit, getValues } = useForm({ defaultValues })
 
-  const onSubmit = handleSubmit((category) => {
+  const onSubmit = handleSubmit((article) => {
     setIsSuccess(false)
     setSaving(true)
 
-    graphqlReq(actionType === 'update' ? UPDATE_CATEGORY : CREATE_CATEGORY, {
-      input: category,
+    graphqlReq(actionType === 'update' ? UPDATE_ARTICLE : CREATE_ARTICLE, {
+      input: article,
       filenames: deletedFilenames.current,
     })
       .then(() => {
         if (actionType === 'create') {
-          router.push(`/categories`)
+          router.push(`/blog`)
         } else {
           setIsSuccess(true)
         }
@@ -107,14 +105,12 @@ const CategoryForm: FC<CategoryFormProps> = ({ defaultValues, actionType }) => {
 
       setDeleting(true)
 
-      graphqlReq(DELETE_CATEGORY, { _id })
+      graphqlReq(DELETE_ARTICLE, { _id })
         .then(() => {
-          router.push(`/categories`)
+          router.push(`/blog`)
         })
         .catch(() => {
-          alert(
-            'Cannot delete this category because it has associated products'
-          )
+          alert('Please check your internet connection')
         })
         .finally(() => {
           setDeleting(false)
@@ -133,26 +129,46 @@ const CategoryForm: FC<CategoryFormProps> = ({ defaultValues, actionType }) => {
   return (
     <div>
       <h1 style={{ fontSize: 25, marginBottom: '2rem' }}>
-        {actionType === 'create' ? 'Create' : 'Update'} Category
+        {actionType === 'create' ? 'Create' : 'Update'} Article
       </h1>
 
       <form onSubmit={onSubmit}>
         <Input
-          style={{ marginBottom: 16 }}
-          label="Name"
-          placeholder="Name"
+          style={{ marginBottom: 32 }}
+          label="Title"
+          placeholder="Title"
           control={control}
-          name="name.en"
+          name="title.en"
           required
         />
 
         <p style={{ fontSize: 14, marginBottom: 8 }}>Thumbnail</p>
 
         <ThumbnailInput
-          style={{ marginBottom: 16 }}
+          fullWidth
+          style={{ marginBottom: 32 }}
           name="thumbnail"
           control={control}
           onDelete={onAssetDelete}
+        />
+
+        <Input
+          style={{ marginBottom: 32 }}
+          label="Description"
+          placeholder="Description"
+          control={control}
+          name="description.en"
+          required
+          multiline
+          rows={3}
+        />
+
+        <Editor
+          style={{ marginBottom: 32 }}
+          label="Content"
+          placeholder="Content"
+          control={control}
+          name="content.en"
         />
 
         <div css={styles.footer}>
@@ -180,9 +196,7 @@ const CategoryForm: FC<CategoryFormProps> = ({ defaultValues, actionType }) => {
           }}
         >
           Updated Successfully!{' '}
-          <StyledLink href={`/categories`}>
-            View it
-          </StyledLink>
+          <StyledLink href={`/blog/${defaultValues._id}`}>View it</StyledLink>
         </p>
       </form>
 
@@ -207,4 +221,4 @@ const useStyles = makeStyles(() => ({
   },
 }))
 
-export default CategoryForm
+export default ArticleForm

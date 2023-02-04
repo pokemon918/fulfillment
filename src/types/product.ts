@@ -21,5 +21,5 @@ export interface DetailedProduct extends BaseProduct {
     name: string
     value: string
   }[]
-  createdAt: string
+  updatedAt: string
 }

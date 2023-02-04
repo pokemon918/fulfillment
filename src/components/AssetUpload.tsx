@@ -25,6 +25,7 @@ const AssetUpload: FC<AssetUploadProps> = ({
   onUploaded,
   className,
   single,
+  ...rest
 }) => {
   const [uploadProgress, setUploadProgress] = useState<number | null>(null)
 
@@ -60,7 +61,7 @@ const AssetUpload: FC<AssetUploadProps> = ({
   const styles = useStyles({})
 
   return (
-    <label css={styles.uploadBtn} className={className}>
+    <label css={styles.uploadBtn} className={className} {...rest}>
       {typeof uploadProgress === 'number' ? (
         <div>
           <p>Uploading</p>

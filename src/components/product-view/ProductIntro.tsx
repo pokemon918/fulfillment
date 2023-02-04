@@ -63,7 +63,7 @@ const ProductIntro: FC<ProductIntroProps> = (props) => {
           <h3 css={styles.price}>${product.price} ~</h3>
 
           <p css={styles.unitPhrase}>
-            USD / KG, {dayjs(product.createdAt).format('MMMM DD, YYYY')}
+            USD / KG, {dayjs(product.updatedAt).format('MMMM DD, YYYY')}
           </p>
 
           <h4 css={styles.offerTitle}>Current Offer Base Prices</h4>

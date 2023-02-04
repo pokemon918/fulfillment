@@ -77,7 +77,7 @@ const useStyles = makeStyles((props: PageCategoriesProps) => ({
   categories: {
     display: 'grid',
     gridTemplateColumns: 'repeat(4, 1fr)',
-    gap: '48px 16px',
+    gap: '48px 24px',
     [`@media (max-width: ${theme.widths.tablet})`]: {
       gridTemplateColumns: 'repeat(3, 1fr)',
     },

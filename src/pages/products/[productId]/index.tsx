@@ -110,7 +110,7 @@ const GET_DATA = gql`
           en
         }
       }
-      createdAt
+      updatedAt
 
       category {
         products {

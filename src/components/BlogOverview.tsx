@@ -28,7 +28,7 @@ const BlogOverview: FC<BlogOverviewProps> = (props) => {
               fermentum amet faucibus sed id nisi lectus at.
             </p>
 
-            <Button css={styles.deskBtn} style={{ minWidth: 205 }}>
+            <Button href="/blog" css={styles.deskBtn} style={{ minWidth: 205 }}>
               See More
             </Button>
           </div>
@@ -74,7 +74,9 @@ const BlogOverview: FC<BlogOverviewProps> = (props) => {
             <ArrowRight />
           </button>
         </div>
-        <Button style={{ minWidth: 205 }}>See More</Button>
+        <Button href="/blog" style={{ minWidth: 205 }}>
+          See More
+        </Button>
       </div>
     </div>
   )

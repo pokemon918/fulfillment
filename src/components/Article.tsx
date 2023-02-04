@@ -3,19 +3,20 @@ import { BaseArticle } from '@/types/article'
 import BoxRation from '@/ui/BoxRatio'
 import makeStyles from '@/utils/makeStyles'
 import mergeProps from '@/utils/mergeProps'
+import Link from 'next/link'
 import { FC, HTMLAttributes } from 'react'
 
-export interface ArticleProps extends HTMLAttributes<HTMLDivElement> {
+export interface ArticleProps extends HTMLAttributes<HTMLAnchorElement> {
   article: BaseArticle
 }
 
 const Article: FC<ArticleProps> = (props) => {
   const styles = useStyles(props)
 
-  const { article, ...divProps } = props
+  const { article, ...anchorProps } = props
 
   return (
-    <div css={styles.root} {...divProps}>
+    <Link href={`/blog/${article._id}`} css={styles.root} {...anchorProps}>
       <BoxRation css={styles.imgWrapper} ration={1.2}>
         <img src={article.thumbnail} css={styles.img} />
       </BoxRation>
@@ -23,7 +24,7 @@ const Article: FC<ArticleProps> = (props) => {
       <h3 css={styles.heading}>{article.title}</h3>
 
       <p css={styles.desc}>{article.description}</p>
-    </div>
+    </Link>
   )
 }
 
@@ -31,12 +32,14 @@ const useStyles = makeStyles((props: ArticleProps) => {
   return {
     root: {
       cursor: 'pointer',
+      color: 'inherit',
+      textDecoration: 'none'
     },
     imgWrapper: {
       width: '100%',
       marginBottom: 14,
       borderRadius: 16,
-      overflow: 'hidden'
+      overflow: 'hidden',
     },
     img: {
       width: '100%',
