@@ -1,17 +1,21 @@
 import Footer from '@/components/Footer'
 import Navbar from '@/components/Navbar'
+import PageBgColor from '@/ui/PageBgColor'
 import makeStyles from '@/utils/makeStyles'
 import { FC, ReactNode } from 'react'
 
 interface PageLayoutProps {
   children?: ReactNode
+  bgColor?: string
 }
 
-const PageLayout: FC<PageLayoutProps> = ({ children }) => {
+const PageLayout: FC<PageLayoutProps> = ({ children, bgColor }) => {
   const styles = useStyles({})
 
   return (
     <div css={styles.root}>
+      {bgColor && <PageBgColor bgColor={bgColor} />}
+
       <Navbar css={styles.navbar} />
 
       <div css={styles.body}>

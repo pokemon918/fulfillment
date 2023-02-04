@@ -4,18 +4,22 @@ import makeStyles from '@/utils/makeStyles'
 import Link from 'next/link'
 import { FC, HTMLAttributes } from 'react'
 
-interface CategoryProps extends HTMLAttributes<HTMLDivElement> {
+interface CategoryProps extends HTMLAttributes<HTMLAnchorElement> {
   category: BaseCategory
 }
 
 const Category: FC<CategoryProps> = (props) => {
   const styles = useStyles(props)
 
-  const { category, ...divProps } = props
+  const { category, ...anchorProps } = props
 
   return (
-    <Link css={styles.root} href={`/products?categoryId=${category._id}`}>
-      <BoxRation ration={1.18} css={styles.box} {...divProps}>
+    <Link
+      css={styles.root}
+      href={`/products?categoryId=${category._id}`}
+      {...anchorProps}
+    >
+      <BoxRation ration={1.18} css={styles.box}>
         <img css={styles.img} src={category.thumbnail} alt={category.name} />
 
         <div css={styles.cover} data-cover="true"></div>
@@ -31,7 +35,8 @@ const Category: FC<CategoryProps> = (props) => {
 const useStyles = makeStyles((props: CategoryProps) => ({
   root: {
     color: 'inherit',
-    textDecoration: 'none'
+    textDecoration: 'none',
+    width: '100%',
   },
   box: {
     display: 'flex',
