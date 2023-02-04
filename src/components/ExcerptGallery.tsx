@@ -3,13 +3,14 @@ import makeStyles from '@/utils/makeStyles'
 import { FC, useEffect, useState } from 'react'
 
 interface ExcerptGalleryProps {
+  productId: string;
   gallery: string[]
 }
 
 const ExcerptGallery: FC<ExcerptGalleryProps> = (props) => {
   const styles = useStyles(props)
 
-  const { gallery } = props
+  const { productId, gallery } = props
 
   const firstImage = gallery[0]
 
@@ -17,7 +18,7 @@ const ExcerptGallery: FC<ExcerptGalleryProps> = (props) => {
 
   useEffect(() => {
     setSelected(firstImage)
-  }, [firstImage])
+  }, [productId])
 
   return (
     <div css={styles.root}>

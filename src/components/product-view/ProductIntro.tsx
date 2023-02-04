@@ -49,7 +49,7 @@ const ProductIntro: FC<ProductIntroProps> = (props) => {
       </div>
 
       <div css={styles.root}>
-        <ExcerptGallery gallery={gallery.slice(0, 5)} />
+        <ExcerptGallery productId={product._id} gallery={gallery.slice(0, 5)} />
 
         <div>
           <h2 css={styles.title}>
