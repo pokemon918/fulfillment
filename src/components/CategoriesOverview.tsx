@@ -1,3 +1,4 @@
+import { useUser } from '@/hooks/useUser'
 import { BaseCategory } from '@/types/category'
 import Button from '@/ui/Button'
 import ContainerWide from '@/ui/ContainerWide'
@@ -14,13 +15,15 @@ const CategoriesOverview: FC<CategoriesOverviewProps> = (props) => {
 
   const { categories, ...divProps } = props
 
+  const user = useUser()
+
   return (
     <div css={styles.wrapper} {...divProps}>
       <div css={styles.root}>
         <div css={styles.header}>
           <h4 css={styles.heading}>Categories</h4>
 
-          <Button href="/categories">Manage</Button>
+          {user?.role === 'admin' && <Button href="/categories">Manage</Button>}
         </div>
 
         <ContainerWide
@@ -70,7 +73,7 @@ const useStyles = makeStyles((props: CategoriesOverviewProps) => {
       flexWrap: 'wrap',
       marginBottom: 34,
       padding: '0 16px',
-      gap: '12px 16px'
+      gap: '12px 16px',
     },
     heading: {
       fontWeight: 700,

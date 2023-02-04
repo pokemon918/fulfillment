@@ -248,7 +248,7 @@ const ProductForm: FC<ProductFormProps> = ({ defaultValues, actionType }) => {
 
       <form onSubmit={onSubmit}>
         <Input
-          style={{ marginBottom: 16 }}
+          style={{ marginBottom: '1.5rem' }}
           label="Name"
           placeholder="Name"
           control={control}
@@ -257,7 +257,7 @@ const ProductForm: FC<ProductFormProps> = ({ defaultValues, actionType }) => {
         />
 
         <Select
-          style={{ marginBottom: 16 }}
+          style={{ marginBottom: '1.5rem' }}
           label="Category"
           placeholder="Category"
           name="categoryId"
@@ -266,13 +266,13 @@ const ProductForm: FC<ProductFormProps> = ({ defaultValues, actionType }) => {
         />
 
         <CountrySelect
-          style={{ marginBottom: 16 }}
+          style={{ marginBottom: '1.5rem' }}
           control={control}
           name="country"
         />
 
         <Select
-          style={{ marginBottom: 16 }}
+          style={{ marginBottom: '1.5rem' }}
           label="Harvesting Seasonality"
           placeholder="Harvesting Seasonality"
           name="harvestingMonths"
@@ -282,7 +282,16 @@ const ProductForm: FC<ProductFormProps> = ({ defaultValues, actionType }) => {
         />
 
         <Input
-          style={{ marginBottom: 16 }}
+          style={{ marginBottom: '1.5rem' }}
+          label="Available Specs"
+          placeholder="Available Specs"
+          control={control}
+          name="availableSpecs.en"
+          required
+        />
+
+        <Input
+          style={{ marginBottom: '1.5rem' }}
           label="HS Code"
           placeholder="HS Code"
           control={control}
@@ -291,7 +300,7 @@ const ProductForm: FC<ProductFormProps> = ({ defaultValues, actionType }) => {
         />
 
         <Input
-          style={{ marginBottom: 16 }}
+          style={{ marginBottom: '1.5rem' }}
           label="Price"
           placeholder="Price"
           control={control}
@@ -301,7 +310,7 @@ const ProductForm: FC<ProductFormProps> = ({ defaultValues, actionType }) => {
         />
 
         <TableForm
-          style={{ marginBottom: '5rem' }}
+          style={{ marginBottom: '1.5rem' }}
           control={control}
           name="offerPrices"
           label="Offer Prices"
@@ -310,7 +319,7 @@ const ProductForm: FC<ProductFormProps> = ({ defaultValues, actionType }) => {
         <p style={{ fontSize: 14, marginBottom: 8 }}>Thumbnail</p>
 
         <ThumbnailInput
-          style={{ marginBottom: 16 }}
+          style={{ marginBottom: '1.5rem' }}
           name="thumbnail"
           control={control}
           onDelete={onAssetDelete}
@@ -324,20 +333,20 @@ const ProductForm: FC<ProductFormProps> = ({ defaultValues, actionType }) => {
           onDelete={onAssetDelete}
         />
 
-        <h3 style={{ marginBottom: '1rem' }} css={styles.heading}>
+        {/* <h3 style={{ marginBottom: '1rem' }} css={styles.heading}>
           Product Details
-        </h3>
+        </h3> */}
 
-        <Input
+        {/* <Input
           style={{ marginBottom: '1.5rem' }}
           label="Title"
           placeholder="Title"
           control={control}
           name="bigTitle.en"
           required
-        />
+        /> */}
 
-        <Input
+        {/* <Input
           style={{ marginBottom: '1.5rem' }}
           label="Description"
           placeholder="Description"
@@ -346,33 +355,24 @@ const ProductForm: FC<ProductFormProps> = ({ defaultValues, actionType }) => {
           required
           multiline
           rows={5}
-        />
+        /> */}
 
-        <Input
-          style={{ marginBottom: '1.5rem' }}
-          label="Available Specs"
-          placeholder="Available Specs"
-          control={control}
-          name="availableSpecs.en"
-          required
-        />
-
-        <TableForm
+        {/* <TableForm
           style={{ marginBottom: '5rem' }}
           control={control}
           name="specs"
           label="Specifications"
-        />
+        /> */}
 
         <h3 style={{ marginBottom: '1rem' }} css={styles.heading}>
-          Traceability from Farm to Table
+          Process from Farm to Buyer
         </h3>
 
         {traces.map((trace, index) => (
           <Paper
             key={trace.id}
             css={styles.trace}
-            style={{ marginBottom: '2rem' }}
+            style={{ marginBottom: '1.5rem' }}
           >
             <Input
               style={{ marginBottom: '1.5rem' }}
@@ -428,21 +428,23 @@ const ProductForm: FC<ProductFormProps> = ({ defaultValues, actionType }) => {
           </Paper>
         ))}
 
-        <Button
-          type="button"
-          variant="outlined"
-          style={{
-            cursor: 'pointer',
-            padding: '6px 12px',
-          }}
-          tabIndex={-1}
-          startIcon={<AddIcon />}
-          onClick={appendNewTrace}
-        >
-          New Trace
-        </Button>
+        <div style={{ marginBottom: '5rem' }}>
+          <Button
+            type="button"
+            variant="outlined"
+            style={{
+              cursor: 'pointer',
+              padding: '6px 12px',
+            }}
+            tabIndex={-1}
+            startIcon={<AddIcon />}
+            onClick={appendNewTrace}
+          >
+            New Trace
+          </Button>
+        </div>
 
-        <h3
+        {/* <h3
           style={{ marginTop: '5rem', marginBottom: '1rem' }}
           css={styles.heading}
         >
@@ -454,7 +456,7 @@ const ProductForm: FC<ProductFormProps> = ({ defaultValues, actionType }) => {
           control={control}
           name="certifications"
           onDelete={onAssetDelete}
-        />
+        /> */}
 
         <div css={styles.footer}>
           <Button type="submit" disabled={saving}>
