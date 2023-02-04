@@ -1,5 +1,5 @@
 import { request, RequestDocument, Variables } from 'graphql-request'
-import { getCookie } from 'cookies-next'
+import { getCookie } from './cookies'
 
 const endpoint = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL!}/graphql`
 
@@ -10,7 +10,7 @@ const graphqlReq = <T = any>(
 ): Promise<T> => {
   const customHeaders: Record<string, string> = {}
 
-  const token = getCookie('token')
+  const token = getCookie(document.cookie, 'token')
 
   if (typeof token === 'string' && token.length > 0) {
     customHeaders.authorization = `Bearer ${token}`

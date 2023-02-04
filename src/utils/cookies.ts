@@ -1,5 +1,5 @@
 const domain = (() => {
-  let val = process.env.NEXT_PUBLIC_MAIN_DOMAIN
+  let val = process.env.NEXT_PUBLIC_COOKIES_BASE_DOMAIN
   if (val !== 'localhost') val = '.' + val
   return val
 })()
