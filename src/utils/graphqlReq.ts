@@ -10,7 +10,8 @@ const graphqlReq = <T = any>(
 ): Promise<T> => {
   const customHeaders: Record<string, string> = {}
 
-  const token = getCookie(document.cookie, 'token')
+  const token =
+    typeof window !== 'undefined' ? getCookie(document.cookie, 'token') : null
 
   if (typeof token === 'string' && token.length > 0) {
     customHeaders.authorization = `Bearer ${token}`
