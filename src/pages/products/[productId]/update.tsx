@@ -19,6 +19,7 @@ const GET_PRODUCT = gql`
       }
       categoryId
       country
+      harvestingMonths
       hsCode {
         en
         es

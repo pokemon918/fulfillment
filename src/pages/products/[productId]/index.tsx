@@ -9,7 +9,7 @@ import graphqlReq from '@/utils/graphqlReq'
 import makeStyles from '@/utils/makeStyles'
 import { gql } from 'graphql-request'
 import { GetServerSideProps } from 'next'
-import { FC, useMemo, useState } from 'react'
+import { FC, useState } from 'react'
 import RelatedProducts from '@/components/RelatedProducts'
 import Faq from '@/components/Faq'
 import QuotePrompt from '@/components/quote-prompt'
@@ -98,6 +98,7 @@ const GET_DATA = gql`
       hsCode {
         en
       }
+      harvestingMonths
       gallery
       traces {
         title {

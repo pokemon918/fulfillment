@@ -18,19 +18,20 @@ const ProductCreate = () => {
     gallery: [],
     specs: [],
     availableSpecs: { en: '', es: '' },
+    harvestingMonths: [],
     traces: [
       {
-        title: 'field',
+        title: { en: 'field', es: '' },
         description: { en: '', es: '' },
         gallery: [],
       },
       {
-        title: 'packing',
+        title: { en: 'packing', es: '' },
         description: { en: '', es: '' },
         gallery: [],
       },
       {
-        title: 'finalProduct',
+        title: { en: 'finalProduct', es: '' },
         description: { en: '', es: '' },
         gallery: [],
       },

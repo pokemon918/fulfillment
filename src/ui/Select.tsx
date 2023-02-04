@@ -7,10 +7,10 @@ import { Control, Controller } from 'react-hook-form'
 
 type StateManagedSelect = <
   Option extends {
-    value: string
+    value: string | number
     label: string
   } = {
-    value: string
+    value: string | number
     label: string
   },
   IsMulti extends boolean = false,

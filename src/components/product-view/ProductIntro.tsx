@@ -84,7 +84,7 @@ const ProductIntro: FC<ProductIntroProps> = (props) => {
           </p>
           <MonthsRange
             style={{ marginBottom: 46, maxWidth: 200 }}
-            picked={[0, 9, 10, 11]}
+            picked={product.harvestingMonths}
           />
 
           <Button
