@@ -1,5 +1,7 @@
 import CountrySelector from '@/components/CountrySelect'
 import Navbar from '@/components/Navbar'
+import UserProfile from '@/components/UserProfile'
+import accountTypes from '@/data/accountTypes'
 import { DetailedUser } from '@/types/user'
 import Button from '@/ui/Button'
 import Container from '@/ui/Container'
@@ -25,13 +27,6 @@ const GET_PROFILE = gql`
     }
   }
 `
-
-const accountTypes = {
-  admin: 'Admin',
-  seller: 'Supplier',
-  buyer: 'Buyer',
-  investor: 'Investor',
-}
 
 const Profile = () => {
   const { setValue, control } = useForm<{
@@ -66,53 +61,7 @@ const Profile = () => {
             <p style={{ textAlign: 'center' }}>Loading...</p>
           ) : (
             <Paper>
-              <p style={{ marginBottom: 16 }}>
-                Account Type: {accountTypes[user.role]}
-              </p>
-
-              <Input
-                style={{ marginBottom: 16 }}
-                label="Name"
-                name="user.fullName"
-                control={control}
-                required
-                readOnly
-              />
-
-              <Input
-                style={{ marginBottom: 16 }}
-                label="Company"
-                name="user.companyName"
-                control={control}
-                required
-                readOnly
-              />
-
-              <CountrySelector
-                style={{ marginBottom: 16 }}
-                control={control}
-                name="user.country"
-                readOnly
-              />
-
-              <Input
-                style={{ marginBottom: 16 }}
-                label="Email"
-                name="user.email"
-                required
-                control={control}
-                readOnly
-              />
-
-              <Input
-                style={{ marginBottom: 24 }}
-                label="Phone"
-                name="user.phone"
-                type="tel"
-                required
-                control={control}
-                readOnly
-              />
+              <UserProfile user={user} />
 
               <Button
                 onClick={logout}

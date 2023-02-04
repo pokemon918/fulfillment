@@ -8,13 +8,13 @@ import makeStyles from '@/utils/makeStyles'
 import mergeProps from '@/utils/mergeProps'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { FC, HTMLAttributes, useState } from 'react'
+import { FC, HTMLAttributes, useMemo, useRef, useState } from 'react'
 
 interface NavbarProps extends HTMLAttributes<HTMLDivElement> {
   mode?: 'light' | 'dark'
 }
 
-const links: {
+const staticLinks: {
   title: string
   to: string
 }[] = [
@@ -55,6 +55,12 @@ const Navbar: FC<NavbarProps> = (originalProps) => {
 
   const user = useUser()
 
+  const links = useMemo(() => {
+    const result = [...staticLinks]
+    if (user?.role === 'admin') result.push({ title: 'Users', to: '/users' })
+    return result
+  }, [user])
+
   return (
     <div css={styles.root} {...divProps} data-open={open}>
       <Container css={styles.nav}>
@@ -78,7 +84,9 @@ const Navbar: FC<NavbarProps> = (originalProps) => {
 
         <div css={styles.deskButtons}>
           {user ? (
-            <Link css={styles.userProfile} href="/profile">{user.fullName}</Link>
+            <Link css={styles.userProfile} href="/profile">
+              {user.fullName}
+            </Link>
           ) : (
             <>
               <Button
@@ -189,7 +197,7 @@ const useStyles = makeStyles(({ mode }: NavbarProps) => ({
   },
   deskLinks: {
     display: 'flex',
-    maxWidth: 450 + 64,
+    maxWidth: 530 + 64,
     width: '100%',
     justifyContent: 'space-between',
     padding: '0 32px',

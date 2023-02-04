@@ -6,7 +6,8 @@ const endpoint = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL!}/graphql`
 const graphqlReq = <T = any>(
   doc: RequestDocument,
   variables?: Variables,
-  requestHeaders?: Record<string, string>
+  requestHeaders?: Record<string, string>,
+  tokenInput?: string | null
 ): Promise<T> => {
   const customHeaders: Record<string, string> = {}
 
@@ -15,6 +16,10 @@ const graphqlReq = <T = any>(
 
   if (typeof token === 'string' && token.length > 0) {
     customHeaders.authorization = `Bearer ${token}`
+  }
+
+  if (tokenInput) {
+    customHeaders.authorization = `Bearer ${tokenInput}`
   }
 
   return request(endpoint, doc, variables, {

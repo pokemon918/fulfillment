@@ -1,12 +1,12 @@
 import PageLayout from '@/components/PageLayout'
 import Redirect from '@/components/Redirect'
 import { useUser } from '@/hooks/useUser'
-import { BasicUser } from '@/types/user'
+import { AuthUser } from '@/types/user'
 import { ComponentType } from 'react'
 
 const withAuth = <P extends {}>(
   WrappedComponent: ComponentType<P>,
-  requiredRole: BasicUser['role']
+  requiredRole: AuthUser['role']
 ) => {
   return (props: P) => {
     const user = useUser()

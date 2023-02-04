@@ -1,4 +1,4 @@
-import { BasicUser } from '@/types/user'
+import { AuthUser } from '@/types/user'
 import { deleteCookie, setCookie } from '@/utils/cookies'
 import graphqlReq from '@/utils/graphqlReq'
 import { gql } from 'graphql-request'
@@ -15,7 +15,7 @@ const GET_USER_ME = gql`
 `
 
 const useFetchAuthUser = (storedUserString: string | null) => {
-  const [user, setUser] = useState<BasicUser | null>(
+  const [user, setUser] = useState<AuthUser | null>(
     (() => {
       if (storedUserString) {
         try {
