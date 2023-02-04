@@ -19,11 +19,11 @@ import ProductInfo from '@/components/product-view/ProductInfo'
 
 interface ProductPageProps {
   product: DetailedProduct
-  products: BaseProduct[]
+  relatedProducts: BaseProduct[]
 }
 
 const ProductPage: FC<ProductPageProps> = (props) => {
-  const { product, products } = props
+  const { product, relatedProducts } = props
 
   const styles = useStyles(props)
   const [openQuote, setOpenQuote] = useState(false)
@@ -45,7 +45,7 @@ const ProductPage: FC<ProductPageProps> = (props) => {
       </Container>
 
       <RelatedProducts
-        products={products}
+        products={relatedProducts}
         style={{ marginBottom: 122, marginTop: 120 }}
       />
 
@@ -98,19 +98,21 @@ const GET_DATA = gql`
         }
       }
       createdAt
-    }
 
-    products {
-      _id
-      name {
-        en
-      }
-      thumbnail
-      country
-      price
-      categoryId
-      availableSpecs {
-        en
+      category {
+        products {
+          _id
+          name {
+            en
+          }
+          thumbnail
+          country
+          price
+          categoryId
+          availableSpecs {
+            en
+          }
+        }
       }
     }
   }
@@ -119,7 +121,7 @@ const GET_DATA = gql`
 export const getServerSideProps: GetServerSideProps<ProductPageProps> = async (
   ctx
 ) => {
-  const { product, products } = await graphqlReq(GET_DATA, {
+  const { product } = await graphqlReq(GET_DATA, {
     productId: ctx.query.productId,
   })
 
@@ -135,11 +137,13 @@ export const getServerSideProps: GetServerSideProps<ProductPageProps> = async (
           description: trace.description.en,
         })),
       },
-      products: products.map((product: any) => ({
-        ...product,
-        name: product.name.en,
-        availableSpecs: product.availableSpecs.en,
-      })),
+      relatedProducts: product.category.products
+        .filter((p: any) => p._id !== product._id)
+        .map((product: any) => ({
+          ...product,
+          name: product.name.en,
+          availableSpecs: product.availableSpecs.en,
+        })),
     },
   }
 }
