@@ -7,6 +7,7 @@ import NavigatingIndicator from '@/components/NavigatingIndicator'
 import { UserProvider } from '@/contexts/userContext'
 import useFetchAuthUser from '@/hooks/useFetchAuthUser'
 import { getCookie } from '@/utils/cookies'
+import Head from 'next/head'
 
 if (typeof window !== 'undefined') {
   smoothScroll.polyfill()
@@ -20,13 +21,20 @@ export default function App({
   const user = useFetchAuthUser(storedUserString)
 
   return (
-    <UserProvider value={user}>
-      <GlobalStyles />
+    <>
+      <Head>
+        <title>TRU MARKET - Trust, transparency & traceability in agro market</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
 
-      <NavigatingIndicator />
+      <UserProvider value={user}>
+        <GlobalStyles />
 
-      <Component {...pageProps} />
-    </UserProvider>
+        <NavigatingIndicator />
+
+        <Component {...pageProps} />
+      </UserProvider>
+    </>
   )
 }
 
