@@ -46,6 +46,12 @@ const GET_ARTICLE = gql`
       content {
         en
       }
+      keywords {
+        _id
+        name {
+          en
+        }
+      }
       updatedAt
     }
   }
@@ -63,6 +69,10 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
         title: article.title.en,
         description: article.description.en,
         content: article.content.en,
+        keywords: article.keywords.map((keyword: any) => ({
+          ...keyword,
+          name: keyword.name.en,
+        })),
       },
     },
   }

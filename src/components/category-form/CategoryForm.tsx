@@ -99,7 +99,7 @@ const CategoryForm: FC<CategoryFormProps> = ({ defaultValues, actionType }) => {
 
   const onDelete = () => {
     const isConfirmed = window.confirm(
-      'Are you sure you want to delete this product'
+      'Are you sure you want to delete this category'
     )
 
     if (isConfirmed) {

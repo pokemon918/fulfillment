@@ -89,6 +89,10 @@ const tinymceStyles = css`
     margin-left: 1.5rem;
     padding-left: 1rem;
   }
+
+  img {
+    max-width: 100%;
+  }
 `
 
 export default ContentView

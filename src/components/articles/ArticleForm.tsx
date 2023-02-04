@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form'
 import Input from '@/ui/Input'
 import { gql } from 'graphql-request'
-import { FC, useRef, useState } from 'react'
+import { FC, useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/router'
 import { LangField } from '@/types/lang-field'
 import graphqlReq from '@/utils/graphqlReq'
@@ -10,6 +10,8 @@ import makeStyles from '@/utils/makeStyles'
 import Button from '@/ui/Button'
 import StyledLink from '@/ui/StyledLink'
 import Editor from '../tinymce/Editor'
+import { BaseKeyword } from '@/types/keyword'
+import KeywordsSelect from '../KeywordsSelect'
 
 const CREATE_ARTICLE = gql`
   mutation CreateArticle($input: CreateArticleInput!, $filenames: [String!]!) {
@@ -41,6 +43,17 @@ const DELETE_FILES = gql`
   }
 `
 
+const GET_KEYWORDS = gql`
+  {
+    keywords {
+      _id
+      name {
+        en
+      }
+    }
+  }
+`
+
 export interface ArticleFormValue {
   _id?: string
   title: LangField
@@ -61,6 +74,7 @@ const ArticleForm: FC<ArticleFormProps> = ({ defaultValues, actionType }) => {
   const [isSuccess, setIsSuccess] = useState(false)
   const [saving, setSaving] = useState(false)
   const [deleting, setDeleting] = useState(false)
+  const [loading, setLoading] = useState(true)
   const router = useRouter()
   const savedFilenames = useRef(
     [defaultValues?.thumbnail]
@@ -80,9 +94,9 @@ const ArticleForm: FC<ArticleFormProps> = ({ defaultValues, actionType }) => {
       input: article,
       filenames: deletedFilenames.current,
     })
-      .then(() => {
+      .then(({ article }) => {
         if (actionType === 'create') {
-          router.push(`/blog`)
+          router.push(`/blog/${article._id}`)
         } else {
           setIsSuccess(true)
         }
@@ -97,7 +111,7 @@ const ArticleForm: FC<ArticleFormProps> = ({ defaultValues, actionType }) => {
 
   const onDelete = () => {
     const isConfirmed = window.confirm(
-      'Are you sure you want to delete this product'
+      'Are you sure you want to delete this article'
     )
 
     if (isConfirmed) {
@@ -125,6 +139,23 @@ const ArticleForm: FC<ArticleFormProps> = ({ defaultValues, actionType }) => {
       graphqlReq(DELETE_FILES, { filenames: [filename] })
     }
   }
+
+  const [initialKeywords, setInitialKeywords] = useState<BaseKeyword[]>([])
+
+  useEffect(() => {
+    ;(async () => {
+      const { keywords: initialKeywords } = await graphqlReq(GET_KEYWORDS)
+      setInitialKeywords(
+        initialKeywords.map((keyword: any) => ({
+          ...keyword,
+          name: keyword.name.en,
+        }))
+      )
+      setLoading(false)
+    })()
+  }, [])
+
+  if (loading) return <p>Loading...</p>
 
   return (
     <div>
@@ -169,6 +200,13 @@ const ArticleForm: FC<ArticleFormProps> = ({ defaultValues, actionType }) => {
           placeholder="Content"
           control={control}
           name="content.en"
+        />
+
+        <KeywordsSelect
+          name="keywordsIds"
+          initialKeywords={initialKeywords}
+          control={control}
+          getValues={() => getValues()['keywordsIds']}
         />
 
         <div css={styles.footer}>

@@ -19,10 +19,10 @@ const ArticleView: FC<ArticleViewProps> = (props) => {
 
   return (
     <div css={styles.root} {...divProps}>
-      {user?.role === 'admin' && (
-        <div css={styles.header}>
-          <h1 css={styles.heading}>{article.title}</h1>
+      <div css={styles.header}>
+        <h1 css={styles.heading}>{article.title}</h1>
 
+        {user?.role === 'admin' && (
           <Button
             variant="outlined"
             fullRounded
@@ -30,8 +30,8 @@ const ArticleView: FC<ArticleViewProps> = (props) => {
           >
             Update
           </Button>
-        </div>
-      )}
+        )}
+      </div>
 
       <p css={styles.date}>
         last update on {dayjs(article.updatedAt).format('MMM DD, YYYY')}
@@ -40,6 +40,14 @@ const ArticleView: FC<ArticleViewProps> = (props) => {
       <img css={styles.thumbnail} src={article.thumbnail} alt="" />
 
       <ContentView content={article.content} />
+
+      <div css={styles.keywords}>
+        {article.keywords.map((keyword) => (
+          <div key={keyword._id} css={styles.keyword}>
+            {keyword.name}
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
@@ -52,7 +60,7 @@ const useStyles = makeStyles((props: ArticleViewProps) => {
       marginBottom: 8,
       alignItems: 'center',
       gap: '8px 16px',
-      flexWrap: 'wrap'
+      flexWrap: 'wrap',
     },
     heading: {
       fontSize: 36,
@@ -88,6 +96,20 @@ const useStyles = makeStyles((props: ArticleViewProps) => {
       lineHeight: 1.6,
       maxHeight: 58,
       overflow: 'hidden',
+    },
+    keywords: {
+      display: 'flex',
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      marginTop: 48,
+    },
+    keyword: {
+      fontSize: '0.75rem',
+      padding: '0.5rem 0.75rem',
+      backgroundColor: 'rgb(209, 213, 219)',
+      borderRadius: '0.25rem',
+      marginRight: '0.5rem',
+      marginBottom: '0.5rem',
     },
   }
 })

@@ -27,6 +27,7 @@ const GET_ARTICLE = gql`
         es
       }
       thumbnail
+      keywordsIds
     }
   }
 `

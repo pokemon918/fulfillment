@@ -6,30 +6,49 @@ import {
   RefAttributes,
   ReactElement,
   useState,
+  Dispatch,
+  SetStateAction,
+  useRef,
+  RefObject,
+  MutableRefObject,
 } from 'react'
 import makeStyles from '@/utils/makeStyles'
 import SelectType from 'react-select/dist/declarations/src/Select'
 import { Control, Controller } from 'react-hook-form'
 import { GroupBase } from 'react-select'
+import useForceUpdate from '@/hooks/useForceUpdate'
 
 type CreatableSelectT = <
   Option = unknown,
   IsMulti extends boolean = false,
   Group extends GroupBase<Option> = GroupBase<Option>
 >(
-  props: CreatableProps<Option, IsMulti, Group> &
-    RefAttributes<SelectType<Option, IsMulti, Group>> & {
-      name: string
-      control: Control<any>
-      className?: string
-      style?: CSSProperties
-      label?: string
-      readOnly?: boolean
-      options: {
-        value: string
-        label: string
-      }[]
-    }
+  props: Omit<
+    CreatableProps<Option, IsMulti, Group> &
+      RefAttributes<SelectType<Option, IsMulti, Group>>,
+    'onCreateOption'
+  > & {
+    name: string
+    control: Control<any>
+    className?: string
+    style?: CSSProperties
+    label?: string
+    readOnly?: boolean
+    options: {
+      value: string
+      label: string
+    }[]
+    onCreateOption?: (fns: {
+      newOption: string
+      optionsRef: MutableRefObject<
+        {
+          label: string
+          value: string
+        }[]
+      >
+      onChange: (v: any) => void
+    }) => void
+  }
 ) => ReactElement
 
 const CreatableSelect: CreatableSelectT = ({
@@ -40,18 +59,21 @@ const CreatableSelect: CreatableSelectT = ({
   label,
   control,
   options: initialOptions,
+  onCreateOption,
   ...rest
 }) => {
   const id = useId()
 
   const styles = useStyles({})
 
-  const [options, setOptions] = useState<
+  const options = useRef<
     {
       label: string
       value: string
     }[]
   >(initialOptions)
+
+  const forceUpdate = useForceUpdate()
 
   return (
     <div className={className} style={style}>
@@ -69,22 +91,32 @@ const CreatableSelect: CreatableSelectT = ({
               inputId={id}
               instanceId={id}
               // @ts-ignore
-              options={options}
+              options={options.current}
               // @ts-ignore
               value={
                 value
                   ? value instanceof Array
                     ? // @ts-ignore
-                      value.map((v) => options.find((c) => c.value === v))
+                      value.map((v) =>
+                        options.current.find((c) => c.value === v)
+                      )
                     : // @ts-ignore
-                      options.find((c) => c.value === value)
+                      options.current.find((c) => c.value === value)
                   : undefined
               }
               onCreateOption={(newOption) => {
-                setOptions((prevOptions) => [
-                  ...prevOptions,
+                if (onCreateOption) {
+                  return onCreateOption({
+                    newOption,
+                    optionsRef: options,
+                    onChange,
+                  })
+                }
+
+                options.current = [
+                  ...options.current,
                   { label: newOption, value: newOption },
-                ])
+                ]
 
                 onChange([...value, newOption])
               }}
