@@ -83,6 +83,15 @@ const GET_DATA = gql`
       country
       price
       categoryId
+      offerPrices {
+        name {
+          en
+        }
+
+        value {
+          en
+        }
+      }
       availableSpecs {
         en
       }
@@ -135,6 +144,11 @@ export const getServerSideProps: GetServerSideProps<ProductPageProps> = async (
         traces: product.traces.map((trace: any) => ({
           ...trace,
           description: trace.description.en,
+        })),
+        offerPrices: product.offerPrices.map((offerPrice: any) => ({
+          ...offerPrice,
+          name: offerPrice.name.en,
+          value: offerPrice.value.en,
         })),
       },
       relatedProducts: product.category.products

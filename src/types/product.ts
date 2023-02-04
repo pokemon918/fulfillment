@@ -16,5 +16,9 @@ export interface DetailedProduct extends BaseProduct {
     description: string
     gallery: string[]
   }[]
+  offerPrices: {
+    name: string
+    value: string
+  }[]
   createdAt: string
 }

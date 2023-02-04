@@ -92,7 +92,7 @@ const TableForm: FC<TableFormProps> = ({
                             <Input
                               css={styles.input}
                               placeholder="Spec Name"
-                              name={`specs.${index}.name.en`}
+                              name={`${name}.${index}.name.en`}
                               control={control}
                               required
                               
@@ -103,7 +103,7 @@ const TableForm: FC<TableFormProps> = ({
                             <Input
                               css={styles.input}
                               placeholder="Spec Value"
-                              name={`specs.${index}.value.en`}
+                              name={`${name}.${index}.value.en`}
                               control={control}
                               required
                             />
@@ -121,7 +121,7 @@ const TableForm: FC<TableFormProps> = ({
                                 color: 'rgb(185, 28, 28)',
                               }}
                               tabIndex={-1}
-                              disabled={fields.length < 2}
+                              // disabled={fields.length < 2}
                               onClick={() => remove(index)}
                             >
                               <DeleteIcon />

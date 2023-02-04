@@ -15,6 +15,7 @@ import ThumbnailInput from '@/components/ThumbnailInput'
 import makeStyles from '@/utils/makeStyles'
 import Paper from '@/ui/Paper'
 import Button from '@/ui/Button'
+import StyledLink from '@/ui/StyledLink'
 
 const GET_CATEGORIES = gql`
   {
@@ -65,7 +66,10 @@ export interface ProductFormValue {
   price: string
   bigTitle: LangField
   description: LangField
-  offerPrices: LangField
+  offerPrices: {
+    name: LangField
+    value: LangField
+  }[]
   thumbnail: string
   gallery: { src: string }[]
   specs: {
@@ -90,6 +94,7 @@ const ProductForm: FC<ProductFormProps> = ({ defaultValues, actionType }) => {
   const styles = useStyles({})
   const [saving, setSaving] = useState(false)
   const [deleting, setDeleting] = useState(false)
+  const [isSuccess, setIsSuccess] = useState(false)
   const router = useRouter()
 
   const savedFilenames = useRef(
@@ -180,18 +185,24 @@ const ProductForm: FC<ProductFormProps> = ({ defaultValues, actionType }) => {
     }
 
     setSaving(true)
+    setIsSuccess(false)
 
     graphqlReq(actionType === 'update' ? Update_PRODUCT : CREATE_PRODUCT, {
       input,
       filenames: deletedFilenames.current,
     })
       .then(({ product: { _id } }) => {
-        router.push(`/products/${_id}`)
+        if (actionType === 'create') {
+          router.push(`/products/${_id}`)
+        } else {
+          setIsSuccess(true)
+        }
       })
       .catch(() => {
         alert('an error occur please try again')
         setSaving(false)
       })
+      .finally(() => setSaving(false))
   })
 
   return (
@@ -213,7 +224,6 @@ const ProductForm: FC<ProductFormProps> = ({ defaultValues, actionType }) => {
         <Select
           style={{ marginBottom: 16 }}
           label="Category"
-          className="mb-6"
           placeholder="Category"
           name="categoryId"
           control={control}
@@ -222,7 +232,6 @@ const ProductForm: FC<ProductFormProps> = ({ defaultValues, actionType }) => {
 
         <CountrySelect
           style={{ marginBottom: 16 }}
-          className="mb-6"
           control={control}
           name="country"
         />
@@ -243,20 +252,14 @@ const ProductForm: FC<ProductFormProps> = ({ defaultValues, actionType }) => {
           control={control}
           name="price"
           required
-          
           pattern="[0-9]+(\.[0-9]+)?"
         />
 
-        <Input
-          style={{ marginBottom: 16 }}
-          className="mb-1"
-          label="Offer Base Prices"
-          placeholder="Offer Base Prices"
+        <TableForm
+          style={{ marginBottom: '5rem' }}
           control={control}
-          name="offerPrices.en"
-          multiline
-          rows={8}
-          required
+          name="offerPrices"
+          label="Offer Prices"
         />
 
         <p style={{ fontSize: 14, marginBottom: 8 }}>Thumbnail</p>
@@ -292,7 +295,6 @@ const ProductForm: FC<ProductFormProps> = ({ defaultValues, actionType }) => {
         <Input
           style={{ marginBottom: '1.5rem' }}
           label="Description"
-          className="mb-6"
           placeholder="Description"
           name="description.en"
           control={control}
@@ -312,7 +314,6 @@ const ProductForm: FC<ProductFormProps> = ({ defaultValues, actionType }) => {
 
         <TableForm
           style={{ marginBottom: '5rem' }}
-          className="mb-6"
           control={control}
           name="specs"
           label="Specifications"
@@ -383,6 +384,17 @@ const ProductForm: FC<ProductFormProps> = ({ defaultValues, actionType }) => {
             </Button>
           )}
         </div>
+
+        <p
+          style={{
+            color: '#1b5e20',
+            marginTop: 16,
+            visibility: isSuccess ? 'visible' : 'hidden',
+          }}
+        >
+          Updated Successfully!{' '}
+          <StyledLink href={`/products/${defaultValues._id}`}>View it</StyledLink>
+        </p>
       </form>
 
       <div style={{ padding: 100 }} />

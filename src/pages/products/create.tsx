@@ -13,39 +13,10 @@ const ProductCreate = () => {
     price: '',
     bigTitle: { en: '', es: '' },
     description: { en: '', es: '' },
-    offerPrices: { en: '', es: '' },
+    offerPrices: [],
     thumbnail: '',
     gallery: [],
-    specs: [
-      {
-        name: { en: 'Variety', es: '' },
-        value: { en: '', es: '' },
-      },
-      {
-        name: { en: 'Cultivation Type', es: '' },
-        value: { en: '', es: '' },
-      },
-      {
-        name: { en: 'Processing Type', es: '' },
-        value: { en: '', es: '' },
-      },
-      {
-        name: { en: 'Grade', es: '' },
-        value: { en: '', es: '' },
-      },
-      {
-        name: { en: 'Packaging', es: '' },
-        value: { en: '', es: '' },
-      },
-      {
-        name: { en: 'Size', es: '' },
-        value: { en: '', es: '' },
-      },
-      {
-        name: { en: 'Certification', es: '' },
-        value: { en: '', es: '' },
-      },
-    ],
+    specs: [],
     availableSpecs: { en: '', es: '' },
     traces: [
       {

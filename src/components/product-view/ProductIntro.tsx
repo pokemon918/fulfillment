@@ -18,11 +18,6 @@ interface ProductIntroProps extends HTMLAttributes<HTMLDivElement> {
   onClickGetQuote: () => void
 }
 
-const offers = [
-  { name: 'Grade: No.1', value: '$6 / kg' },
-  { name: 'Cat1 - 2kg box', value: '$7.75 / kg' },
-]
-
 const ProductIntro: FC<ProductIntroProps> = (props) => {
   const user = useUser()
   const styles = useStyles(props)
@@ -75,7 +70,7 @@ const ProductIntro: FC<ProductIntroProps> = (props) => {
 
           <div css={styles.offersWrapper}>
             <div css={styles.offers}>
-              {offers.map((offer, idx) => (
+              {product.offerPrices.map((offer, idx) => (
                 <div key={idx} css={styles.offer}>
                   <span css={styles.offerName}>{offer.name}</span>
                   <span css={styles.offerValue}>{offer.value}</span>

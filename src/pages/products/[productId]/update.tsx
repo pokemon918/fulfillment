@@ -33,8 +33,15 @@ const GET_PRODUCT = gql`
         es
       }
       offerPrices {
-        en
-        es
+        name {
+          en
+          es
+        }
+
+        value {
+          en
+          es
+        }
       }
       thumbnail
       gallery
