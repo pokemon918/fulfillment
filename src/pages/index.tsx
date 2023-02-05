@@ -3,7 +3,7 @@ import HomeBanner from '@/components/HomeBanner'
 import Overview from '@/components/Overview'
 import { BaseProduct } from '@/types/product'
 import Container from '@/ui/Container'
-import graphqlReq from '@/utils/graphqlReq'
+import graphqlReq, { graphqlServerReq } from '@/utils/graphqlReq'
 import makeStyles from '@/utils/makeStyles'
 import { gql } from 'graphql-request'
 import { GetServerSideProps } from 'next'
@@ -53,6 +53,12 @@ const useStyles = makeStyles((props: HomeProps) => ({}))
 
 const GET_DATA = gql`
   query {
+    authUser: userProfile {
+      _id
+      fullName
+      role
+    }
+
     categories {
       _id
       name {
@@ -88,8 +94,10 @@ const GET_DATA = gql`
   }
 `
 
-export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
-  const data = await graphqlReq(GET_DATA, {}, {})
+export const getServerSideProps: GetServerSideProps<HomeProps> = async (
+  ctx
+) => {
+  const data = await graphqlServerReq(ctx, GET_DATA)
 
   return {
     props: {
@@ -107,6 +115,7 @@ export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
         title: article.title.en,
         description: article.description.en,
       })),
+      authUser: data.authUser,
     },
   }
 }

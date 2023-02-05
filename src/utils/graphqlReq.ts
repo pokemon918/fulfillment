@@ -1,4 +1,6 @@
 import { request, RequestDocument, Variables } from 'graphql-request'
+import { GetServerSidePropsContext, PreviewData } from 'next'
+import { ParsedUrlQuery } from 'querystring'
 import { getCookie } from './cookies'
 
 const endpoint = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL!}/graphql`
@@ -40,6 +42,17 @@ export const isGqlErrStatus = (err: any, statusCode: number) => {
   }
 
   return false
+}
+
+export const graphqlServerReq = <T = any>(
+  ctx: GetServerSidePropsContext<ParsedUrlQuery, PreviewData>,
+  doc: RequestDocument,
+  variables?: Variables,
+  requestHeaders?: Record<string, string>
+): Promise<T> => {
+  const cookies = ctx.req.headers.cookie ?? ''
+  const token = getCookie(cookies, 'token')
+  return graphqlReq(doc, variables, requestHeaders, token)
 }
 
 export default graphqlReq

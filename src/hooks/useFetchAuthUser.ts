@@ -14,8 +14,19 @@ const GET_USER_ME = gql`
   }
 `
 
-const useFetchAuthUser = () => {
-  const [user, setUser] = useState<AuthUser | null | undefined>()
+const useFetchAuthUser = (authUser?: AuthUser | null) => {
+  const [user, setUser] = useState<AuthUser | null | undefined>(
+    (() => {
+      const isValid =
+        authUser === null ||
+        (authUser &&
+          authUser._id &&
+          authUser.fullName &&
+          authUser.role)
+
+      return isValid ? authUser : undefined
+    })()
+  )
 
   useEffect(() => {
     ;(async () => {

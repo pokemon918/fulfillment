@@ -11,11 +11,8 @@ if (typeof window !== 'undefined') {
   smoothScroll.polyfill()
 }
 
-export default function App({
-  Component,
-  pageProps,
-}: AppProps & { storedUserString: string | null }) {
-  const user = useFetchAuthUser()
+export default function App({ Component, pageProps }: AppProps) {
+  const user = useFetchAuthUser(pageProps.authUser)
 
   if (typeof user === 'undefined') return null
 
