@@ -27,9 +27,10 @@ const Product: FC<ProductProps> = (originalProps) => {
 
   return (
     <Link href={`/products/${product._id}`} css={styles.root} {...anchorProps}>
-      <div css={styles.imgWrapper}>
-        <img css={styles.img} src={product.thumbnail} />
-      </div>
+      <div
+        css={styles.imgBackground}
+        style={{ backgroundImage: `url(${product.thumbnail})` }}
+      />
 
       <div css={styles.body}>
         <h3 css={styles.heading}>{product.name}</h3>
@@ -76,15 +77,16 @@ const useStyles = makeStyles(
         margin: '0 auto',
       },
     },
-    imgWrapper: {
-      position: 'relative',
+    imgBackground: {
       width: '100%',
       height: '100%',
       borderRadius: 16,
       overflow: 'hidden',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+      backgroundSize: 'cover',
       [`@media (max-width: ${theme.widths.tabletXs})`]: {
         height: 'auto',
-        position: 'relative',
         width: '100%',
         '::before': {
           content: '""',
@@ -93,14 +95,6 @@ const useStyles = makeStyles(
           paddingTop: `100%`,
         },
       },
-    },
-    img: {
-      position: 'absolute',
-      width: '100%',
-      height: '100%',
-      top: 0,
-      left: 0,
-      objectFit: 'cover',
     },
     body: {
       display: 'flex',

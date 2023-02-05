@@ -68,15 +68,6 @@ const BlogOverview: FC<BlogOverviewProps> = (props) => {
       />
 
       <div css={styles.mobileFooter}>
-        {/* <div css={styles.mobileNavigators}>
-          <button css={styles.swapBtn}>
-            <ArrowLeft />
-          </button>
-
-          <button css={styles.swapBtn}>
-            <ArrowRight />
-          </button>
-        </div> */}
         <Button href="/blog" style={{ minWidth: 205 }}>
           See More
         </Button>

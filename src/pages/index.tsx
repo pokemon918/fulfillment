@@ -61,7 +61,7 @@ const GET_DATA = gql`
       thumbnail
     }
 
-    products (descCreatedAt: true) {
+    products(descCreatedAt: true) {
       _id
       name {
         en
@@ -75,7 +75,7 @@ const GET_DATA = gql`
       }
     }
 
-    articles (descCreatedAt: true) {
+    articles(descCreatedAt: true) {
       _id
       thumbnail
       title {

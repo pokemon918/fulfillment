@@ -19,9 +19,7 @@ const Category: FC<CategoryProps> = (props) => {
       href={`/products?categoryId=${category._id}`}
       {...anchorProps}
     >
-      <BoxRation ration={1.18} css={styles.box}>
-        <img css={styles.img} src={category.thumbnail} alt={category.name} />
-
+      <BoxRation ration={1.18} css={styles.box} style={{ backgroundImage: `url(${category.thumbnail})` }}>
         <div css={styles.cover} data-cover="true"></div>
 
         <div css={styles.coverText} data-cover-text="true">
@@ -39,11 +37,15 @@ const useStyles = makeStyles((props: CategoryProps) => ({
     width: '100%',
   },
   box: {
+    position: 'relative',
     display: 'flex',
     width: '100%',
     borderRadius: 20,
     overflow: 'hidden',
     cursor: 'pointer',
+    backgroundPosition: 'center',
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
     ':hover': {
       '& [data-cover="true"]': {
         opacity: '0.6',
@@ -52,11 +54,6 @@ const useStyles = makeStyles((props: CategoryProps) => ({
         display: 'flex',
       },
     },
-  },
-  img: {
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover',
   },
   cover: {
     position: 'absolute',

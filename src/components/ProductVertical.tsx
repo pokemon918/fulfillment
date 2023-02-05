@@ -20,9 +20,11 @@ const ProductVertical: FC<ProductProps> = (originalProps) => {
 
   return (
     <Link href={`/products/${product._id}`} css={styles.root} {...anchorProps}>
-      <BoxRation css={styles.imgWrapper} ration={1}>
-        <img css={styles.img} src={product.thumbnail} />
-      </BoxRation>
+      <BoxRation
+        css={styles.imgWrapper}
+        ration={1}
+        style={{ backgroundImage: `url(${product.thumbnail})` }}
+      />
 
       <div css={styles.body}>
         <h3 css={styles.heading}>{product.name}</h3>
@@ -67,6 +69,9 @@ const useStyles = makeStyles(({}: ProductProps) => ({
     width: '100%',
     borderRadius: 16,
     overflow: 'hidden',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center'
   },
   img: {
     width: '100%',

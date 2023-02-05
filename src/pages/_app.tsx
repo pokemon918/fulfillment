@@ -8,6 +8,7 @@ import { UserProvider } from '@/contexts/userContext'
 import useFetchAuthUser from '@/hooks/useFetchAuthUser'
 import { getCookie } from '@/utils/cookies'
 import Head from 'next/head'
+import NoSSR from '@/components/NoSSR'
 
 if (typeof window !== 'undefined') {
   smoothScroll.polyfill()

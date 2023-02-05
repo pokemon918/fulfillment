@@ -43,7 +43,10 @@ function PageCategories(props: PageCategoriesProps) {
               css={styles.category}
               href={`/categories/${category._id}/update`}
             >
-              <img css={styles.categoryImg} src={category.thumbnail} alt="" />
+              <div
+                css={styles.categoryImg}
+                style={{ backgroundImage: `url(${category.thumbnail})` }}
+              />
 
               <div css={styles.categoryDetails}>
                 <h3 css={styles.categoryName}>{category.name}</h3>
@@ -107,6 +110,9 @@ const useStyles = makeStyles((props: PageCategoriesProps) => ({
     height: 315,
     objectFit: 'cover',
     borderRadius: 20,
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center'
   },
   categoryName: {
     fontSize: 20,
