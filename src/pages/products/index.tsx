@@ -1,5 +1,5 @@
 import { BaseProduct } from '@/types/product'
-import graphqlReq from '@/utils/graphqlReq'
+import graphqlReq, { graphqlServerReq } from '@/utils/graphqlReq'
 import makeStyles from '@/utils/makeStyles'
 import { gql } from 'graphql-request'
 import { GetServerSideProps } from 'next'
@@ -112,6 +112,12 @@ const useStyles = makeStyles((props: PageProductsProps) => ({
 
 const GET_CATEGORY_PRODUCTS = gql`
   query ($categoryId: String!) {
+    authUser: userProfile {
+      _id
+      fullName
+      role
+    }
+
     category(_id: $categoryId) {
       _id
       name {
@@ -137,6 +143,12 @@ const GET_CATEGORY_PRODUCTS = gql`
 
 const GET_PRODUCTS = gql`
   query {
+    authUser: userProfile {
+      _id
+      fullName
+      role
+    }
+
     products (descCreatedAt: true) {
       _id
       name {
@@ -158,7 +170,8 @@ export const getServerSideProps: GetServerSideProps<PageProductsProps> = async (
 ) => {
   const categoryId = ctx.query.categoryId as string | undefined
 
-  const data = await graphqlReq(
+  const data = await graphqlServerReq(
+    ctx,
     categoryId ? GET_CATEGORY_PRODUCTS : GET_PRODUCTS,
     categoryId ? { categoryId } : {}
   )
@@ -176,6 +189,7 @@ export const getServerSideProps: GetServerSideProps<PageProductsProps> = async (
         name: product.name.en,
         availableSpecs: product.availableSpecs.en,
       })),
+      authUser: data.authUser
     },
   }
 }

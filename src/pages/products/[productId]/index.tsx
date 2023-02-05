@@ -5,7 +5,7 @@ import theme from '@/theme'
 import { BaseProduct, DetailedProduct } from '@/types/product'
 import Container from '@/ui/Container'
 import PageBgColor from '@/ui/PageBgColor'
-import graphqlReq from '@/utils/graphqlReq'
+import graphqlReq, { graphqlServerReq } from '@/utils/graphqlReq'
 import makeStyles from '@/utils/makeStyles'
 import { gql } from 'graphql-request'
 import { GetServerSideProps } from 'next'
@@ -146,6 +146,7 @@ const GET_DATA = gql`
       companyName
       email
       phone
+      role
     }
   }
 `
@@ -153,16 +154,9 @@ const GET_DATA = gql`
 export const getServerSideProps: GetServerSideProps<ProductPageProps> = async (
   ctx
 ) => {
-  const token = getCookie(ctx.req.headers.cookie ?? '', 'token')
-
-  const { product, userProfile } = await graphqlReq(
-    GET_DATA,
-    {
-      productId: ctx.query.productId,
-    },
-    {},
-    token
-  )
+  const { product, userProfile } = await graphqlServerReq(ctx, GET_DATA, {
+    productId: ctx.query.productId,
+  })
 
   return {
     props: {
@@ -190,6 +184,11 @@ export const getServerSideProps: GetServerSideProps<ProductPageProps> = async (
           availableSpecs: product.availableSpecs.en,
         })),
       userProfile,
+      authUser: {
+        _id: userProfile._id,
+        fullName: userProfile.fullName,
+        role: userProfile.role,
+      },
     },
   }
 }

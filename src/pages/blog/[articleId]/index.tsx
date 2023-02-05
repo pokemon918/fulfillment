@@ -2,7 +2,7 @@ import ArticleView from '@/components/articles/ArticleView'
 import PageLayout from '@/components/PageLayout'
 import { DetailedArticle } from '@/types/article'
 import Container from '@/ui/Container'
-import graphqlReq from '@/utils/graphqlReq'
+import graphqlReq, { graphqlServerReq } from '@/utils/graphqlReq'
 import makeStyles from '@/utils/makeStyles'
 import { gql } from 'graphql-request'
 import { GetServerSideProps } from 'next'
@@ -34,6 +34,12 @@ const useStyles = makeStyles(() => ({}))
 // ssr
 const GET_ARTICLE = gql`
   query ($articleId: String!) {
+    authUser: userProfile {
+      _id
+      fullName
+      role
+    }
+
     article(_id: $articleId) {
       _id
       thumbnail
@@ -58,7 +64,7 @@ const GET_ARTICLE = gql`
 `
 
 export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
-  const { article } = await graphqlReq(GET_ARTICLE, {
+  const { article, authUser } = await graphqlServerReq(ctx, GET_ARTICLE, {
     articleId: ctx.query.articleId,
   })
 
@@ -74,6 +80,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
           name: keyword.name.en,
         })),
       },
+      authUser
     },
   }
 }

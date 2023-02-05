@@ -6,7 +6,7 @@ import theme from '@/theme'
 import { BaseArticle } from '@/types/article'
 import Button from '@/ui/Button'
 import Container from '@/ui/Container'
-import graphqlReq from '@/utils/graphqlReq'
+import graphqlReq, { graphqlServerReq } from '@/utils/graphqlReq'
 import makeStyles from '@/utils/makeStyles'
 import { gql } from 'graphql-request'
 import { GetServerSideProps } from 'next'
@@ -83,6 +83,12 @@ const useStyles = makeStyles(() => ({
 // ssr
 const GET_ARTICLES = gql`
   {
+    authUser: userProfile {
+      _id
+      fullName
+      role
+    }
+
     articles (descCreatedAt: true) {
       _id
       title {
@@ -95,8 +101,8 @@ const GET_ARTICLES = gql`
     }
   }
 `
-export const getServerSideProps: GetServerSideProps<Props> = async () => {
-  const { articles } = await graphqlReq(GET_ARTICLES)
+export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
+  const { articles, authUser } = await graphqlServerReq(ctx, GET_ARTICLES)
 
   return {
     props: {
@@ -105,6 +111,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async () => {
         title: article.title.en,
         description: article.description.en,
       })),
+      authUser
     },
   }
 }
