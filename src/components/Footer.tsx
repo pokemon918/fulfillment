@@ -14,8 +14,8 @@ const links = {
     { title: 'Terms & Conditions', href: '#' },
   ],
   'Our Services': [
-    { title: 'Technology', href: '/technology' },
-    { title: 'Who we are', href: '/whoweare' },
+    { title: 'Technology', href: 'https://trumarket.tech/technology' },
+    { title: 'Who we are', href: 'https://trumarket.tech/whoweare' },
   ],
 }
 
