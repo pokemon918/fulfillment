@@ -61,7 +61,7 @@ const GET_DATA = gql`
       thumbnail
     }
 
-    products {
+    products (descCreatedAt: true) {
       _id
       name {
         en
@@ -75,7 +75,7 @@ const GET_DATA = gql`
       }
     }
 
-    articles {
+    articles (descCreatedAt: true) {
       _id
       thumbnail
       title {
@@ -97,12 +97,12 @@ export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
         ...category,
         name: category.name.en,
       })),
-      products: data.products.map((product: any) => ({
+      products: data.products.slice(0, 4).map((product: any) => ({
         ...product,
         name: product.name.en,
         availableSpecs: product.availableSpecs.en,
       })),
-      articles: data.articles.map((article: any) => ({
+      articles: data.articles.slice(0, 10).map((article: any) => ({
         ...article,
         title: article.title.en,
         description: article.description.en,

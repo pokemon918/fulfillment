@@ -83,7 +83,7 @@ const useStyles = makeStyles(() => ({
 // ssr
 const GET_ARTICLES = gql`
   {
-    articles {
+    articles (descCreatedAt: true) {
       _id
       title {
         en

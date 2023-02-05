@@ -74,7 +74,7 @@ const useStyles = makeStyles((props: PageUsersProps) => ({
 
 const GET_USERS = gql`
   query {
-    users {
+    users (descCreatedAt: true) {
       _id
       fullName
       email

@@ -26,7 +26,7 @@ const ProductsOverview: FC<ProductsOverviewProps> = (props) => {
         </h4>
 
         <div css={styles.root}>
-          {products.slice(0, 4).map((product) => (
+          {products.map((product) => (
             <Product key={product._id} product={product} />
           ))}
         </div>

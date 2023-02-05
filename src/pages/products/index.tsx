@@ -119,7 +119,7 @@ const GET_CATEGORY_PRODUCTS = gql`
       }
     }
 
-    products(categoryId: $categoryId) {
+    products(categoryId: $categoryId, descCreatedAt: true) {
       _id
       name {
         en
@@ -137,7 +137,7 @@ const GET_CATEGORY_PRODUCTS = gql`
 
 const GET_PRODUCTS = gql`
   query {
-    products {
+    products (descCreatedAt: true) {
       _id
       name {
         en
