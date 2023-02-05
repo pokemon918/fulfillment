@@ -15,16 +15,18 @@ const RelatedProducts: FC<RelatedProductsProps> = (props) => {
 
   const { products, ...divProps } = props
 
+  if (products.length === 0) return null
+
   return (
     <ScrollView
       maxWidth="md"
       endBlur="linear-gradient(269.92deg, #f8f8f8 0.05%, rgb(248 248 248 / 0%) 99.9%)"
       children={
         <div css={styles.products}>
-          {[...products, ...products, ...products].map((product, idx) => (
+          {products.map((product) => (
             <ProductVertical
               css={styles.product}
-              key={product._id + idx}
+              key={product._id}
               product={product}
             />
           ))}
