@@ -184,11 +184,13 @@ export const getServerSideProps: GetServerSideProps<ProductPageProps> = async (
           availableSpecs: product.availableSpecs.en,
         })),
       userProfile,
-      authUser: {
-        _id: userProfile._id,
-        fullName: userProfile.fullName,
-        role: userProfile.role,
-      },
+      authUser: userProfile
+        ? {
+            _id: userProfile._id,
+            fullName: userProfile.fullName,
+            role: userProfile.role,
+          }
+        : null,
     },
   }
 }
