@@ -13,4 +13,5 @@ export interface DetailedUser extends BaseUser {
   country: string
   email: string
   phone: string
+  commercialInfo?: { [k: string]: any }
 }

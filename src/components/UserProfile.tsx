@@ -58,7 +58,7 @@ const UserProfile: FC<UserProfileProps> = (props) => {
 
   let commercialInfo
 
-  if (user.role === 'buyer') {
+  if (user.role === 'buyer' && user.commercialInfo) {
     commercialInfo = (
       <Fragment key="buyer">
         <Select
@@ -113,7 +113,7 @@ const UserProfile: FC<UserProfileProps> = (props) => {
         />
       </Fragment>
     )
-  } else if (user.role === 'seller') {
+  } else if (user.role === 'seller'&& user.commercialInfo) {
     commercialInfo = (
       <Fragment key="seller">
         <CreatableSelect
