@@ -29,6 +29,7 @@ const CategoriesOverview: FC<CategoriesOverviewProps> = (props) => {
         <ContainerWide
           scrollable
           endBlur="linear-gradient(269.92deg, #e7f4ca 0.05%, rgba(231, 244, 202, 0) 99.9%)"
+          contentEndWidth={46}
         >
           <div css={styles.categories}>
             {categories.map((category) => (
@@ -93,7 +94,7 @@ const useStyles = makeStyles((props: CategoriesOverviewProps) => {
     },
     emptyBox: {
       flexShrink: 0,
-      width: 16,
+      width: 10,
     },
   }
 })

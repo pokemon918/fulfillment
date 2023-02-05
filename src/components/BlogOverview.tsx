@@ -4,6 +4,7 @@ import theme from '@/theme'
 import { BaseArticle } from '@/types/article'
 import Button from '@/ui/Button'
 import ContainerWide from '@/ui/ContainerWide'
+import ScrollView from '@/ui/ScrollView'
 import makeStyles from '@/utils/makeStyles'
 import { FC, HTMLAttributes } from 'react'
 import Article from './Article'
@@ -18,38 +19,10 @@ const BlogOverview: FC<BlogOverviewProps> = (props) => {
   const { articles, ...divProps } = props
   return (
     <div css={styles.root} {...divProps}>
-      <div css={styles.view}>
-        <div css={styles.mainView}>
-          <div>
-            <h3 css={styles.heading}>Blog</h3>
-
-            <p css={styles.desc}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lacus,
-              fermentum amet faucibus sed id nisi lectus at.
-            </p>
-
-            <Button href="/blog" css={styles.deskBtn} style={{ minWidth: 205 }}>
-              See More
-            </Button>
-          </div>
-
-          <div css={styles.deskNavigators}>
-            <button css={styles.swapBtn}>
-              <ArrowLeft />
-            </button>
-
-            <button css={styles.swapBtn}>
-              <ArrowRight />
-            </button>
-          </div>
-        </div>
-
-        <ContainerWide
-          scrollable
-          maxWidth="none"
-          endBlur="linear-gradient(269.92deg, #FFFFFF 0.05%, rgba(255, 255, 255, 0) 99.9%);"
-          contentEndWidth={54}
-        >
+      <ScrollView
+        maxWidth="none"
+        endBlur="linear-gradient(269.92deg, #FFFFFF 0.05%, rgba(255, 255, 255, 0) 99.9%);"
+        children={
           <div css={styles.articles}>
             {articles.map((article) => (
               <Article
@@ -61,11 +34,41 @@ const BlogOverview: FC<BlogOverviewProps> = (props) => {
 
             <div css={styles.emptyArticle} />
           </div>
-        </ContainerWide>
-      </div>
+        }
+        render={({ deskArrows, mobileArrows, scrollView }) => (
+          <>
+            <div css={styles.view}>
+              <div css={styles.mainView}>
+                <div>
+                  <h3 css={styles.heading}>Blog</h3>
+
+                  <p css={styles.desc}>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Lacus, fermentum amet faucibus sed id nisi lectus at.
+                  </p>
+
+                  <Button
+                    href="/blog"
+                    css={styles.deskBtn}
+                    style={{ minWidth: 205 }}
+                  >
+                    See More
+                  </Button>
+                </div>
+
+                {deskArrows}
+              </div>
+
+              {scrollView}
+            </div>
+
+            {mobileArrows}
+          </>
+        )}
+      />
 
       <div css={styles.mobileFooter}>
-        <div css={styles.mobileNavigators}>
+        {/* <div css={styles.mobileNavigators}>
           <button css={styles.swapBtn}>
             <ArrowLeft />
           </button>
@@ -73,7 +76,7 @@ const BlogOverview: FC<BlogOverviewProps> = (props) => {
           <button css={styles.swapBtn}>
             <ArrowRight />
           </button>
-        </div>
+        </div> */}
         <Button href="/blog" style={{ minWidth: 205 }}>
           See More
         </Button>
@@ -143,15 +146,13 @@ const useStyles = makeStyles((props: BlogOverviewProps) => {
     article: {
       flexShrink: 0,
       width: 310,
-      '&:not(:last-of-type)': {
-        marginRight: 30,
-      },
+      marginRight: 30,
       [`@media (max-width: ${theme.widths.mobileSm})`]: {
         width: 'calc(100% - 56px)',
       },
     },
     emptyArticle: {
-      width: 24,
+      width: 16,
       flexShrink: 0,
     },
     mobileFooter: {

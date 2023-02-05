@@ -10,7 +10,7 @@ import {
   useRef,
 } from 'react'
 
-interface ContainerWideProps extends HTMLAttributes<HTMLDivElement> {
+export interface ContainerWideProps extends HTMLAttributes<HTMLDivElement> {
   maxWidth?: 'md' | 'none'
   scrollable?: boolean
   endBlur?: string
@@ -38,7 +38,7 @@ const ContainerWide = forwardRef<HTMLDivElement, ContainerWideProps>(
 
     const containerRef = useRef<HTMLDivElement>(null)
 
-    const [showBlur, setShowBlur] = useSameState(false)
+    const [showBlur, setShowBlur] = useSameState(true)
 
     useImperativeHandle(ref, () => containerRef.current!)
 

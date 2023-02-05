@@ -1,12 +1,9 @@
-import ArrowLeft from '@/icons/ArrowLeft'
-import ArrowRight from '@/icons/ArrowRight'
 import theme from '@/theme'
 import { BaseProduct } from '@/types/product'
 import Container from '@/ui/Container'
-import ContainerWide from '@/ui/ContainerWide'
-import IconButton from '@/ui/IconButton'
+import ScrollView from '@/ui/ScrollView'
 import makeStyles from '@/utils/makeStyles'
-import { FC, HTMLAttributes, useRef } from 'react'
+import { FC, HTMLAttributes } from 'react'
 import ProductVertical from './ProductVertical'
 
 interface RelatedProductsProps extends HTMLAttributes<HTMLDivElement> {
@@ -18,77 +15,39 @@ const RelatedProducts: FC<RelatedProductsProps> = (props) => {
 
   const { products, ...divProps } = props
 
-  const containerRef = useRef<HTMLDivElement>(null)
-
-  const getNextViewWidth = (container: HTMLDivElement) => {
-    const containerWidth = container.clientWidth
-    const fractionalWidth = containerWidth % 276
-    return containerWidth - fractionalWidth
-  }
-
-  const next = () => {
-    const container = containerRef.current!
-
-    container.scroll({
-      top: 0,
-      left: container.scrollLeft + 276,
-      behavior: 'smooth',
-    })
-  }
-
-  const prev = () => {
-    const container = containerRef.current!
-
-    container.scroll({
-      top: 0,
-      left: container.scrollLeft - 276,
-      behavior: 'smooth',
-    })
-  }
-
   return (
-    <div {...divProps}>
-      <Container maxWidth="md">
-        <div css={styles.header}>
-          <h2 css={styles.title}>Other Related Products</h2>
-
-          <div css={styles.deskArrows}>
-            <IconButton
-              bordered
-              style={{ marginRight: 16 }}
-              children={<ArrowLeft />}
-              onClick={prev}
-            />
-            <IconButton bordered children={<ArrowRight />} onClick={next} />
-          </div>
-        </div>
-      </Container>
-
-      <ContainerWide
-        ref={containerRef}
-        scrollable
-        endBlur="linear-gradient(269.92deg, #f8f8f8 0.05%, rgb(248 248 248 / 0%) 99.9%)"
-        contentEndWidth={258 + 16}
-      >
+    <ScrollView
+      maxWidth="md"
+      endBlur="linear-gradient(269.92deg, #f8f8f8 0.05%, rgb(248 248 248 / 0%) 99.9%)"
+      children={
         <div css={styles.products}>
-          {products.map((product, idx) => (
-            <ProductVertical key={idx} product={product} />
+          {[...products, ...products, ...products].map((product, idx) => (
+            <ProductVertical
+              css={styles.product}
+              key={product._id + idx}
+              product={product}
+            />
           ))}
 
-          <div />
+          <div css={styles.emptyProduct} />
         </div>
-      </ContainerWide>
+      }
+      render={({ deskArrows, mobileArrows, scrollView }) => (
+        <div {...divProps}>
+          <Container maxWidth="md">
+            <div css={styles.header}>
+              <h2 css={styles.title}>Other Related Products</h2>
 
-      <div css={styles.tabletSmArrows}>
-        <IconButton
-          bordered
-          style={{ marginRight: 16 }}
-          children={<ArrowLeft />}
-          onClick={prev}
-        />
-        <IconButton bordered children={<ArrowRight />} onClick={next} />
-      </div>
-    </div>
+              {deskArrows}
+            </div>
+          </Container>
+
+          {scrollView}
+
+          {mobileArrows}
+        </div>
+      )}
+    />
   )
 }
 
@@ -106,29 +65,23 @@ const useStyles = makeStyles(({}: RelatedProductsProps) => ({
   title: {
     fontSize: 30,
   },
-  deskArrows: {
-    [`@media (max-width: ${theme.widths.tabletSm})`]: {
-      display: 'none',
-    },
-  },
-  tabletSmArrows: {
-    display: 'none',
-    [`@media (max-width: ${theme.widths.tabletSm})`]: {
-      display: 'flex',
-      justifyContent: 'center',
-      marginTop: 32,
-    },
-  },
   products: {
-    display: 'grid',
-    gridAutoFlow: 'column',
-    gridAutoColumns: 258,
+    height: 'auto',
+    display: 'flex',
     padding: '0 16px',
-    gap: 18,
     fontFamily: theme.fonts.primary,
-    '@media (max-width: 320px)': {
-      gridAutoColumns: 'calc(100% - 32px)',
+  },
+  product: {
+    flexShrink: 0,
+    width: 258,
+    marginRight: 18,
+    [`@media (max-width: ${theme.widths.mobileSm})`]: {
+      width: 'calc(100% - 32px)',
     },
+  },
+  emptyProduct: {
+    width: 28,
+    flexShrink: 0,
   },
 }))
 

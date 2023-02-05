@@ -266,7 +266,7 @@ const useStyles = makeStyles(({ mode }: NavbarProps) => ({
         height: 6,
         background: '#B0D950',
         borderRadius: '50%',
-        bottom: -6,
+        bottom: -10,
         left: 'calc(50% - 3px)',
       },
     },
