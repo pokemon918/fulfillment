@@ -124,17 +124,17 @@ const QuoteStep1: FC<QuoteStep1Props> = (props) => {
 
             <Input
               control={control}
-              name="landingPort.name"
+              name="loadingPort.name"
               css={styles.input}
               placeholder="Port of Loading"
               theme="dark"
               startIcon={<ShipIcon />}
               startSelect={{
-                name: 'landingPort.shippingType',
+                name: 'loadingPort.shippingType',
                 options: shippingTypes,
               }}
               endSelect={{
-                name: 'landingPort.country',
+                name: 'loadingPort.country',
                 options: countriesOptions,
               }}
               required

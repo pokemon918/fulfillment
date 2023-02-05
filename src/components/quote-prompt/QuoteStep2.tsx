@@ -3,7 +3,7 @@ import PhoneIcon from '@/icons/PhoneIcon'
 import CountryLabel from '@/ui/CountryLabel'
 import Input from '@/ui/Input'
 import makeStyles from '@/utils/makeStyles'
-import { FC, FormEventHandler, HTMLAttributes, useMemo } from 'react'
+import { FC, FormEventHandler, HTMLAttributes, useMemo, useRef } from 'react'
 import QuoteFeatures from './QuoteFeatures'
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
 import { QuoteInput, QuoteProduct } from './quote.types'
@@ -12,8 +12,16 @@ import Button from '@/ui/Button'
 import countries from '@/data/countries'
 import FieldValue from '../FieldValue'
 import theme from '@/theme'
+import { gql } from 'graphql-request'
+import graphqlReq from '@/utils/graphqlReq'
 
 export interface Step2Values {}
+
+const SEND_MAIL = gql`
+  mutation ($input: ContactMailInput!) {
+    sendContactMail(input: $input)
+  }
+`
 
 interface QuoteStep2Props extends HTMLAttributes<HTMLFormElement> {
   product: QuoteProduct
@@ -25,7 +33,7 @@ const QuoteStep2: FC<QuoteStep2Props> = (props) => {
 
   const { product, onNextStep, ...formProps } = props
 
-  const { control } = useFormContext<QuoteInput>()
+  const { control, getValues } = useFormContext<QuoteInput>()
 
   const paymentTermsControl = useFieldArray({
     name: 'paymentTerms',
@@ -43,13 +51,13 @@ const QuoteStep2: FC<QuoteStep2Props> = (props) => {
   const name = useWatch({ control, name: 'name' })
   const phone = useWatch({ control, name: 'phone' })
   const email = useWatch({ control, name: 'email' })
-  const landingPort = useWatch({ control, name: 'landingPort' })
+  const loadingPort = useWatch({ control, name: 'loadingPort' })
   const destinationPort = useWatch({ control, name: 'destinationPort' })
   const purchaseVolume = useWatch({ control, name: 'purchaseVolume' })
 
-  const landingCountry = useMemo(
-    () => countries.find((c) => c.code === landingPort.country)?.name,
-    [landingPort.country]
+  const loadingCountry = useMemo(
+    () => countries.find((c) => c.code === loadingPort.country)?.name,
+    [loadingPort.country]
   )
 
   const destCountry = useMemo(
@@ -57,10 +65,73 @@ const QuoteStep2: FC<QuoteStep2Props> = (props) => {
     [destinationPort.country]
   )
 
-  const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
+  const isSaving = useRef(false)
+
+  const stringifyInfo = () => {
+    const {
+      company,
+      name,
+      email,
+      phone,
+      loadingPort,
+      destinationPort,
+      purchaseVolume,
+      needs,
+      paymentTerms,
+    } = getValues()
+
+    const baseInfo = [
+      `Company: ${company}`,
+      `Name: ${name}`,
+      `Email: ${email}`,
+      `Phone: ${phone}`,
+      `Port of Loading: ${loadingPort.shippingType} - ${loadingPort.name}, ${loadingCountry}`,
+      `Port of Destination: ${destinationPort.shippingType} - ${destinationPort.name}, ${destCountry}`,
+      `Purchase Volume: ${purchaseVolume} kg`,
+      `Needs: ${needs}`,
+    ]
+
+    const terms = paymentTerms.map(
+      ({ title, paidPercent, amount }) =>
+        `${title} - ${paidPercent}% - ${amount}`
+    )
+
+    return (
+      'Quote Request' +
+      '\n\n' +
+      baseInfo.join('\n') +
+      '\n\n\n' +
+      'Payment Terms:' +
+      '\n' +
+      terms.join('\n')
+    )
+  }
+
+  const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault()
 
-    onNextStep()
+    if (isSaving.current) return
+
+    isSaving.current = true
+
+    const { email } = getValues()
+
+    const infoText = stringifyInfo()
+
+    try {
+      await graphqlReq(SEND_MAIL, {
+        input: {
+          subject: 'Quote Request',
+          content: infoText,
+          replyTo: email,
+        },
+      })
+
+      onNextStep()
+    } catch {
+    } finally {
+      isSaving.current = false
+    }
   }
 
   const roundedPrice = +(product.price * Number(purchaseVolume)).toFixed(2)
@@ -89,7 +160,7 @@ const QuoteStep2: FC<QuoteStep2Props> = (props) => {
                 <CountryLabel countryCode={product.country} fontWeight={400} />
               </th>
               <th css={styles.deskDetailVal}>
-                {landingPort.name}, {landingCountry}
+                {loadingPort.name}, {loadingCountry}
               </th>
               <td css={styles.deskDetailVal}>
                 {destinationPort.name}, {destCountry}
@@ -113,7 +184,7 @@ const QuoteStep2: FC<QuoteStep2Props> = (props) => {
           <div css={styles.mobileDetail}>
             <span css={styles.mobileDetailKey}>Port of Loading</span>
             <span css={styles.mobileDetailVal}>
-              {landingPort.name} {landingCountry}
+              {loadingPort.name} {loadingCountry}
             </span>
           </div>
 
@@ -152,12 +223,16 @@ const QuoteStep2: FC<QuoteStep2Props> = (props) => {
           <div css={styles.infoSection}>
             <p css={styles.infoVal}>
               <PhoneIcon css={styles.infoValIcon} />
-              <span css={styles.infoValText} data-nowrap="true">+{phone}</span>
+              <span css={styles.infoValText} data-nowrap="true">
+                +{phone}
+              </span>
             </p>
 
             <p css={styles.infoVal}>
               <EmailIcon css={styles.infoValIcon} />
-              <span css={styles.infoValText} data-nowrap="true">{email}</span>
+              <span css={styles.infoValText} data-nowrap="true">
+                {email}
+              </span>
             </p>
           </div>
         </div>

@@ -9,7 +9,7 @@ export interface QuoteInput {
   name: string;
   email: string;
   phone: string;
-  landingPort: PortData;
+  loadingPort: PortData;
   destinationPort: PortData;
   purchaseVolume: string;
   needs: string;

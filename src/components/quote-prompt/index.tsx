@@ -14,6 +14,12 @@ import theme from '@/theme'
 interface QuotePromptProps extends HTMLAttributes<HTMLDivElement> {
   product: QuoteProduct
   onClose: () => void
+  userProfile?: {
+    fullName: string
+    companyName: string
+    email: string
+    phone: string
+  }
 }
 
 const QuotePrompt: FC<QuotePromptProps> = (props) => {
@@ -21,20 +27,20 @@ const QuotePrompt: FC<QuotePromptProps> = (props) => {
 
   const [stepIdx, setStepIdx] = useState<number>(0)
 
-  const { product, onClose, ...divProps } = props
+  const { product, onClose, userProfile, ...divProps } = props
 
   const formMethods = useForm<QuoteInput>({
     defaultValues: {
-      company: '',
-      name: '',
-      email: '',
-      phone: '',
+      company: userProfile?.companyName ?? '',
+      name: userProfile?.fullName ?? '',
+      email: userProfile?.email ?? '',
+      phone: userProfile?.phone ?? '',
       destinationPort: {
         shippingType: 'FOB',
         country: 'PE',
         name: '',
       },
-      landingPort: {
+      loadingPort: {
         shippingType: 'FOB',
         country: 'PE',
         name: '',

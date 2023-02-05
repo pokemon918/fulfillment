@@ -16,14 +16,21 @@ import QuotePrompt from '@/components/quote-prompt'
 import NoSSR from '@/components/NoSSR'
 import QuoteSticky from '@/components/QuoteSticky'
 import ProductInfo from '@/components/product-view/ProductInfo'
+import { getCookie } from '@/utils/cookies'
 
 interface ProductPageProps {
   product: DetailedProduct
   relatedProducts: BaseProduct[]
+  userProfile?: {
+    fullName: string
+    companyName: string
+    email: string
+    phone: string
+  }
 }
 
 const ProductPage: FC<ProductPageProps> = (props) => {
-  const { product, relatedProducts } = props
+  const { product, relatedProducts, userProfile } = props
 
   const styles = useStyles(props)
   const [openQuote, setOpenQuote] = useState(false)
@@ -57,7 +64,11 @@ const ProductPage: FC<ProductPageProps> = (props) => {
 
       <NoSSR>
         <div css={{ display: openQuote ? undefined : 'none' }}>
-          <QuotePrompt product={product} onClose={() => setOpenQuote(false)} />
+          <QuotePrompt
+            product={product}
+            onClose={() => setOpenQuote(false)}
+            userProfile={userProfile}
+          />
         </div>
       </NoSSR>
 
@@ -128,15 +139,30 @@ const GET_DATA = gql`
         }
       }
     }
+
+    userProfile {
+      _id
+      fullName
+      companyName
+      email
+      phone
+    }
   }
 `
 
 export const getServerSideProps: GetServerSideProps<ProductPageProps> = async (
   ctx
 ) => {
-  const { product } = await graphqlReq(GET_DATA, {
-    productId: ctx.query.productId,
-  })
+  const token = getCookie(ctx.req.headers.cookie ?? '', 'token')
+
+  const { product, userProfile } = await graphqlReq(
+    GET_DATA,
+    {
+      productId: ctx.query.productId,
+    },
+    {},
+    token
+  )
 
   return {
     props: {
@@ -163,6 +189,7 @@ export const getServerSideProps: GetServerSideProps<ProductPageProps> = async (
           name: product.name.en,
           availableSpecs: product.availableSpecs.en,
         })),
+      userProfile,
     },
   }
 }
