@@ -12,6 +12,8 @@ interface QuoteOrderSentProps {
 const QuoteOrderSent: FC<QuoteOrderSentProps> = (props) => {
   const styles = useStyles(props)
 
+  const { onNextStep } = props
+
   return (
     <div css={styles.root}>
       <div css={styles.info}>
@@ -28,7 +30,7 @@ const QuoteOrderSent: FC<QuoteOrderSentProps> = (props) => {
       </div>
 
       <div css={styles.footer}>
-        <Button style={{ padding: '16px 42px' }}>View Transaction</Button>
+        <Button onClick={onNextStep} style={{ padding: '16px 42px' }}>View Transaction</Button>
       </div>
     </div>
   )
@@ -36,6 +38,9 @@ const QuoteOrderSent: FC<QuoteOrderSentProps> = (props) => {
 
 const useStyles = makeStyles(({}: QuoteOrderSentProps) => ({
   root: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
     height: '100%',
     width: '100%',
     textAlign: 'center',

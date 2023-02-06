@@ -15,7 +15,7 @@ const StepGallery: FC<StepGalleryProps> = (props) => {
     <div css={styles.root}>
       {gallery.map((galleryItem, idx) => {
         let isVideo = ['webm', 'mp4'].includes(
-          galleryItem.split('.').at(-1) as any
+          galleryItem.split('.')[gallery.length - 1] as any
         )
 
         return (

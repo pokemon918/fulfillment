@@ -10,6 +10,7 @@ import BackIcon from '@/icons/BackIcon'
 import QuoteOrderSent from './QuoteOrderSent'
 import QuoteEvaluate from './QuoteEvaluate'
 import theme from '@/theme'
+import QuoteStep3 from './QuoteStep3'
 
 interface QuotePromptProps extends HTMLAttributes<HTMLDivElement> {
   product: QuoteProduct
@@ -84,8 +85,7 @@ const QuotePrompt: FC<QuotePromptProps> = (props) => {
       component: QuoteStep2,
     },
     {
-      component: QuoteOrderSent,
-      isHideStepsDisplay: true,
+      component: QuoteStep3
     },
   ]
 

@@ -3,7 +3,14 @@ import PhoneIcon from '@/icons/PhoneIcon'
 import CountryLabel from '@/ui/CountryLabel'
 import Input from '@/ui/Input'
 import makeStyles from '@/utils/makeStyles'
-import { FC, FormEventHandler, HTMLAttributes, useMemo, useRef } from 'react'
+import {
+  FC,
+  FormEventHandler,
+  HTMLAttributes,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import QuoteFeatures from './QuoteFeatures'
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
 import { QuoteInput, QuoteProduct } from './quote.types'
@@ -14,6 +21,8 @@ import FieldValue from '../FieldValue'
 import theme from '@/theme'
 import { gql } from 'graphql-request'
 import graphqlReq from '@/utils/graphqlReq'
+import QuoteOrderSent from './QuoteOrderSent'
+import { calcAmount, calcTotal } from './quotePrompt.shared'
 
 export interface Step2Values {}
 
@@ -33,7 +42,7 @@ const QuoteStep2: FC<QuoteStep2Props> = (props) => {
 
   const { product, onNextStep, ...formProps } = props
 
-  const { control, getValues } = useFormContext<QuoteInput>()
+  const { control, getValues, setValue } = useFormContext<QuoteInput>()
 
   const paymentTermsControl = useFieldArray({
     name: 'paymentTerms',
@@ -54,6 +63,8 @@ const QuoteStep2: FC<QuoteStep2Props> = (props) => {
   const loadingPort = useWatch({ control, name: 'loadingPort' })
   const destinationPort = useWatch({ control, name: 'destinationPort' })
   const purchaseVolume = useWatch({ control, name: 'purchaseVolume' })
+  const volume = Number(useWatch({ control, name: 'purchaseVolume' }))
+  const total = calcTotal(product.price, volume)
 
   const loadingCountry = useMemo(
     () => countries.find((c) => c.code === loadingPort.country)?.name,
@@ -92,8 +103,8 @@ const QuoteStep2: FC<QuoteStep2Props> = (props) => {
     ]
 
     const terms = paymentTerms.map(
-      ({ title, paidPercent, amount }) =>
-        `${title} - ${paidPercent}% - ${amount}`
+      ({ title, paidPercent }) =>
+        `${title} - ${paidPercent}% - ${calcAmount(total, paidPercent)}`
     )
 
     return (
@@ -136,7 +147,9 @@ const QuoteStep2: FC<QuoteStep2Props> = (props) => {
 
   const roundedPrice = +(product.price * Number(purchaseVolume)).toFixed(2)
 
-  return (
+  const [completed, setCompleted] = useState(false)
+
+  return !completed ? (
     <form onSubmit={handleSubmit} css={styles.root} {...formProps}>
       <div css={styles.mainSection}>
         <table css={styles.deskDetails}>
@@ -268,14 +281,22 @@ const QuoteStep2: FC<QuoteStep2Props> = (props) => {
                   </div>
 
                   <div css={styles.termInputWrapper}>
-                    <Input
-                      startAdornment="$"
-                      placeholder="0.00"
+                    <FieldValue
+                      name={`paymentTerms.${idx}.paidPercent`}
                       control={control}
-                      name={`paymentTerms.${idx}.amount`}
-                      required
-                      pattern="[0-9]+(\.[0-9]+)?"
-                    />
+                    >
+                      {(percent) => (
+                        <Input
+                          startAdornment="$"
+                          placeholder="0.00"
+                          name={`paymentTerms.${idx}.amount`}
+                          required
+                          pattern="[0-9]+(\.[0-9]+)?"
+                          inputVal={calcAmount(total, percent) ?? ''}
+                          readOnly
+                        />
+                      )}
+                    </FieldValue>
                   </div>
                 </div>
               </div>
@@ -297,17 +318,16 @@ const QuoteStep2: FC<QuoteStep2Props> = (props) => {
 
         <FieldValue control={control} name="paymentTerms">
           {(paymentTerms: QuoteInput['paymentTerms']) => {
-            const total = paymentTerms.reduce((acc, paymentTerm) => {
-              const amount = !Number.isNaN(Number(paymentTerm.amount))
-                ? Number(paymentTerm.amount)
-                : 0
+            const inputTotal = paymentTerms.reduce((acc, paymentTerm) => {
+              const amount =
+                (Number(paymentTerm.paidPercent) / 100) * Number(total)
               return acc + amount
             }, 0)
 
             return (
               <p css={styles.totalPrice}>
                 <span css={styles.totalPriceHeading}>Total price</span>${' '}
-                {+total.toFixed(2)}
+                {+inputTotal.toFixed(3)}
               </p>
             )
           }}
@@ -316,6 +336,8 @@ const QuoteStep2: FC<QuoteStep2Props> = (props) => {
 
       <QuoteFeatures css={styles.features} />
     </form>
+  ) : (
+    <QuoteOrderSent onNextStep={onNextStep} product={product} />
   )
 }
 

@@ -45,6 +45,7 @@ interface InputProps {
   maxLength?: number
   readOnly?: boolean
   autoFocus?: boolean
+  inputVal?: string | number
 }
 
 const Input: FC<InputProps> = (originalProps) => {
@@ -71,6 +72,7 @@ const Input: FC<InputProps> = (originalProps) => {
     name,
     control,
     autoFocus,
+    inputVal,
     ...commonProps
   } = props
 
@@ -148,20 +150,31 @@ const Input: FC<InputProps> = (originalProps) => {
 
         {startSelectNode}
 
-        <Controller
-          name={name}
-          control={control}
-          render={({ field }) => (
-            <input
-              autoFocus={autoFocus}
-              id={id}
-              type={type}
-              css={styles.input}
-              {...commonProps}
-              {...field}
-            />
-          )}
-        />
+        {inputVal ? (
+          <input
+            autoFocus={autoFocus}
+            id={id}
+            type={type}
+            css={styles.input}
+            {...commonProps}
+            value={inputVal}
+          />
+        ) : (
+          <Controller
+            name={name}
+            control={control}
+            render={({ field }) => (
+              <input
+                autoFocus={autoFocus}
+                id={id}
+                type={type}
+                css={styles.input}
+                {...commonProps}
+                {...field}
+              />
+            )}
+          />
+        )}
 
         {endSelectNode}
 
