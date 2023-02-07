@@ -4,20 +4,22 @@ import { FC, HTMLAttributes } from 'react'
 
 interface MiniGalleryProps extends HTMLAttributes<HTMLDivElement> {
   images: string[]
+  onClickView: (imageIdx: number) => void
 }
 
 const MiniGallery: FC<MiniGalleryProps> = (props) => {
-  const { images, ...divProps } = props
+  const { images, onClickView, ...divProps } = props
 
   const styles = useStyles(props)
 
   return (
     <div css={styles.root} {...divProps}>
-      {images.map((image) => (
+      {images.map((image, imageIdx) => (
         <div
           key={image}
           css={styles.image}
           style={{ backgroundImage: `url(${image})` }}
+          onClick={() => onClickView(imageIdx)}
         >
           <ZoomIcon style={{ color: '#fff' }} />
         </div>
@@ -31,7 +33,7 @@ const useStyles = makeStyles(({}: MiniGalleryProps) => ({
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginBottom: -10
+    marginBottom: -10,
   },
   image: {
     width: 80,

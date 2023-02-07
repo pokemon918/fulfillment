@@ -17,7 +17,6 @@ export interface QuoteInput {
     placeholder?: string
     title: string
     paidPercent: string
-    amount: string
   }[]
 }
 

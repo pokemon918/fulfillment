@@ -9,6 +9,7 @@ import makeStyles from '@/utils/makeStyles'
 import dayjs from 'dayjs'
 import { FC, HTMLAttributes, useState } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
+import GallerySingleView from '../gallery/GallerySingleView'
 import { QuoteInput, QuoteProduct } from './quote.types'
 import QuoteDealCompleted from './QuoteDealCompleted'
 import { calcAmount, calcTotal } from './quotePrompt.shared'
@@ -37,6 +38,20 @@ const heads = [
   },
 ]
 
+const additionalTermsData: {
+  documents?: string[]
+  images?: string[]
+}[] = [
+  {
+    documents: ['test.pdf'],
+    images: [
+      '/images/apples.jpg',
+      '/images/orange-trees.jpg',
+      '/images/kiwi.jpg',
+    ],
+  },
+]
+
 const QuoteStep3: FC<QuoteStep3Props> = (props) => {
   const styles = useStyles(props)
 
@@ -49,8 +64,52 @@ const QuoteStep3: FC<QuoteStep3Props> = (props) => {
   const paymentTerms = useWatch({ control, name: 'paymentTerms' })
   const volume = Number(useWatch({ control, name: 'purchaseVolume' }))
   const total = calcTotal(product.price, volume)
+  const [gallery, setGallery] = useState<{
+    open: boolean
+    images: string[]
+    viewingIdx: number
+  } | null>(null)
 
   const [completed, setCompleted] = useState(false)
+
+  const closeGallery = () =>
+    setGallery((prevGallery) =>
+      prevGallery
+        ? {
+            ...prevGallery,
+            open: false,
+          }
+        : null
+    )
+
+  const nextImage = () => {
+    setGallery((prevGallery) => {
+      if (!prevGallery) return null
+
+      const { images, viewingIdx } = prevGallery
+      const nextViewIdx = viewingIdx + 1
+
+      return {
+        ...prevGallery,
+        viewingIdx:
+          nextViewIdx < images.length ? nextViewIdx : images.length - 1,
+      }
+    })
+  }
+
+  const prevImage = () => {
+    setGallery((prevGallery) => {
+      if (!prevGallery) return null
+
+      const { viewingIdx } = prevGallery
+      const prevViewIdx = viewingIdx - 1
+
+      return {
+        ...prevGallery,
+        viewingIdx: prevViewIdx >= 0 ? prevViewIdx : 0,
+      }
+    })
+  }
 
   return !completed ? (
     <div css={styles.root}>
@@ -73,15 +132,7 @@ const QuoteStep3: FC<QuoteStep3Props> = (props) => {
 
           const port = isLast ? destinationPort : loadingPort
 
-          const images = isFirst
-            ? [
-                '/images/orange-trees.jpg',
-                '/images/grape.png',
-                '/images/kiwi.jpg',
-              ]
-            : []
-
-          const documents = isFirst ? ['test.pdf'] : []
+          const { documents = [], images = [] } = additionalTermsData[idx] || {}
 
           return (
             <div css={styles.step}>
@@ -102,7 +153,9 @@ const QuoteStep3: FC<QuoteStep3Props> = (props) => {
 
                 <div css={styles.optionalDetail}>
                   <p css={styles.mStepHead}>Time</p>
-                  <p css={styles.timeVal}>{dayjs().format('DD/MM/YYYY - HH:mm')}</p>
+                  <p css={styles.timeVal}>
+                    {dayjs().format('DD/MM/YYYY - HH:mm')}
+                  </p>
                 </div>
 
                 <div css={styles.amountPaid}>
@@ -127,7 +180,13 @@ const QuoteStep3: FC<QuoteStep3Props> = (props) => {
 
               <div css={styles.stepBody}>
                 {images.length > 0 && (
-                  <MiniGallery style={{ marginTop: 14 }} images={images} />
+                  <MiniGallery
+                    style={{ marginTop: 14 }}
+                    images={images}
+                    onClickView={(imageIdx) =>
+                      setGallery({ open: true, images, viewingIdx: imageIdx })
+                    }
+                  />
                 )}
               </div>
             </div>
@@ -138,6 +197,15 @@ const QuoteStep3: FC<QuoteStep3Props> = (props) => {
       <div css={styles.footer}>
         <Button onClick={() => setCompleted(true)}>Next</Button>
       </div>
+
+      <GallerySingleView
+        open={gallery?.open ?? false}
+        images={gallery?.images ?? []}
+        viewingIdx={gallery?.viewingIdx ?? -1}
+        onClose={closeGallery}
+        onNext={nextImage}
+        onPrev={prevImage}
+      />
     </div>
   ) : (
     <QuoteDealCompleted product={product} onNextStep={onNextStep} />
@@ -245,9 +313,9 @@ const useStyles = makeStyles(({}: QuoteStep3Props) => {
     timeVal: {
       fontSize: 15,
       [`@media (max-width: ${theme.widths.tablet})`]: {
-        fontSize: 'inherit'
-      }
-    }
+        fontSize: 'inherit',
+      },
+    },
   }
 })
 

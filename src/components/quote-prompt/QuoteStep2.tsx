@@ -42,7 +42,9 @@ const QuoteStep2: FC<QuoteStep2Props> = (props) => {
 
   const { product, onNextStep, ...formProps } = props
 
-  const { control, getValues, setValue } = useFormContext<QuoteInput>()
+  const { control, getValues } = useFormContext<QuoteInput>()
+
+  const [completed, setCompleted] = useState(false)
 
   const paymentTermsControl = useFieldArray({
     name: 'paymentTerms',
@@ -52,7 +54,6 @@ const QuoteStep2: FC<QuoteStep2Props> = (props) => {
   const addPaymentTerm = () =>
     paymentTermsControl.append({
       title: '',
-      amount: '',
       paidPercent: '',
     })
 
@@ -123,9 +124,18 @@ const QuoteStep2: FC<QuoteStep2Props> = (props) => {
 
     if (isSaving.current) return
 
-    isSaving.current = true
+    const { email, paymentTerms } = getValues()
 
-    const { email } = getValues()
+    const totalPercent = paymentTerms.reduce(
+      (acc, { paidPercent }) => acc + Number(paidPercent),
+      0
+    )
+
+    if (totalPercent !== 100) {
+      return alert('The total paid percent of all milestones must be 100%')
+    }
+
+    isSaving.current = true
 
     const infoText = stringifyInfo()
 
@@ -138,16 +148,12 @@ const QuoteStep2: FC<QuoteStep2Props> = (props) => {
         },
       })
 
-      onNextStep()
+      setCompleted(true)
     } catch {
     } finally {
       isSaving.current = false
     }
   }
-
-  const roundedPrice = +(product.price * Number(purchaseVolume)).toFixed(2)
-
-  const [completed, setCompleted] = useState(false)
 
   return !completed ? (
     <form onSubmit={handleSubmit} css={styles.root} {...formProps}>
@@ -182,7 +188,7 @@ const QuoteStep2: FC<QuoteStep2Props> = (props) => {
                 {purchaseVolume} kg
               </td>
               <td css={styles.deskDetailVal} data-emphasize="true">
-                ${roundedPrice}
+                ${total}
               </td>
             </tr>
           </tbody>
@@ -218,7 +224,7 @@ const QuoteStep2: FC<QuoteStep2Props> = (props) => {
           <div css={styles.mobileDetail}>
             <span css={styles.mobileDetailKey}>Price</span>
             <span css={styles.mobileDetailVal} data-emphasize="true">
-              ${roundedPrice}
+              ${total}
             </span>
           </div>
         </div>
@@ -318,16 +324,16 @@ const QuoteStep2: FC<QuoteStep2Props> = (props) => {
 
         <FieldValue control={control} name="paymentTerms">
           {(paymentTerms: QuoteInput['paymentTerms']) => {
-            const inputTotal = paymentTerms.reduce((acc, paymentTerm) => {
-              const amount =
-                (Number(paymentTerm.paidPercent) / 100) * Number(total)
-              return acc + amount
-            }, 0)
+            const totalPercent = paymentTerms.reduce(
+              (acc, { paidPercent }) => acc + Number(paidPercent),
+              0
+            )
+
+            const inputTotal = calcAmount(total, totalPercent)
 
             return (
               <p css={styles.totalPrice}>
-                <span css={styles.totalPriceHeading}>Total price</span>${' '}
-                {+inputTotal.toFixed(3)}
+                <span css={styles.totalPriceHeading}>Total price</span>$ {total}
               </p>
             )
           }}
