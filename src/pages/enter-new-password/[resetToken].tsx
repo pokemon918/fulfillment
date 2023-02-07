@@ -47,7 +47,7 @@ const BeginResetPassword = () => {
         newPassword,
       })
 
-      deleteCookie('fulfillment-token')
+      deleteCookie('fulfillment_token')
 
       window.location.href = '/login'
     } catch (e) {

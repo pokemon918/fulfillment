@@ -52,7 +52,8 @@ const Login = () => {
 
       const expireAt = new Date(Date.now() + YEAR)
 
-      setCookie('fulfillment-token', token, expireAt)
+      setCookie('fulfillment_token', token, expireAt)
+      localStorage.setItem('fulfillment_user', JSON.stringify(user))
 
       window.location.href = '/'
     } catch (e) {

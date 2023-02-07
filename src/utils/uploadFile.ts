@@ -14,7 +14,7 @@ const uploadFile = ({
   onUploadProgress,
   relationId,
 }: UploadFileInput) => {
-  const token = getCookie(document.cookie, 'fulfillment-token')
+  const token = getCookie(document.cookie, 'fulfillment_token')
 
   if (onUploadProgress) onUploadProgress(0)
 

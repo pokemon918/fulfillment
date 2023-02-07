@@ -14,7 +14,7 @@ const graphqlReq = <T = any>(
   const customHeaders: Record<string, string> = {}
 
   const token =
-    typeof window !== 'undefined' ? getCookie(document.cookie, 'fulfillment-token') : null
+    typeof window !== 'undefined' ? getCookie(document.cookie, 'fulfillment_token') : null
 
   if (typeof token === 'string' && token.length > 0) {
     customHeaders.authorization = `Bearer ${token}`
@@ -51,7 +51,7 @@ export const graphqlServerReq = <T = any>(
   requestHeaders?: Record<string, string>
 ): Promise<T> => {
   const cookies = ctx.req.headers.cookie ?? ''
-  const token = getCookie(cookies, 'fulfillment-token')
+  const token = getCookie(cookies, 'fulfillment_token')
   return graphqlReq(doc, variables, requestHeaders, token)
 }
 

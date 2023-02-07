@@ -16,7 +16,9 @@ const globalStyles = css`
 
   html,
   body,
-  #__next {
+  #__next,
+  .app-root-wrapper,
+  .app-root {
     width: 100%;
     height: 100%;
   }

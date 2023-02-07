@@ -37,6 +37,10 @@ export const getCookie = (cookies: string, cookieKey: string) => {
   return val
 }
 
+// getBrowserCookie
+export const getBrowserCookie = (cookieKey: string) =>
+  getCookie(typeof window !== 'undefined' ? document.cookie : '', cookieKey)
+
 // setCookie
 export const setCookie = (name: string, value: string, expiresAt: Date) => {
   let cookie = `${name}=${value};domain=${domain};path=/;expires=${expiresAt.toUTCString()}`

@@ -9,7 +9,7 @@ import Container from '@/ui/Container'
 import graphqlReq, { graphqlServerReq } from '@/utils/graphqlReq'
 import makeStyles from '@/utils/makeStyles'
 import { gql } from 'graphql-request'
-import { GetServerSideProps } from 'next'
+import { GetServerSideProps, GetStaticProps } from 'next'
 import { FC } from 'react'
 
 const PageBlog: FC<Props> = (props) => {
@@ -83,12 +83,6 @@ const useStyles = makeStyles(() => ({
 // ssr
 const GET_ARTICLES = gql`
   {
-    authUser: userProfile {
-      _id
-      fullName
-      role
-    }
-
     articles (descCreatedAt: true) {
       _id
       title {
@@ -101,8 +95,8 @@ const GET_ARTICLES = gql`
     }
   }
 `
-export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
-  const { articles, authUser } = await graphqlServerReq(ctx, GET_ARTICLES)
+export const getStaticProps: GetStaticProps<Props> = async (ctx) => {
+  const { articles } = await graphqlReq(GET_ARTICLES)
 
   return {
     props: {
@@ -110,8 +104,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
         ...article,
         title: article.title.en,
         description: article.description.en,
-      })),
-      authUser
+      }))
     },
   }
 }

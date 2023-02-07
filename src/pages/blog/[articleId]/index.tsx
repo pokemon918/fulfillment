@@ -5,7 +5,7 @@ import Container from '@/ui/Container'
 import graphqlReq, { graphqlServerReq } from '@/utils/graphqlReq'
 import makeStyles from '@/utils/makeStyles'
 import { gql } from 'graphql-request'
-import { GetServerSideProps } from 'next'
+import { GetServerSideProps, GetStaticPaths, GetStaticProps } from 'next'
 import { FC } from 'react'
 
 const PageArticleView: FC<Props> = (props) => {
@@ -34,12 +34,6 @@ const useStyles = makeStyles(() => ({}))
 // ssr
 const GET_ARTICLE = gql`
   query ($articleId: String!) {
-    authUser: userProfile {
-      _id
-      fullName
-      role
-    }
-
     article(_id: $articleId) {
       _id
       thumbnail
@@ -63,10 +57,10 @@ const GET_ARTICLE = gql`
   }
 `
 
-export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
-  const { article, authUser } = await graphqlServerReq(ctx, GET_ARTICLE, {
-    articleId: ctx.query.articleId,
-  })
+export const getStaticProps: GetStaticProps<Props> = async (ctx) => {
+  const articleId = ctx.params?.articleId as string
+
+  const { article } = await graphqlReq(GET_ARTICLE, { articleId })
 
   return {
     props: {
@@ -80,7 +74,27 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
           name: keyword.name.en,
         })),
       },
-      authUser
     },
+  }
+}
+
+const GET_ARTICLES = gql`
+  query {
+    articles {
+      _id
+    }
+  }
+`
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const { articles } = await graphqlReq(GET_ARTICLES)
+
+  const paths = articles.map((article: any) => ({
+    params: { articleId: article._id },
+  }))
+
+  return {
+    paths: paths,
+    fallback: 'blocking',
   }
 }

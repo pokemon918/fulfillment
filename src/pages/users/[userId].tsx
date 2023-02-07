@@ -70,7 +70,7 @@ const GET_USERS = gql`
 export const getServerSideProps: GetServerSideProps<PageUserProps> = async (
   ctx
 ) => {
-  const token = getCookie(ctx.req.headers.cookie ?? '', 'fulfillment-token')
+  const token = getCookie(ctx.req.headers.cookie ?? '', 'fulfillment_token')
   const userId = ctx.query.userId
 
   const data = await graphqlReq(GET_USERS, { userId }, {}, token)

@@ -190,7 +190,7 @@ const SignUp: FC<SignUpProps> = ({ products }) => {
 
       const expireAt = new Date(Date.now() + YEAR)
 
-      setCookie('fulfillment-token', token, expireAt)
+      setCookie('fulfillment_token', token, expireAt)
 
       window.location.href = '/'
     } catch (e) {

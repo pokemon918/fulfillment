@@ -8,7 +8,7 @@ import PageBgColor from '@/ui/PageBgColor'
 import graphqlReq, { graphqlServerReq } from '@/utils/graphqlReq'
 import makeStyles from '@/utils/makeStyles'
 import { gql } from 'graphql-request'
-import { GetServerSideProps } from 'next'
+import { GetServerSideProps, GetStaticPaths, GetStaticProps } from 'next'
 import { FC, useState } from 'react'
 import RelatedProducts from '@/components/RelatedProducts'
 import Faq from '@/components/Faq'
@@ -139,24 +139,13 @@ const GET_DATA = gql`
         }
       }
     }
-
-    userProfile {
-      _id
-      fullName
-      companyName
-      email
-      phone
-      role
-    }
   }
 `
 
-export const getServerSideProps: GetServerSideProps<ProductPageProps> = async (
-  ctx
-) => {
-  const { product, userProfile } = await graphqlServerReq(ctx, GET_DATA, {
-    productId: ctx.query.productId,
-  })
+export const getStaticProps: GetStaticProps<ProductPageProps> = async (ctx) => {
+  const productId = ctx.params?.productId as string
+
+  const { product } = await graphqlReq(GET_DATA, { productId })
 
   return {
     props: {
@@ -183,15 +172,29 @@ export const getServerSideProps: GetServerSideProps<ProductPageProps> = async (
           name: product.name.en,
           availableSpecs: product.availableSpecs.en,
         })),
-      userProfile,
-      authUser: userProfile
-        ? {
-            _id: userProfile._id,
-            fullName: userProfile.fullName,
-            role: userProfile.role,
-          }
-        : null,
     },
+    revalidate: 10,
+  }
+}
+
+const GET_PRODUCTS = gql`
+  query {
+    products {
+      _id
+    }
+  }
+`
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const { products } = await graphqlReq(GET_PRODUCTS)
+
+  const paths = products.map((product: any) => ({
+    params: { productId: product._id },
+  }))
+
+  return {
+    paths: paths,
+    fallback: 'blocking',
   }
 }
 
