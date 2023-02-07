@@ -1,7 +1,10 @@
 import { useUser } from '@/hooks/useUser'
+import theme from '@/theme'
 import { BaseCategory } from '@/types/category'
 import Button from '@/ui/Button'
+import Container from '@/ui/Container'
 import ContainerWide from '@/ui/ContainerWide'
+import ScrollView from '@/ui/ScrollView'
 import makeStyles from '@/utils/makeStyles'
 import { FC, HTMLAttributes } from 'react'
 import Category from './Category'
@@ -18,31 +21,55 @@ const CategoriesOverview: FC<CategoriesOverviewProps> = (props) => {
   const user = useUser()
 
   return (
+    <ScrollView
+      maxWidth="md"
+      endBlur="linear-gradient(269.92deg, #e7f4ca 0.05%, rgba(231, 244, 202, 0) 99.9%)"
+      children={
+        <div css={styles.categories}>
+          {categories.map((category) => (
+            <Category
+              css={styles.category}
+              key={category._id}
+              category={category}
+            />
+          ))}
+
+          <div css={styles.emptyBox} />
+        </div>
+      }
+      render={({ deskArrows, mobileArrows, scrollView }) => (
+        <div css={styles.wrapper} {...divProps}>
+          <div css={styles.root}>
+            <Container maxWidth="md">
+              <div css={styles.header}>
+                <div css={styles.subheader}>
+                  <h4 css={styles.heading}>Categories</h4>
+                  {user?.role === 'admin' && (
+                    <Button href="/categories">Manage</Button>
+                  )}
+                </div>
+
+                {deskArrows}
+              </div>
+            </Container>
+
+            {scrollView}
+
+            {mobileArrows}
+          </div>
+        </div>
+      )}
+    />
+  )
+
+  return (
     <div css={styles.wrapper} {...divProps}>
       <div css={styles.root}>
         <div css={styles.header}>
           <h4 css={styles.heading}>Categories</h4>
-
-          {user?.role === 'admin' && <Button href="/categories">Manage</Button>}
         </div>
 
-        <ContainerWide
-          scrollable
-          endBlur="linear-gradient(269.92deg, #e7f4ca 0.05%, rgba(231, 244, 202, 0) 99.9%)"
-          contentEndWidth={46}
-        >
-          <div css={styles.categories}>
-            {categories.map((category) => (
-              <Category
-                css={styles.category}
-                key={category._id}
-                category={category}
-              />
-            ))}
-
-            <div css={styles.emptyBox} />
-          </div>
-        </ContainerWide>
+        <ContainerWide scrollable contentEndWidth={46}></ContainerWide>
       </div>
     </div>
   )
@@ -66,15 +93,30 @@ const useStyles = makeStyles((props: CategoriesOverviewProps) => {
       position: 'relative',
       paddingTop: 74,
       paddingBottom: 74,
+      [`@media (max-width: ${theme.widths.tabletSm})`]: {
+        paddingBottom: 74 - 32,
+      },
     },
     header: {
       display: 'flex',
-      justifyContent: 'center',
+      justifyContent: 'space-between',
       alignItems: 'center',
       flexWrap: 'wrap',
       marginBottom: 34,
       padding: '0 16px',
+      [`@media (max-width: ${theme.widths.tabletSm})`]: {
+        justifyContent: 'center',
+      },
+    },
+    subheader: {
+      display: 'flex',
       gap: '12px 16px',
+      justifyContent: 'center',
+    },
+    deskArrows: {
+      display: 'flex',
+      justifyContent: 'center',
+      marginTop: 32,
     },
     heading: {
       fontWeight: 700,

@@ -9,6 +9,7 @@ import Checkboxes from '@/ui/Checkboxes'
 import CreatableSelect from '@/ui/CreatableSelect'
 import Input from '@/ui/Input'
 import Select from '@/ui/Select'
+import makeStyles from '@/utils/makeStyles'
 import { FC, Fragment, HTMLAttributes, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 
@@ -19,6 +20,8 @@ interface UserProfileProps extends HTMLAttributes<HTMLDivElement> {
 
 const UserProfile: FC<UserProfileProps> = (props) => {
   const { user, products = [], ...divProps } = props
+
+  const styles = useStyles(props)
 
   const { control } = useForm<DetailedUser>({
     defaultValues: user,
@@ -59,6 +62,7 @@ const UserProfile: FC<UserProfileProps> = (props) => {
   let commercialInfo
 
   if (user.role === 'buyer' && user.commercialInfo) {
+    const { fulfillmentProducts } = user.commercialInfo
     commercialInfo = (
       <Fragment key="buyer">
         <Select
@@ -71,16 +75,15 @@ const UserProfile: FC<UserProfileProps> = (props) => {
           required
         />
 
-        <CreatableSelect
-          style={{ marginBottom: 16 }}
-          control={control}
-          label="Fulfillment Products"
-          placeholder=""
-          name="commercialInfo.fulfillmentProducts"
-          options={productsOptions}
-          isMulti
-          required
-        />
+        <label css={styles.label}>Fulfillment Products</label>
+
+        <div css={styles.options} style={{ marginBottom: '1rem' }}>
+          {fulfillmentProducts.map((product: string) => (
+            <span css={styles.option} key={product}>
+              {product}
+            </span>
+          ))}
+        </div>
 
         <Select
           style={{ marginBottom: 16 }}
@@ -113,19 +116,20 @@ const UserProfile: FC<UserProfileProps> = (props) => {
         />
       </Fragment>
     )
-  } else if (user.role === 'seller'&& user.commercialInfo) {
+  } else if (user.role === 'seller' && user.commercialInfo) {
+    const { fulfillmentProducts } = user.commercialInfo
+
     commercialInfo = (
       <Fragment key="seller">
-        <CreatableSelect
-          style={{ marginBottom: 16 }}
-          control={control}
-          label="Fulfillment Products"
-          placeholder=""
-          name="commercialInfo.fulfillmentProducts"
-          options={productsOptions}
-          isMulti
-          required
-        />
+        <label css={styles.label}>Fulfillment Products</label>
+
+        <div css={styles.options} style={{ marginBottom: '1rem' }}>
+          {fulfillmentProducts.map((product: string) => (
+            <span css={styles.option} key={product}>
+              {product}
+            </span>
+          ))}
+        </div>
 
         <Checkbox
           style={{ display: 'flex', marginBottom: 16 }}
@@ -227,5 +231,27 @@ const UserProfile: FC<UserProfileProps> = (props) => {
     </div>
   )
 }
+
+const useStyles = makeStyles(() => ({
+  label: {
+    fontSize: 14,
+    marginBottom: 8,
+  },
+  options: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  option: {
+    flexShrink: 0,
+    background: '#e6e6e6',
+    padding: '4px 8px',
+    color: '#333333',
+    margin: '2px',
+    fontSize: 14,
+    ':first-of-type': {
+      marginLeft: 0
+    }
+  },
+}))
 
 export default UserProfile

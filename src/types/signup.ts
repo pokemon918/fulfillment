@@ -12,7 +12,7 @@ export interface SignUpMainInfo {
 export interface BuyerSignUpInfo extends SignUpMainInfo {
   role: 'buyer'
   commercialInfo: {
-    buyerType: string
+    buyerType: string[]
     fulfillmentProducts: string[]
     fulfillmentCountries: string[]
     marketDestinations: string[]

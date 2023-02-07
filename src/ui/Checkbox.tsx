@@ -24,7 +24,7 @@ const Checkbox: FC<CheckboxProps> = (props) => {
     <Controller
       name={name}
       control={control}
-      render={({ field: { ref, onChange, ...field } }) => {
+      render={({ field: { ref, onChange, value, ...field } }) => {
         return (
           <div css={styles.root} className={className} style={style}>
             <input
@@ -32,6 +32,7 @@ const Checkbox: FC<CheckboxProps> = (props) => {
               id={id}
               type="checkbox"
               onChange={onChange}
+              checked={!!value}
               {...field}
               {...inputProps}
             />

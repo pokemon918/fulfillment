@@ -23,6 +23,7 @@ const Radio: FC<RadioProps> = (props) => {
     name,
     control,
     onChange: onChangeProp,
+    value,
     ...inputProps
   } = props
 
@@ -32,7 +33,7 @@ const Radio: FC<RadioProps> = (props) => {
     <Controller
       name={name}
       control={control}
-      render={({ field: { ref, onChange, ...field } }) => (
+      render={({ field: { ref, onChange, value: curValue, ...field } }) => (
         <div css={styles.root} className={className} style={style}>
           <input
             css={styles.input}
@@ -42,6 +43,8 @@ const Radio: FC<RadioProps> = (props) => {
               onChange(e)
               if (onChangeProp) onChangeProp(e)
             }}
+            value={value}
+            checked={curValue === value}
             {...field}
             {...inputProps}
           />

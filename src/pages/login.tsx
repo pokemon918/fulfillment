@@ -53,11 +53,6 @@ const Login = () => {
       const expireAt = new Date(Date.now() + YEAR)
 
       setCookie('token', token, expireAt)
-      setCookie(
-        'token_user',
-        encodeURIComponent(JSON.stringify(user)),
-        expireAt
-      )
 
       window.location.href = '/'
     } catch (e) {

@@ -19,11 +19,13 @@ import { SignUpInfo } from '@/types/signup'
 import Select from '@/ui/Select'
 import CreatableSelect from '@/ui/CreatableSelect'
 import { GetServerSideProps } from 'next'
-import { FC, Fragment, useMemo } from 'react'
+import { FC, Fragment, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { buyerTypes, certifications, marketDestinations } from '@/data/signup'
 import countries from '@/data/countries'
 import Checkbox from '@/ui/Checkbox'
 import Checkboxes from '@/ui/Checkboxes'
+import Link from 'next/link'
+import ArrowBackIcon from '@/icons/ArrowBackIcon'
 
 const FINALIZE_SIGNUP = gql`
   mutation FinalizeSignup($input: FinalizeSignupInput!) {
@@ -53,6 +55,12 @@ const SIGNUP = gql`
   }
 `
 
+const REGISTERED = gql`
+  mutation Registered($email: String!) {
+    registered(email: $email)
+  }
+`
+
 const SignUp: FC<SignUpProps> = ({ products }) => {
   const styles = useStyles({})
 
@@ -60,6 +68,8 @@ const SignUp: FC<SignUpProps> = ({ products }) => {
 
   const pendingUserToken = query.pendingUserToken as string | undefined
   const defaultFullName = query.fullName as string | undefined
+  const [finalStep, setFinalStep] = useState(false)
+  const sending = useRef(false)
 
   const productsOptions = useMemo(
     () => products.map((product) => ({ label: product, value: product })),
@@ -105,15 +115,42 @@ const SignUp: FC<SignUpProps> = ({ products }) => {
     },
   })
 
+  useLayoutEffect(() => {
+    if (finalStep) window.scrollTo(0, 0)
+  }, [finalStep])
+
   const onSubmit = handleSubmit(async (data) => {
+    if (sending.current) return
+
     if (data.phone.length < 6) {
       return alert('Please enter a valid phone number')
+    }
+
+    const { email, password, ...info } = data
+
+    if (!finalStep) {
+      try {
+        sending.current = true
+
+        const { registered } = await graphqlReq(REGISTERED, { email })
+
+        if (registered) {
+          return alert('the account is already registered, please login')
+        }
+
+        return setFinalStep(true)
+      } catch {
+        return alert('Please check your internet connection then try again')
+      } finally {
+        sending.current = false
+      }
     }
 
     if (data.role === 'buyer') {
       const cInfo = data.commercialInfo
 
-      if (!cInfo.buyerType) return alert('Please input the buyer type')
+      if (cInfo.buyerType.length === 0)
+        return alert('Please input the buyer type')
 
       if (cInfo.fulfillmentProducts.length === 0)
         return alert('Please input the fulfillment products')
@@ -133,52 +170,44 @@ const SignUp: FC<SignUpProps> = ({ products }) => {
         return alert('Please select one certification at least')
     }
 
-    try {
-      const mutation = pendingUserToken ? FINALIZE_SIGNUP : SIGNUP
+    const mutation = pendingUserToken ? FINALIZE_SIGNUP : SIGNUP
 
-      const { email, password, ...info } = data
-
-      const input = pendingUserToken
-        ? {
-            pendingUserToken,
-            ...info,
-          }
-        : { email, password, ...info }
-
-      try {
-        const {
-          auth: { token, user },
-        } = await graphqlReq(mutation, { input })
-
-        const YEAR = 1000 * 60 * 60 * 24 * 365
-
-        const expireAt = new Date(Date.now() + YEAR)
-
-        setCookie('token', token, expireAt)
-
-        setCookie(
-          'token_user',
-          encodeURIComponent(JSON.stringify(user)),
-          expireAt
-        )
-
-        window.location.href = '/'
-      } catch (e) {
-        if (isGqlErrStatus(e, 409)) {
-          alert('the account is already registered, please login')
+    const input = pendingUserToken
+      ? {
+          pendingUserToken,
+          ...info,
         }
-      }
+      : { email, password, ...info }
+
+    try {
+      sending.current = true
+
+      const {
+        auth: { token, user },
+      } = await graphqlReq(mutation, { input })
+
+      const YEAR = 1000 * 60 * 60 * 24 * 365
+
+      const expireAt = new Date(Date.now() + YEAR)
+
+      setCookie('token', token, expireAt)
+
+      window.location.href = '/'
     } catch (e) {
-      if (isGqlErrStatus(e, 401)) {
-        alert('password or email is incorrect')
+      if (isGqlErrStatus(e, 409)) {
+        alert('the account is already registered, please login')
+      } else {
+        return alert('Please check your internet connection then try again')
       }
+    } finally {
+      sending.current = false
     }
   })
 
   const handleRoleChange = (role: SignUpInfo['role']) => {
     if (role === 'buyer') {
       setValue('commercialInfo', {
-        buyerType: '',
+        buyerType: [],
         fulfillmentProducts: [],
         fulfillmentCountries: [],
         marketDestinations: [],
@@ -210,6 +239,7 @@ const SignUp: FC<SignUpProps> = ({ products }) => {
           placeholder=""
           name="commercialInfo.buyerType"
           options={buyerTypesOptions}
+          isMulti
           required
         />
 
@@ -319,124 +349,139 @@ const SignUp: FC<SignUpProps> = ({ products }) => {
       <div style={{ height: 48 }} />
 
       <Container maxWidth="xs">
+        {finalStep && (
+          <button css={styles.back} onClick={() => setFinalStep(false)}>
+            <ArrowBackIcon style={{ marginRight: 6, fontSize: 20 }} />
+            <span>Back</span>
+          </button>
+        )}
+
         <Paper style={{ marginBottom: 16 }}>
           <form onSubmit={onSubmit}>
-            <h2 css={styles.heading}>
-              {pendingUserToken ? 'Finalize Sign Up' : 'Sign Up'}
-            </h2>
-            {!pendingUserToken && (
+            {!finalStep && (
               <>
-                <GoogleAuthButton
-                  style={{ marginBottom: 16 }}
-                  href={`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/auth/google`}
-                />
+                <h2 css={styles.heading}>
+                  {pendingUserToken ? 'Finalize Sign Up' : 'Sign Up'}
+                </h2>
 
-                <OrSeparator style={{ marginBottom: 12 }} />
-              </>
-            )}
-            <Input
-              style={{ marginBottom: 16 }}
-              type="text"
-              label="Full Name"
-              name="fullName"
-              control={control}
-              required
-              minLength={2}
-            />
-            <Input
-              style={{ marginBottom: 16 }}
-              type="text"
-              label="Company Name"
-              name="companyName"
-              control={control}
-              required
-              minLength={2}
-            />
-            <CountrySelector
-              style={{ marginBottom: 16 }}
-              control={control}
-              name="country"
-            />
-            {!pendingUserToken && (
-              <>
+                {!pendingUserToken && (
+                  <>
+                    <GoogleAuthButton
+                      style={{ marginBottom: 16 }}
+                      href={`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/auth/google`}
+                    />
+
+                    <OrSeparator style={{ marginBottom: 12 }} />
+                  </>
+                )}
                 <Input
                   style={{ marginBottom: 16 }}
-                  type="email"
-                  label="Email"
-                  name="email"
+                  type="text"
+                  label="Full Name"
+                  name="fullName"
                   control={control}
                   required
+                  minLength={2}
+                />
+                <Input
+                  style={{ marginBottom: 16 }}
+                  type="text"
+                  label="Company Name"
+                  name="companyName"
+                  control={control}
+                  required
+                  minLength={2}
+                />
+                <CountrySelector
+                  style={{ marginBottom: 16 }}
+                  control={control}
+                  name="country"
+                />
+                {!pendingUserToken && (
+                  <>
+                    <Input
+                      style={{ marginBottom: 16 }}
+                      type="email"
+                      label="Email"
+                      name="email"
+                      control={control}
+                      required
+                    />
+
+                    <Input
+                      style={{ marginBottom: 16 }}
+                      type="password"
+                      label="Password"
+                      name="password"
+                      control={control}
+                      required
+                    />
+                  </>
+                )}
+                <Input
+                  style={{ marginBottom: 16 }}
+                  label="Phone"
+                  type="tel"
+                  name="phone"
+                  required
+                  control={control}
                 />
 
                 <Input
                   style={{ marginBottom: 16 }}
-                  type="password"
-                  label="Password"
-                  name="password"
+                  type="text"
+                  label="Website"
+                  name="website"
                   control={control}
-                  required
                 />
+
+                <p style={{ fontSize: 14, marginBottom: 8 }}>Access Type</p>
+                <div style={{ marginBottom: 24 }}>
+                  <Radio
+                    style={{ marginRight: 16 }}
+                    label="Buyer"
+                    name="role"
+                    control={control}
+                    type="radio"
+                    value="buyer"
+                    required
+                    onChange={(e) =>
+                      handleRoleChange(e.target.value as SignUpInfo['role'])
+                    }
+                  />
+
+                  <Radio
+                    label="Supplier"
+                    name="role"
+                    control={control}
+                    type="radio"
+                    value="seller"
+                    required
+                    onChange={(e) =>
+                      handleRoleChange(e.target.value as SignUpInfo['role'])
+                    }
+                  />
+                </div>
+
+                <Button type="submit" fullWidth fullRounded>
+                  Next
+                </Button>
               </>
             )}
-            <Input
-              style={{ marginBottom: 16 }}
-              label="Phone"
-              type="tel"
-              name="phone"
-              required
-              control={control}
-            />
 
-            <Input
-              style={{ marginBottom: 16 }}
-              type="text"
-              label="Website"
-              name="website"
-              control={control}
-            />
+            {finalStep && (
+              <>
+                <h2 css={styles.heading}>Commercial Info</h2>
 
-            <p style={{ fontSize: 14, marginBottom: 8 }}>Access Type</p>
-            <div style={{ marginBottom: 24 }}>
-              <Radio
-                style={{ marginRight: 16 }}
-                label="Buyer"
-                name="role"
-                control={control}
-                type="radio"
-                value="buyer"
-                required
-                onChange={(e) =>
-                  handleRoleChange(e.target.value as SignUpInfo['role'])
-                }
-              />
+                <div style={{ marginBottom: 24 }}>{commercialInfo}</div>
 
-              <Radio
-                label="Supplier"
-                name="role"
-                control={control}
-                type="radio"
-                value="seller"
-                required
-                onChange={(e) =>
-                  handleRoleChange(e.target.value as SignUpInfo['role'])
-                }
-              />
-            </div>
-            {commercialInfo && (
-              <div style={{ marginTop: 24, marginBottom: 24 }}>
-                {commercialInfo}
-              </div>
+                <Button type="submit" fullWidth fullRounded>
+                  Sign Up
+                </Button>
+              </>
             )}
-            <Button type="submit" fullWidth fullRounded>
-              Sign Up
-            </Button>
           </form>
         </Paper>
-
-        <p style={{ textAlign: 'center' }}>
-          Forgot your password?{' '}
-          <StyledLink href="/begin-reset-password">Reset it</StyledLink>
-        </p>
       </Container>
 
       <div style={{ height: 48 }} />
@@ -451,6 +496,19 @@ const useStyles = makeStyles(() => ({
     lineHeight: '2rem',
     textAlign: 'center',
     marginBottom: 16,
+  },
+  back: {
+    color: '#000',
+    textDecoration: 'none',
+    fontSize: 14,
+    display: 'flex',
+    alignItems: 'center',
+    marginBottom: 8,
+    background: 'transparent',
+    padding: 0,
+    fontFamily: 'inherit',
+    border: 'none',
+    cursor: 'pointer',
   },
 }))
 

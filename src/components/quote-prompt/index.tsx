@@ -52,19 +52,16 @@ const QuotePrompt: FC<QuotePromptProps> = (props) => {
         {
           placeholder: 'Down payment',
           title: 'Down payment',
-          amount: '',
           paidPercent: '',
         },
         {
           placeholder: 'Cash Against Documents',
           title: 'Cash Against Documents',
-          amount: '',
           paidPercent: '',
         },
         {
           placeholder: 'On Arrival',
           title: 'On Arrival',
-          amount: '',
           paidPercent: '',
         },
       ],

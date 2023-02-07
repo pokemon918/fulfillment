@@ -48,7 +48,6 @@ const BeginResetPassword = () => {
       })
 
       deleteCookie('token')
-      deleteCookie('token_user')
 
       window.location.href = '/login'
     } catch (e) {
