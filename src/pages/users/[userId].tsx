@@ -6,13 +6,18 @@ import PageLayout from '@/components/PageLayout'
 import UserProfile from '@/components/UserProfile'
 import withAuth from '@/hoc/withAuth'
 import useGql from '@/hooks/useGql'
+import { useRouter } from 'next/router'
 
 function PageUser(props: PageUserProps) {
   const styles = useStyles(props)
 
+  const router = useRouter()
+
+  const { userId } = router.query
+
   const { data } = useGql<{
     user: DetailedUser | null
-  }>(GET_USER)
+  }>(GET_USER, { userId }, !!userId)
 
   return (
     <PageLayout>
