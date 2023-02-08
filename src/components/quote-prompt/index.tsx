@@ -1,6 +1,13 @@
 import Dialog from '@/ui/Dialog'
 import makeStyles from '@/utils/makeStyles'
-import { FC, HTMLAttributes, FunctionComponent, useState, memo } from 'react'
+import {
+  FC,
+  HTMLAttributes,
+  FunctionComponent,
+  useState,
+  memo,
+  useEffect,
+} from 'react'
 import QuoteStep1 from './QuoteStep1'
 import CloseIcon from '@/icons/CloseIcon'
 import { useForm, FormProvider } from 'react-hook-form'
@@ -11,6 +18,8 @@ import QuoteOrderSent from './QuoteOrderSent'
 import QuoteEvaluate from './QuoteEvaluate'
 import theme from '@/theme'
 import QuoteStep3 from './QuoteStep3'
+import { gql } from 'graphql-request'
+import graphqlReq from '@/utils/graphqlReq'
 
 interface QuotePromptProps extends HTMLAttributes<HTMLDivElement> {
   product: QuoteProduct
@@ -22,6 +31,18 @@ interface QuotePromptProps extends HTMLAttributes<HTMLDivElement> {
     phone: string
   }
 }
+
+const GET_USER_PROFILE = gql`
+  {
+    userProfile {
+      _id
+      fullName
+      companyName
+      email
+      phone
+    }
+  }
+`
 
 const QuotePrompt: FC<QuotePromptProps> = (props) => {
   const styles = useStyles(props)
@@ -82,7 +103,7 @@ const QuotePrompt: FC<QuotePromptProps> = (props) => {
       component: QuoteStep2,
     },
     {
-      component: QuoteStep3
+      component: QuoteStep3,
     },
   ]
 
@@ -108,6 +129,17 @@ const QuotePrompt: FC<QuotePromptProps> = (props) => {
   }
 
   const step = steps[stepIdx]
+
+  useEffect(() => {
+    ;(async () => {
+      const { userProfile } = await graphqlReq(GET_USER_PROFILE)
+
+      formMethods.setValue('name', userProfile.fullName)
+      formMethods.setValue('company', userProfile.companyName)
+      formMethods.setValue('email', userProfile.email)
+      formMethods.setValue('phone', userProfile.phone)
+    })()
+  }, [])
 
   return (
     <Dialog css={styles.dialog} {...divProps}>

@@ -18,7 +18,7 @@ import { useRouter } from 'next/router'
 import { SignUpInfo } from '@/types/signup'
 import Select from '@/ui/Select'
 import CreatableSelect from '@/ui/CreatableSelect'
-import { GetServerSideProps } from 'next'
+import { GetServerSideProps, GetStaticProps } from 'next'
 import { FC, Fragment, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { buyerTypes, certifications, marketDestinations } from '@/data/signup'
 import countries from '@/data/countries'
@@ -527,7 +527,7 @@ const GET_DATA = gql`
   }
 `
 
-export const getServerSideProps: GetServerSideProps<SignUpProps> = async () => {
+export const getStaticProps: GetStaticProps<SignUpProps> = async () => {
   const data = await graphqlReq(GET_DATA, {}, {})
 
   const products: string[] = []
@@ -542,6 +542,7 @@ export const getServerSideProps: GetServerSideProps<SignUpProps> = async () => {
     props: {
       products,
     },
+    revalidate: 10,
   }
 }
 

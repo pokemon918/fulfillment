@@ -15,22 +15,16 @@ import { useForm } from 'react-hook-form'
 
 interface UserProfileProps extends HTMLAttributes<HTMLDivElement> {
   user: DetailedUser
-  products?: string[]
 }
 
 const UserProfile: FC<UserProfileProps> = (props) => {
-  const { user, products = [], ...divProps } = props
+  const { user, ...divProps } = props
 
   const styles = useStyles(props)
 
   const { control } = useForm<DetailedUser>({
     defaultValues: user,
   })
-
-  const productsOptions = useMemo(
-    () => products.map((product) => ({ label: product, value: product })) ?? [],
-    [products]
-  )
 
   const buyerTypesOptions = useMemo(
     () =>
@@ -249,8 +243,8 @@ const useStyles = makeStyles(() => ({
     margin: '2px',
     fontSize: 14,
     ':first-of-type': {
-      marginLeft: 0
-    }
+      marginLeft: 0,
+    },
   },
 }))
 

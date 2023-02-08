@@ -11,6 +11,8 @@ const withAuth = <P extends {}>(
   return (props: P) => {
     const user = useUser()
 
+    if (typeof user === 'undefined') return null
+
     if (!user) return <Redirect to="/login" />
 
     if (user.role !== requiredRole)

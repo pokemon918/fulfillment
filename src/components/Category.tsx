@@ -16,7 +16,7 @@ const Category: FC<CategoryProps> = (props) => {
   return (
     <Link
       css={styles.root}
-      href={`/products?categoryId=${category._id}`}
+      href={`/categories/${category._id}/products`}
       {...anchorProps}
     >
       <BoxRation ration={1.18} css={styles.box} style={{ backgroundImage: `url(${category.thumbnail})` }}>

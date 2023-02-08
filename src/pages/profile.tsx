@@ -45,6 +45,7 @@ const Profile = () => {
 
   const logout = () => {
     deleteCookie('fulfillment_token')
+    window.localStorage.removeItem('fulfillment_user')
     window.location.href = '/'
   }
 

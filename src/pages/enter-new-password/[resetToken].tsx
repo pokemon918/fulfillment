@@ -48,6 +48,7 @@ const BeginResetPassword = () => {
       })
 
       deleteCookie('fulfillment_token')
+      window.localStorage.removeItem('fulfillment_user')
 
       window.location.href = '/login'
     } catch (e) {

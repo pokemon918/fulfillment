@@ -6,7 +6,6 @@ import Container from '@/ui/Container'
 import graphqlReq from '@/utils/graphqlReq'
 import makeStyles from '@/utils/makeStyles'
 import { gql } from 'graphql-request'
-import { GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
 import { FC, useEffect, useState } from 'react'
 
@@ -68,10 +67,3 @@ interface Props {}
 
 // styles
 const useStyles = makeStyles(() => ({}))
-
-// ssr
-export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
-  return {
-    props: {},
-  }
-}

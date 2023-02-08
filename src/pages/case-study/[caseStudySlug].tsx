@@ -6,10 +6,7 @@ import theme from '@/theme'
 import Container from '@/ui/Container'
 import PageBgColor from '@/ui/PageBgColor'
 import Steps from '@/ui/steps/Steps'
-import { graphqlServerReq } from '@/utils/graphqlReq'
 import makeStyles from '@/utils/makeStyles'
-import { gql } from 'graphql-request'
-import { GetServerSideProps } from 'next'
 import { FC } from 'react'
 
 interface CaseStudyPageProps {}
@@ -108,26 +105,5 @@ const useStyles = makeStyles(({}: CaseStudyPageProps) => ({
     marginBottom: 56,
   },
 }))
-
-// ssr
-const GET_CASE_STUDY = gql`
-  {
-    authUser: userProfile {
-      _id
-      fullName
-      role
-    }
-  }
-`
-
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { authUser } = await graphqlServerReq(ctx, GET_CASE_STUDY)
-
-  return {
-    props: {
-      authUser,
-    },
-  }
-}
 
 export default CaseStudyPage

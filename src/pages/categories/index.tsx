@@ -1,7 +1,5 @@
-import graphqlReq from '@/utils/graphqlReq'
 import makeStyles from '@/utils/makeStyles'
 import { gql } from 'graphql-request'
-import { GetServerSideProps } from 'next'
 import Container from '@/ui/Container'
 import { BaseCategory } from '@/types/category'
 import theme from '@/theme'
@@ -11,13 +9,28 @@ import { useUser } from '@/hooks/useUser'
 import PageLayout from '@/components/PageLayout'
 import Link from 'next/link'
 import withAuth from '@/hoc/withAuth'
+import useGql from '@/hooks/useGql'
+import { useMemo } from 'react'
 
 function PageCategories(props: PageCategoriesProps) {
-  const { categories } = props
-
   const user = useUser()
 
   const styles = useStyles(props)
+
+  const { data } = useGql<{
+    categories: BaseCategory[]
+  }>(GET_CATEGORIES)
+
+  const categories = useMemo(
+    () =>
+      data?.categories.map((category: any) => ({
+        ...category,
+        name: category.name.en,
+      })) ?? [],
+    [data?.categories]
+  )
+
+  const loading = !data
 
   return (
     <PageLayout bgColor="#f8f8f8">
@@ -36,25 +49,29 @@ function PageCategories(props: PageCategoriesProps) {
           )}
         </div>
 
-        <div css={styles.categories}>
-          {categories.map((category) => (
-            <Link
-              key={category._id}
-              css={styles.category}
-              href={`/categories/${category._id}/update`}
-            >
-              <div
-                css={styles.categoryImg}
-                style={{ backgroundImage: `url(${category.thumbnail})` }}
-              />
+        {loading ? (
+          <p style={{ textAlign: 'center' }}>Loading...</p>
+        ) : (
+          <div css={styles.categories}>
+            {categories.map((category) => (
+              <Link
+                key={category._id}
+                css={styles.category}
+                href={`/categories/${category._id}/update`}
+              >
+                <div
+                  css={styles.categoryImg}
+                  style={{ backgroundImage: `url(${category.thumbnail})` }}
+                />
 
-              <div css={styles.categoryDetails}>
-                <h3 css={styles.categoryName}>{category.name}</h3>
-                <Button style={{ minWidth: 146 }}>Update</Button>
-              </div>
-            </Link>
-          ))}
-        </div>
+                <div css={styles.categoryDetails}>
+                  <h3 css={styles.categoryName}>{category.name}</h3>
+                  <Button style={{ minWidth: 146 }}>Update</Button>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
       </Container>
     </PageLayout>
   )
@@ -62,9 +79,7 @@ function PageCategories(props: PageCategoriesProps) {
 
 export default withAuth(PageCategories, 'admin')
 
-interface PageCategoriesProps {
-  categories: BaseCategory[]
-}
+interface PageCategoriesProps {}
 
 const useStyles = makeStyles((props: PageCategoriesProps) => ({
   header: {
@@ -112,7 +127,7 @@ const useStyles = makeStyles((props: PageCategoriesProps) => ({
     borderRadius: 20,
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
-    backgroundPosition: 'center'
+    backgroundPosition: 'center',
   },
   categoryName: {
     fontSize: 20,
@@ -132,18 +147,3 @@ const GET_CATEGORIES = gql`
     }
   }
 `
-
-export const getServerSideProps: GetServerSideProps<
-  PageCategoriesProps
-> = async (ctx) => {
-  const data = await graphqlReq(GET_CATEGORIES)
-
-  return {
-    props: {
-      categories: data.categories.map((category: any) => ({
-        ...category,
-        name: category.name.en,
-      })),
-    },
-  }
-}

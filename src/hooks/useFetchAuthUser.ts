@@ -27,7 +27,7 @@ const getCachedUser = () => {
         parsedUser &&
         typeof parsedUser._id === 'string' &&
         typeof parsedUser.fullName === 'string' &&
-        typeof parsedUser.role in ['admin', 'buyer', 'seller']
+        ['admin', 'buyer', 'seller'].includes(parsedUser.role)
       )
         return {
           _id: parsedUser._id,
@@ -46,8 +46,7 @@ const useFetchAuthUser = () => {
   useEffect(() => {
     const cachedUser = getCachedUser()
 
-    if (cachedUser) setUser(cachedUser)
-    
+    if (typeof cachedUser !== 'undefined') setUser(cachedUser)
     ;(async () => {
       const { fetchedUser } = await graphqlReq(GET_USER_ME)
 
@@ -60,7 +59,10 @@ const useFetchAuthUser = () => {
         cachedUser.fullName !== fetchedUser.fullName ||
         cachedUser.role !== fetchedUser.role
       ) {
-        window.localStorage.setItem('fulfillment_user', JSON.stringify(fetchedUser))
+        window.localStorage.setItem(
+          'fulfillment_user',
+          JSON.stringify(fetchedUser)
+        )
       }
 
       setUser(fetchedUser)

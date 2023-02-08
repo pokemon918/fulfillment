@@ -1,8 +1,9 @@
-import ArticleForm, { ArticleFormValue } from '@/components/articles/ArticleForm'
+import ArticleForm, {
+  ArticleFormValue,
+} from '@/components/articles/ArticleForm'
 import PageLayout from '@/components/PageLayout'
 import Container from '@/ui/Container'
 import makeStyles from '@/utils/makeStyles'
-import { GetServerSideProps } from 'next'
 import { FC } from 'react'
 
 const PageArticleCreate: FC<Props> = (props) => {
@@ -13,7 +14,7 @@ const PageArticleCreate: FC<Props> = (props) => {
     description: { en: '', es: '' },
     content: { en: '', es: '' },
     thumbnail: '',
-    keywordsIds: []
+    keywordsIds: [],
   }
 
   return (
@@ -31,10 +32,3 @@ interface Props {}
 
 // styles
 const useStyles = makeStyles(() => ({}))
-
-// ssr
-export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
-  return {
-    props: {},
-  }
-}
