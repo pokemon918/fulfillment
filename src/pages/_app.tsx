@@ -18,7 +18,7 @@ export default function App({ Component, pageProps }: AppProps) {
   const appRootWrapperStyles =
     typeof user === 'undefined'
       ? {
-          background: 'var(--page-bg, #fff)',
+          background: 'var(--page-bg, transparent)',
         }
       : undefined
 
