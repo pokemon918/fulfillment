@@ -106,5 +106,6 @@ export const getStaticProps: GetStaticProps<Props> = async (ctx) => {
         description: article.description.en,
       }))
     },
+    revalidate: 10
   }
 }
