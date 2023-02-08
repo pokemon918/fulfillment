@@ -3,6 +3,7 @@ import { theme } from '../../theme'
 import { Button } from '../../ui'
 import { makeStyles } from '../../utils'
 import { QuoteProduct } from './quote.types'
+import doneCongratsGif from 'common/assets/images/done-congrats.gif'
 
 interface QuoteOrderSentProps {
   product: QuoteProduct
@@ -26,7 +27,7 @@ export const QuoteOrderSent: FC<QuoteOrderSentProps> = (props) => {
       </div>
 
       <div css={styles.gifWrapper}>
-        <img css={styles.gif} src="/gifs/done-congratulation.gif" alt="" />
+        <img css={styles.gif} src={doneCongratsGif.src} alt="" />
       </div>
 
       <div css={styles.footer}>

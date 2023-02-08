@@ -130,10 +130,12 @@ export const QuotePrompt: FC<QuotePromptProps> = (props) => {
     ;(async () => {
       const { userProfile } = await graphqlReq(GET_USER_PROFILE)
 
-      formMethods.setValue('name', userProfile.fullName)
-      formMethods.setValue('company', userProfile.companyName)
-      formMethods.setValue('email', userProfile.email)
-      formMethods.setValue('phone', userProfile.phone)
+      if (userProfile) {
+        formMethods.setValue('name', userProfile.fullName)
+        formMethods.setValue('company', userProfile.companyName)
+        formMethods.setValue('email', userProfile.email)
+        formMethods.setValue('phone', userProfile.phone)
+      }
     })()
   }, [])
 

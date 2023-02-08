@@ -6,7 +6,6 @@ import {
 } from 'common'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
-import Script from 'next/script'
 import 'common/initApp'
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -34,13 +33,6 @@ export default function App({ Component, pageProps }: AppProps) {
         </title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <Script id="my-script" strategy="beforeInteractive">{`
-        if (window.localStorage.getItem('fulfillment_user')) {
-          document.documentElement.style.setProperty('--page-display', 0)
-          document.documentElement.style.setProperty('--page-bg', '#fff')
-        }
-      `}</Script>
 
       <div className="app-root-wrapper" style={appRootWrapperStyles}>
         <div className="app-root" style={appRootStyles}>
