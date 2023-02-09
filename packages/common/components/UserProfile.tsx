@@ -5,6 +5,7 @@ import {
   buyerTypes,
   certifications,
   countries,
+  interestTickets,
   marketDestinations,
 } from '../data'
 import { DetailedUser } from '../types'
@@ -50,6 +51,15 @@ export const UserProfile: FC<UserProfileProps> = (props) => {
         value: destination,
       })),
     [marketDestinations]
+  )
+
+  const interestTicketsOptions = useMemo(
+    () =>
+      interestTickets.map((interestTicket) => ({
+        label: interestTicket,
+        value: interestTicket,
+      })),
+    [interestTickets]
   )
 
   let commercialInfo
@@ -160,6 +170,48 @@ export const UserProfile: FC<UserProfileProps> = (props) => {
           othersName="commercialInfo.othersCertifications"
           control={control}
           options={certifications}
+        />
+      </Fragment>
+    )
+  } else if (user.role === 'investor' && user.commercialInfo) {
+    const { fulfillmentProducts } = user.commercialInfo
+
+    commercialInfo = (
+      <Fragment key="investor">
+        <Input
+          style={{ marginBottom: 16 }}
+          type="text"
+          label="Investor Size"
+          name="commercialInfo.investorSize"
+          control={control}
+        />
+
+        <Input
+          style={{ marginBottom: 16 }}
+          type="text"
+          label="Address"
+          name="commercialInfo.address"
+          control={control}
+        />
+
+        <Select
+          style={{ marginBottom: 16 }}
+          control={control}
+          label="Interest Ticket"
+          placeholder=""
+          name="commercialInfo.interestTicket"
+          options={interestTicketsOptions}
+          required
+        />
+
+        <Input
+          style={{ marginBottom: 16 }}
+          type="text"
+          label="Additional Notes"
+          name="commercialInfo.additionalNotes"
+          control={control}
+          multiline
+          rows={3}
         />
       </Fragment>
     )

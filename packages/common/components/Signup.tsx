@@ -430,6 +430,8 @@ export const Signup: FC<SignupProps> = ({
           name="commercialInfo.additionalNotes"
           control={control}
           required
+          multiline
+          rows={3}
         />
       </Fragment>
     )
