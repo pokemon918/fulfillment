@@ -8,6 +8,13 @@ export const buyerTypes = [
   'Service',
 ]
 
+export const interestTickets = [
+  '<$100K',
+  '<$250K',
+  '<$500K',
+  '>$1M',
+]
+
 export const certifications = [
   'GlobalGAP',
   'GRASP',

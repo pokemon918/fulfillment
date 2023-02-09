@@ -3,6 +3,7 @@ import { deleteCookie } from '../utils'
 import { graphqlReq } from '../utils'
 import { gql } from 'graphql-request'
 import { useEffect, useState } from 'react'
+import { APP_TYPE } from '../constants'
 
 const GET_USER_ME = gql`
   {
@@ -14,10 +15,10 @@ const GET_USER_ME = gql`
   }
 `
 
-const getCachedUser = () => {
+const getCachedUser = (storageItemName: string, acceptedRoles: string[]) => {
   if (typeof window === 'undefined') return null
 
-  const storedUser = window.localStorage.getItem('fulfillment_user')
+  const storedUser = window.localStorage.getItem(storageItemName)
 
   if (storedUser) {
     try {
@@ -27,7 +28,7 @@ const getCachedUser = () => {
         parsedUser &&
         typeof parsedUser._id === 'string' &&
         typeof parsedUser.fullName === 'string' &&
-        ['admin', 'buyer', 'seller'].includes(parsedUser.role)
+        acceptedRoles.includes(parsedUser.role)
       )
         return {
           _id: parsedUser._id,
@@ -43,16 +44,22 @@ const getCachedUser = () => {
 export const useFetchAuthUser = () => {
   const [user, setUser] = useState<AuthUser | null | undefined>()
 
+  const tokenName = `${APP_TYPE}_token`
+  const storageItemName = `${APP_TYPE}_user`
+  const acceptedRoles =
+    APP_TYPE === 'fulfillment' ? ['admin', 'buyer', 'seller'] : ['investor']
+
   useEffect(() => {
-    const cachedUser = getCachedUser()
+    const cachedUser = getCachedUser(storageItemName, acceptedRoles)
 
     if (typeof cachedUser !== 'undefined') setUser(cachedUser)
     ;(async () => {
       const { fetchedUser } = await graphqlReq(GET_USER_ME)
 
-      if (!fetchedUser) {
-        deleteCookie('fulfillment_token')
-        window.localStorage.removeItem('fulfillment_user')
+      if (!fetchedUser || !acceptedRoles.includes(fetchedUser.role)) {
+        deleteCookie(tokenName)
+        window.localStorage.removeItem(storageItemName)
+        setUser(null)
       } else if (
         !cachedUser ||
         cachedUser._id !== fetchedUser._id ||
@@ -60,15 +67,14 @@ export const useFetchAuthUser = () => {
         cachedUser.role !== fetchedUser.role
       ) {
         window.localStorage.setItem(
-          'fulfillment_user',
+          storageItemName,
           JSON.stringify(fetchedUser)
         )
-      }
 
-      setUser(fetchedUser)
+        setUser(fetchedUser)
+      }
     })()
   }, [])
 
   return user
 }
-

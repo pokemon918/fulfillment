@@ -1,6 +1,7 @@
 import { request, RequestDocument, Variables } from 'graphql-request'
 import { GetServerSidePropsContext, PreviewData } from 'next'
 import { ParsedUrlQuery } from 'querystring'
+import { APP_TYPE } from '../constants'
 import { getCookie } from './cookies'
 
 const endpoint = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL!}/graphql`
@@ -15,7 +16,7 @@ export const graphqlReq = <T = any>(
 
   const token =
     typeof window !== 'undefined'
-      ? getCookie(document.cookie, 'fulfillment_token')
+      ? getCookie(document.cookie, `${APP_TYPE}_token`)
       : null
 
   if (typeof token === 'string' && token.length > 0) {
@@ -53,7 +54,7 @@ export const graphqlServerReq = <T = any>(
   requestHeaders?: Record<string, string>
 ): Promise<T> => {
   const cookies = ctx.req.headers.cookie ?? ''
-  const token = getCookie(cookies, 'fulfillment_token')
+  const token = getCookie(cookies, `${APP_TYPE}_token`)
   return graphqlReq(doc, variables, requestHeaders, token)
 }
 

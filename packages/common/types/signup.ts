@@ -6,7 +6,7 @@ export interface SignUpMainInfo {
   country: string
   phone: string
   website?: string
-  role?: 'buyer' | 'seller'
+  role?: 'buyer' | 'seller' | 'investor'
 }
 
 export interface BuyerSignUpInfo extends SignUpMainInfo {
@@ -32,4 +32,17 @@ export interface SupplierSignupInfo extends SignUpMainInfo {
   }
 }
 
-export type SignUpInfo = BuyerSignUpInfo | SupplierSignupInfo
+export interface InvestorSignupInfo extends SignUpMainInfo {
+  role: 'investor'
+  commercialInfo: {
+    investorSize: string
+    address: string
+    interestTicket: string
+    additionalNotes: string
+  }
+}
+
+export type SignUpInfo =
+  | BuyerSignUpInfo
+  | SupplierSignupInfo
+  | InvestorSignupInfo
