@@ -1,17 +1,22 @@
 import {
   Container,
+  InvestmentForm,
+  InvestmentFormValue,
   PageLayout,
   ProductForm,
-  ProductFormValue,
   withAuth,
 } from 'common'
 
 const ProductCreate = () => {
-  const defaultValues: ProductFormValue = {
+  const defaultValues: InvestmentFormValue = {
     name: { en: '', es: '' },
     country: 'PE',
     hsCode: { en: '', es: '' },
-    price: '',
+    goalAmount: '',
+    paidAmount: '',
+    estimatedReturn: '',
+    supporters: '',
+    finalDate: '',
     bigTitle: { en: '', es: '' },
     description: { en: '', es: '' },
     offerPrices: [],
@@ -19,7 +24,6 @@ const ProductCreate = () => {
     gallery: [],
     specs: [],
     availableSpecs: { en: '', es: '' },
-    harvestingMonths: [],
     traces: [
       {
         title: { en: 'Field', es: '' },
@@ -43,7 +47,7 @@ const ProductCreate = () => {
   return (
     <PageLayout>
       <Container maxWidth="md">
-        <ProductForm defaultValues={defaultValues} actionType="create" />
+        <InvestmentForm defaultValues={defaultValues} actionType="create" />
       </Container>
     </PageLayout>
   )

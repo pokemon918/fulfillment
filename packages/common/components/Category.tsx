@@ -6,17 +6,18 @@ import { makeStyles } from '../utils'
 
 interface CategoryProps extends HTMLAttributes<HTMLAnchorElement> {
   category: BaseCategory
+  itemType?: 'product' | 'investment'
 }
 
 export const Category: FC<CategoryProps> = (props) => {
   const styles = useStyles(props)
 
-  const { category, ...anchorProps } = props
+  const { category, itemType = 'product', ...anchorProps } = props
 
   return (
     <Link
       css={styles.root}
-      href={`/categories/${category._id}/products`}
+      href={`/categories/${category._id}/${itemType}s`}
       {...anchorProps}
     >
       <BoxRation

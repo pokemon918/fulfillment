@@ -4,6 +4,10 @@
   "pipeline": {
     "build": {
       "dependsOn": ["^build"],
+      "env": [
+        "NEXT_PUBLIC_BACKEND_BASE_URL",
+        "NEXT_PUBLIC_COOKIES_BASE_DOMAIN"
+      ],
       "outputs": ["dist/**", ".next/**"]
     },
     "lint": {

@@ -1,7 +1,7 @@
 import {
   BaseArticle,
   BaseCategory,
-  BaseProduct,
+  BaseInvestment,
   BlogOverview,
   CategoriesOverview,
   ContainerWide,
@@ -9,6 +9,8 @@ import {
   gql,
   graphqlReq,
   HomeBanner,
+  Investments,
+  InvestmentsOverview,
   makeStyles,
   Overview,
   ProductsOverview,
@@ -17,27 +19,31 @@ import { GetStaticProps } from 'next'
 
 interface HomeProps {
   categories: BaseCategory[]
-  products: BaseProduct[]
+  investments: BaseInvestment[]
   articles: BaseArticle[]
 }
 
 export default function Home(props: HomeProps) {
-  const { categories, products, articles } = props
+  const { categories, investments, articles } = props
 
   const styles = useStyles(props)
 
   return (
     <>
-      <HomeBanner />
+      <HomeBanner action='investments' />
 
       <CategoriesOverview
         categories={categories}
         style={{ marginBottom: 114, position: 'relative' }}
+        itemType="investment"
       />
 
       <Overview style={{ marginBottom: 82 }} />
 
-      <ProductsOverview style={{ marginBottom: 162 }} products={products} />
+      <InvestmentsOverview
+        style={{ marginBottom: 162 }}
+        investments={investments}
+      />
 
       <ContainerWide>
         <BlogOverview style={{ marginBottom: 122 }} articles={articles} />
@@ -60,18 +66,15 @@ const GET_DATA = gql`
       thumbnail
     }
 
-    products(descCreatedAt: true) {
+    investments(descCreatedAt: true) {
       _id
       name {
         en
       }
       thumbnail
       country
-      price
-      categoryId
-      availableSpecs {
-        en
-      }
+      goalAmount
+      paidAmount
     }
 
     articles(descCreatedAt: true) {
@@ -96,10 +99,9 @@ export const getStaticProps: GetStaticProps<HomeProps> = async () => {
         ...category,
         name: category.name.en,
       })),
-      products: data.products.slice(0, 4).map((product: any) => ({
-        ...product,
-        name: product.name.en,
-        availableSpecs: product.availableSpecs.en,
+      investments: data.investments.slice(0, 4).map((investment: any) => ({
+        ...investment,
+        name: investment.name.en,
       })),
       articles: data.articles.slice(0, 10).map((article: any) => ({
         ...article,

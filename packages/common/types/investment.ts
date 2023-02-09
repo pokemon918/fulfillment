@@ -5,6 +5,24 @@ export interface BaseInvestment {
   country: string;
   goalAmount: number;
   paidAmount: number;
-  categoryId: string;
-  availableSpecs: string;
+}
+
+export interface DetailedInvestment extends BaseInvestment {
+  hsCode: string
+  gallery: string[]
+  traces: {
+    title: string
+    description: string
+    gallery: string[]
+  }[]
+  offerPrices: {
+    name: string
+    value: string
+  }[]
+  updatedAt: string
+  availableSpecs: string
+  estimatedReturn: number
+  supporters: number
+  finalDate: string
+  harvestingMonths: number[]
 }

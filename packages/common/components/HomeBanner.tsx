@@ -6,12 +6,14 @@ import { makeStyles } from '../utils'
 import { Navbar } from './Navbar'
 import bannerCover from '../assets/images/home-banner-cover.jpg'
 
-interface HomeBannerProps extends HTMLAttributes<HTMLDivElement> {}
+interface HomeBannerProps extends HTMLAttributes<HTMLDivElement> {
+  action?: 'products' | 'investments'
+}
 
 export const HomeBanner: FC<HomeBannerProps> = (props) => {
   const styles = useHomeBannerStyles(props)
 
-  const { ...divProps } = props
+  const { action = 'products', ...divProps } = props
 
   return (
     <>
@@ -31,14 +33,14 @@ export const HomeBanner: FC<HomeBannerProps> = (props) => {
             </p>
 
             <Button
-              href="/products"
+              href={`/${action}`}
               variant="outlined"
               style={{ paddingLeft: 34, paddingRight: 34 }}
               fontColor="#fff"
               size="lg"
               rounded
             >
-              Browse Products
+              Browse {action === 'investments' ? 'Investments' : 'Products'}
             </Button>
           </div>
         </Container>

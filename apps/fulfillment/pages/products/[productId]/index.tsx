@@ -11,7 +11,7 @@ import {
   NoSSR,
   PageBgColor,
   ProductInfo,
-  ProductIntro,
+  ItemIntro,
   QuotePrompt,
   QuoteSticky,
   RelatedProducts,
@@ -43,10 +43,10 @@ const ProductPage: FC<ProductPageProps> = (props) => {
       <Navbar style={{ marginBottom: 72 }} />
 
       <Container style={{ marginBottom: 100 }} maxWidth="md">
-        <ProductIntro
+        <ItemIntro
           style={{ marginBottom: 120 }}
           gallery={product.gallery}
-          product={product}
+          item={{ type: 'product', ...product }}
           onClickGetQuote={() => setOpenQuote(true)}
         />
 

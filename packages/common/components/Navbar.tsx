@@ -56,7 +56,10 @@ export const Navbar: FC<NavbarProps> = (originalProps) => {
 
   const links = useMemo(() => {
     const result = [...staticLinks]
-    if (user?.role === 'admin') result.push({ title: 'Users', to: '/users' })
+    if (user?.role === 'admin') {
+      result.push({ title: 'Users', to: '/users' })
+      result.push({ title: 'Investments', to: '/investments' })
+    }
     return result
   }, [user])
 

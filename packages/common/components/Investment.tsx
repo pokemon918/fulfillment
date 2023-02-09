@@ -2,9 +2,13 @@ import { FC, HTMLAttributes } from 'react'
 import { BaseInvestment } from '../types'
 import { Button, CountryLabel, Progress } from '../ui'
 import { makeStyles } from '../utils'
+import Link from 'next/link'
 
-interface InvestmentProps extends HTMLAttributes<HTMLDivElement> {
+interface InvestmentProps extends HTMLAttributes<HTMLAnchorElement> {
   investment: BaseInvestment
+  href: string
+  actionText?: string
+  squareImg?: boolean
 }
 
 export const Investment: FC<InvestmentProps> = (props) => {
@@ -12,14 +16,21 @@ export const Investment: FC<InvestmentProps> = (props) => {
 
   const {
     investment: { name, thumbnail, country, goalAmount, paidAmount },
-    ...divProps
+    actionText = 'See Details',
+    href,
+    squareImg,
+    ...anchorProps
   } = props
 
   const progress = Math.round((paidAmount / goalAmount) * 100)
 
   return (
-    <div css={styles.root} {...divProps}>
-      <img src={thumbnail} alt="" css={styles.img} />
+    <Link href={href} css={styles.root} {...anchorProps}>
+      <div
+        css={styles.img}
+        style={{ backgroundImage: `url(${thumbnail})` }}
+        data-square-img={squareImg}
+      />
       <h4 css={styles.title}>{name}</h4>
 
       <CountryLabel css={styles.flag} countryCode={country} />
@@ -30,8 +41,8 @@ export const Investment: FC<InvestmentProps> = (props) => {
 
       <p css={styles.goalPrice}>pledged of ${goalAmount} goal</p>
 
-      <Button>See Details</Button>
-    </div>
+      <Button style={{ minWidth: 140, padding: 11 }}>{actionText}</Button>
+    </Link>
   )
 }
 
@@ -39,13 +50,22 @@ const useStyles = makeStyles(() => ({
   root: {
     width: '100%',
     fontWeight: 500,
+    textDecoration: 'none',
+    color: 'inherit',
+    cursor: 'pointer',
   },
   img: {
     width: '100%',
     height: 380,
-    objectFit: 'cover',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
     borderRadius: 16,
     marginBottom: 24,
+    '&[data-square-img="true"]': {
+      width: 258,
+      height: 258,
+    },
   },
   title: {
     fontSize: 25,

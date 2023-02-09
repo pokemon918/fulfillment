@@ -8,12 +8,13 @@ import { Category } from './Category'
 
 interface CategoriesOverviewProps extends HTMLAttributes<HTMLDivElement> {
   categories: BaseCategory[]
+  itemType?: 'product' | 'investment'
 }
 
 export const CategoriesOverview: FC<CategoriesOverviewProps> = (props) => {
   const styles = useStyles(props)
 
-  const { categories, ...divProps } = props
+  const { categories, itemType = 'product', ...divProps } = props
 
   const user = useUser()
 
@@ -28,6 +29,7 @@ export const CategoriesOverview: FC<CategoriesOverviewProps> = (props) => {
               css={styles.category}
               key={category._id}
               category={category}
+              itemType={itemType}
             />
           ))}
 

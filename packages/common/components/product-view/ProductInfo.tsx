@@ -5,7 +5,14 @@ import { FC, HTMLAttributes, useState } from 'react'
 import { Gallery } from '../gallery'
 
 interface ProductInfoProps extends HTMLAttributes<HTMLDivElement> {
-  product: DetailedProduct
+  product: {
+    gallery: string[];
+    traces: {
+      title: string;
+      description: string;
+      gallery: string[]
+    }[]
+  }
 }
 
 export const ProductInfo: FC<ProductInfoProps> = (props) => {
