@@ -76,13 +76,12 @@ const REGISTERED = gql`
   }
 `
 
-export const Signup: FC<SignupProps> = () => {
+export const Signup: FC<SignupProps> = ({
+  pendingUserToken,
+  defaultFullName,
+}) => {
   const styles = useStyles({})
 
-  const { query } = useRouter()
-
-  const pendingUserToken = query.pendingUserToken as string | undefined
-  const defaultFullName = query.fullName as string | undefined
   const [finalStep, setFinalStep] = useState(false)
   const sending = useRef(false)
 
@@ -149,7 +148,7 @@ export const Signup: FC<SignupProps> = () => {
       country: 'US',
       phone: '',
       website: '',
-      ...(APP_TYPE === 'investor'
+      ...(APP_TYPE === 'investment'
         ? {
             role: 'investor',
             commercialInfo: {
@@ -464,7 +463,7 @@ export const Signup: FC<SignupProps> = () => {
                   <>
                     <GoogleAuthButton
                       style={{ marginBottom: 16 }}
-                      href={`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/auth/google`}
+                      href={`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/auth/google/${APP_TYPE}`}
                     />
 
                     <OrSeparator style={{ marginBottom: 12 }} />
@@ -589,7 +588,10 @@ export const Signup: FC<SignupProps> = () => {
   )
 }
 
-interface SignupProps {}
+interface SignupProps {
+  pendingUserToken?: string
+  defaultFullName?: string
+}
 
 const useStyles = makeStyles(() => ({
   heading: {

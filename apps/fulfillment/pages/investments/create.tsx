@@ -23,6 +23,7 @@ const ProductCreate = () => {
     thumbnail: '',
     gallery: [],
     specs: [],
+    harvestingMonths: [],
     availableSpecs: { en: '', es: '' },
     traces: [
       {

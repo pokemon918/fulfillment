@@ -40,7 +40,7 @@ export const HomeBanner: FC<HomeBannerProps> = (props) => {
               size="lg"
               rounded
             >
-              Browse {action === 'investments' ? 'Investments' : 'Products'}
+              Browse {action === 'investments' ? 'Products' : 'Products'}
             </Button>
           </div>
         </Container>

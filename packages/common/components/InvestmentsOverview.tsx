@@ -24,7 +24,7 @@ export const InvestmentsOverview: FC<InvestmentsOverviewProps> = (props) => {
 
       <Container maxWidth="md">
         <h4 css={styles.heading} style={{ marginBottom: 34 }}>
-          DEAL OPPORTUNITIES
+          INVESTMENT OPPORTUNITIES
         </h4>
 
         <Investments investments={investments} action="view" />

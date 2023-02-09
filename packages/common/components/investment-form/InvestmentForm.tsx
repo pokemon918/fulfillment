@@ -23,7 +23,10 @@ const GET_CATEGORIES = gql`
 `
 
 const CREATE_INVESTMENT = gql`
-  mutation CreateInvestment($input: CreateInvestmentInput!, $filenames: [String!]!) {
+  mutation CreateInvestment(
+    $input: CreateInvestmentInput!
+    $filenames: [String!]!
+  ) {
     investment: createInvestment(input: $input) {
       _id
     }
@@ -32,7 +35,10 @@ const CREATE_INVESTMENT = gql`
 `
 
 const Update_INVESTMENT = gql`
-  mutation UpdateInvestment($input: UpdateInvestmentInput!, $filenames: [String!]!) {
+  mutation UpdateInvestment(
+    $input: UpdateInvestmentInput!
+    $filenames: [String!]!
+  ) {
     investment: updateInvestment(input: $input) {
       _id
     }
@@ -96,6 +102,7 @@ export interface InvestmentFormValue {
     gallery: { src: string }[]
   }[]
   certifications: { src: string }[]
+  harvestingMonths: number[]
 }
 
 interface InvestmentFormProps {
@@ -223,10 +230,13 @@ export const InvestmentForm: FC<InvestmentFormProps> = ({
     setSaving(true)
     setIsSuccess(false)
 
-    graphqlReq(actionType === 'update' ? Update_INVESTMENT : CREATE_INVESTMENT, {
-      input,
-      filenames: deletedFilenames.current,
-    })
+    graphqlReq(
+      actionType === 'update' ? Update_INVESTMENT : CREATE_INVESTMENT,
+      {
+        input,
+        filenames: deletedFilenames.current,
+      }
+    )
       .then(({ investment: { _id } }) => {
         if (actionType === 'create') {
           // router.push(`/investments/${_id}`)
@@ -271,6 +281,16 @@ export const InvestmentForm: FC<InvestmentFormProps> = ({
           style={{ marginBottom: '1.5rem' }}
           control={control}
           name="country"
+        />
+
+        <Select
+          style={{ marginBottom: '1.5rem' }}
+          label="Harvesting Seasonality"
+          placeholder="Harvesting Seasonality"
+          name="harvestingMonths"
+          control={control}
+          options={HARVESTING_MONTHS as any}
+          isMulti
         />
 
         <Input
@@ -516,9 +536,7 @@ export const InvestmentForm: FC<InvestmentFormProps> = ({
         >
           Updated Successfully!{' '}
           {/* <StyledLink href={`/investments/${defaultValues._id}`}> */}
-          <StyledLink href={`/investments`}>
-            View it
-          </StyledLink>
+          <StyledLink href={`/investments`}>View it</StyledLink>
         </p>
       </form>
 

@@ -1,6 +1,7 @@
 import { gql } from 'graphql-request'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useRouter } from 'next/router'
 import { APP_TYPE } from '../constants'
 import {
   Alert,
@@ -32,13 +33,21 @@ const LOGIN = gql`
 
 const apps = {
   fulfillment: process.env.NEXT_PUBLIC_FULFILLMENT!,
-  investor: process.env.NEXT_PUBLIC_INVESTOR!,
+  investment: process.env.NEXT_PUBLIC_INVESTMENT!,
 }
 
 export const LoginPage = () => {
-  const [invalidRole, setInvalidRole] = useState<string | null>(null)
+  const [matchingRole, setMismatchingRole] = useState<string | null>(null)
 
   const styles = useStyles({})
+
+  const router = useRouter()
+
+  useEffect(() => {
+    if (router.query.mismatchingRole) {
+      setMismatchingRole(router.query.mismatchingRole as string)
+    }
+  }, [router.isReady])
 
   const { control, handleSubmit } = useForm<{
     email: string
@@ -62,14 +71,14 @@ export const LoginPage = () => {
 
       const expireAt = new Date(Date.now() + YEAR)
 
-      const authType = user.role === 'investor' ? 'investor' : 'fulfillment'
+      const authType = user.role === 'investor' ? 'investment' : 'fulfillment'
 
       if (APP_TYPE === authType) {
         setCookie(`${APP_TYPE}_token`, token, expireAt)
         localStorage.setItem(`${APP_TYPE}_user`, JSON.stringify(user))
         window.location.href = '/'
       } else {
-        setInvalidRole(user.role)
+        setMismatchingRole(user.role)
       }
     } catch (e) {
       if (isGqlErrStatus(e, 401)) {
@@ -89,21 +98,13 @@ export const LoginPage = () => {
           <form onSubmit={onSubmit}>
             <h2 css={styles.heading}>Login</h2>
 
-            <div style={{ marginBottom: 16 }}>
-              <GoogleAuthButton
-                href={`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/auth/google`}
-              />
-            </div>
-
-            <OrSeparator style={{ marginBottom: 12 }} />
-
-            {invalidRole && (
+            {matchingRole && (
               <Alert style={{ marginBottom: 12 }} severity="error">
-                account type is {invalidRole} please{' '}
+                account type is {matchingRole} please{' '}
                 <StyledLink
                   href={
                     apps[
-                      APP_TYPE === 'fulfillment' ? 'investor' : 'fulfillment'
+                      APP_TYPE === 'fulfillment' ? 'investment' : 'fulfillment'
                     ] + '/login'
                   }
                 >
@@ -111,6 +112,14 @@ export const LoginPage = () => {
                 </StyledLink>
               </Alert>
             )}
+
+            <div style={{ marginBottom: 16 }}>
+              <GoogleAuthButton
+                href={`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/auth/google/${APP_TYPE}`}
+              />
+            </div>
+
+            <OrSeparator style={{ marginBottom: 12 }} />
 
             <Input
               style={{ marginBottom: 16 }}

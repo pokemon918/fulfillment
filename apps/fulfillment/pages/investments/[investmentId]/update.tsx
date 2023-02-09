@@ -77,6 +77,7 @@ const GET_INVESTMENT = gql`
         gallery
       }
       certifications
+      harvestingMonths
     }
   }
 `

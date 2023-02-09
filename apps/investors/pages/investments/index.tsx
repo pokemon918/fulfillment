@@ -65,7 +65,7 @@ export const getStaticProps: GetStaticProps<
 
   return {
     props: {
-      investments: data.investments.slice(0, 4).map((investment: any) => ({
+      investments: data.investments.map((investment: any) => ({
         ...investment,
         name: investment.name.en,
       })),
