@@ -10,6 +10,7 @@ interface ItemDeleteButtonProps extends HTMLAttributes<HTMLDivElement> {
   redirect: string
   itemType: string
   getRevalidateInfo: () => RevalidateInfo
+  errorFormatter?: (e: any) => string
 }
 
 export const ItemDeleteButton: FC<ItemDeleteButtonProps> = (props) => {
@@ -25,6 +26,7 @@ export const ItemDeleteButton: FC<ItemDeleteButtonProps> = (props) => {
     itemType,
     redirect,
     getRevalidateInfo,
+    errorFormatter,
     ...divProps
   } = props
 
@@ -42,8 +44,11 @@ export const ItemDeleteButton: FC<ItemDeleteButtonProps> = (props) => {
       try {
         await graphqlReq(mutation, { _id: itemId })
         setDeleted(true)
-      } catch {
-        alert('Please check your internet connection')
+      } catch (e: any) {
+        const formatted = errorFormatter
+          ? errorFormatter(e)
+          : 'Please check your internet connection'
+        alert(formatted)
         setDeleting(false)
       }
     })()

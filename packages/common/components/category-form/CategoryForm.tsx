@@ -165,6 +165,7 @@ export const CategoryForm: FC<CategoryFormProps> = ({
               }
               redirect="/categories"
               itemType="category"
+              errorFormatter={() => 'Cannot delete this category because it has associated products'}
             />
           )}
         </div>

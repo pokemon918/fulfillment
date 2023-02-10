@@ -1,7 +1,7 @@
-import NextLink from 'next/link'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { FC, HTMLAttributes, useEffect, useMemo, useRef, useState } from 'react'
-import { useMounted, useSameState, useUser } from '../hooks'
+import { useSameState, useUser } from '../hooks'
 import { MenuIcon } from '../icons'
 import { theme } from '../theme'
 import { Button, Container, IconButton } from '../ui'
@@ -76,10 +76,6 @@ export const Navbar: FC<NavbarProps> = (originalProps) => {
   }, [])
 
   const logo = mode === 'light' ? logoLight : logoDark
-
-  const mounted = useMounted()
-
-  const Link = mounted && user?.role === 'admin' ? 'a' : NextLink
 
   return (
     <div css={styles.root} {...divProps} data-open={open}>

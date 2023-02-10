@@ -116,6 +116,8 @@ interface InvestmentFormProps {
   actionType: 'create' | 'update'
 }
 
+const investmentUrl = process.env.NEXT_PUBLIC_INVESTMENT as string
+
 export const InvestmentForm: FC<InvestmentFormProps> = ({
   defaultValues,
   actionType,
@@ -510,7 +512,7 @@ export const InvestmentForm: FC<InvestmentFormProps> = ({
                     {actionType === 'update' ? 'Updated' : 'Created'}{' '}
                     Successfully!{' '}
                     <StyledLink
-                      href={`/investments/${success ? success._id : ''}`}
+                      href={`${investmentUrl}/investments/${success ? success._id : ''}`}
                       native
                     >
                       View it
@@ -552,7 +554,7 @@ export const InvestmentForm: FC<InvestmentFormProps> = ({
                     'delete'
                   )
                 }
-                redirect="/investments"
+                redirect={`${investmentUrl}/investments`}
                 itemType="investment"
               />
             )}

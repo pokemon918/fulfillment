@@ -1,4 +1,5 @@
 import { FC, useEffect, useRef, useState } from 'react'
+import { timeout } from '../utils'
 
 export interface RevalidateInfo {
   revalidate: () => Promise<void>
@@ -20,6 +21,7 @@ export const RevalidateIndictor: FC<RevalidateIndictorProps> = ({
     ;(async () => {
       try {
         await revalidate()
+        await timeout(1000)
         setUpdated(true)
         if (callback) callback()
       } catch {
