@@ -7,10 +7,16 @@ import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { LangField } from '../../types'
 import { ThumbnailInput } from '../ThumbnailInput'
-import { makeStyles, graphqlReq, revalidateProduct } from '../../utils'
+import {
+  makeStyles,
+  graphqlReq,
+  revalidateProduct,
+  revalidateCrossPaths,
+} from '../../utils'
 import { DeleteIcon, AddIcon } from '../../icons'
 import { GalleryForm } from '../gallery/GalleryForm'
 import { RevalidateIndictor } from '../RevalidateIndictor'
+import { ItemDeleteButton } from '../ItemDeleteButton'
 
 const GET_CATEGORIES = gql`
   {
@@ -115,6 +121,8 @@ export const ProductForm: FC<ProductFormProps> = ({
   defaultValues,
   actionType,
 }) => {
+  const productId = defaultValues._id
+
   const styles = useStyles({})
   const [saving, setSaving] = useState(false)
   const [deleting, setDeleting] = useState(false)
@@ -183,33 +191,6 @@ export const ProductForm: FC<ProductFormProps> = ({
       },
       gallery: [],
     })
-
-  const onDelete = async () => {
-    const isConfirmed = window.confirm(
-      'Are you sure you want to delete this product'
-    )
-
-    if (isConfirmed) {
-      const { _id } = defaultValues
-
-      if (!_id || !categoryId) return alert('An unknown error occurred')
-
-      setDeleting(true)
-
-      const { revalidatePromise } = revalidateProduct(
-        { _id, categoryId },
-        'delete'
-      )
-
-      Promise.all([graphqlReq(DELETE_PRODUCT, { _id }), revalidatePromise])
-        .then(() => {
-          router.push(`/products`)
-        })
-        .finally(() => {
-          setDeleting(false)
-        })
-    }
-  }
 
   const onAssetDelete = (filename: string) => {
     if (savedFilenames.current.includes(filename)) {
@@ -476,38 +457,51 @@ export const ProductForm: FC<ProductFormProps> = ({
         /> */}
 
         <div css={styles.footer}>
-          <Button type="submit" disabled={saving}>
-            {actionType === 'create' ? 'Create' : 'Save'}
-          </Button>
-
-          {actionType === 'update' && (
-            <Button
-              type="button"
-              style={{ background: '#f44336', color: '#fff' }}
-              disabled={deleting}
-              onClick={onDelete}
-            >
-              Delete
+          <div>
+            <Button type="submit" disabled={saving}>
+              {actionType === 'create' ? 'Create' : 'Save'}
             </Button>
-          )}
-        </div>
 
-        <p
-          style={{
-            color: '#1b5e20',
-            marginTop: 16,
-            visibility: success ? 'visible' : 'hidden',
-          }}
-        >
-          {actionType === 'update' ? 'Updated' : 'Created'} Successfully!{' '}
-          <StyledLink href={`/products/${success ? success._id : ''}`}>
-            View it
-          </StyledLink>
-        </p>
+            <div css={{ marginTop: 16, minHeight: 50 }}>
+              {success && (
+                <div style={{ marginBottom: 8 }}>
+                  <p style={{ color: '#1b5e20' }}>
+                    {actionType === 'update' ? 'Updated' : 'Created'}{' '}
+                    Successfully!{' '}
+                    <StyledLink
+                      href={`/products/${success ? success._id : ''}`}
+                    >
+                      View it
+                    </StyledLink>
+                  </p>
+                </div>
+              )}
 
-        <div css={{ height: 30, marginTop: 8 }}>
-          {success && (
-            <RevalidateIndictor {...revalidateProduct(success, actionType)} />
+              {success && (
+                <RevalidateIndictor
+                  {...revalidateProduct(success, actionType)}
+                />
+              )}
+            </div>
+          </div>
+
+          {actionType === 'update' && productId && categoryId && (
+            <ItemDeleteButton
+            css={styles.deleteBtnSection}
+              mutation={DELETE_PRODUCT}
+              itemId={productId}
+              getRevalidateInfo={() =>
+                revalidateProduct(
+                  {
+                    _id: productId,
+                    categoryId,
+                  },
+                  'delete'
+                )
+              }
+              redirect="/products"
+              itemType="product"
+            />
           )}
         </div>
       </form>
@@ -530,5 +524,10 @@ const useStyles = makeStyles(() => ({
     justifyContent: 'space-between',
     display: 'flex',
     marginTop: '2rem',
+  },
+  deleteBtnSection: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-end',
   },
 }))

@@ -107,12 +107,14 @@ const PageProductUpdate = () => {
     })()
   }, [router.isReady])
 
-  if (!product) return null
-
   return (
     <PageLayout>
       <Container maxWidth="md">
-        <ProductForm defaultValues={product} actionType="update" />
+        {product ? (
+          <ProductForm defaultValues={product} actionType="update" />
+        ) : (
+          <p style={{ textAlign: 'center' }}>Loading...</p>
+        )}
       </Container>
     </PageLayout>
   )
