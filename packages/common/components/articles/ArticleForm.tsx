@@ -220,7 +220,7 @@ export const ArticleForm: FC<ArticleFormProps> = ({
               mutation={DELETE_ARTICLE}
               itemId={articleId}
               getRevalidateInfo={() =>
-                revalidateArticle({ _id: articleId }, actionType)
+                revalidateArticle({ _id: articleId }, 'delete')
               }
               redirect="/blog"
               itemType="article"
