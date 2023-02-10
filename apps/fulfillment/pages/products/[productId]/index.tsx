@@ -175,6 +175,7 @@ export const getStaticProps: GetStaticProps<ProductPageProps> = async (ctx) => {
           availableSpecs: product.availableSpecs.en,
         })),
     },
+    revalidate: 60
   }
 }
 
