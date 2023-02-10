@@ -39,8 +39,9 @@ export default async function revalidateHandler(
   try {
     for (const path of paths) {
       await res.revalidate(path)
-      return res.json({ revalidated: true })
     }
+
+    return res.json({ revalidated: true })
   } catch (err) {
     return res.status(500).send('Error revalidating')
   }

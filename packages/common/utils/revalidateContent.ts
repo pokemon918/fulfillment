@@ -9,9 +9,9 @@ export const revalidateProduct = (
   const paths = {
     fulfillment: [
       '/',
-      `/products`,
+      '/products',
       `/categories/${product.categoryId}/products`,
-      action !== 'delete' ? `/product/${product._id}` : undefined,
+      action !== 'delete' ? `/products/${product._id}` : undefined,
     ],
   }
 
