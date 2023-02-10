@@ -107,6 +107,5 @@ export const getStaticProps: GetStaticProps<HomeProps> = async () => {
         description: article.description.en,
       })),
     },
-    revalidate: 10,
   }
 }

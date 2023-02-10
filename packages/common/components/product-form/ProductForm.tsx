@@ -7,9 +7,10 @@ import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { LangField } from '../../types'
 import { ThumbnailInput } from '../ThumbnailInput'
-import { makeStyles, graphqlReq } from '../../utils'
+import { makeStyles, graphqlReq, revalidateProduct } from '../../utils'
 import { DeleteIcon, AddIcon } from '../../icons'
 import { GalleryForm } from '../gallery/GalleryForm'
+import { RevalidateIndictor } from '../RevalidateIndictor'
 
 const GET_CATEGORIES = gql`
   {
@@ -26,6 +27,7 @@ const CREATE_PRODUCT = gql`
   mutation CreateProduct($input: CreateProductInput!, $filenames: [String!]!) {
     product: createProduct(input: $input) {
       _id
+      categoryId
     }
     deleteFiles(filenames: $filenames)
   }
@@ -35,6 +37,7 @@ const Update_PRODUCT = gql`
   mutation UpdateProduct($input: UpdateProductInput!, $filenames: [String!]!) {
     product: updateProduct(input: $input) {
       _id
+      categoryId
     }
     deleteFiles(filenames: $filenames)
   }
@@ -70,6 +73,7 @@ const HARVESTING_MONTHS = [
 export interface ProductFormValue {
   _id?: string
   name: LangField
+  categoryId?: string
   country: string
   hsCode: LangField
   price: string
@@ -100,6 +104,13 @@ interface ProductFormProps {
   actionType: 'create' | 'update'
 }
 
+type Success =
+  | false
+  | {
+      _id: string
+      categoryId: string
+    }
+
 export const ProductForm: FC<ProductFormProps> = ({
   defaultValues,
   actionType,
@@ -107,7 +118,8 @@ export const ProductForm: FC<ProductFormProps> = ({
   const styles = useStyles({})
   const [saving, setSaving] = useState(false)
   const [deleting, setDeleting] = useState(false)
-  const [isSuccess, setIsSuccess] = useState(false)
+  const [success, setSuccess] = useState<Success>(false)
+  const [categoryId, setCategoryId] = useState(defaultValues.categoryId)
   const router = useRouter()
 
   const savedFilenames = useRef(
@@ -172,7 +184,7 @@ export const ProductForm: FC<ProductFormProps> = ({
       gallery: [],
     })
 
-  const onDelete = () => {
+  const onDelete = async () => {
     const isConfirmed = window.confirm(
       'Are you sure you want to delete this product'
     )
@@ -180,9 +192,16 @@ export const ProductForm: FC<ProductFormProps> = ({
     if (isConfirmed) {
       const { _id } = defaultValues
 
+      if (!_id || !categoryId) return alert('An unknown error occurred')
+
       setDeleting(true)
 
-      graphqlReq(DELETE_PRODUCT, { _id })
+      const { revalidatePromise } = revalidateProduct(
+        { _id, categoryId },
+        'delete'
+      )
+
+      Promise.all([graphqlReq(DELETE_PRODUCT, { _id }), revalidatePromise])
         .then(() => {
           router.push(`/products`)
         })
@@ -215,17 +234,20 @@ export const ProductForm: FC<ProductFormProps> = ({
     }
 
     setSaving(true)
-    setIsSuccess(false)
+    setSuccess(false)
 
     graphqlReq(actionType === 'update' ? Update_PRODUCT : CREATE_PRODUCT, {
       input,
       filenames: deletedFilenames.current,
     })
-      .then(({ product: { _id } }) => {
-        if (actionType === 'create') {
-          router.push(`/products/${_id}`)
-        } else {
-          setIsSuccess(true)
+      .then(({ product: { _id, categoryId } }) => {
+        setSuccess({
+          _id,
+          categoryId,
+        })
+
+        if (actionType === 'update') {
+          setCategoryId(categoryId)
         }
       })
       .catch(() => {
@@ -455,7 +477,7 @@ export const ProductForm: FC<ProductFormProps> = ({
 
         <div css={styles.footer}>
           <Button type="submit" disabled={saving}>
-            Save
+            {actionType === 'create' ? 'Create' : 'Save'}
           </Button>
 
           {actionType === 'update' && (
@@ -474,14 +496,20 @@ export const ProductForm: FC<ProductFormProps> = ({
           style={{
             color: '#1b5e20',
             marginTop: 16,
-            visibility: isSuccess ? 'visible' : 'hidden',
+            visibility: success ? 'visible' : 'hidden',
           }}
         >
-          Updated Successfully!{' '}
-          <StyledLink href={`/products/${defaultValues._id}`}>
+          {actionType === 'update' ? 'Updated' : 'Created'} Successfully!{' '}
+          <StyledLink href={`/products/${success ? success._id : ''}`}>
             View it
           </StyledLink>
         </p>
+
+        <div css={{ height: 30, marginTop: 8 }}>
+          {success && (
+            <RevalidateIndictor {...revalidateProduct(success, actionType)} />
+          )}
+        </div>
       </form>
 
       <div style={{ padding: 100 }} />

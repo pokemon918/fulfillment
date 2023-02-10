@@ -86,6 +86,7 @@ const PageProductUpdate = () => {
   const [product, setProduct] = useState<ProductFormValue | null>(null)
 
   useEffect(() => {
+    if (!router.isReady) return
     ;(async () => {
       const data = await graphqlReq(GET_PRODUCT, {
         _id: productId,
@@ -104,7 +105,7 @@ const PageProductUpdate = () => {
         })),
       })
     })()
-  }, [])
+  }, [router.isReady])
 
   if (!product) return null
 
