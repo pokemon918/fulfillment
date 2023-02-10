@@ -4,16 +4,18 @@ import { gql } from 'graphql-request'
 import { FC, useRef, useState } from 'react'
 import { useRouter } from 'next/router'
 import { LangField } from '../../types'
-import { graphqlReq, makeStyles } from '../../utils'
+import { graphqlReq, makeStyles, revalidateCategory } from '../../utils'
 import { ThumbnailInput } from '../../components/ThumbnailInput'
 import { Button, StyledLink } from '../../ui'
+import { RevalidateIndictor } from '../RevalidateIndictor'
+import { ItemDeleteButton } from '../ItemDeleteButton'
 
 const CREATE_CATEGORY = gql`
   mutation CreateCategory(
     $input: CreateCategoryInput!
     $filenames: [String!]!
   ) {
-    product: createCategory(input: $input) {
+    category: createCategory(input: $input) {
       _id
     }
     deleteFiles(filenames: $filenames)
@@ -25,7 +27,7 @@ const UPDATE_CATEGORY = gql`
     $input: UpdateCategoryInput!
     $filenames: [String!]!
   ) {
-    Category: updateCategory(input: $input) {
+    category: updateCategory(input: $input) {
       _id
     }
     deleteFiles(filenames: $filenames)
@@ -61,9 +63,10 @@ export const CategoryForm: FC<CategoryFormProps> = ({
 }) => {
   const styles = useStyles({})
 
-  const [isSuccess, setIsSuccess] = useState(false)
+  const [success, setSuccess] = useState<{ _id: string } | false>(false)
   const [saving, setSaving] = useState(false)
   const [deleting, setDeleting] = useState(false)
+  const categoryId = defaultValues._id
   const router = useRouter()
   const savedFilenames = useRef(
     [defaultValues?.thumbnail]
@@ -73,22 +76,18 @@ export const CategoryForm: FC<CategoryFormProps> = ({
 
   const deletedFilenames = useRef<string[]>([])
 
-  const { control, handleSubmit, getValues } = useForm({ defaultValues })
+  const { control, handleSubmit } = useForm({ defaultValues })
 
   const onSubmit = handleSubmit((category) => {
-    setIsSuccess(false)
+    setSuccess(false)
     setSaving(true)
 
     graphqlReq(actionType === 'update' ? UPDATE_CATEGORY : CREATE_CATEGORY, {
       input: category,
       filenames: deletedFilenames.current,
     })
-      .then(() => {
-        if (actionType === 'create') {
-          router.push(`/categories`)
-        } else {
-          setIsSuccess(true)
-        }
+      .then(({ category: { _id } }) => {
+        setSuccess(_id)
       })
       .catch(() => {
         alert('an error occur please try again')
@@ -97,31 +96,6 @@ export const CategoryForm: FC<CategoryFormProps> = ({
         setSaving(false)
       })
   })
-
-  const onDelete = () => {
-    const isConfirmed = window.confirm(
-      'Are you sure you want to delete this category'
-    )
-
-    if (isConfirmed) {
-      const { _id } = defaultValues
-
-      setDeleting(true)
-
-      graphqlReq(DELETE_CATEGORY, { _id })
-        .then(() => {
-          router.push(`/categories`)
-        })
-        .catch(() => {
-          alert(
-            'Cannot delete this category because it has associated products'
-          )
-        })
-        .finally(() => {
-          setDeleting(false)
-        })
-    }
-  }
 
   const onAssetDelete = (filename: string) => {
     if (savedFilenames.current.includes(filename)) {
@@ -157,32 +131,43 @@ export const CategoryForm: FC<CategoryFormProps> = ({
         />
 
         <div css={styles.footer}>
-          <Button type="submit" disabled={saving}>
-            Save
-          </Button>
-
-          {actionType === 'update' && (
-            <Button
-              type="button"
-              style={{ background: '#f44336', color: '#fff' }}
-              disabled={deleting}
-              onClick={onDelete}
-            >
-              Delete
+          <div>
+            <Button type="submit" disabled={saving}>
+              {actionType === 'create' ? 'Create' : 'Save'}
             </Button>
+
+            <div css={{ marginTop: 16, minHeight: 50 }}>
+              {success && (
+                <div style={{ marginBottom: 8 }}>
+                  <p style={{ color: '#1b5e20' }}>
+                    {actionType === 'update' ? 'Updated' : 'Created'}{' '}
+                    Successfully!{' '}
+                    <StyledLink href={`/categories`}>View it</StyledLink>
+                  </p>
+                </div>
+              )}
+
+              {success && (
+                <RevalidateIndictor
+                  {...revalidateCategory({ _id: success._id }, actionType)}
+                />
+              )}
+            </div>
+          </div>
+
+          {actionType === 'update' && categoryId && (
+            <ItemDeleteButton
+              css={styles.deleteBtnSection}
+              mutation={DELETE_CATEGORY}
+              itemId={categoryId}
+              getRevalidateInfo={() =>
+                revalidateCategory({ _id: categoryId }, 'delete')
+              }
+              redirect="/categories"
+              itemType="category"
+            />
           )}
         </div>
-
-        <p
-          style={{
-            color: '#1b5e20',
-            marginTop: 16,
-            visibility: isSuccess ? 'visible' : 'hidden',
-          }}
-        >
-          Updated Successfully!{' '}
-          <StyledLink href={`/categories`}>View it</StyledLink>
-        </p>
       </form>
 
       <div style={{ padding: 100 }} />
@@ -203,5 +188,10 @@ const useStyles = makeStyles(() => ({
     justifyContent: 'space-between',
     display: 'flex',
     marginTop: '2rem',
+  },
+  deleteBtnSection: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-end',
   },
 }))

@@ -43,7 +43,7 @@ export const ItemDeleteButton: FC<ItemDeleteButtonProps> = (props) => {
         await graphqlReq(mutation, { _id: itemId })
         setDeleted(true)
       } catch {
-        alert('An unknown error occurred')
+        alert('Please check your internet connection')
         setDeleting(false)
       }
     })()

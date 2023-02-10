@@ -242,7 +242,6 @@ export const Signup: FC<SignupProps> = ({
 
       const expireAt = new Date(Date.now() + YEAR)
 
-      console.log('APP_TYPE', APP_TYPE)
       setCookie(`${APP_TYPE}_token`, token, expireAt)
       localStorage.setItem(`${APP_TYPE}_user`, JSON.stringify(user))
 

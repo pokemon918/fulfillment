@@ -3,11 +3,13 @@ import { gql } from 'graphql-request'
 import { FC, useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/router'
 import { LangField, BaseKeyword } from '../../types'
-import { graphqlReq, makeStyles } from '../../utils'
+import { graphqlReq, makeStyles, revalidateArticle } from '../../utils'
 import { ThumbnailInput } from '../ThumbnailInput'
 import { Button, Input, StyledLink } from '../../ui'
 import { Editor } from '../tinymce'
 import { KeywordsSelect } from '../KeywordsSelect'
+import { RevalidateIndictor } from '../RevalidateIndictor'
+import { ItemDeleteButton } from '../ItemDeleteButton'
 
 const CREATE_ARTICLE = gql`
   mutation CreateArticle($input: CreateArticleInput!, $filenames: [String!]!) {
@@ -70,7 +72,9 @@ export const ArticleForm: FC<ArticleFormProps> = ({
 }) => {
   const styles = useStyles({})
 
-  const [isSuccess, setIsSuccess] = useState(false)
+  const articleId = defaultValues._id
+
+  const [success, setSuccess] = useState<{ _id: string } | false>(false)
   const [saving, setSaving] = useState(false)
   const [deleting, setDeleting] = useState(false)
   const [loading, setLoading] = useState(true)
@@ -86,19 +90,17 @@ export const ArticleForm: FC<ArticleFormProps> = ({
   const { control, handleSubmit, getValues } = useForm({ defaultValues })
 
   const onSubmit = handleSubmit((article) => {
-    setIsSuccess(false)
+    if (saving) return
+
+    setSuccess(false)
     setSaving(true)
 
     graphqlReq(actionType === 'update' ? UPDATE_ARTICLE : CREATE_ARTICLE, {
       input: article,
       filenames: deletedFilenames.current,
     })
-      .then(({ article }) => {
-        if (actionType === 'create') {
-          router.push(`/blog/${article._id}`)
-        } else {
-          setIsSuccess(true)
-        }
+      .then(({ article: { _id } }) => {
+        setSuccess({ _id })
       })
       .catch(() => {
         alert('an error occur please try again')
@@ -107,29 +109,6 @@ export const ArticleForm: FC<ArticleFormProps> = ({
         setSaving(false)
       })
   })
-
-  const onDelete = () => {
-    const isConfirmed = window.confirm(
-      'Are you sure you want to delete this article'
-    )
-
-    if (isConfirmed) {
-      const { _id } = defaultValues
-
-      setDeleting(true)
-
-      graphqlReq(DELETE_ARTICLE, { _id })
-        .then(() => {
-          router.push(`/blog`)
-        })
-        .catch(() => {
-          alert('Please check your internet connection')
-        })
-        .finally(() => {
-          setDeleting(false)
-        })
-    }
-  }
 
   const onAssetDelete = (filename: string) => {
     if (savedFilenames.current.includes(filename)) {
@@ -209,32 +188,45 @@ export const ArticleForm: FC<ArticleFormProps> = ({
         />
 
         <div css={styles.footer}>
-          <Button type="submit" disabled={saving}>
-            Save
-          </Button>
-
-          {actionType === 'update' && (
-            <Button
-              type="button"
-              style={{ background: '#f44336', color: '#fff' }}
-              disabled={deleting}
-              onClick={onDelete}
-            >
-              Delete
+          <div>
+            <Button type="submit" disabled={saving}>
+              {actionType === 'create' ? 'Create' : 'Save'}
             </Button>
+
+            <div css={{ marginTop: 16, minHeight: 50 }}>
+              {success && (
+                <>
+                  <div style={{ marginBottom: 8 }}>
+                    <p style={{ color: '#1b5e20' }}>
+                      {actionType === 'update' ? 'Updated' : 'Created'}{' '}
+                      Successfully!{' '}
+                      <StyledLink href={`/blog/${success ? success._id : ''}`}>
+                        View it
+                      </StyledLink>
+                    </p>
+                  </div>
+
+                  <RevalidateIndictor
+                    {...revalidateArticle({ _id: success._id }, actionType)}
+                  />
+                </>
+              )}
+            </div>
+          </div>
+
+          {actionType === 'update' && articleId && (
+            <ItemDeleteButton
+              css={styles.deleteBtnSection}
+              mutation={DELETE_ARTICLE}
+              itemId={articleId}
+              getRevalidateInfo={() =>
+                revalidateArticle({ _id: articleId }, actionType)
+              }
+              redirect="/blog"
+              itemType="article"
+            />
           )}
         </div>
-
-        <p
-          style={{
-            color: '#1b5e20',
-            marginTop: 16,
-            visibility: isSuccess ? 'visible' : 'hidden',
-          }}
-        >
-          Updated Successfully!{' '}
-          <StyledLink href={`/blog/${defaultValues._id}`}>View it</StyledLink>
-        </p>
       </form>
 
       <div style={{ padding: 100 }} />
@@ -255,5 +247,10 @@ const useStyles = makeStyles(() => ({
     justifyContent: 'space-between',
     display: 'flex',
     marginTop: '2rem',
+  },
+  deleteBtnSection: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-end',
   },
 }))

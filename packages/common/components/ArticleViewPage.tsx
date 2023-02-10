@@ -70,7 +70,6 @@ export const getArticleViewStaticProps: GetStaticProps<Props> = async (ctx) => {
         })),
       },
     },
-    revalidate: 10,
   }
 }
 

@@ -80,7 +80,6 @@ export const getStaticProps: GetStaticProps<PageInvestmentsProps> = async (
         name: investment.name.en,
       })),
     },
-    revalidate: 10,
   }
 }
 

@@ -70,6 +70,5 @@ export const getStaticProps: GetStaticProps<
         name: investment.name.en,
       })),
     },
-    revalidate: 10,
   }
 }

@@ -32,6 +32,7 @@ const PageProductUpdate = () => {
   const [category, setCategory] = useState<CategoryFormValue | null>(null)
 
   useEffect(() => {
+    if (!router.isReady) return
     ;(async () => {
       const data = await graphqlReq(GET_CATEGORY, {
         _id: categoryId,
@@ -39,14 +40,16 @@ const PageProductUpdate = () => {
 
       setCategory(data.category)
     })()
-  }, [])
-
-  if (!category) return null
+  }, [router.isReady])
 
   return (
     <PageLayout>
       <Container maxWidth="md">
-        <CategoryForm defaultValues={category} actionType="update" />
+        {category ? (
+          <CategoryForm defaultValues={category} actionType="update" />
+        ) : (
+          <p style={{ textAlign: 'center' }}>Loading...</p>
+        )}
       </Container>
     </PageLayout>
   )

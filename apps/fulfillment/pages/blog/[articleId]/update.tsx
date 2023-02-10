@@ -42,6 +42,7 @@ const PageArticleUpdate: FC<Props> = (props) => {
   const [article, setArticle] = useState<ArticleFormValue | null>(null)
 
   useEffect(() => {
+    if (!router.isReady) return
     ;(async () => {
       const data = await graphqlReq(GET_ARTICLE, {
         _id: articleId,
@@ -49,14 +50,16 @@ const PageArticleUpdate: FC<Props> = (props) => {
 
       setArticle(data.article)
     })()
-  }, [])
-
-  if (!article) return null
+  }, [router.isReady])
 
   return (
     <PageLayout>
       <Container maxWidth="md">
-        <ArticleForm defaultValues={article} actionType="update" />
+        {article ? (
+          <ArticleForm defaultValues={article} actionType="update" />
+        ) : (
+          <p style={{ textAlign: 'center' }}>Loading...</p>
+        )}
       </Container>
     </PageLayout>
   )

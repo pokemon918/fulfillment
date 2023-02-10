@@ -7,9 +7,12 @@ import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { LangField } from '../../types'
 import { ThumbnailInput } from '../ThumbnailInput'
-import { makeStyles, graphqlReq } from '../../utils'
+import { makeStyles, graphqlReq, revalidateInvestment } from '../../utils'
 import { DeleteIcon, AddIcon } from '../../icons'
 import { GalleryForm } from '../gallery/GalleryForm'
+import useHistoryRef from '../../hooks/useHistoryRef'
+import { RevalidateIndictor } from '../RevalidateIndictor'
+import { ItemDeleteButton } from '../ItemDeleteButton'
 
 const GET_CATEGORIES = gql`
   {
@@ -29,6 +32,7 @@ const CREATE_INVESTMENT = gql`
   ) {
     investment: createInvestment(input: $input) {
       _id
+      categoryId
     }
     deleteFiles(filenames: $filenames)
   }
@@ -41,6 +45,7 @@ const Update_INVESTMENT = gql`
   ) {
     investment: updateInvestment(input: $input) {
       _id
+      categoryId
     }
     deleteFiles(filenames: $filenames)
   }
@@ -77,6 +82,7 @@ export interface InvestmentFormValue {
   _id?: string
   name: LangField
   country: string
+  categoryId?: string
   hsCode: LangField
   goalAmount: string
   paidAmount: string
@@ -117,7 +123,9 @@ export const InvestmentForm: FC<InvestmentFormProps> = ({
   const styles = useStyles({})
   const [saving, setSaving] = useState(false)
   const [deleting, setDeleting] = useState(false)
-  const [isSuccess, setIsSuccess] = useState(false)
+  const [success, setSuccess] = useState<{ _id: string } | false>(false)
+  const investmentId = defaultValues._id
+  const categoryIdRef = useHistoryRef(defaultValues.categoryId)
   const router = useRouter()
 
   const savedFilenames = useRef(
@@ -182,26 +190,6 @@ export const InvestmentForm: FC<InvestmentFormProps> = ({
       gallery: [],
     })
 
-  const onDelete = () => {
-    const isConfirmed = window.confirm(
-      'Are you sure you want to delete this investment'
-    )
-
-    if (isConfirmed) {
-      const { _id } = defaultValues
-
-      setDeleting(true)
-
-      graphqlReq(DELETE_INVESTMENT, { _id })
-        .then(() => {
-          router.push(`/investments`)
-        })
-        .finally(() => {
-          setDeleting(false)
-        })
-    }
-  }
-
   const onAssetDelete = (filename: string) => {
     if (savedFilenames.current.includes(filename)) {
       deletedFilenames.current.push(filename)
@@ -228,7 +216,7 @@ export const InvestmentForm: FC<InvestmentFormProps> = ({
     }
 
     setSaving(true)
-    setIsSuccess(false)
+    setSuccess(false)
 
     graphqlReq(
       actionType === 'update' ? Update_INVESTMENT : CREATE_INVESTMENT,
@@ -237,12 +225,11 @@ export const InvestmentForm: FC<InvestmentFormProps> = ({
         filenames: deletedFilenames.current,
       }
     )
-      .then(({ investment: { _id } }) => {
-        if (actionType === 'create') {
-          // router.push(`/investments/${_id}`)
-          router.push(`/investments`)
-        } else {
-          setIsSuccess(true)
+      .then(({ investment: { _id, categoryId } }) => {
+        setSuccess({ _id })
+
+        if (actionType === 'update') {
+          categoryIdRef.append(categoryId)
         }
       })
       .catch(() => {
@@ -511,33 +498,64 @@ export const InvestmentForm: FC<InvestmentFormProps> = ({
         /> */}
 
         <div css={styles.footer}>
-          <Button type="submit" disabled={saving}>
-            Save
-          </Button>
-
-          {actionType === 'update' && (
-            <Button
-              type="button"
-              style={{ background: '#f44336', color: '#fff' }}
-              disabled={deleting}
-              onClick={onDelete}
-            >
-              Delete
+          <div>
+            <Button type="submit" disabled={saving}>
+              {actionType === 'create' ? 'Create' : 'Save'}
             </Button>
-          )}
-        </div>
 
-        <p
-          style={{
-            color: '#1b5e20',
-            marginTop: 16,
-            visibility: isSuccess ? 'visible' : 'hidden',
-          }}
-        >
-          Updated Successfully!{' '}
-          {/* <StyledLink href={`/investments/${defaultValues._id}`}> */}
-          <StyledLink href={`/investments`}>View it</StyledLink>
-        </p>
+            <div css={{ marginTop: 16, minHeight: 50 }}>
+              {success && (
+                <div style={{ marginBottom: 8 }}>
+                  <p style={{ color: '#1b5e20' }}>
+                    {actionType === 'update' ? 'Updated' : 'Created'}{' '}
+                    Successfully!{' '}
+                    <StyledLink
+                      href={`/investments/${success ? success._id : ''}`}
+                    >
+                      View it
+                    </StyledLink>
+                  </p>
+                </div>
+              )}
+
+              {success && (
+                <RevalidateIndictor
+                  {...revalidateInvestment(
+                    {
+                      _id: success._id,
+                      categoryIds: [
+                        categoryIdRef.prev(),
+                        categoryIdRef.current(),
+                      ],
+                    },
+                    actionType
+                  )}
+                />
+              )}
+            </div>
+          </div>
+
+          {actionType === 'update' &&
+            investmentId &&
+            categoryIdRef.current() && (
+              <ItemDeleteButton
+                css={styles.deleteBtnSection}
+                mutation={DELETE_INVESTMENT}
+                itemId={investmentId}
+                getRevalidateInfo={() =>
+                  revalidateInvestment(
+                    {
+                      _id: investmentId,
+                      categoryIds: [categoryIdRef.current()],
+                    },
+                    'delete'
+                  )
+                }
+                redirect="/investments"
+                itemType="investment"
+              />
+            )}
+        </div>
       </form>
 
       <div style={{ padding: 100 }} />
@@ -558,5 +576,10 @@ const useStyles = makeStyles(() => ({
     justifyContent: 'space-between',
     display: 'flex',
     marginTop: '2rem',
+  },
+  deleteBtnSection: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-end',
   },
 }))

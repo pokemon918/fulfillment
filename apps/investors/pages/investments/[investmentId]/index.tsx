@@ -169,7 +169,6 @@ export const getStaticProps: GetStaticProps<InvestmentPageProps> = async (
         })
       ),
     },
-    revalidate: 10,
   }
 }
 
