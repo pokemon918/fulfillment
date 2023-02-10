@@ -133,7 +133,7 @@ export const ArticleForm: FC<ArticleFormProps> = ({
     })()
   }, [])
 
-  if (loading) return <p>Loading...</p>
+  if (loading) return <p style={{ textAlign: 'center' }}>Loading...</p>
 
   return (
     <div>

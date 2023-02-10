@@ -1,8 +1,18 @@
+import { APP_TYPE } from '../constants'
+import { getCookie } from './cookies'
 import { uniq } from './uniq'
 
-export const revalidate = (appUrl: string, paths: string[]) => {
+export const revalidatePaths = (appUrl: string, paths: string[]) => {
+  const cookies = document.cookie ?? ''
+  const token = getCookie(cookies, `${APP_TYPE}_token`)
+
   const stringifiedPaths = encodeURIComponent(paths.join(','))
-  return fetch(`/api/revalidate?paths=${stringifiedPaths}`)
+
+  return fetch(`${appUrl}/api/revalidate?paths=${stringifiedPaths}`, {
+    headers: {
+      authorization: `Bearer ${token}`,
+    },
+  })
 }
 
 interface AppPaths {
@@ -17,11 +27,12 @@ const appUrls = {
 
 export const revalidateCrossPaths = (
   appPaths: AppPaths
-): { revalidatePromise: Promise<any>; paths: string[] } => {
+): { revalidate: () => Promise<void>; paths: string[] } => {
   const appKeys = Object.keys(appPaths) as (keyof AppPaths)[]
 
-  const revalidatingPaths: string[] = []
-  const promises: Promise<any>[] = []
+  const processedAppPaths: {
+    [appKey: string]: string[]
+  } = {}
 
   appKeys.map((appKey) => {
     const paths = appPaths[appKey]
@@ -33,13 +44,21 @@ export const revalidateCrossPaths = (
         paths.filter((path) => typeof path !== 'undefined') as string[]
       )
 
-      revalidatingPaths.push(...filteredPaths)
-      promises.push(revalidate(appUrl, filteredPaths))
+      processedAppPaths[appUrl] = filteredPaths
     }
   })
 
   return {
-    revalidatePromise: Promise.all(promises),
-    paths: revalidatingPaths,
+    revalidate: async () => {
+      await Promise.all(
+        Object.entries(processedAppPaths).map(([appUrl, paths]) =>
+          revalidatePaths(appUrl, paths)
+        )
+      )
+    },
+    paths: Object.values(processedAppPaths).reduce(
+      (acc, cur) => [...acc, ...cur],
+      []
+    ),
   }
 }

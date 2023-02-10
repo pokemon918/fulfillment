@@ -1,7 +1,7 @@
 import { FC, useEffect, useRef, useState } from 'react'
 
 export interface RevalidateInfo {
-  revalidatePromise: Promise<void>
+  revalidate: () => Promise<void>
   paths: string[]
 }
 
@@ -11,7 +11,7 @@ interface RevalidateIndictorProps extends RevalidateInfo {
 
 export const RevalidateIndictor: FC<RevalidateIndictorProps> = ({
   paths,
-  revalidatePromise,
+  revalidate,
   callback,
 }) => {
   const [updated, setUpdated] = useState(false)
@@ -19,7 +19,7 @@ export const RevalidateIndictor: FC<RevalidateIndictorProps> = ({
   useEffect(() => {
     ;(async () => {
       try {
-        await revalidatePromise
+        await revalidate()
         setUpdated(true)
         if (callback) callback()
       } catch {
