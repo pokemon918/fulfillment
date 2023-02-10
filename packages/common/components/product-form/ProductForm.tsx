@@ -461,6 +461,7 @@ export const ProductForm: FC<ProductFormProps> = ({
                     Successfully!{' '}
                     <StyledLink
                       href={`/products/${success ? success._id : ''}`}
+                      native
                     >
                       View it
                     </StyledLink>

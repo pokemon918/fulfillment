@@ -511,6 +511,7 @@ export const InvestmentForm: FC<InvestmentFormProps> = ({
                     Successfully!{' '}
                     <StyledLink
                       href={`/investments/${success ? success._id : ''}`}
+                      native
                     >
                       View it
                     </StyledLink>

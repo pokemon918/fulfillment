@@ -76,7 +76,9 @@ export const ItemDeleteButton: FC<ItemDeleteButtonProps> = (props) => {
         {deleted && (
           <RevalidateIndictor
             {...getRevalidateInfo()}
-            callback={() => router.push(redirect)}
+            callback={() => {
+              window.location.href = redirect
+            }}
           />
         )}
       </div>

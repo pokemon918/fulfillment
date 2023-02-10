@@ -142,7 +142,7 @@ export const CategoryForm: FC<CategoryFormProps> = ({
                   <p style={{ color: '#1b5e20' }}>
                     {actionType === 'update' ? 'Updated' : 'Created'}{' '}
                     Successfully!{' '}
-                    <StyledLink href={`/categories`}>View it</StyledLink>
+                    <StyledLink href={`/categories`} native>View it</StyledLink>
                   </p>
                 </div>
               )}

@@ -200,7 +200,7 @@ export const ArticleForm: FC<ArticleFormProps> = ({
                     <p style={{ color: '#1b5e20' }}>
                       {actionType === 'update' ? 'Updated' : 'Created'}{' '}
                       Successfully!{' '}
-                      <StyledLink href={`/blog/${success ? success._id : ''}`}>
+                      <StyledLink href={`/blog/${success ? success._id : ''}`} native>
                         View it
                       </StyledLink>
                     </p>
