@@ -17,6 +17,7 @@ import { DeleteIcon, AddIcon } from '../../icons'
 import { GalleryForm } from '../gallery/GalleryForm'
 import { RevalidateIndictor } from '../RevalidateIndictor'
 import { ItemDeleteButton } from '../ItemDeleteButton'
+import useHistoryRef from '../../hooks/useHistoryRef'
 
 const GET_CATEGORIES = gql`
   {
@@ -110,13 +111,6 @@ interface ProductFormProps {
   actionType: 'create' | 'update'
 }
 
-type Success =
-  | false
-  | {
-      _id: string
-      categoryId: string
-    }
-
 export const ProductForm: FC<ProductFormProps> = ({
   defaultValues,
   actionType,
@@ -126,8 +120,8 @@ export const ProductForm: FC<ProductFormProps> = ({
   const styles = useStyles({})
   const [saving, setSaving] = useState(false)
   const [deleting, setDeleting] = useState(false)
-  const [success, setSuccess] = useState<Success>(false)
-  const [categoryId, setCategoryId] = useState(defaultValues.categoryId)
+  const [success, setSuccess] = useState<false | { _id: string }>(false)
+  const categoryIdRef = useHistoryRef(defaultValues.categoryId)
   const router = useRouter()
 
   const savedFilenames = useRef(
@@ -222,13 +216,10 @@ export const ProductForm: FC<ProductFormProps> = ({
       filenames: deletedFilenames.current,
     })
       .then(({ product: { _id, categoryId } }) => {
-        setSuccess({
-          _id,
-          categoryId,
-        })
+        setSuccess({ _id })
 
         if (actionType === 'update') {
-          setCategoryId(categoryId)
+          categoryIdRef.append(categoryId)
         }
       })
       .catch(() => {
@@ -479,22 +470,31 @@ export const ProductForm: FC<ProductFormProps> = ({
 
               {success && (
                 <RevalidateIndictor
-                  {...revalidateProduct(success, actionType)}
+                  {...revalidateProduct(
+                    {
+                      _id: success._id,
+                      categoryIds: [
+                        categoryIdRef.prev(),
+                        categoryIdRef.current(),
+                      ],
+                    },
+                    actionType
+                  )}
                 />
               )}
             </div>
           </div>
 
-          {actionType === 'update' && productId && categoryId && (
+          {actionType === 'update' && productId && categoryIdRef.current() && (
             <ItemDeleteButton
-            css={styles.deleteBtnSection}
+              css={styles.deleteBtnSection}
               mutation={DELETE_PRODUCT}
               itemId={productId}
               getRevalidateInfo={() =>
                 revalidateProduct(
                   {
                     _id: productId,
-                    categoryId,
+                    categoryIds: [categoryIdRef.current()],
                   },
                   'delete'
                 )

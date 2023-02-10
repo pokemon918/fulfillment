@@ -1,4 +1,6 @@
-export const revalidate = (paths: string[]) => {
+import { uniq } from './uniq'
+
+export const revalidate = (appUrl: string, paths: string[]) => {
   const stringifiedPaths = encodeURIComponent(paths.join(','))
   return fetch(`/api/revalidate?paths=${stringifiedPaths}`)
 }
@@ -27,12 +29,12 @@ export const revalidateCrossPaths = (
     if (paths) {
       const appUrl = appUrls[appKey]
 
-      const filteredPaths = paths.filter(
-        (path) => typeof path !== 'undefined'
-      ) as string[]
+      const filteredPaths = uniq(
+        paths.filter((path) => typeof path !== 'undefined') as string[]
+      )
 
       revalidatingPaths.push(...filteredPaths)
-      promises.push(revalidate(filteredPaths))
+      promises.push(revalidate(appUrl, filteredPaths))
     }
   })
 

@@ -19,7 +19,14 @@ export const ItemDeleteButton: FC<ItemDeleteButtonProps> = (props) => {
   const styles = useStyles(props)
   const router = useRouter()
 
-  const { itemId, mutation, itemType, redirect, getRevalidateInfo, ...divProps } = props
+  const {
+    itemId,
+    mutation,
+    itemType,
+    redirect,
+    getRevalidateInfo,
+    ...divProps
+  } = props
 
   const onDelete = async () => {
     if (deleting) return
@@ -37,7 +44,6 @@ export const ItemDeleteButton: FC<ItemDeleteButtonProps> = (props) => {
         setDeleted(true)
       } catch {
         alert('An unknown error occurred')
-      } finally {
         setDeleting(false)
       }
     })()
