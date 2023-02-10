@@ -229,10 +229,7 @@ export const InvestmentForm: FC<InvestmentFormProps> = ({
     )
       .then(({ investment: { _id, categoryId } }) => {
         setSuccess({ _id })
-
-        if (actionType === 'update') {
-          categoryIdRef.append(categoryId)
-        }
+        categoryIdRef.append(categoryId)
       })
       .catch(() => {
         alert('an error occur please try again')
@@ -512,7 +509,9 @@ export const InvestmentForm: FC<InvestmentFormProps> = ({
                     {actionType === 'update' ? 'Updated' : 'Created'}{' '}
                     Successfully!{' '}
                     <StyledLink
-                      href={`${investmentUrl}/investments/${success ? success._id : ''}`}
+                      href={`${investmentUrl}/investments/${
+                        success ? success._id : ''
+                      }`}
                       native
                     >
                       View it

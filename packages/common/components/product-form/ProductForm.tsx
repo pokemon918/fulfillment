@@ -217,10 +217,7 @@ export const ProductForm: FC<ProductFormProps> = ({
     })
       .then(({ product: { _id, categoryId } }) => {
         setSuccess({ _id })
-
-        if (actionType === 'update') {
-          categoryIdRef.append(categoryId)
-        }
+        categoryIdRef.append(categoryId)
       })
       .catch(() => {
         alert('an error occur please try again')

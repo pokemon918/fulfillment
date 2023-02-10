@@ -18,7 +18,7 @@ export default function PageInvestments({ investments }: PageInvestmentsProps) {
         <h3 css={styles.heading}>Investments</h3>
 
         {investments ? (
-          <Investments investments={investments} action="update" />
+          <Investments investments={investments} action="view" />
         ) : (
           <p style={{ textAlign: 'center' }}>Loading...</p>
         )}
