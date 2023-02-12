@@ -93,7 +93,6 @@ export const Navbar: FC<NavbarProps> = (originalProps) => {
             <Link
               key={link.to}
               href={link.to}
-              passHref
               css={styles.deskLink}
               data-active={link.to === pathname}
             >

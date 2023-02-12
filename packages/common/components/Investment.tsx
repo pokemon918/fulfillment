@@ -41,7 +41,7 @@ export const Investment: FC<InvestmentProps> = (props) => {
 
       <p css={styles.goalPrice}>pledged of ${goalAmount} goal</p>
 
-      <Button style={{ minWidth: 140, padding: 11 }}>{actionText}</Button>
+      <Button style={{ minWidth: 146, padding: 11 }}>{actionText}</Button>
     </Link>
   )
 }
