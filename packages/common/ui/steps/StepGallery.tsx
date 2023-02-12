@@ -1,6 +1,7 @@
-import { makeStyles } from '../../utils'
+import { isVideoUrl, makeStyles } from '../../utils'
 import { FC } from 'react'
 import { BoxRation } from '../BoxRatio'
+import { RoundedVideo } from '../RoundedVideo'
 
 interface StepGalleryProps {
   gallery: string[]
@@ -14,9 +15,7 @@ export const StepGallery: FC<StepGalleryProps> = (props) => {
   return (
     <div css={styles.root}>
       {gallery.map((galleryItem, idx) => {
-        let isVideo = ['webm', 'mp4'].includes(
-          galleryItem.split('.')[gallery.length - 1] as any
-        )
+        let isVideo = isVideoUrl(galleryItem)
 
         return (
           <BoxRation
@@ -26,9 +25,12 @@ export const StepGallery: FC<StepGalleryProps> = (props) => {
             data-size={gallery.length > 1 ? 'sm' : 'lg'}
           >
             {isVideo ? (
-              <video css={styles.item} controls src={galleryItem} />
+              <RoundedVideo css={styles.video} src={galleryItem} />
             ) : (
-              <img css={styles.item} src={galleryItem} />
+              <div
+                css={styles.img}
+                style={{ backgroundImage: `url(${galleryItem})` }}
+              />
             )}
           </BoxRation>
         )
@@ -38,6 +40,13 @@ export const StepGallery: FC<StepGalleryProps> = (props) => {
 }
 
 const useStyles = makeStyles(({}: StepGalleryProps) => {
+  const itemStyles = {
+    height: '100%',
+    width: '100%',
+    overflow: 'hidden',
+    borderRadius: '50%',
+  }
+
   return {
     root: {
       width: '100%',
@@ -59,12 +68,15 @@ const useStyles = makeStyles(({}: StepGalleryProps) => {
         maxWidth: 360,
       },
     },
-    item: {
-      borderRadius: '50%',
+    video: {
+      ...itemStyles,
       background: '#212121',
-      objectFit: 'cover',
-      height: '100%',
-      width: '100%',
+    },
+    img: {
+      ...itemStyles,
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+      backgroundSize: 'cover',
     },
   }
 })

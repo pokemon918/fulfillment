@@ -6,7 +6,7 @@
       "dependsOn": ["^build"],
       "env": [
         "NEXT_PUBLIC_BACKEND_BASE_URL",
-        "NEXT_PUBLIC_COOKIES_BASE_DOMAIN"
+        "NEXT_PUBLIC_COOKIES_DOMAIN"
       ],
       "outputs": ["dist/**", ".next/**"]
     },

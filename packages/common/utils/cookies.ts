@@ -1,4 +1,4 @@
-const domain = process.env.NEXT_PUBLIC_COOKIES_BASE_DOMAIN
+const domain = process.env.NEXT_PUBLIC_COOKIES_DOMAIN
 
 // getCookie
 export const getCookie = (cookies: string, cookieKey: string) => {
