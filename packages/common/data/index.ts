@@ -1,3 +1,6 @@
 export * from './accountTypes'
 export * from './countries'
 export * from './signup'
+export * from './home'
+export * from './faqs'
+export * from './caseStudies'

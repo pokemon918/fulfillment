@@ -6,6 +6,7 @@ import { makeStyles } from '../utils'
 import { theme } from '../theme'
 import logoDark from '../assets/images/logo-dark-large.png'
 import footerCover from '../assets/images/footer-cover.png'
+import { homeData } from '../data'
 
 export interface FooterProps extends HTMLAttributes<HTMLDivElement> {}
 
@@ -31,11 +32,7 @@ export const Footer: FC<FooterProps> = (props) => {
         <img css={styles.logo} src={logoDark.src} />
 
         <div css={styles.content}>
-          <div css={styles.desc}>
-            Our mission is to help local producers connect with global buyers,
-            through a blockchain-based platform that ensures transparency and
-            trust on the value chain from farm to table
-          </div>
+          <div css={styles.desc}>{homeData.footerText}</div>
 
           <div css={styles.linkGroups}>
             {Object.entries(links).map(([group, groupLinks], groupIdx) => (

@@ -553,7 +553,7 @@ export const InvestmentForm: FC<InvestmentFormProps> = ({
                     'delete'
                   )
                 }
-                redirect={`${investmentUrl}/investments`}
+                redirect={`/investments`}
                 itemType="investment"
               />
             )}

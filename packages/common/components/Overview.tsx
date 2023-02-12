@@ -4,6 +4,7 @@ import { Container } from '../ui'
 import { makeStyles } from '../utils'
 import curvyDots from '../assets/images/curvy-dots.png'
 import overviewGif from '../assets/images/overview.gif'
+import { homeData } from '../data'
 
 interface OverviewProps extends HTMLAttributes<HTMLDivElement> {}
 
@@ -20,22 +21,15 @@ export const Overview: FC<OverviewProps> = (props) => {
 
       <Container maxWidth="md">
         <h4 css={styles.heading} style={{ marginBottom: 52 }}>
-          Overview of TRU MARKET Fulfillment Solution
+          {homeData.solutionsOverview.heading}
         </h4>
       </Container>
 
       <Container maxWidth="md" style={{ position: 'relative' }}>
         <div css={styles.root}>
           <div css={styles.content}>
-            <h3 css={styles.subheading}>TRU Market</h3>
-            <p css={styles.desc}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lacus,
-              fermentum amet faucibus sed id nisi lectus at. Lorem ipsum dolor
-              sit amet, consectetur adipiscing elit. Lacus, fermentum amet
-              faucibus sed id nisi lectus at. Lorem ipsum dolor sit amet,
-              consectetur adipiscing elit. Lacus, fermentum amet faucibus sed id
-              nisi lectus at.
-            </p>
+            <h3 css={styles.subheading}>{homeData.solutionsOverview.title}</h3>
+            <p css={styles.desc}>{homeData.solutionsOverview.content}</p>
           </div>
 
           <img css={styles.gif} src={overviewGif.src} alt="" />

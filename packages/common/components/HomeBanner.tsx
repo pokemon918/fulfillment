@@ -5,6 +5,7 @@ import { Button } from '../ui/Button'
 import { makeStyles } from '../utils'
 import { Navbar } from './Navbar'
 import bannerCover from '../assets/images/home-banner-cover.jpg'
+import { homeData } from '../data'
 
 interface HomeBannerProps extends HTMLAttributes<HTMLDivElement> {
   action?: 'products' | 'investments'
@@ -22,15 +23,9 @@ export const HomeBanner: FC<HomeBannerProps> = (props) => {
 
         <Container css={styles.content}>
           <div css={styles.body}>
-            <h1 css={styles.heading}>
-              Start importing fresh products safely and reliably.
-            </h1>
+            <h1 css={styles.heading}>{homeData.banner.title}</h1>
 
-            <p css={styles.desc}>
-              We provide a global order fulfillment solution in which we take
-              care of everything from production to delivery to ensure that you
-              receive quality product that you need safely and reliably.
-            </p>
+            <p css={styles.desc}>{homeData.banner.content}</p>
 
             <Button
               href={`/${action}`}

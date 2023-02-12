@@ -17,6 +17,7 @@ import {
   RelatedProducts,
   theme,
   RelatedInvestments,
+  faqs,
 } from 'common'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { FC, useState } from 'react'
@@ -60,7 +61,7 @@ const InvestmentPage: FC<InvestmentPageProps> = (props) => {
       />
 
       <Container style={{ marginBottom: 100 }} maxWidth="sm">
-        <Faq />
+        <Faq faqs={faqs.investmentProductFaqs} />
       </Container>
 
       <Footer />

@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import NextLink from 'next/link'
 import { useRouter } from 'next/router'
 import { FC, HTMLAttributes, useEffect, useMemo, useRef, useState } from 'react'
 import { useSameState, useUser } from '../hooks'
@@ -76,6 +76,8 @@ export const Navbar: FC<NavbarProps> = (originalProps) => {
   }, [])
 
   const logo = mode === 'light' ? logoLight : logoDark
+
+  const Link = user?.role === 'admin' ? 'a' : NextLink
 
   return (
     <div css={styles.root} {...divProps} data-open={open}>

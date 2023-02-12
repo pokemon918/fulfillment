@@ -16,6 +16,7 @@ import {
   QuoteSticky,
   RelatedProducts,
   theme,
+  faqs,
 } from 'common'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { FC, useState } from 'react'
@@ -59,7 +60,7 @@ const ProductPage: FC<ProductPageProps> = (props) => {
       />
 
       <Container style={{ marginBottom: 100 }} maxWidth="sm">
-        <Faq />
+        <Faq faqs={faqs.dealProductFaqs} />
       </Container>
 
       <Footer />

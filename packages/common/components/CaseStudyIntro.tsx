@@ -3,16 +3,17 @@ import { theme } from '../theme'
 import { Container } from '../ui'
 import { makeStyles } from '../utils'
 import blockchain from '../assets/images/blockchain.png'
-import caseStudyImg from '../assets/images/case-study-img.svg'
 
 interface CaseStudyIntroProps extends HTMLAttributes<HTMLDivElement> {
+  overviewImg: string
+  description: string
   certifications: string[]
 }
 
 export const CaseStudyIntro: FC<CaseStudyIntroProps> = (props) => {
   const styles = useStyles(props)
 
-  const { certifications, ...divProps } = props
+  const { certifications, overviewImg, description, ...divProps } = props
 
   return (
     <div css={styles.wrapper} {...divProps}>
@@ -21,12 +22,7 @@ export const CaseStudyIntro: FC<CaseStudyIntroProps> = (props) => {
         <div css={styles.root}>
           <div css={styles.textWrapper}>
             <div css={styles.text}>
-              Working in partnership with Catholic Relief Services, NCBA CLUSA
-              will help establish a local Community Development Fund as part of
-              the new $50 million Communities Leading Development Project in
-              Guatemala funded by the U.S. Agency for International Development.
-              Other project partners include Mercy Corps, ADIPO, Caritas Los
-              Altos, and Caritas San Marcos.
+              {description}
             </div>
 
             <div css={styles.certificationsWrapper}>
@@ -43,7 +39,7 @@ export const CaseStudyIntro: FC<CaseStudyIntroProps> = (props) => {
             </div>
           </div>
 
-          <img css={styles.img} src={caseStudyImg.src} />
+          <img css={styles.img} src={overviewImg} />
         </div>
       </Container>
     </div>

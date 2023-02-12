@@ -3,14 +3,16 @@ import { LocationIcon } from '../icons'
 import { theme } from '../theme'
 import { Container } from '../ui'
 import { makeStyles } from '../utils'
-import growerImg from '../assets/images/grower.svg'
 
 interface ProfileHeaderProps extends HTMLAttributes<HTMLDivElement> {
-  profile: {
-    title: string
+  profile:  {
+    name: string
     location: string
-    imgUrl: string
-    detail: string
+    image: string
+    type: {
+      title: string
+      icon: string
+    }
   }
 }
 
@@ -22,13 +24,13 @@ export const ProfileHeader: FC<ProfileHeaderProps> = (props) => {
   return (
     <div css={styles.root} {...divProps}>
       <Container css={styles.profile} maxWidth="md">
-        <img css={styles.logo} src={profile.imgUrl} alt="" />
+        <img css={styles.logo} src={profile.image} alt="" />
         {/* <div css={styles.logoWrapper}>
         </div> */}
 
         <div css={styles.contentWrapper}>
           <div css={styles.info}>
-            <h2 css={styles.title}>{profile.title}</h2>
+            <h2 css={styles.title}>{profile.name}</h2>
             <div css={styles.subtitle}>
               <LocationIcon style={{ marginRight: 16 }} />
               <span>{profile.location}</span>
@@ -36,8 +38,8 @@ export const ProfileHeader: FC<ProfileHeaderProps> = (props) => {
           </div>
 
           <div css={styles.detail}>
-            <span style={{ marginRight: 25 }}>{profile.detail}</span>
-            <img src={growerImg.src} alt="" />
+            <span style={{ marginRight: 25 }}>{profile.type.title}</span>
+            <img src={profile.type.icon} alt="" />
           </div>
         </div>
       </Container>
