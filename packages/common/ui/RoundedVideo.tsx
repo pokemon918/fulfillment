@@ -38,7 +38,7 @@ export const RoundedVideo: FC<RoundedVideoProps> = (props) => {
       <video
         ref={videoRef}
         css={styles.video}
-        controls={false}
+        playsInline
         src={src}
         onPlay={() => setIsPlaying(true)}
         onPause={() => setIsPlaying(false)}
