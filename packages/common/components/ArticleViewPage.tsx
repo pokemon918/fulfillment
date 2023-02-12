@@ -57,6 +57,13 @@ export const getArticleViewStaticProps: GetStaticProps<Props> = async (ctx) => {
 
   const { article } = await graphqlReq(GET_ARTICLE, { articleId })
 
+  if (!article) {
+    return {
+      notFound: true,
+      revalidate: 60,
+    }
+  }
+
   return {
     props: {
       article: {

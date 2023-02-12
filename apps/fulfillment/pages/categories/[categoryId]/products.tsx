@@ -44,15 +44,22 @@ export const getStaticProps: GetStaticProps<PageProductsProps> = async (
 ) => {
   const categoryId = ctx.params?.categoryId as string
 
-  const data = await graphqlReq(GET_CATEGORY_PRODUCTS, { categoryId })
+  const { category, products } = await graphqlReq(GET_CATEGORY_PRODUCTS, { categoryId })
+
+  if (!category) {
+    return {
+      notFound: true,
+      revalidate: 60
+    }
+  }
 
   return {
     props: {
       category: {
-        ...data.category,
-        name: data.category.name.en,
+        ...category,
+        name: category.name.en,
       },
-      products: data.products.map((product: any) => ({
+      products: products.map((product: any) => ({
         ...product,
         name: product.name.en,
         availableSpecs: product.availableSpecs.en,

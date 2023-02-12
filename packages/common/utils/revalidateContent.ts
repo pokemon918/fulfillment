@@ -13,7 +13,7 @@ export const revalidateProduct = (
       ...product.categoryIds.map((categoryId) =>
         categoryId ? `/categories/${categoryId}/products` : undefined
       ),
-      action !== 'delete' ? `/products/${product._id}` : undefined,
+      `/products/${product._id}`,
     ],
   }
 
@@ -31,7 +31,7 @@ export const revalidateInvestment = (
       ...product.categoryIds.map((categoryId) =>
         categoryId ? `/categories/${categoryId}/investments` : undefined
       ),
-      action !== 'delete' ? `/investments/${product._id}` : undefined,
+      `/investments/${product._id}`,
     ],
   }
 
@@ -42,11 +42,7 @@ export const revalidateArticle = (
   article: { _id: string },
   action: ChangeAction
 ) => {
-  const commonPaths = [
-    '/',
-    '/blog',
-    action !== 'delete' ? `/blog/${article._id}` : undefined,
-  ]
+  const commonPaths = ['/', '/blog', `/blog/${article._id}`]
 
   const paths = {
     fulfillment: commonPaths,

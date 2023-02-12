@@ -143,6 +143,13 @@ export const getStaticProps: GetStaticProps<InvestmentPageProps> = async (
 
   const { investment } = await graphqlReq(GET_DATA, { investmentId })
 
+  if (!investment) {
+    return {
+      notFound: true,
+      revalidate: 60
+    }
+  }
+
   return {
     props: {
       investment: {

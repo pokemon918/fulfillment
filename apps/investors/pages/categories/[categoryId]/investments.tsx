@@ -67,20 +67,29 @@ export const getStaticProps: GetStaticProps<PageInvestmentsProps> = async (
 ) => {
   const categoryId = ctx.params?.categoryId as string
 
-  const data = await graphqlReq(GET_CATEGORY_INVESTMENTS, { categoryId })
+  const { category, investments } = await graphqlReq(GET_CATEGORY_INVESTMENTS, {
+    categoryId,
+  })
+
+  if (!category) {
+    return {
+      notFound: true,
+      revalidate: 60,
+    }
+  }
 
   return {
     props: {
       category: {
-        ...data.category,
-        name: data.category.name.en,
+        ...category,
+        name: category.name.en,
       },
-      investments: data.investments.map((investment: any) => ({
+      investments: investments.map((investment: any) => ({
         ...investment,
         name: investment.name.en,
       })),
     },
-    revalidate: 60
+    revalidate: 60,
   }
 }
 

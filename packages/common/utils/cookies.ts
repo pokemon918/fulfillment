@@ -1,8 +1,4 @@
-const domain = (() => {
-  let val = process.env.NEXT_PUBLIC_COOKIES_BASE_DOMAIN
-  if (val !== 'localhost') val = '.' + val
-  return val
-})()
+const domain = process.env.NEXT_PUBLIC_COOKIES_BASE_DOMAIN
 
 // getCookie
 export const getCookie = (cookies: string, cookieKey: string) => {
@@ -44,7 +40,7 @@ export const getBrowserCookie = (cookieKey: string) =>
 // setCookie
 export const setCookie = (name: string, value: string, expiresAt: Date) => {
   let cookie = `${name}=${value};domain=${domain};path=/;expires=${expiresAt.toUTCString()}`
-  if (domain !== 'localhost') cookie += `;secure`
+  if (process.env.NODE_ENV !== 'development') cookie += `;secure`
   cookie += ';'
   document.cookie = cookie
 }

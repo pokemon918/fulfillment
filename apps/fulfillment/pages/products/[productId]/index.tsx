@@ -149,6 +149,13 @@ export const getStaticProps: GetStaticProps<ProductPageProps> = async (ctx) => {
 
   const { product } = await graphqlReq(GET_DATA, { productId })
 
+  if (!product) {
+    return {
+      notFound: true,
+      revalidate: 60
+    }
+  }
+
   return {
     props: {
       product: {
