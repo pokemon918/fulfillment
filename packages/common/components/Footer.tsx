@@ -12,8 +12,8 @@ export interface FooterProps extends HTMLAttributes<HTMLDivElement> {}
 
 const links = {
   'Useful Links': [
-    { title: 'Privacy Policy', href: '#' },
-    { title: 'Terms & Conditions', href: '#' },
+    { title: 'Privacy Policy', href: 'https://trumarket.tech/privacy-policy' },
+    { title: 'Terms & Conditions', href: 'https://trumarket.tech/terms-and-conditions' },
   ],
   'Our Services': [
     { title: 'Technology', href: 'https://trumarket.tech/technology' },
