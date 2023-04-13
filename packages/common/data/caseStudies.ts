@@ -61,7 +61,7 @@ export const caseStudies: CaseStudy[] = [
       {
         title: 'Plantation',
         description:
-          'Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size. Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.',
+        'Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size. Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.Our blueberries are delicately harvested and packed in the Cañete region of Peru, being fully bloomed and large in size.',
         gallery: [sampleImg.src],
       },
       {
@@ -80,7 +80,7 @@ export const caseStudies: CaseStudy[] = [
       cover: cover.src,
       image: kiwiImg.src,
       type: {
-        title: 'Grower / Harvester',
+        title: 'Grower / Processor',
         icon: typeImg.src,
       },
     },
