@@ -4,6 +4,7 @@ import { FC } from 'react'
 import { Step } from './Step'
 import { StepGallery } from './StepGallery'
 import { StepsStartPoint } from './StepsStartPoint'
+import parseLineBreaks from '../../utils/parseLineBreaks'
 
 interface StepsProps {
   steps: {
@@ -46,7 +47,7 @@ export const Steps: FC<StepsProps> = (props) => {
                 <h3 css={styles.heading}>{step.title}</h3>
               </div>
 
-              <div css={styles.desc}>{step.description}</div>
+              <div css={styles.desc}>{parseLineBreaks(step.description)}</div>
 
               <div css={styles.gallery} data-reversed={stepIdx % 2 == 0}>
                 <StepGallery gallery={step.gallery} />
