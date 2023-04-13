@@ -29,10 +29,10 @@ export interface CaseStudy {
 
 export const caseStudies: CaseStudy[] = [
   {
-    slug: 'company1',
+    slug: 'mango',
     profile: {
-      name: 'Company name',
-      location: 'Guatemala, Guatemala city',
+      name: 'APROMALPI',
+      location: 'Piura, Peru',
       cover: cover.src,
       image: kiwiImg.src,
       type: {
