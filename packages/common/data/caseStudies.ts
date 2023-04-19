@@ -67,26 +67,26 @@ export const caseStudies: CaseStudy[] = [
         title: 'Harvest - milestone 1',
         description:
           `The production of organic fresh mango begins in carefully nurtured orchards located in the northern regions of Peru - at Tambogrande - in orchads where the mango trees are cultivated with utmost care and precision. From planting to harvesting, every step is crucial in ensuring the highest quality mangoes reach the consumers table. TRU MARKET innovative platform has enabled traceability in the production orchards, bringing transparency and trust to the entire journey.
-          Through smart contracts, TRU MARKET ensures that suppliers comply with all the milestones of the operation. This includes using certified organic farming practices, adhering to Codex Alimentarius standards for food safety, and obtaining relevant certifications such as GlobalGAP for good agricultural practices. TRU MARKET platform records and verifies each operation in real-time, creating an immutable and transparent audit trail.
-          With TRU MARKET technology, buyers can confidently trace the origin of the mangoes, ensuring that they are sourced from reputable organic farms. Our platform enables recording and verification of planting details, including the variety of mangoes, planting date, and location. This information is then securely stored on the blockchain, providing an immutable record of the mangoes origin. This enhances trust between buyers and suppliers, as the platform ensures that all operations are thoroughly inspected to meet the highest standards.`,
+          \nThrough smart contracts, TRU MARKET ensures that suppliers comply with all the milestones of the operation. This includes using certified organic farming practices, adhering to Codex Alimentarius standards for food safety, and obtaining relevant certifications such as GlobalGAP for good agricultural practices. TRU MARKET platform records and verifies each operation in real-time, creating an immutable and transparent audit trail.
+          \nWith TRU MARKET technology, buyers can confidently trace the origin of the mangoes, ensuring that they are sourced from reputable organic farms. Our platform enables recording and verification of planting details, including the variety of mangoes, planting date, and location. This information is then securely stored on the blockchain, providing an immutable record of the mangoes origin. This enhances trust between buyers and suppliers, as the platform ensures that all operations are thoroughly inspected to meet the highest standards.`,
         gallery: [mangoo1.src, mangoo2.src],
       },
       {
         title: 'Packing - milestone 2',
         description:
-          'Once the organic fresh mangoes are harvested, they are carefully transported to the packing house where details such as washing, sorting, and packing are recorded and verified in real-time, ensuring that the mangoes are handled according to quality and safety standards.'+
-          'TRU MARKET platform enables traceability in the packing house, ensuring that every mango is processed with precision.'+
-          'Quality checks are conducted at every stage, ensuring that only the best mangoes are packed for shipment. Packaging standards are strictly followed, including the use of eco-friendly materials that align with organic certification requirements. TRU MARKET technology ensures that every operation is transparently recorded and verified, creating a seamless and trustworthy process.'+
-          'By leveraging our platform traceability capabilities, B2B global operations of organic fresh mangoes can confidently trace the journey of mangoes from the farm to the end consumer, ensuring transparency, trust, and compliance at every step of the production process.',
+          `Once the organic fresh mangoes are harvested, they are carefully transported to the packing house where details such as washing, sorting, and packing are recorded and verified in real-time, ensuring that the mangoes are handled according to quality and safety standards.'
+          \nTRU MARKET platform enables traceability in the packing house, ensuring that every mango is processed with precision.'
+          \nQuality checks are conducted at every stage, ensuring that only the best mangoes are packed for shipment. Packaging standards are strictly followed, including the use of eco-friendly materials that align with organic certification requirements. TRU MARKET technology ensures that every operation is transparently recorded and verified, creating a seamless and trustworthy process.
+          \nBy leveraging our platform traceability capabilities, B2B global operations of organic fresh mangoes can confidently trace the journey of mangoes from the farm to the end consumer, ensuring transparency, trust, and compliance at every step of the production process.`,
         gallery: [mangop1.src, mangop2.src],
       },
       {
         title: 'Finished product - milestone 3',
         description:
         'Our platform goes beyond the B2B supply chain and extends its traceability capabilities to the finished product of organic fresh mangoes, ensuring that end consumers can have confidence in the product freshness and authenticity.'+
-        'TRU MARKET enables end consumers can easily access information about the mangoes they are purchasing, such as the variety of mangoes, the farm where they were grown, and the processing methods used. This provides transparency and confidence in the mangoes quality, as consumers can verify the product claims and make informed purchasing decisions through the palm of their hand.'+
-        'Furthermore, our platform ensures compliance with relevant certifications, such as organic certification and other quality and safety standards, giving consumers peace of mind knowing that they are purchasing a product that meets stringent requirements.'+
-        'By leveraging our platform traceability capabilities, the finished product of organic fresh mangoes can be tracked and verified, providing end consumers with transparency, confidence, and trust in the product quality and authenticity.',
+        '\nTRU MARKET enables end consumers can easily access information about the mangoes they are purchasing, such as the variety of mangoes, the farm where they were grown, and the processing methods used. This provides transparency and confidence in the mangoes quality, as consumers can verify the product claims and make informed purchasing decisions through the palm of their hand.'+
+        '\nFurthermore, our platform ensures compliance with relevant certifications, such as organic certification and other quality and safety standards, giving consumers peace of mind knowing that they are purchasing a product that meets stringent requirements.'+
+        '\nBy leveraging our platform traceability capabilities, the finished product of organic fresh mangoes can be tracked and verified, providing end consumers with transparency, confidence, and trust in the product quality and authenticity.',
         gallery: [mangoe1.src, mangoe2.src],
       },
       {
