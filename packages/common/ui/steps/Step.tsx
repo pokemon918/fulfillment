@@ -1,6 +1,7 @@
 import { makeStyles } from '../../utils'
 import { FC, HTMLAttributes } from 'react'
 import { StepGallery } from './StepGallery'
+import parseLineBreaks from '../../utils/parseLineBreaks'
 
 interface StepProps extends HTMLAttributes<HTMLDivElement> {
   title: string
@@ -46,7 +47,7 @@ export const Step: FC<StepProps> = (props) => {
         {reversed && dotNode}
       </div>
 
-      <p css={styles.stepDesc}>{description}</p>
+      <p css={styles.stepDesc}>{parseLineBreaks(description)}</p>
     </div>
   )
 
