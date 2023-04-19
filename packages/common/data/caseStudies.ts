@@ -14,6 +14,7 @@ import mangoe1 from '../assets/images/20230111_163645.jpg'
 import mangoe2 from '../assets/images/20230111_193734.jpg'
 import globalgap from '../assets/images/global_gap.jpg'
 import euorganic from '../assets/images/eu_organic.png'
+import fairtrade from '../assets/images/fair_trade.png'
 import gingero1 from '../assets/images/RECEPCION DE MATERIA PRIMA.jpg'
 import gingerp1 from '../assets/images/EMPAQUE.jpg'
 import gingerp2 from '../assets/images/EMPAQUE (1).jpg'
@@ -49,7 +50,7 @@ export const caseStudies: CaseStudy[] = [
     slug: 'mango',
     profile: {
       name: 'APROMALPI - Cooperativa Agraria de Productores Orgánicos',
-      location: 'Pichanaki, Peru',
+      location: 'Piura, Peru',
       cover: banner_mango.src,
       image: apromalpi.src,
       type: {
@@ -60,14 +61,14 @@ export const caseStudies: CaseStudy[] = [
     description:
       'Working in partnership with TRU MARKET, APROMALPI has shipped their mangoes to supermarket chains in The Netherlands, Belgium and Germany. APROMALPI is a well-known organic mango producer with more than 20 years of experience in organic management and export located in Chulucanas, Piura.',
     overviewImg: overviewImg.src,
-    certifications: [globalgap.src, euorganic.src],
+    certifications: [globalgap.src, euorganic.src, fairtrade.src],
     journey: [
       {
         title: 'Harvest - milestone 1',
         description:
-          'The production of organic fresh mango begins in carefully nurtured orchards located in the northern regions of Peru - at Tambogrande - in orchads where the mango trees are cultivated with utmost care and precision. From planting to harvesting, every step is crucial in ensuring the highest quality mangoes reach the consumers table. TRU MARKET innovative platform has enabled traceability in the production orchards, bringing transparency and trust to the entire journey.'+
-          'Through smart contracts, TRU MARKET ensures that suppliers comply with all the milestones of the operation. This includes using certified organic farming practices, adhering to Codex Alimentarius standards for food safety, and obtaining relevant certifications such as GlobalGAP for good agricultural practices. TRU MARKET platform records and verifies each operation in real-time, creating an immutable and transparent audit trail.'+
-          'With TRU MARKET technology, buyers can confidently trace the origin of the mangoes, ensuring that they are sourced from reputable organic farms. Our platform enables recording and verification of planting details, including the variety of mangoes, planting date, and location. This information is then securely stored on the blockchain, providing an immutable record of the mangoes origin. This enhances trust between buyers and suppliers, as the platform ensures that all operations are thoroughly inspected to meet the highest standards.',
+          `The production of organic fresh mango begins in carefully nurtured orchards located in the northern regions of Peru - at Tambogrande - in orchads where the mango trees are cultivated with utmost care and precision. From planting to harvesting, every step is crucial in ensuring the highest quality mangoes reach the consumers table. TRU MARKET innovative platform has enabled traceability in the production orchards, bringing transparency and trust to the entire journey.
+          Through smart contracts, TRU MARKET ensures that suppliers comply with all the milestones of the operation. This includes using certified organic farming practices, adhering to Codex Alimentarius standards for food safety, and obtaining relevant certifications such as GlobalGAP for good agricultural practices. TRU MARKET platform records and verifies each operation in real-time, creating an immutable and transparent audit trail.
+          With TRU MARKET technology, buyers can confidently trace the origin of the mangoes, ensuring that they are sourced from reputable organic farms. Our platform enables recording and verification of planting details, including the variety of mangoes, planting date, and location. This information is then securely stored on the blockchain, providing an immutable record of the mangoes origin. This enhances trust between buyers and suppliers, as the platform ensures that all operations are thoroughly inspected to meet the highest standards.`,
         gallery: [mangoo1.src, mangoo2.src],
       },
       {
