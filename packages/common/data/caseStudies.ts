@@ -143,8 +143,8 @@ export const caseStudies: CaseStudy[] = [
         title: 'Storage - milestone 4',
         description:
           `Optimal storage conditions are crucial for preserving the freshness and flavor of organic fresh ginger, and our platform ensures traceability in the storage process.
-          After the ginger is packaged, it is carefully stored in climate-controlled facilities that are designed to maintain the ginger freshness and flavor. Our platform records and verifies the storage conditions, ensuring that the ginger is stored at the optimal temperature and humidity levels to prevent deterioration and maintain its superior quality.
-          Our commitment to traceability extends to every stage of the supply chain, including storage. By monitoring and recording the storage conditions, we can ensure that the ginger remains fresh and flavorful until it reaches the end consumers table. This meticulous attention to storage helps us deliver a premium product that meets our customers expectations and maintains the ginger natural goodness from Pichanaki, Peru, to consumers worldwide.`,
+          \nAfter the ginger is packaged, it is carefully stored in climate-controlled facilities that are designed to maintain the ginger freshness and flavor. Our platform records and verifies the storage conditions, ensuring that the ginger is stored at the optimal temperature and humidity levels to prevent deterioration and maintain its superior quality.
+          \nOur commitment to traceability extends to every stage of the supply chain, including storage. By monitoring and recording the storage conditions, we can ensure that the ginger remains fresh and flavorful until it reaches the end consumers table. This meticulous attention to storage helps us deliver a premium product that meets our customers expectations and maintains the ginger natural goodness from Pichanaki, Peru, to consumers worldwide.`,
         gallery: [sampleImg.src, sampleImg.src],
       },
     ],
