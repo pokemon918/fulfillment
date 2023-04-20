@@ -112,7 +112,7 @@ export const caseStudies: CaseStudy[] = [
     description:
       'Working in partnership with Catholic Relief Services, NCBA CLUSA will help establish a local Community Development Fund as part of the new $50 million Communities Leading Development Project in Guatemala funded by the U.S. Agency for International Development. Other project partners include Mercy Corps, ADIPO, Caritas Los Altos, and Caritas San Marcos.',
     overviewImg: overviewImg.src,
-    certifications: [certPlaceholder.src, certPlaceholder.src],
+    certifications: [euorganic.src, globalgap.src],
     journey: [
         {
         title: 'Harvest - milestone 1',
