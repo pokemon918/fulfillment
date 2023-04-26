@@ -4,6 +4,7 @@ import { theme } from '../theme'
 import { BaseProduct } from '../types'
 import { Button, CountryLabel } from '../ui'
 import { makeStyles, mergeProps } from '../utils'
+import rightangle from '../assets/images/right_angle.png'
 
 interface ProductProps extends HTMLAttributes<HTMLAnchorElement> {
   product: BaseProduct
@@ -23,9 +24,56 @@ export const Product: FC<ProductProps> = (originalProps) => {
 
   const { product, horizontal, bordered, imgHeight, ...anchorProps } = props
 
+  const splittedSpecs = product.availableSpecs.split("/")
+  const type = splittedSpecs[0].trim()
+  const quality = splittedSpecs[1].trim()
+  const size = splittedSpecs[2].split(':')[1].trim();
+
   return (
     <Link href={`/products/${product._id}`} css={styles.root} {...anchorProps}>
-      <div
+      <div css={styles.productMainContainer}>
+        <div css={styles.productImageContainer}>
+          <div
+            css={styles.imgBackground}
+            style={{ backgroundImage: `url(${product.thumbnail})` }}
+          />
+        </div>
+
+        <div css={styles.productHeadlineContainer}>
+          <div css={styles.productNameContainer}>
+            <h3 css={styles.heading}>{product.name}</h3>
+          </div>
+          <div css={styles.productFlagContainer}>
+            <CountryLabel css={styles.flag} countryCode={product.country} noName={true} />
+          </div>
+        </div>
+
+        <div css={styles.productSpecsContainer}>
+          <div css={styles.typeContainer}>
+            <p css={styles.type} style={{ fontWeight: '200' }}>Type</p>
+            <p css={styles.type} style={{ fontWeight: 'bold' }}>{type.toUpperCase()}</p>
+          </div>
+          <div css={styles.qualityContainer}>
+            <p css={styles.type} style={{ fontWeight: '200' }}>Quality</p>
+            <p css={styles.type} style={{ fontWeight: 'bold' }}>{quality.toUpperCase()}</p>
+          </div>
+          <div css={styles.sizeContainer}>
+            <p css={styles.type} style={{ fontWeight: '200' }}>Size</p>
+            <p css={styles.type} style={{ fontWeight: 'bold' }}>{size}</p>
+          </div>
+        </div>
+
+        <div css={styles.detailsContainer}>
+          <div css={styles.priceContainer}>
+            <span css={styles.priceVal}>${product.price}</span>
+            <p css={styles.priceDesc}>per lb (Pound)</p>
+          </div>
+          <div css={styles.moreContainer}>
+            <span style={{display: 'inline-flex'}}>In details<img css={styles.angle} src={rightangle.src} /></span>
+          </div>
+        </div>
+      </div>
+      {/* <div
         css={styles.imgBackground}
         style={{ backgroundImage: `url(${product.thumbnail})` }}
       />
@@ -49,7 +97,7 @@ export const Product: FC<ProductProps> = (originalProps) => {
         </div>
 
         <Button style={{ minWidth: 146 }}>See Details</Button>
-      </div>
+      </div> */}
     </Link>
   )
 }
@@ -61,10 +109,11 @@ const useStyles = makeStyles(
       zIndex: 300,
       transform: 'translateZ(10px)',
       width: '100%',
-      display: 'grid',
+      display: 'block',
       gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 0.8fr)',
       border: '1px solid #CFCFCF',
       borderRadius: 16,
+      background: '#E9E9E9',
       fontWeight: 500,
       overflow: 'hidden',
       color: '#000',
@@ -74,6 +123,15 @@ const useStyles = makeStyles(
         gridTemplateColumns: 'minmax(0, 1fr)',
         margin: '0 auto',
       },
+    },
+    productMainContainer: {
+      width: '100%',
+    },
+    productImageContainer: {
+      width: '90%',
+      margin: 'auto',
+      height: '250px',
+      marginTop: '20px',
     },
     imgBackground: {
       width: '100%',
@@ -94,6 +152,72 @@ const useStyles = makeStyles(
         },
       },
     },
+    productHeadlineContainer: {
+      width: '90%',
+      margin: 'auto',
+      display: 'flex',
+      marginTop: '20px',
+      marginBottom: '20px',
+      [`@media (max-width: ${theme.widths.tabletXs})`]: {
+        marginTop: '70px'
+      }
+    },
+    productNameContainer: {
+      width: '88%',
+      paddingTop: '8px'
+    },
+    productFlagContainer: {
+      width: '15%',
+      paddingTop: '13px',
+      background: '#f5f2f2',
+      textAlign: 'center',
+      paddingLeft: '5px',
+    },
+    productSpecsContainer: {
+      width: '100%',
+      display: 'flex',
+      borderBottom: '1px solid #CFCFCF',
+      borderTop: '1px solid #CFCFCF',
+    },
+    typeContainer: {
+      width: '33.3%',
+      textAlign: 'center',
+      borderRight: '1px solid #CFCFCF',
+    },
+    qualityContainer: {
+      width: '33.4%',
+      textAlign: 'center',
+      borderRight: '1px solid #CFCFCF',
+    },
+    sizeContainer: {
+      width: '33.3%',
+      textAlign: 'center'
+    },
+    type: {
+      color: '#69832C',
+      margin: '10px 0px'
+    },
+    detailsContainer: {
+      width: '100%',
+      display: 'flex',
+    },
+    priceContainer: {
+      width: '60%',
+      paddingLeft: '20px !important',
+      fontWeight: 'bold',
+      padding: '20px 0px',
+    },
+    moreContainer: {
+      width: '40%',
+      textAlign: 'center',
+      paddingTop: '30px !important',
+      background: '#B1DA50',
+      padding: '20px 0px'
+    },
+    angle: {
+      marginLeft: '10px',
+      objectFit: 'contain'
+    },
     body: {
       display: 'flex',
       flexDirection: 'column',
@@ -109,7 +233,7 @@ const useStyles = makeStyles(
     },
     heading: {
       fontSize: 25,
-      fontWeight: 500,
+      fontWeight: 'bold',
       lineHeight: 1.2,
       marginBottom: 6,
     },

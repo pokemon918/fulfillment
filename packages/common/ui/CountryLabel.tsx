@@ -26,7 +26,7 @@ export const CountryLabel: FC<CountryLabelProps> = (props) => {
         className={`fi fi-${countryCode.toLowerCase()}`}
         css={styles.flagIcon}
       ></i>
-      <span>{(address ? `${address}, ` : '') + country.name}</span>
+      {/* <span>{(address ? `${address}, ` : '') + country.name}</span> */}
     </div>
   )
 }

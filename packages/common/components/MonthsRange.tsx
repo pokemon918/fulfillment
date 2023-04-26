@@ -1,5 +1,6 @@
 import { FC, HTMLAttributes } from 'react'
 import { makeStyles } from '../utils'
+import pickedImg from '../assets/images/picked.png'
 
 interface MonthsRangeProps extends HTMLAttributes<HTMLDivElement> {
   picked: number[]
@@ -7,21 +8,27 @@ interface MonthsRangeProps extends HTMLAttributes<HTMLDivElement> {
 
 export const MonthsRange: FC<MonthsRangeProps> = (props) => {
   const { picked, ...divProps } = props
-  const months = ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D']
+  const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC']
 
   const styles = useStyles(props)
 
   return (
     <div css={styles.root} {...divProps}>
-      <div css={styles.headings}>
+      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
         {months.map((month, monthIdx) => (
-          <span key={monthIdx} css={styles.heading}>
-            {month}
-          </span>
+          <div>
+            <div key={monthIdx} css={styles.monthHolder}>
+              {month}
+            </div>
+
+            <div key={monthIdx} css={styles.pickedHolder} style={{background: picked.includes(monthIdx) ? '#B1DA50' : '#E9EBF0'}} >
+              <img src={pickedImg.src} />
+            </div>
+          </div>
         ))}
       </div>
 
-      <div css={styles.range}>
+      {/* <div css={styles.range}>
         {months.map((_, monthIdx) => {
           const isCurPicked = picked.includes(monthIdx)
           const isPrevPicked = picked.includes(monthIdx - 1) || monthIdx === 0
@@ -40,12 +47,12 @@ export const MonthsRange: FC<MonthsRangeProps> = (props) => {
             </span>
           )
         })}
-      </div>
+      </div> */}
     </div>
   )
 }
 
-const useStyles = makeStyles(({}: MonthsRangeProps) => ({
+const useStyles = makeStyles(({ }: MonthsRangeProps) => ({
   root: {
     width: '100%',
   },
@@ -59,11 +66,27 @@ const useStyles = makeStyles(({}: MonthsRangeProps) => ({
     display: 'flex',
     justifyContent: 'center',
   },
+  monthHolder: {
+    background: '#E9EBF0',
+    textAlign: 'center',
+    padding: '5px',
+    width: 'auto',
+    fontSize: '10px',
+    marginRight: '3px',
+    color: '#828282',
+  },
+  pickedHolder: {
+    marginTop: '3px',
+    textAlign: 'center',
+    padding: '5px',
+    width: 'auto',
+    marginRight: '3px',
+    color: '#828282',
+  },
   range: {
     display: 'grid',
     gridTemplateColumns: 'repeat(12, minmax(0, 1fr))',
     background: '#ffffff',
-    border: '0.4px solid #D6D6D6',
     borderRadius: 50,
     height: 10,
     overflow: 'hidden',
