@@ -44,7 +44,7 @@ export const Product: FC<ProductProps> = (originalProps) => {
             <h3 css={styles.heading}>{product.name}</h3>
           </div>
           <div css={styles.productFlagContainer}>
-            <CountryLabel css={styles.flag} countryCode={product.country} noName={true} />
+            <CountryLabel css={styles.flag} countryCode={product.country} />
           </div>
         </div>
 
