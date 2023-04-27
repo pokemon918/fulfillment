@@ -6,12 +6,13 @@ interface CountryLabelProps extends HTMLAttributes<HTMLDivElement> {
   countryCode: string
   fontWeight?: number
   address?: string
+  noName?: boolean
 }
 
 export const CountryLabel: FC<CountryLabelProps> = (props) => {
   const styles = useStyles(props)
 
-  const { countryCode, fontWeight, address, ...divProps } = props
+  const { noName, countryCode, fontWeight, address, ...divProps } = props
 
   const country = useMemo(
     () => countries.find((c) => c.code === countryCode),
@@ -26,7 +27,7 @@ export const CountryLabel: FC<CountryLabelProps> = (props) => {
         className={`fi fi-${countryCode.toLowerCase()}`}
         css={styles.flagIcon}
       ></i>
-      {/* <span>{(address ? `${address}, ` : '') + country.name}</span> */}
+      <span>{(address ? `${address}, ` : '') + (noName ? '' : country.name)}</span>
     </div>
   )
 }

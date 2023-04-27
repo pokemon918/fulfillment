@@ -138,7 +138,7 @@ export const ItemIntro: FC<ItemIntroProps> = (props) => {
             <div css={styles.originContainer}>
               <p style={{ fontWeight: 'bold', fontSize: '12px' }}>Origin: Peru</p>
               <div css={styles.flagHolder}>
-                <CountryLabel countryCode={'US'} />
+                <CountryLabel countryCode={'US'} noName />
               </div>
             </div>
           </div>
