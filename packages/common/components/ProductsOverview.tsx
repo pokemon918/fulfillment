@@ -131,7 +131,7 @@ const useStyles = makeStyles((props: ProductsOverviewProps) => {
       },
     },
     product: {
-      minWidth: 400,
+      minWidth: 370,
       marginRight: 20,
       [`@media (max-width: ${theme.widths.tablet})`]: {
         marginRight: 20,

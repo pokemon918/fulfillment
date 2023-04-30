@@ -64,7 +64,7 @@ export const ItemIntro: FC<ItemIntroProps> = (props) => {
             children={
               <div css={styles.categories}>
                 {gallery.map((productImage, index) => (
-                  <div key={index} css={styles.product}><img src={productImage} style={{ borderRadius: '10px', width: '100%', objectFit: 'contain'}} /></div>
+                  <div key={index} css={styles.product}><img src={productImage} style={{ borderRadius: '10px', width: '100%', objectFit: 'contain' }} /></div>
                 ))}
 
                 <div css={styles.emptyBox} />
@@ -75,7 +75,7 @@ export const ItemIntro: FC<ItemIntroProps> = (props) => {
                 <div css={styles.sliderStyle}>
                   {scrollView}
 
-                  <div style={{textAlign: 'right', marginTop: '50px'}}>
+                  <div style={{ textAlign: 'right', marginTop: '50px' }}>
                     {deskArrows}
                   </div>
 
@@ -84,6 +84,16 @@ export const ItemIntro: FC<ItemIntroProps> = (props) => {
               </div>
             )}
           />
+
+          <div style={{ marginTop: '-100px', height: 'auto', marginLeft: '20px' }}>
+            {item.traces.map((item) => {
+              return <div>
+                <img src={item.gallery[0]} style={{ width: '100%', objectFit: 'contain' }} />
+                <h2 style={{ margin: '10px 0px', fontWeight: 'normal' }}>{item.title}</h2>
+                <p css={styles.subtitle} style={{ marginBottom: '20px' }}>{item.description}</p>
+              </div>
+            })}
+          </div>
         </div>
 
         <div css={styles.detailsMainContainer}>
@@ -119,7 +129,7 @@ export const ItemIntro: FC<ItemIntroProps> = (props) => {
 
               {item.type === 'product' ? (
                 <p css={styles.unitPhrase}>
-                  USD / KG, {dayjs(item.updatedAt).format('MMMM DD, YYYY')}
+                  / USD / KG, {dayjs(item.updatedAt).format('MMMM DD, YYYY')}
                 </p>
               ) : (
                 <div style={{ marginBottom: 26 }}>
@@ -166,7 +176,7 @@ export const ItemIntro: FC<ItemIntroProps> = (props) => {
 
           <div css={styles.harvestingContainer}>
             <div style={{ padding: '20px' }}>
-              <p css={styles.subtitle} style={{ marginBottom: 10 }}>
+              <p style={{ fontWeight: 'bold', fontSize: '12px', marginBottom: '10px' }}>
                 Harvesting Seasonality
               </p>
 
@@ -202,7 +212,26 @@ const useStyles = makeStyles(({ item: { type } }: ItemIntroProps) => ({
   },
   scrollContainer: {
     width: '50%',
-    paddingRight: '50px',
+    paddingRight: '20px',
+    height: '604px',
+    overflowY: 'scroll',
+    '::-webkit-scrollbar': {
+      width: '5px'
+    },
+    /* Track */
+    '::-webkit-scrollbar-track': {
+      background: '#f8f8f8'
+    },
+
+    /* Handle */
+    '::-webkit-scrollbar-thumb': {
+      background: '#B1DA50'
+    },
+
+    /* Handle on hover */
+    '::-webkit-scrollbar-thumb:hover': {
+      background: '#B1DA50'
+    },
     [`@media (max-width: ${theme.widths.tablet})`]: {
       width: '100%',
       paddingRight: '0px',
@@ -236,11 +265,10 @@ const useStyles = makeStyles(({ item: { type } }: ItemIntroProps) => ({
     padding: '0 16px',
   },
   detailsMainContainer: {
-    border: '1px solid #E9EBF0',
+    border: '1px solid #D9D9D9',
     width: '50%',
-    borderRadius: '10px',
-    height: '594px',
-    paddingTop: '34px',
+    borderRadius: '5px',
+    height: '604px',
     [`@media (max-width: ${theme.widths.tablet})`]: {
       width: '100%',
       height: 'auto',
@@ -259,13 +287,13 @@ const useStyles = makeStyles(({ item: { type } }: ItemIntroProps) => ({
   },
   headerContainer: {
     width: '100%',
-    borderBottom: '1px solid #E9EBF0',
+    borderBottom: '1px solid #D9D9D9',
     padding: '20px'
   },
   specsContainer: {
     width: '100%',
     display: 'flex',
-    borderBottom: '1px solid #E9EBF0',
+    borderBottom: '1px solid #D9D9D9',
     padding: '20px'
   },
   priceContainer: {
@@ -280,7 +308,7 @@ const useStyles = makeStyles(({ item: { type } }: ItemIntroProps) => ({
   },
   offerContainer: {
     width: '100%',
-    borderBottom: '1px solid #E9EBF0',
+    borderBottom: '1px solid #D9D9D9',
     padding: '20px'
   },
   kgBoxes: {
@@ -320,12 +348,15 @@ const useStyles = makeStyles(({ item: { type } }: ItemIntroProps) => ({
     alignItems: 'center',
   },
   title: {
-    fontSize: 34,
+    fontSize: 32,
+    fontWeight:600,
     marginBottom: 10,
   },
   subtitle: {
-    fontSize: 12,
-    color: '#828282'
+    fontSize: 14,
+    color: '#828282',
+    fontWeight:400,
+    fontFamily: theme.fonts.primary,
   },
   price: {
     fontSize: 30,
