@@ -69,11 +69,12 @@ const useStyles = makeStyles(({ }: MonthsRangeProps) => ({
   monthHolder: {
     background: '#E9EBF0',
     textAlign: 'center',
-    padding: '5px 12.4px',
+    padding: '5px 11px',
     width: 'auto',
     fontSize: '10px',
     marginRight: '3px',
     color: '#828282',
+    border: '1px solid #cecece'
   },
   pickedHolder: {
     margin: '3px 0px',

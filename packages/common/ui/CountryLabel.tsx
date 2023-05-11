@@ -3,7 +3,7 @@ import { makeStyles } from '../utils'
 import { FC, HTMLAttributes, useMemo } from 'react'
 
 interface CountryLabelProps extends HTMLAttributes<HTMLDivElement> {
-  countryCode: string
+  countryCode: string | undefined
   fontWeight?: number
   address?: string
   noName?: boolean
@@ -24,7 +24,7 @@ export const CountryLabel: FC<CountryLabelProps> = (props) => {
   return (
     <div css={styles.root} {...divProps}>
       <i
-        className={`fi fi-${countryCode.toLowerCase()}`}
+        className={`fi fi-${countryCode?.toLowerCase()}`}
         css={styles.flagIcon}
       ></i>
       <span>{(address ? `${address}, ` : '') + (noName ? '' : country.name)}</span>

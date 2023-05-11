@@ -25,13 +25,13 @@ export const ProductInfo: FC<ProductInfoProps> = (props) => {
     <div css={styles.root} {...divProps}>
       <div css={styles.toggleNav}>
         <div css={styles.toggleButtons}>
-          <Button
+          {/* <Button
             css={styles.toggleBtn}
             data-inactive={view !== 'details'}
             onClick={() => setView('details')}
           >
             Product Details
-          </Button>
+          </Button> */}
 
           <Button
             css={styles.toggleBtn}
@@ -48,10 +48,10 @@ export const ProductInfo: FC<ProductInfoProps> = (props) => {
         gallery={product.gallery}
       />
 
-      <div style={{ display: view === 'details' ? undefined : 'none' }}>
+      {/* <div style={{ display: view === 'details' ? undefined : 'none' }}>
         <h2 css={styles.heading}>Our Process from Farm to Buyer</h2>
         <Steps steps={product.traces} />
-      </div>
+      </div> */}
     </div>
   )
 }

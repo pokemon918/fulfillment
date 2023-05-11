@@ -36,6 +36,10 @@ export const ItemIntro: FC<ItemIntroProps> = (props) => {
     () => countries.find((c) => c.code === item.country)?.name,
     [item.country]
   )
+  const countryCode = useMemo(
+    () => countries.find((c) => c.code === item.country)?.code,
+    [item.country]
+  )
 
   return (
     <div {...divProps}>
@@ -89,7 +93,7 @@ export const ItemIntro: FC<ItemIntroProps> = (props) => {
             {item.traces.map((item) => {
               return <div>
                 <img src={item.gallery[0]} style={{ width: '100%', objectFit: 'contain' }} />
-                <h2 style={{ margin: '10px 0px', fontWeight: 'normal' }}>{item.title}</h2>
+                <h2 style={{ margin: '10px 0px', fontWeight: 'bold' }}>{item.title}</h2>
                 <p css={styles.subtitle} style={{ marginBottom: '20px' }}>{item.description}</p>
               </div>
             })}
@@ -109,7 +113,7 @@ export const ItemIntro: FC<ItemIntroProps> = (props) => {
             <div css={styles.priceContainer}>
               {item.type === 'product' ? (
                 <div>
-                  <p style={{ fontWeight: 'bold', fontSize: '12px', marginBottom: '10px' }}>Price</p>
+                  <p style={{ fontWeight: 'bold', fontSize: '16px', marginBottom: '10px' }}>Price</p>
                   <h3 style={{ marginTop: 0 }} css={styles.price}>
                     ${item.price} ~
                   </h3>
@@ -146,29 +150,29 @@ export const ItemIntro: FC<ItemIntroProps> = (props) => {
               )}
             </div>
             <div css={styles.originContainer}>
-              <p style={{ fontWeight: 'bold', fontSize: '12px' }}>Origin: Peru</p>
+              <p style={{ fontWeight: 'bold', fontSize: '16px' }}>Origin: {countryName}</p>
               <div css={styles.flagHolder}>
-                <CountryLabel countryCode={'US'} noName />
+                <CountryLabel countryCode={countryCode} noName />
               </div>
             </div>
           </div>
 
           <div css={styles.offerContainer}>
-            <p style={{ fontWeight: 'bold', fontSize: '12px', marginBottom: '10px' }}>Current Offer Base Prices</p>
+            <p style={{ fontWeight: 'bold', fontSize: '16px', marginBottom: '10px' }}>Current Offer Base Prices</p>
 
             <div css={styles.kgBoxes}>
               <div css={styles.gradeBox}>
                 <p css={styles.subtitle}>Grade: No.1</p>
                 <div css={styles.gradeDetailContainer}>
                   <img src={kgImg.src} style={{ marginRight: '5px' }} />
-                  <p style={{ fontWeight: 'bold', fontSize: '12px', paddingTop: '5px' }}>$6/kg</p>
+                  <p style={{ fontWeight: 'bold', fontSize: '16px', paddingTop: '5px' }}>$6/kg</p>
                 </div>
               </div>
               <div css={styles.catBox}>
                 <p css={styles.subtitle}>Cat1 - 2kg box</p>
                 <div css={styles.catDetailContainer}>
                   <img src={kgImg.src} style={{ marginRight: '5px' }} />
-                  <p style={{ fontWeight: 'bold', fontSize: '12px', paddingTop: '5px' }}>$6/kg</p>
+                  <p style={{ fontWeight: 'bold', fontSize: '16px', paddingTop: '5px' }}>$6/kg</p>
                 </div>
               </div>
             </div>
@@ -176,7 +180,7 @@ export const ItemIntro: FC<ItemIntroProps> = (props) => {
 
           <div css={styles.harvestingContainer}>
             <div style={{ padding: '20px' }}>
-              <p style={{ fontWeight: 'bold', fontSize: '12px', marginBottom: '10px' }}>
+              <p style={{ fontWeight: 'bold', fontSize: '16px', marginBottom: '10px' }}>
                 Harvesting Seasonality
               </p>
 
@@ -224,14 +228,14 @@ const useStyles = makeStyles(({ item: { type } }: ItemIntroProps) => ({
     },
 
     /* Handle */
-    '::-webkit-scrollbar-thumb': {
-      background: '#B1DA50'
-    },
+    // '::-webkit-scrollbar-thumb': {
+    //   background: '#B1DA50'
+    // },
 
     /* Handle on hover */
-    '::-webkit-scrollbar-thumb:hover': {
-      background: '#B1DA50'
-    },
+    // '::-webkit-scrollbar-thumb:hover': {
+    //   background: '#B1DA50'
+    // },
     [`@media (max-width: ${theme.widths.tablet})`]: {
       width: '100%',
       paddingRight: '0px',
@@ -316,15 +320,17 @@ const useStyles = makeStyles(({ item: { type } }: ItemIntroProps) => ({
     display: 'flex'
   },
   gradeBox: {
-    width: '50%'
+    width: '100%'
   },
   catBox: {
-    width: '50%'
+    width: '100%'
   },
   flagHolder: {
     background: '#E9EBF0',
     padding: '10px',
-    width: '45px'
+    width: '45px',
+    borderRadius: '5px',
+    marginTop: '5px'
   },
   root: {
     display: 'grid',
@@ -357,6 +363,7 @@ const useStyles = makeStyles(({ item: { type } }: ItemIntroProps) => ({
     color: '#828282',
     fontWeight:400,
     fontFamily: theme.fonts.primary,
+    marginBottom:'10px'
   },
   price: {
     fontSize: 30,
@@ -369,21 +376,27 @@ const useStyles = makeStyles(({ item: { type } }: ItemIntroProps) => ({
   },
   gradeDetailContainer: {
     textAlign: 'center',
-    padding: '20px',
+    padding: '25px',
     display: 'flex',
     justifyContent: 'center',
     background: '#E9EBF0',
     borderRadius: '5px',
-    width: '96%'
+    width: '100%',
+    maxWidth:'244px',
+    maxHeight:'72px',
+    border: '1px solid #cecece'
   },
   catDetailContainer: {
     textAlign: 'center',
-    padding: '20px',
+    padding: '25px',
     display: 'flex',
     justifyContent: 'center',
     background: '#E9EBF0',
     borderRadius: '5px',
-    width: '100%'
+    width: '100%',
+    maxWidth:'244px',
+    maxHeight:'72px',
+    border: '1px solid #cecece'
   },
   harvestingContainer: {
     width: '100%'
