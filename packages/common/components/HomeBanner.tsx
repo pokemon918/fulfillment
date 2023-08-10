@@ -6,6 +6,7 @@ import { makeStyles } from '../utils'
 import { Navbar } from './Navbar'
 import bannerCover from '../assets/images/home-banner-cover.jpg'
 import { homeData } from '../data'
+import { theme } from '../theme'
 
 interface HomeBannerProps extends HTMLAttributes<HTMLDivElement> {
   action?: 'products' | 'investments'
@@ -23,16 +24,18 @@ export const HomeBanner: FC<HomeBannerProps> = (props) => {
 
         <Container css={styles.content}>
           <div css={styles.body}>
-            <h1 css={styles.heading}>{homeData.banner.title}</h1>
-
+            <div css={styles.heading}>
+              <h1 css={styles.heading1}>{homeData.banner.title1}
+                <span css={styles.heading2}>{homeData.banner.title2}</span>
+              </h1>
+            </div>
             <p css={styles.desc}>{homeData.banner.content}</p>
 
             <Button
               href={`/${action}`}
               variant="outlined"
-              style={{ paddingLeft: 34, paddingRight: 34 }}
               fontColor="#fff"
-              size="lg"
+              css={styles.browseBtn}
               rounded
             >
               Browse {action === 'investments' ? 'Products' : 'Products'}
@@ -48,12 +51,12 @@ const useHomeBannerStyles = makeStyles(() => ({
   root: css`
     width: 100%;
     background: linear-gradient(
-        239.41deg,
-        rgba(0, 0, 0, 0.7) 25.67%,
-        rgba(0, 0, 0, 0.252) 77.1%
+        90deg,
+        rgba(0, 0.5, 1, 0.8) 25.67%,
+        rgba(0, 0.5, 1, 0.7) 77.1%
       ),
       url(${bannerCover.src}), #ffffff;
-    background-blend-mode: normal, luminosity, normal;
+    background-blend-mode:unset;
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
@@ -67,6 +70,10 @@ const useHomeBannerStyles = makeStyles(() => ({
     flexDirection: 'column',
     width: '100%',
     flexGrow: 1,
+    marginLeft: 96,
+    [`@media (max-width: ${theme.widths.tablet})`]: {
+      marginLeft: 0,
+    },
   },
   navbar: {
     flexShrink: 0,
@@ -78,19 +85,64 @@ const useHomeBannerStyles = makeStyles(() => ({
     textAlign: 'center',
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'center',
+    [`@media (max-width: ${theme.widths.tablet})`]: {
+      alignItems: 'center',
+    },
   },
   heading: {
+    maxWidth: 700,
     width: '100%',
-    maxWidth: 502,
-    fontSize: 36,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    whiteSpace: 'nowrap',
+    color: '#A8EFA8',
     marginBottom: 15,
+    [`@media (max-width: ${theme.widths.tablet})`]: {
+      whiteSpace: 'inherit',
+      justifyContent: 'center',
+    },
+  },
+  heading1: {
+    width: '100%',
+    fontSize: '48px',
+    fontWeight: 600,
+    [`@media (max-width: ${theme.widths.tablet})`]: {
+      fontSize: 36,
+    },
+  },
+  heading2: {
+    width: '100%',
+    fontSize: '48px',
+    fontWeight: 300,
+    marginLeft: 15,
+    [`@media (max-width: ${theme.widths.tablet})`]: {
+      fontSize: 36,
+      marginLeft: 10,
+    },
   },
   desc: {
     width: '100%',
-    maxWidth: 664,
+    maxWidth: 680,
     marginBottom: 15,
-    fontWeight: 300,
+    fontWeight: 500,
+    textAlign: 'left',
+    fontSize: '18px',
+    lineHeight: '28px',
+    whiteSpace: 'pre-wrap',
+    [`@media (max-width: ${theme.widths.tablet})`]: {
+      textAlign: 'center',
+    },
   },
+  browseBtn: {
+    width: 259,
+    height: 59,
+    fontSize: 18,
+    [`@media (max-width: ${theme.widths.tablet})`]: {
+      width: 220,
+      height: 50,
+    },
+  }
 }))
