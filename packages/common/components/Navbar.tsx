@@ -108,7 +108,7 @@ export const Navbar: FC<NavbarProps> = (originalProps) => {
             variant="outlined"
             rounded
             fontColor={fontColor1}
-            href="/"
+            href="https://trumarket.tech/investor"
           >
             Invest now
           </Button>
@@ -169,7 +169,7 @@ export const Navbar: FC<NavbarProps> = (originalProps) => {
             variant="outlined"
             rounded
             fontColor={fontColor1}
-            href="/"
+            href="https://trumarket.tech/investor"
           >
             Invest now
           </Button>
