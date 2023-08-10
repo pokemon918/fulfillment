@@ -132,7 +132,7 @@ const useHomeBannerStyles = makeStyles(() => ({
   desc: {
     width: '100%',
     maxWidth: 680,
-    marginBottom: 15,
+    marginBottom: 50,
     fontWeight: 500,
     textAlign: 'left',
     fontSize: '18px',
@@ -146,6 +146,11 @@ const useHomeBannerStyles = makeStyles(() => ({
     width: 259,
     height: 59,
     fontSize: 18,
+    ':hover': {
+      backgroundColor: '#A8EFA8',
+      color: '#000',
+      border: 'none',
+    },
     [`@media (max-width: ${theme.widths.tablet})`]: {
       width: 220,
       height: 50,
