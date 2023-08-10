@@ -40,9 +40,20 @@ export const CategoriesOverview: FC<CategoriesOverviewProps> = (props) => {
         <div css={styles.wrapper} {...divProps}>
           <div css={styles.root}>
             <Container maxWidth="md">
+              <div css={styles.mobileHeader}>
+                <div css={styles.subheader}>
+                  <h4 css={styles.heading2}><span css={styles.heading1}>Search</span> by available categories</h4>
+                  {user?.role === 'admin' && (
+                    <Button href="/categories">Manage</Button>
+                  )}
+                </div>
+              </div>
+            </Container>
+            {scrollView}
+            <Container maxWidth="md">
               <div css={styles.header}>
                 <div css={styles.subheader}>
-                  <h4 css={styles.heading}>Categories</h4>
+                  <h4 css={styles.heading2}><span css={styles.heading1}>Search</span> by available categories</h4>
                   {user?.role === 'admin' && (
                     <Button href="/categories">Manage</Button>
                   )}
@@ -51,9 +62,6 @@ export const CategoriesOverview: FC<CategoriesOverviewProps> = (props) => {
                 {deskArrows}
               </div>
             </Container>
-
-            {scrollView}
-
             {mobileArrows}
           </div>
         </div>
@@ -74,14 +82,15 @@ const useStyles = makeStyles((props: CategoriesOverviewProps) => {
   return {
     wrapper: {
       position: 'relative',
-      background: 'rgba(176, 217, 80, 0.3)',
+      background: '#EAF2D1',
     },
     root: {
       position: 'relative',
       paddingTop: 74,
       paddingBottom: 74,
       [`@media (max-width: ${theme.widths.tabletSm})`]: {
-        paddingBottom: 74 - 32,
+        paddingBottom: 42,
+        paddingTop: 42,
       },
     },
     header: {
@@ -89,10 +98,20 @@ const useStyles = makeStyles((props: CategoriesOverviewProps) => {
       justifyContent: 'space-between',
       alignItems: 'center',
       flexWrap: 'wrap',
-      marginBottom: 34,
-      padding: '0 16px',
-      [`@media (max-width: ${theme.widths.tabletSm})`]: {
+      padding: '50px 16px 0 16px',
+      [`@media (max-width: ${theme.widths.tablet})`]: {
         justifyContent: 'center',
+        display: 'none',
+      },
+    },
+    mobileHeader: {
+      display: 'none',
+      [`@media (max-width: ${theme.widths.tablet})`]: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexWrap: 'wrap',
+        padding: '0px 16px 30px 16px',
       },
     },
     subheader: {
@@ -103,14 +122,30 @@ const useStyles = makeStyles((props: CategoriesOverviewProps) => {
     deskArrows: {
       display: 'flex',
       justifyContent: 'center',
-      marginTop: 32,
     },
-    heading: {
-      fontWeight: 700,
-      fontSize: 36,
-      lineHeight: 1.25,
+    heading1: {
+      fontWeight: 600,
+      fontSize: 48,
       textAlign: 'center',
-      color: '#69832C',
+      color: '#3BA83B',
+      [`@media (max-width: ${theme.widths.tablet})`]: {
+        fontSize: 40,
+      },
+      [`@media (max-width: ${theme.widths.tabletSm})`]: {
+        fontSize: 32,
+      },
+    },
+    heading2: {
+      fontWeight: 300,
+      fontSize: 48,
+      textAlign: 'center',
+      color: '#3BA83B',
+      [`@media (max-width: ${theme.widths.tablet})`]: {
+        fontSize: 40,
+      },
+      [`@media (max-width: ${theme.widths.tabletSm})`]: {
+        fontSize: 32,
+      },
     },
     categories: {
       height: 'auto',
