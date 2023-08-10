@@ -100,6 +100,7 @@ export const getStaticProps: GetStaticProps<HomeProps> = async () => {
         ...product,
         name: product.name.en,
         availableSpecs: product.availableSpecs.en,
+        isSustainable: product.name.en === "Fresh Mango" ? true : false,
       })),
       articles: data.articles.slice(0, 10).map((article: any) => ({
         ...article,

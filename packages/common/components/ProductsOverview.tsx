@@ -34,15 +34,14 @@ export const ProductsOverview: FC<ProductsOverviewProps> = (props) => {
             <Container maxWidth="md">
               <div css={styles.header}>
                 <div css={styles.subheader}>
-                  <h4 css={styles.heading}>DEAL OPPORTUNITIES</h4>
+                  <h4 css={styles.heading}>DEAL <span css={styles.subHeading}>OPPORTUNITIES</span></h4>
                 </div>
 
                 {deskArrows}
               </div>
 
               <p css={styles.desc}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Lacus, fermentum amet faucibus sed id nisi lectus at.
+                Explore the best offers currently on the marketplace.
               </p>
             </Container>
 
@@ -99,11 +98,24 @@ const useStyles = makeStyles((props: ProductsOverviewProps) => {
       marginTop: 32,
     },
     heading: {
-      fontWeight: 700,
-      fontSize: 36,
+      fontWeight: 300,
+      fontSize: 48,
       lineHeight: 1.25,
       textAlign: 'center',
-      color: '#69832C',
+      color: '#3BA83B',
+      [`@media (max-width: ${theme.widths.tablet})`]: {
+        fontSize: 40,
+      },
+    },
+    subHeading: {
+      fontWeight: 600,
+      fontSize: 48,
+      lineHeight: 1.25,
+      textAlign: 'center',
+      color: '#3BA83B',
+      [`@media (max-width: ${theme.widths.tablet})`]: {
+        fontSize: 36,
+      },
     },
     categories: {
       height: 'auto',
@@ -119,10 +131,11 @@ const useStyles = makeStyles((props: ProductsOverviewProps) => {
       width: 10,
     },
     desc: {
-      fontSize: 18,
+      fontSize: 24,
+      fontWeight: 500,
       marginBottom: 40,
       marginLeft: 20,
-      width: '500px',
+      width: '700px',
       [`@media (max-width: ${theme.widths.tablet})`]: {
         width: 'auto',
         marginLeft: 0,
