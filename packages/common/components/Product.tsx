@@ -70,7 +70,7 @@ export const Product: FC<ProductProps> = (originalProps) => {
           <div css={styles.detailsContainer}>
             <div css={styles.priceContainer}>
               <span css={styles.priceVal}>${product.price}</span>
-              <p css={styles.priceDesc}>per lb (Pound)</p>
+              <p css={styles.priceDesc}>Per lB (pound)</p>
             </div>
             <div css={styles.moreContainer}>
               <span style={{ display: 'inline-flex' }}>In details<img css={styles.angle} src={rightangle.src} /></span>
@@ -113,6 +113,9 @@ const useStyles = makeStyles(
       position: 'relative',
       paddingTop: 40,
       textDecoration: 'none',
+      [`@media (max-width: ${theme.widths.tabletXs})`]: {
+        paddingTop: 30,
+      },
     },
     root: {
       zIndex: 300,
@@ -127,9 +130,8 @@ const useStyles = makeStyles(
       overflow: 'hidden',
       color: '#000',
       [`@media (max-width: ${theme.widths.tabletXs})`]: {
-        maxWidth: 300,
+        width: '100%',
         gridTemplateColumns: 'minmax(0, 1fr)',
-        margin: '0 auto',
       },
     },
     productMainContainer: {
@@ -145,6 +147,10 @@ const useStyles = makeStyles(
       fontWeight: 500,
       textAlign: 'left',
       color: '#B1DA50',
+      [`@media (max-width: ${theme.widths.tabletXs})`]: {
+        fontSize: 24,
+        textAlign: 'center',
+      },
     },
     productImageContainer: {
       width: '90%',
@@ -298,6 +304,7 @@ const useStyles = makeStyles(
     priceDesc: {
       fontSize: 13,
       color: '#808673',
+      fontWeight: 400,
     },
   })
 )

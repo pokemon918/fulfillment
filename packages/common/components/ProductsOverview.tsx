@@ -104,7 +104,10 @@ const useStyles = makeStyles((props: ProductsOverviewProps) => {
       textAlign: 'center',
       color: '#3BA83B',
       [`@media (max-width: ${theme.widths.tablet})`]: {
-        fontSize: 40,
+        fontSize: 38,
+      },
+      [`@media (max-width: ${theme.widths.tabletSm})`]: {
+        fontSize: 32,
       },
     },
     subHeading: {
@@ -114,7 +117,10 @@ const useStyles = makeStyles((props: ProductsOverviewProps) => {
       textAlign: 'center',
       color: '#3BA83B',
       [`@media (max-width: ${theme.widths.tablet})`]: {
-        fontSize: 36,
+        fontSize: 38,
+      },
+      [`@media (max-width: ${theme.widths.tabletSm})`]: {
+        fontSize: 32,
       },
     },
     categories: {

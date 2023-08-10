@@ -36,11 +36,15 @@ export const BlogOverview: FC<BlogOverviewProps> = (props) => {
             <div css={styles.view}>
               <div css={styles.mainView}>
                 <div>
-                  <h3 css={styles.heading}>Blog</h3>
+                  <h3 css={styles.heading}>Market Intelligence Update</h3>
 
                   <p css={styles.desc}>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Lacus, fermentum amet faucibus sed id nisi lectus at.
+                    Our blog is dedicated to exploring
+                    the fascinating and ever-evolving
+                    industry of fresh produce. Here, we
+                    delve into the art of cultivating,
+                    harvesting, and distributing these
+                    colorful treasures of nature.
                   </p>
 
                   <Button
@@ -86,11 +90,17 @@ const useStyles = makeStyles((props: BlogOverviewProps) => {
       },
     },
     heading: {
-      fontWeight: 700,
-      fontSize: 36,
+      fontWeight: 600,
+      fontSize: 48,
       lineHeight: 1.25,
-      color: '#69832C',
+      color: '#3BA83B',
       marginBottom: 16,
+      [`@media (max-width: ${theme.widths.tablet})`]: {
+        fontSize: 38,
+      },
+      [`@media (max-width: ${theme.widths.tabletSm})`]: {
+        fontSize: 32,
+      },
     },
     mainView: {
       display: 'flex',
@@ -116,6 +126,7 @@ const useStyles = makeStyles((props: BlogOverviewProps) => {
     },
     desc: {
       fontSize: 18,
+      fontWeight: 500,
       marginBottom: 40,
       [`@media (max-width: ${theme.widths.tablet})`]: {
         marginBottom: 0,

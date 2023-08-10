@@ -110,7 +110,10 @@ const useHomeBannerStyles = makeStyles(() => ({
     fontSize: '48px',
     fontWeight: 600,
     [`@media (max-width: ${theme.widths.tablet})`]: {
-      fontSize: 36,
+      fontSize: 38,
+    },
+    [`@media (max-width: ${theme.widths.tabletSm})`]: {
+      fontSize: 32,
     },
   },
   heading2: {
@@ -119,8 +122,11 @@ const useHomeBannerStyles = makeStyles(() => ({
     fontWeight: 300,
     marginLeft: 15,
     [`@media (max-width: ${theme.widths.tablet})`]: {
-      fontSize: 36,
+      fontSize: 38,
       marginLeft: 10,
+    },
+    [`@media (max-width: ${theme.widths.tabletSm})`]: {
+      fontSize: 32,
     },
   },
   desc: {

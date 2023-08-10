@@ -75,7 +75,7 @@ export const ScrollView: FC<ScrollViewProps> = (props) => {
     <div css={styles.tabletSmArrows}>
       <IconButton
         bordered
-        style={{ marginRight: 16 }}
+        style={{ marginRight: 25 }}
         children={<ArrowLeft />}
         onClick={prev}
       />
@@ -113,6 +113,7 @@ const useStyles = makeStyles(({ }: ScrollViewProps) => ({
     fontSize: 30,
   },
   deskArrows: {
+    marginTop: 20,
     [`@media (max-width: ${theme.widths.tabletSm})`]: {
       display: 'none',
     },
