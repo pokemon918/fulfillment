@@ -6,7 +6,7 @@ import curvyDots from '../assets/images/curvy-dots.png'
 import overviewGif from '../assets/images/overview.gif'
 import { homeData } from '../data'
 
-interface OverviewProps extends HTMLAttributes<HTMLDivElement> {}
+interface OverviewProps extends HTMLAttributes<HTMLDivElement> { }
 
 export const Overview: FC<OverviewProps> = (props) => {
   const styles = useStyles(props)
@@ -21,7 +21,7 @@ export const Overview: FC<OverviewProps> = (props) => {
 
       <Container maxWidth="md">
         <h4 css={styles.heading} style={{ marginBottom: 52 }}>
-          {homeData.solutionsOverview.heading}
+          How <span css={styles.caption}>TRU MARKET</span> is shaping the way to conduct international business
         </h4>
       </Container>
 
@@ -57,7 +57,7 @@ const useStyles = makeStyles((props: OverviewProps) => ({
   },
   root: {
     display: 'grid',
-    gridTemplateColumns: '416px 1fr',
+    gridTemplateColumns: '60% 40%',
     alignItems: 'center',
     gap: 72,
     [`@media (max-width: ${theme.widths.tablet})`]: {
@@ -71,22 +71,51 @@ const useStyles = makeStyles((props: OverviewProps) => ({
     },
   },
   content: {
+    fontSize: 18,
+    color: '#000',
     [`@media (max-width: ${theme.widths.tablet})`]: {
       marginBottom: 24,
     },
   },
-  heading: {
-    fontWeight: 700,
-    fontSize: 30,
+  caption: {
+    fontWeight: 600,
+    fontSize: 48,
     lineHeight: 1.25,
-    textAlign: 'center',
-    color: '#69832C',
+    color: '#3BA83B',
+    [`@media (max-width: ${theme.widths.tablet})`]: {
+      fontSize: 38,
+    },
+    [`@media (max-width: ${theme.widths.tabletSm})`]: {
+      fontSize: 32,
+    },
+  },
+  heading: {
+    maxWidth: 900,
+    fontWeight: 300,
+    fontSize: 48,
+    lineHeight: 1.25,
+    textAlign: 'left',
+    color: '#3BA83B',
+    [`@media (max-width: ${theme.widths.tablet})`]: {
+      textAlign: 'center',
+      fontSize: 38,
+    },
+    [`@media (max-width: ${theme.widths.tabletSm})`]: {
+      fontSize: 32,
+    },
   },
   subheading: {
     fontWeight: 500,
-    fontSize: 25,
+    fontSize: 36,
     lineHeight: 1.25,
     marginBottom: 8,
+    [`@media (max-width: ${theme.widths.tablet})`]: {
+      textAlign: 'center',
+      fontSize: 28,
+    },
+    [`@media (max-width: ${theme.widths.tabletSm})`]: {
+      fontSize: 28,
+    },
   },
   desc: {
     fontSize: 18,
