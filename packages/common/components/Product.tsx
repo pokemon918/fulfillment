@@ -112,7 +112,6 @@ const useStyles = makeStyles(
     mainContainer: {
       position: 'relative',
       paddingTop: 40,
-      marginBottom: 30,
       textDecoration: 'none',
     },
     root: {
