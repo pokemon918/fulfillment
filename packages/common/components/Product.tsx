@@ -27,49 +27,51 @@ export const Product: FC<ProductProps> = (originalProps) => {
   const splittedSpecs = product.availableSpecs.split("/")
   const type = splittedSpecs[0].trim()
   const quality = splittedSpecs[1].trim()
-  const size = splittedSpecs[2].split(':')[1]?.trim();
+  const size = splittedSpecs[2].split(':')[1].trim();
 
   return (
-    <Link href={`/products/${product._id}`} css={styles.root} {...anchorProps}>
-      <div css={styles.productMainContainer}>
-        <div css={styles.productImageContainer}>
-          <div
-            css={styles.imgBackground}
-            style={{ backgroundImage: `url(${product.thumbnail})` }}
-          />
-        </div>
+    <Link href={`/products/${product._id}`} css={styles.mainContainer} {...anchorProps}>
+      {product.isSustainable && <span css={styles.susTitle}>Sustainable Product</span>}
+      <div css={styles.root}>
+        <div css={product.isSustainable ? styles.productSusContainer : styles.productMainContainer}>
+          <div css={styles.productImageContainer}>
+            <div
+              css={styles.imgBackground}
+              style={{ backgroundImage: `url(${product.thumbnail})` }}
+            />
+          </div>
 
-        <div css={styles.productHeadlineContainer}>
-          <div css={styles.productNameContainer}>
-            <h3 css={styles.heading}>{product.name}</h3>
+          <div css={styles.productHeadlineContainer}>
+            <div css={styles.productNameContainer}>
+              <h3 css={styles.heading}>{product.name}</h3>
+            </div>
+            <div css={styles.productFlagContainer}>
+              <CountryLabel css={styles.flag} countryCode={product.country} noName={true} />
+            </div>
           </div>
-          <div css={styles.productFlagContainer}>
-            <CountryLabel css={styles.flag} countryCode={product.country} noName={true} />
-          </div>
-        </div>
 
-        <div css={styles.productSpecsContainer}>
-          <div css={styles.typeContainer}>
-            <p css={styles.type} style={{ fontWeight: '200' }}>Type</p>
-            <p css={styles.type} style={{ fontWeight: 'bold' }}>{type.toUpperCase()}</p>
+          <div css={styles.productSpecsContainer}>
+            <div css={styles.typeContainer}>
+              <p css={styles.type} style={{ fontWeight: '200' }}>Type</p>
+              <p css={styles.typeValue} style={{ fontWeight: 'bold' }}>{type.toUpperCase()}</p>
+            </div>
+            <div css={styles.qualityContainer}>
+              <p css={styles.type} style={{ fontWeight: '200' }}>Quality</p>
+              <p css={styles.typeValue} style={{ fontWeight: 'bold' }}>{quality?.split(' ')?.[0].toUpperCase()}</p>
+            </div>
+            <div css={styles.sizeContainer}>
+              <p css={styles.type} style={{ fontWeight: '200' }}>Size</p>
+              <p css={styles.typeValue} style={{ fontWeight: 'bold' }}>{size}</p>
+            </div>
           </div>
-          <div css={styles.qualityContainer}>
-            <p css={styles.type} style={{ fontWeight: '200' }}>Quality</p>
-            <p css={styles.type} style={{ fontWeight: 'bold' }}>{quality.toUpperCase()}</p>
-          </div>
-          <div css={styles.sizeContainer}>
-            <p css={styles.type} style={{ fontWeight: '200' }}>Size</p>
-            <p css={styles.type} style={{ fontWeight: 'bold' }}>{size}</p>
-          </div>
-        </div>
-
-        <div css={styles.detailsContainer}>
-          <div css={styles.priceContainer}>
-            <span css={styles.priceVal}>${product.price}</span>
-            <p css={styles.priceDesc}>per lb (Pound)</p>
-          </div>
-          <div css={styles.moreContainer}>
-            <span style={{display: 'inline-flex'}}>In details<img css={styles.angle} src={rightangle.src} /></span>
+          <div css={styles.detailsContainer}>
+            <div css={styles.priceContainer}>
+              <span css={styles.priceVal}>${product.price}</span>
+              <p css={styles.priceDesc}>Per lB (pound)</p>
+            </div>
+            <div css={styles.moreContainer}>
+              <span style={{ display: 'inline-flex', fontWeight: 'bold' }}>In details<img css={styles.angle} src={rightangle.src} /></span>
+            </div>
           </div>
         </div>
       </div>
@@ -104,28 +106,48 @@ export const Product: FC<ProductProps> = (originalProps) => {
 
 const useStyles = makeStyles(
   ({ horizontal, bordered, imgHeight }: ProductProps) => ({
-    root: {
+    mainContainer: {
       position: 'relative',
+      paddingTop: 40,
+      textDecoration: 'none',
+      [`@media (max-width: ${theme.widths.tabletXs})`]: {
+        paddingTop: 30,
+      },
+    },
+    root: {
       zIndex: 300,
       transform: 'translateZ(10px)',
       width: '100%',
       display: 'block',
       gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 0.8fr)',
-      border: '1px solid #CFCFCF',
+      border: '1px solid #E9E9E9',
       borderRadius: 16,
-      background: '#E9E9E9',
+      background: '#fff',
       fontWeight: 500,
       overflow: 'hidden',
       color: '#000',
-      textDecoration: 'none',
       [`@media (max-width: ${theme.widths.tabletXs})`]: {
-        maxWidth: 300,
+        width: '100%',
         gridTemplateColumns: 'minmax(0, 1fr)',
-        margin: '0 auto',
       },
     },
     productMainContainer: {
       width: '100%',
+    },
+    productSusContainer: {
+      borderTop: '10px solid #B1DA50',
+    },
+    susTitle: {
+      position: 'absolute',
+      top: 0,
+      fontSize: 28,
+      fontWeight: 500,
+      textAlign: 'left',
+      color: '#B1DA50',
+      [`@media (max-width: ${theme.widths.tabletXs})`]: {
+        fontSize: 24,
+        textAlign: 'center',
+      },
     },
     productImageContainer: {
       width: '90%',
@@ -194,8 +216,12 @@ const useStyles = makeStyles(
       textAlign: 'center'
     },
     type: {
-      color: '#69832C',
+      color: '#808673',
       margin: '10px 0px'
+    },
+    typeValue: {
+      color: '#69832C',
+      marginBottom: 10,
     },
     detailsContainer: {
       width: '100%',
@@ -269,12 +295,13 @@ const useStyles = makeStyles(
     },
     priceCurrency: {
       fontSize: 13,
-      color: 'rgba(5, 5, 5, 0.5)',
+      color: '#808673',
       marginRight: 4,
     },
     priceDesc: {
       fontSize: 13,
-      color: 'rgba(5, 5, 5, 0.3)',
+      color: '#808673',
+      fontWeight: 400,
     },
   })
 )

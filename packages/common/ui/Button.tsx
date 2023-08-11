@@ -7,7 +7,7 @@ import { FC, HTMLAttributes, ReactNode } from 'react'
 export interface ButtonProps extends HTMLAttributes<HTMLElement> {
   variant?: 'contained' | 'outlined'
   color?: 'primary' | 'primary-gradient'
-  size?: 'sm' | 'md' | 'lg'
+  size?: 'sm' | 'md' | 'lg' | 'llg'
   rounded?: boolean
   fullRounded?: boolean
   fullWidth?: boolean
@@ -81,12 +81,14 @@ const useButtonStyles = makeStyles(
       sm: 9,
       md: 14,
       lg: 16,
+      llg: 35,
     }
 
     const widths = {
       sm: 106,
       md: 126,
       lg: 146,
+      llg: 259,
     }
 
     return {
@@ -101,7 +103,7 @@ const useButtonStyles = makeStyles(
         background:
           variant === 'contained' ? `var(--color-${color})` : 'transparent',
         border:
-          variant === 'contained' ? 'none' : `1px solid var(--color-${color})`,
+          variant === 'contained' ? 'none' : `3px solid var(--color-${color})`,
         borderRadius: fullRounded ? 99 : rounded ? 10 : 4,
         fontSize: 16,
         cursor: 'pointer',

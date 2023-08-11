@@ -63,7 +63,7 @@ export const ScrollView: FC<ScrollViewProps> = (props) => {
     <div css={styles.deskArrows}>
       <IconButton
         bordered
-        style={{ marginRight: 16 }}
+        style={{ marginRight: 25 }}
         children={<ArrowLeft />}
         onClick={prev}
       />
@@ -75,7 +75,7 @@ export const ScrollView: FC<ScrollViewProps> = (props) => {
     <div css={styles.tabletSmArrows}>
       <IconButton
         bordered
-        style={{ marginRight: 16 }}
+        style={{ marginRight: 25 }}
         children={<ArrowLeft />}
         onClick={prev}
       />
@@ -98,7 +98,7 @@ export const ScrollView: FC<ScrollViewProps> = (props) => {
   return <>{render({ deskArrows, mobileArrows, scrollView })}</>
 }
 
-const useStyles = makeStyles(({}: ScrollViewProps) => ({
+const useStyles = makeStyles(({ }: ScrollViewProps) => ({
   header: {
     width: '100%',
     display: 'flex',
@@ -113,13 +113,14 @@ const useStyles = makeStyles(({}: ScrollViewProps) => ({
     fontSize: 30,
   },
   deskArrows: {
+    marginTop: 20,
     [`@media (max-width: ${theme.widths.tabletSm})`]: {
       display: 'none',
     },
   },
   tabletSmArrows: {
     display: 'none',
-    [`@media (max-width: ${theme.widths.tabletSm})`]: {
+    [`@media (max-width: ${theme.widths.tablet})`]: {
       display: 'flex',
       justifyContent: 'center',
       marginTop: 48,

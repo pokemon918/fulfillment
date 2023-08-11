@@ -45,6 +45,7 @@ const useStyles = makeStyles((props: CategoryProps) => ({
     position: 'relative',
     display: 'flex',
     width: '100%',
+    border: '3px solid #3BA83B',
     borderRadius: 20,
     overflow: 'hidden',
     cursor: 'pointer',
@@ -80,7 +81,6 @@ const useStyles = makeStyles((props: CategoryProps) => ({
     fontSize: 25,
     color: '#fff',
     padding: 16,
-
     alignItems: 'center',
     justifyContent: 'center',
     textAlign: 'center',

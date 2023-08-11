@@ -17,23 +17,23 @@ const staticLinks: {
   title: string
   to: string
 }[] = [
-  {
-    title: 'Home',
-    to: '/',
-  },
-  {
-    title: 'Technology',
-    to: 'https://trumarket.tech/technology',
-  },
-  {
-    title: 'Who We Are',
-    to: 'https://trumarket.tech/whoweare',
-  },
-  {
-    title: 'Contact us',
-    to: 'https://trumarket.tech/contactus',
-  },
-]
+    {
+      title: 'Home',
+      to: '/',
+    },
+    {
+      title: 'Technology',
+      to: 'https://trumarket.tech/technology',
+    },
+    {
+      title: 'Who We Are',
+      to: 'https://trumarket.tech/whoweare',
+    },
+    {
+      title: 'Contact us',
+      to: 'https://trumarket.tech/contactus',
+    },
+  ]
 
 export const Navbar: FC<NavbarProps> = (originalProps) => {
   const props = mergeProps(originalProps, {
@@ -44,7 +44,8 @@ export const Navbar: FC<NavbarProps> = (originalProps) => {
 
   const { mode, ...divProps } = props
 
-  const fontColor = mode === 'light' ? '#000' : '#fff'
+  const fontColor1 = mode === 'light' ? '#000' : '#fff'
+  const fontColor2 = mode === 'light' ? '#fff' : '#000'
 
   const { pathname } = useRouter()
 
@@ -102,31 +103,40 @@ export const Navbar: FC<NavbarProps> = (originalProps) => {
         </div>
 
         <div css={styles.deskButtons}>
+          <Button
+            css={styles.deskButton}
+            variant="outlined"
+            rounded
+            fontColor={fontColor1}
+            href="https://trumarket.tech/investor"
+          >
+            Invest now
+          </Button>
           {user ? (
             <Link css={styles.userProfile} href="/profile">
               {user.fullName}
             </Link>
           ) : (
-            <>
+            <div css={styles.deskBtnGroup}>
               <Button
                 css={styles.deskButton}
                 variant="outlined"
                 rounded
-                fontColor={fontColor}
+                fontColor={fontColor1}
                 href="/login"
               >
-                Login
+                Log in
               </Button>
 
               <Button
                 css={styles.deskButton}
                 rounded
-                fontColor={fontColor}
+                fontColor={fontColor2}
                 href="/signup"
               >
-                Sign Up
+                Sign up
               </Button>
-            </>
+            </div>
           )}
         </div>
 
@@ -154,6 +164,16 @@ export const Navbar: FC<NavbarProps> = (originalProps) => {
             </Link>
           ))}
 
+          <Button
+            css={styles.mobileButton}
+            variant="outlined"
+            rounded
+            fontColor={fontColor1}
+            href="https://trumarket.tech/investor"
+          >
+            Invest now
+          </Button>
+
           {user ? (
             <Link css={styles.userProfile} href="/profile">
               {user.fullName}
@@ -164,19 +184,19 @@ export const Navbar: FC<NavbarProps> = (originalProps) => {
                 css={styles.mobileButton}
                 variant="outlined"
                 rounded
-                fontColor={fontColor}
+                fontColor={fontColor1}
                 href="/login"
               >
-                Login
+                Log in
               </Button>
 
               <Button
                 css={styles.mobileButton}
                 rounded
-                fontColor={fontColor}
+                fontColor={fontColor2}
                 href="/signup"
               >
-                Sign Up
+                Sign up
               </Button>
             </>
           )}
@@ -207,27 +227,31 @@ const useStyles = makeStyles(({ mode }: NavbarProps) => ({
     width: '100%',
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center',
-    height: 88,
-    padding: 0,
+    alignItems: 'flex-start',
+    height: 176,
+    paddingTop: 45,
     color: mode === 'light' ? '#000' : '#fff',
     [`@media (max-width: ${theme.widths.tablet})`]: {
       justifyContent: 'space-between',
       height: 'initial',
       position: 'static',
+      paddingTop: 0,
+      alignItems: 'center',
     },
   },
   logoWrapper: {
     position: 'absolute',
     left: 0,
-    top: 0,
+    top: 15,
     height: '100%',
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     [`@media (max-width: ${theme.widths.tablet})`]: {
       position: 'static',
       height: 'initial',
       display: 'block',
+      alignItems: 'center',
+      top: 0,
     },
   },
   logo: {
@@ -249,7 +273,7 @@ const useStyles = makeStyles(({ mode }: NavbarProps) => ({
   deskLink: {
     position: 'relative',
     color: 'inherit',
-    fontFamily: theme.fonts.primary,
+    fontFamily: theme.fonts.secondary,
     textDecoration: 'none',
     ':hover': {
       color: '#B0D950',
@@ -276,21 +300,31 @@ const useStyles = makeStyles(({ mode }: NavbarProps) => ({
   },
   deskButtons: {
     display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-end',
+    gap: '20px',
     position: 'absolute',
     right: 0,
-    top: 0,
+    top: 30,
     height: '100%',
     flexShrink: 0,
-    alignItems: 'center',
     [`@media (max-width: ${theme.widths.tablet})`]: {
       display: 'none',
     },
   },
+  deskBtnGroup: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   deskButton: {
     padding: 12,
     minWidth: 116,
+    height: 47,
+    fontSize: 14,
+    fontWeight: 400,
     '&:not(:last-of-type)': {
-      marginRight: 16,
+      marginRight: 20,
     },
   },
   menuBtn: {

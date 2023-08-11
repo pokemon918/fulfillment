@@ -29,20 +29,12 @@ export default function Home(props: HomeProps) {
   return (
     <>
       <HomeBanner />
-
       <CategoriesOverview
         categories={categories}
-        style={{ marginBottom: 114, position: 'relative' }}
       />
-
-      <Overview style={{ marginBottom: 82 }} />
-
+      <Overview />
       <ProductsOverview style={{ marginBottom: 162 }} products={products} />
-
-      <ContainerWide>
-        <BlogOverview style={{ marginBottom: 122 }} articles={articles} />
-      </ContainerWide>
-
+      <BlogOverview style={{ marginBottom: 122 }} articles={articles} />
       <Footer />
     </>
   )
@@ -100,6 +92,7 @@ export const getStaticProps: GetStaticProps<HomeProps> = async () => {
         ...product,
         name: product.name.en,
         availableSpecs: product.availableSpecs.en,
+        isSustainable: product.name.en === "Fresh Mango" ? true : false,
       })),
       articles: data.articles.slice(0, 10).map((article: any) => ({
         ...article,
