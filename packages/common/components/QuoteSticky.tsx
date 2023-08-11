@@ -42,8 +42,9 @@ export const QuoteSticky: FC<QuoteStickyProps> = (props) => {
 
 const useStyles = makeStyles(({}: QuoteStickyProps) => ({
   root: {
-    background: '#000',
-    color: '#fff',
+    background: '#b1da51',
+    color: '#333',
+    borderRadius:'10px',
     position: 'fixed',
     bottom: 35,
     right: 35,
@@ -63,6 +64,7 @@ const useStyles = makeStyles(({}: QuoteStickyProps) => ({
     },
   },
   btn: {
+    background:'#fff',
     [`@media (max-width: ${theme.widths.tablet})`]: {
       flexShrink: 0,
       width: 'initial',

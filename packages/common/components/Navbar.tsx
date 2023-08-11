@@ -249,7 +249,7 @@ const useStyles = makeStyles(({ mode }: NavbarProps) => ({
   deskLink: {
     position: 'relative',
     color: 'inherit',
-    fontFamily: theme.fonts.secondary,
+    fontFamily: theme.fonts.primary,
     textDecoration: 'none',
     ':hover': {
       color: '#B0D950',

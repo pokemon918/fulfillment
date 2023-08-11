@@ -97,7 +97,7 @@ const useButtonStyles = makeStyles(
         padding: paddings[size!] - (variant === 'contained' ? 0 : 1) + 'px',
         minWidth: widths[size!],
         color: fontColor ? fontColor : '#000',
-        fontFamily: theme.fonts.secondary,
+        fontFamily: theme.fonts.primary,
         background:
           variant === 'contained' ? `var(--color-${color})` : 'transparent',
         border:

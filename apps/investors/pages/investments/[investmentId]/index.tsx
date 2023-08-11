@@ -71,7 +71,7 @@ const InvestmentPage: FC<InvestmentPageProps> = (props) => {
 
 const useStyles = makeStyles((props: InvestmentPageProps) => ({
   root: {
-    fontFamily: theme.fonts.secondary,
+    fontFamily: theme.fonts.primary,
   },
 }))
 

@@ -1,16 +1,30 @@
 import { countries } from '../data'
 import { useUser } from '../hooks'
-import { ArrowBackIcon } from '../icons'
+import { ArrowLeft, ArrowRight, BackIcon, HomeIcon } from '../icons'
 import { theme } from '../theme'
 import { DetailedInvestment, DetailedProduct } from '../types'
-import { Button, Progress, CountryLabel, ScrollView, Container } from '../ui'
+import {
+  Button,
+  Progress,
+  CountryLabel,
+  ScrollView,
+  Container,
+  IconButton,
+} from '../ui'
 import { makeStyles } from '../utils'
 import dayjs from 'dayjs'
 import Link from 'next/link'
-import { FC, HTMLAttributes, useMemo } from 'react'
+import { FC, HTMLAttributes, useCallback, useMemo, useRef, useState } from 'react'
 import { ExcerptGallery } from './ExcerptGallery'
 import { MonthsRange } from './MonthsRange'
 import kgImg from '../assets/images/kg.png'
+// Import Swiper React components
+import { Swiper, SwiperSlide } from 'swiper/react'
+
+// Import Swiper styles
+import 'swiper/css'
+
+
 
 interface ProductItem extends DetailedProduct {
   type: 'product'
@@ -23,14 +37,15 @@ interface InvestmentItem extends DetailedInvestment {
 interface ItemIntroProps extends HTMLAttributes<HTMLDivElement> {
   gallery: string[]
   item: ProductItem | InvestmentItem
-  onClickGetQuote: () => void
+  onClickGetQuote: () => void,
+  buttonRef: React.RefObject<Element> | any;
 }
 
 export const ItemIntro: FC<ItemIntroProps> = (props) => {
   const user = useUser()
   const styles = useStyles(props)
 
-  const { gallery, item, onClickGetQuote, ...divProps } = props
+  const { gallery, item, onClickGetQuote, buttonRef, ...divProps} = props
 
   const countryName = useMemo(
     () => countries.find((c) => c.code === item.country)?.name,
@@ -41,15 +56,33 @@ export const ItemIntro: FC<ItemIntroProps> = (props) => {
     [item.country]
   )
 
+  const sliderRef = useRef<any>(null)
+
+  const handlePrev = useCallback(() => {
+    if (!sliderRef.current) return
+    sliderRef.current.swiper.slidePrev()
+  }, [])
+
+  const handleNext = useCallback(() => {
+    if (!sliderRef.current) return
+    sliderRef.current.swiper.slideNext()
+  }, [])
+
+  const [paginationIndex, setPaginationIndex] = useState(0);
+
+  const handleSlideChange = (swiper: any) => {
+    setPaginationIndex(swiper.realIndex);
+  };
+
   return (
     <div {...divProps}>
       <div css={styles.header}>
         <Link css={styles.back} href="/">
-          <ArrowBackIcon style={{ marginRight: 6 }} />
-          <span>Browse Market</span>
+          <BackIcon style={{ marginRight: 0, color: '#90AF47' }} />
+          <span>Back to homepage</span>
         </Link>
 
-        {user?.role === 'admin' && (
+        {user?.role === 'admin' ? (
           <Button
             variant="outlined"
             fullRounded
@@ -57,18 +90,29 @@ export const ItemIntro: FC<ItemIntroProps> = (props) => {
           >
             Update
           </Button>
+        ) : (
+          <Link css={styles.back2} href="/">
+            <HomeIcon style={{ marginRight: 6 }} />
+            <span>{'Home >'}</span>&nbsp;
+            <span
+              style={{ color: '#90AF47' }}
+            >{`${countryName}-${item.name}`}</span>
+          </Link>
         )}
       </div>
 
       <div css={styles.megaContainer}>
         <div css={styles.scrollContainer}>
-          <ScrollView
+          {/* <ScrollView
             maxWidth="md"
-            endBlur="linear-gradient(269.92deg, #e7f4ca 0.05%, rgba(231, 244, 202, 0) 99.9%)"
+            endBlur=""
             children={
               <div css={styles.categories}>
                 {gallery.map((productImage, index) => (
-                  <div key={index} css={styles.product}><img src={productImage} style={{ borderRadius: '10px', width: '100%', objectFit: 'contain' }} /></div>
+                  <div key={index} css={styles.product}><img src={productImage} style={{ borderRadius: '10px',
+                  width: '100%',
+                  objectFit: 'cover',
+                  aspectRatio: '4/5'}} /></div>
                 ))}
 
                 <div css={styles.emptyBox} />
@@ -79,7 +123,7 @@ export const ItemIntro: FC<ItemIntroProps> = (props) => {
                 <div css={styles.sliderStyle}>
                   {scrollView}
 
-                  <div style={{ textAlign: 'right', marginTop: '50px' }}>
+                  <div style={{ textAlign: 'right', marginTop: '20px' }}>
                     {deskArrows}
                   </div>
 
@@ -87,33 +131,126 @@ export const ItemIntro: FC<ItemIntroProps> = (props) => {
                 </div>
               </div>
             )}
-          />
+          /> */}
 
-          <div style={{ marginTop: '-100px', height: 'auto', marginLeft: '20px' }}>
-            {item.traces.map((item) => {
-              return <div>
-                <img src={item.gallery[0]} style={{ width: '100%', objectFit: 'contain' }} />
-                <h2 style={{ margin: '10px 0px', fontWeight: 'bold' }}>{item.title}</h2>
-                <p css={styles.subtitle} style={{ marginBottom: '20px' }}>{item.description}</p>
-              </div>
-            })}
+          <Swiper
+            ref={sliderRef}
+            className="mySwiper"
+            onSlideChange={handleSlideChange}
+          >
+            {gallery.map((productImage, index) => (
+              <SwiperSlide key={index}>
+                <img
+                  src={productImage}
+                  css={styles.sliderImage}
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+          <div style={{ display: 'flex',
+justifyContent: 'space-between',
+alignItems: 'center',
+margin: '10px 0 45px 0'}}>
+            <p>{paginationIndex + 1}/{gallery.length}</p>
+            <div css={styles.deskArrows}>
+              <IconButton
+                bordered
+                style={{ marginRight: 16 }}
+                children={<ArrowLeft />}
+                onClick={handlePrev}
+              />
+              <IconButton
+                bordered
+                children={<ArrowRight />}
+                onClick={handleNext}
+              />
+            </div>
+          
           </div>
+
+          {item.traces.map((item, key) => {
+            return (
+              <div>
+                <div style={{ position: 'relative' }}>
+                  <img
+                    src={item.gallery[0]}
+                    style={{
+                      width: '100%',
+                      objectFit: 'cover',
+                      borderRadius: '10px',
+                      aspectRatio: '2/1'
+                    }}
+                  />
+                  <div
+                    style={{
+                      position: 'absolute',
+                      bottom: '-18px',
+                      left: (key + 1) % 2 !== 0 ? '32px' : 'unset',
+                      right: (key + 1) % 2 == 0 ? '32px' : 'unset',
+                      background: '#B1DA50',
+                      border: '6px solid #fff',
+                      borderRadius: '50%',
+                      width: '100px',
+                      height: '100px',
+                      color: '#fff',
+                      fontSize: '45px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    {key + 1}
+                  </div>
+                </div>
+                <h2
+                  style={{
+                    margin: '40px 0px 10px 0',
+                    fontSize: '28px',
+                    fontWeight: '500',
+                  }}
+                >
+                  {item.title}
+                </h2>
+                <p
+                  css={styles.subtitle}
+                  style={{
+                    marginBottom: '40px',
+                    color: '#818181',
+                    lineHeight: '1.5',
+                  }}
+                >
+                  {item.description}
+                </p>
+              </div>
+            )
+          })}
         </div>
 
         <div css={styles.detailsMainContainer}>
-          <div css={styles.headerContainer}>
+          <div css={styles.headerContainer} ref={buttonRef}>
             <p css={styles.subtitle}>HS Code: {item.hsCode}</p>
             <h2 css={styles.title}>
               {countryName} - {item.name}
             </h2>
-            <p css={styles.subtitle}>Lorum Ipsum Lorum Ipsum Lorum Ipsum Lorum Ipsum Lorum Ipsum Lorum Ipsum Lorum Ipsum Lorum Ipsum Lorum Ipsum Lorum Ipsum</p>
+            <p css={styles.subtitle}>
+              Lorum Ipsum Lorum Ipsum Lorum Ipsum Lorum Ipsum Lorum Ipsum Lorum
+              Ipsum Lorum Ipsum Lorum Ipsum Lorum Ipsum Lorum Ipsum
+            </p>
           </div>
 
           <div css={styles.specsContainer}>
-            <div css={styles.priceContainer}>
+            <div css={styles.priceContainer} >
               {item.type === 'product' ? (
                 <div>
-                  <p style={{ fontWeight: 'bold', fontSize: '16px', marginBottom: '10px' }}>Price</p>
+                  <p
+                    style={{
+                      fontWeight: 'bold',
+                      fontSize: '16px',
+                      marginBottom: '10px',
+                    }}
+                  >
+                    Price
+                  </p>
                   <h3 style={{ marginTop: 0 }} css={styles.price}>
                     ${item.price} ~
                   </h3>
@@ -122,12 +259,16 @@ export const ItemIntro: FC<ItemIntroProps> = (props) => {
                 <div style={{ marginTop: 26 }}>
                   <Progress
                     css={styles.progress}
-                    value={Math.round((item.paidAmount / item.goalAmount) * 100)}
+                    value={Math.round(
+                      (item.paidAmount / item.goalAmount) * 100
+                    )}
                   />
 
                   <p css={styles.remainPrice}>$ {item.paidAmount}</p>
 
-                  <p css={styles.goalPrice}>pledged of ${item.goalAmount} goal</p>
+                  <p css={styles.goalPrice}>
+                    pledged of ${item.goalAmount} goal
+                  </p>
                 </div>
               )}
 
@@ -150,7 +291,9 @@ export const ItemIntro: FC<ItemIntroProps> = (props) => {
               )}
             </div>
             <div css={styles.originContainer}>
-              <p style={{ fontWeight: 'bold', fontSize: '16px' }}>Origin: {countryName}</p>
+              <p style={{ fontWeight: 'bold', fontSize: '16px' }}>
+                Origin: {countryName}
+              </p>
               <div css={styles.flagHolder}>
                 <CountryLabel countryCode={countryCode} noName />
               </div>
@@ -158,21 +301,45 @@ export const ItemIntro: FC<ItemIntroProps> = (props) => {
           </div>
 
           <div css={styles.offerContainer}>
-            <p style={{ fontWeight: 'bold', fontSize: '16px', marginBottom: '10px' }}>Current Offer Base Prices</p>
+            <p
+              style={{
+                fontWeight: 'bold',
+                fontSize: '16px',
+                marginBottom: '10px',
+              }}
+            >
+              Current Offer Base Prices
+            </p>
 
-            <div css={styles.kgBoxes}>
+            <div css={styles.kgBoxes} >
               <div css={styles.gradeBox}>
                 <p css={styles.subtitle}>Grade: No.1</p>
                 <div css={styles.gradeDetailContainer}>
                   <img src={kgImg.src} style={{ marginRight: '5px' }} />
-                  <p style={{ fontWeight: 'bold', fontSize: '16px', paddingTop: '5px' }}>$6/kg</p>
+                  <p
+                    style={{
+                      fontWeight: 'bold',
+                      fontSize: '16px',
+                      paddingTop: '5px',
+                    }}
+                  >
+                    $6/kg
+                  </p>
                 </div>
               </div>
-              <div css={styles.catBox}>
+              <div css={styles.catBox} >
                 <p css={styles.subtitle}>Cat1 - 2kg box</p>
                 <div css={styles.catDetailContainer}>
                   <img src={kgImg.src} style={{ marginRight: '5px' }} />
-                  <p style={{ fontWeight: 'bold', fontSize: '16px', paddingTop: '5px' }}>$6/kg</p>
+                  <p
+                    style={{
+                      fontWeight: 'bold',
+                      fontSize: '16px',
+                      paddingTop: '5px',
+                    }}
+                  >
+                    $6/kg
+                  </p>
                 </div>
               </div>
             </div>
@@ -180,7 +347,13 @@ export const ItemIntro: FC<ItemIntroProps> = (props) => {
 
           <div css={styles.harvestingContainer}>
             <div style={{ padding: '20px' }}>
-              <p style={{ fontWeight: 'bold', fontSize: '16px', marginBottom: '10px' }}>
+              <p
+                style={{
+                  fontWeight: 'bold',
+                  fontSize: '16px',
+                  marginBottom: '10px',
+                }}
+              >
                 Harvesting Seasonality
               </p>
 
@@ -190,13 +363,39 @@ export const ItemIntro: FC<ItemIntroProps> = (props) => {
               />
             </div>
 
-            <Button
+
+<Button
+           
               fullWidth
-              style={{ fontWeight: 'bold', paddingTop: 12, paddingBottom: 12, borderTopLeftRadius: '0px', borderTopRightRadius: '0px' }}
+              style={{
+                fontWeight: 'bold',
+                paddingTop: 20,
+                paddingBottom: 20,
+                borderRadius:0,
+               
+              }}
               onClick={onClickGetQuote}
             >
               Get a Quote
             </Button>
+
+
+<Button
+           
+              fullWidth
+              style={{
+                fontWeight: 'bold',
+                paddingTop: '20px',
+                paddingBottom: '20px',
+                borderRadius: '0px 0px 10px 10px',
+                marginTop: '15px'
+              }}
+              
+            >
+              Create Smart Contract
+            </Button>
+
+            
           </div>
         </div>
       </div>
@@ -208,25 +407,36 @@ const useStyles = makeStyles(({ item: { type } }: ItemIntroProps) => ({
   megaContainer: {
     display: 'flex',
     width: '100%',
-    marginTop: '100px',
+    marginTop: '40px',
+    justifyContent: 'space-between',
+    gap: '30px',
     [`@media (max-width: ${theme.widths.tablet})`]: {
       display: 'inline-block',
       marginTop: '0px',
     },
   },
+  sliderImage:{
+    [`@media (max-width: ${theme.widths.tabletSm})`]: {
+      height:'300px'
+    },
+      width: '100%',
+      height: '640px',
+      objectFit: 'cover',
+      borderRadius: '10px',
+    
+  },
+  deskArrows: {
+   
+    '& button': {
+      width: '35px',
+      height: '35px',
+    },
+  },
+ 
   scrollContainer: {
-    width: '50%',
-    paddingRight: '20px',
-    height: '604px',
-    overflowY: 'scroll',
-    '::-webkit-scrollbar': {
-      width: '5px'
-    },
-    /* Track */
-    '::-webkit-scrollbar-track': {
-      background: '#f8f8f8'
-    },
+    flex: 1,
 
+    overflow: 'hidden',
     /* Handle */
     // '::-webkit-scrollbar-thumb': {
     //   background: '#B1DA50'
@@ -269,10 +479,12 @@ const useStyles = makeStyles(({ item: { type } }: ItemIntroProps) => ({
     padding: '0 16px',
   },
   detailsMainContainer: {
-    border: '1px solid #D9D9D9',
-    width: '50%',
-    borderRadius: '5px',
-    height: '604px',
+    border: '1px solid rgba(217, 217, 217, 0.5)',
+    flex: '1',
+    borderRadius: '10px',
+    height: '100%',
+    position: 'sticky',
+    top: '80px',
     [`@media (max-width: ${theme.widths.tablet})`]: {
       width: '100%',
       height: 'auto',
@@ -291,46 +503,46 @@ const useStyles = makeStyles(({ item: { type } }: ItemIntroProps) => ({
   },
   headerContainer: {
     width: '100%',
-    borderBottom: '1px solid #D9D9D9',
-    padding: '20px'
+    borderBottom: '1px solid rgba(217, 217, 217, 0.5)',
+    padding: '20px',
   },
   specsContainer: {
     width: '100%',
     display: 'flex',
-    borderBottom: '1px solid #D9D9D9',
-    padding: '20px'
+    borderBottom: '1px solid rgba(217, 217, 217, 0.5)',
+    padding: '20px',
   },
   priceContainer: {
     width: '65%',
     display: 'flex',
     [`@media (max-width: ${theme.widths.tablet})`]: {
-      display: 'inline'
+      display: 'inline',
     },
   },
   originContainer: {
-    width: '35%'
+    width: '35%',
   },
   offerContainer: {
     width: '100%',
-    borderBottom: '1px solid #D9D9D9',
-    padding: '20px'
+    borderBottom: '1px solid rgba(217, 217, 217, 0.5)',
+    padding: '20px',
   },
   kgBoxes: {
     width: '100%',
-    display: 'flex'
+    display: 'flex',
   },
   gradeBox: {
-    width: '100%'
+    width: '100%',
   },
   catBox: {
-    width: '100%'
+    width: '100%',
   },
   flagHolder: {
     background: '#E9EBF0',
     padding: '10px',
     width: '45px',
     borderRadius: '5px',
-    marginTop: '5px'
+    marginTop: '5px',
   },
   root: {
     display: 'grid',
@@ -353,17 +565,27 @@ const useStyles = makeStyles(({ item: { type } }: ItemIntroProps) => ({
     display: 'flex',
     alignItems: 'center',
   },
+  back2: {
+    [`@media (max-width: ${theme.widths.tabletSm})`]: {
+      display: 'none',
+    },
+    color: '#000',
+    textDecoration: 'none',
+    fontSize: 14,
+    display: 'flex',
+    alignItems: 'center',
+  },
   title: {
     fontSize: 32,
-    fontWeight:600,
+    fontWeight: 600,
     marginBottom: 10,
   },
   subtitle: {
     fontSize: 14,
-    color: '#828282',
-    fontWeight:400,
+    color: '#818181',
+    fontWeight: 400,
     fontFamily: theme.fonts.primary,
-    marginBottom:'10px'
+    marginBottom: '10px',
   },
   price: {
     fontSize: 30,
@@ -372,34 +594,34 @@ const useStyles = makeStyles(({ item: { type } }: ItemIntroProps) => ({
     fontSize: 12,
     paddingTop: '44px',
     paddingLeft: '5px',
-    color: '#828282'
+    color: '#818181',
   },
   gradeDetailContainer: {
     textAlign: 'center',
     padding: '25px',
     display: 'flex',
     justifyContent: 'center',
-    background: '#E9EBF0',
+    background: '#F8F8F8',
     borderRadius: '5px',
     width: '100%',
-    maxWidth:'244px',
-    maxHeight:'72px',
-    border: '1px solid #cecece'
+    maxWidth: '244px',
+    maxHeight: '72px',
+    border: '1px solid #E9EBF0',
   },
   catDetailContainer: {
     textAlign: 'center',
     padding: '25px',
     display: 'flex',
     justifyContent: 'center',
-    background: '#E9EBF0',
+    background: '#F8F8F8',
     borderRadius: '5px',
     width: '100%',
-    maxWidth:'244px',
-    maxHeight:'72px',
-    border: '1px solid #cecece'
+    maxWidth: '244px',
+    maxHeight: '72px',
+    border: '1px solid #E9EBF0',
   },
   harvestingContainer: {
-    width: '100%'
+    width: '100%',
   },
   smallDetail: {
     fontSize: 14,
