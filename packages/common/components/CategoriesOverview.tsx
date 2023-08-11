@@ -1,10 +1,11 @@
-import { FC, HTMLAttributes } from 'react'
+import React, { ChangeEvent, FC, HTMLAttributes } from 'react'
 import { useUser } from '../hooks'
 import { theme } from '../theme'
 import { BaseCategory } from '../types'
 import { Button, Container, ScrollView } from '../ui'
 import { makeStyles } from '../utils'
 import { Category } from './Category'
+import { SearchBox } from '../ui/SearchBox'
 
 interface CategoriesOverviewProps extends HTMLAttributes<HTMLDivElement> {
   categories: BaseCategory[]
@@ -12,61 +13,71 @@ interface CategoriesOverviewProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export const CategoriesOverview: FC<CategoriesOverviewProps> = (props) => {
+
   const styles = useStyles(props)
 
   const { categories, itemType = 'product', ...divProps } = props
-
+  const [searchedCategories, setSearchedCategories] = React.useState<BaseCategory[]>(categories)
   const user = useUser()
 
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const searchText = e.target.value.toLowerCase().trim();
+    setSearchedCategories(categories?.filter((category) => category?.name.toLowerCase().trim()?.startsWith(searchText)));
+  }
+
   return (
-    <ScrollView
-      maxWidth="md"
-      endBlur="linear-gradient(269.92deg, #e7f4ca 0.05%, rgba(231, 244, 202, 0) 99.9%)"
-      children={
-        <div css={styles.categories}>
-          {categories.map((category) => (
-            <Category
-              css={styles.category}
-              key={category._id}
-              category={category}
-              itemType={itemType}
-            />
-          ))}
-
-          <div css={styles.emptyBox} />
-        </div>
-      }
-      render={({ deskArrows, mobileArrows, scrollView }) => (
-        <div css={styles.wrapper} {...divProps}>
-          <div css={styles.root}>
-            <Container maxWidth="md">
-              <div css={styles.mobileHeader}>
-                <div css={styles.subheader}>
-                  <h4 css={styles.heading2}><span css={styles.heading1}>Search</span> by available categories</h4>
-                  {user?.role === 'admin' && (
-                    <Button href="/categories">Manage</Button>
-                  )}
+    <>
+      <SearchBox placeholder="Search Categories..." onChange={handleChange} />
+      <ScrollView
+        maxWidth="md"
+        endBlur="linear-gradient(269.92deg, #e7f4ca 0.05%, rgba(231, 244, 202, 0) 99.9%)"
+        children={
+          <>
+            <div css={styles.categories}>
+              {searchedCategories?.map((category) => (
+                <Category
+                  css={styles.category}
+                  key={category._id}
+                  category={category}
+                  itemType={itemType}
+                />
+              ))}
+              <div css={styles.emptyBox} />
+            </div>
+          </>
+        }
+        render={({ deskArrows, mobileArrows, scrollView }) => (
+          <div css={styles.wrapper} {...divProps}>
+            <div css={styles.root}>
+              <Container maxWidth="md">
+                <div css={styles.mobileHeader}>
+                  <div css={styles.subheader}>
+                    <h4 css={styles.heading2}><span css={styles.heading1}>Search</span> by available categories</h4>
+                    {user?.role === 'admin' && (
+                      <Button href="/categories">Manage</Button>
+                    )}
+                  </div>
                 </div>
-              </div>
-            </Container>
-            {scrollView}
-            <Container maxWidth="md">
-              <div css={styles.header}>
-                <div css={styles.subheader}>
-                  <h4 css={styles.heading2}><span css={styles.heading1}>Search</span> by available categories</h4>
-                  {user?.role === 'admin' && (
-                    <Button href="/categories">Manage</Button>
-                  )}
-                </div>
+              </Container>
+              {scrollView}
+              <Container maxWidth="md">
+                <div css={styles.header}>
+                  <div css={styles.subheader}>
+                    <h4 css={styles.heading2}><span css={styles.heading1}>Search</span> by available categories</h4>
+                    {user?.role === 'admin' && (
+                      <Button href="/categories">Manage</Button>
+                    )}
+                  </div>
 
-                {deskArrows}
-              </div>
-            </Container>
-            {mobileArrows}
+                  {deskArrows}
+                </div>
+              </Container>
+              {mobileArrows}
+            </div>
           </div>
-        </div>
-      )}
-    />
+        )}
+      />
+    </>
   )
 }
 
@@ -86,7 +97,7 @@ const useStyles = makeStyles((props: CategoriesOverviewProps) => {
     },
     root: {
       position: 'relative',
-      paddingTop: 74,
+      paddingTop: 30,
       paddingBottom: 74,
       [`@media (max-width: ${theme.widths.tabletSm})`]: {
         paddingBottom: 42,
