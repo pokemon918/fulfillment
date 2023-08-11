@@ -40,12 +40,12 @@ const ProductPage: FC<ProductPageProps> = (props) => {
 
   return (
     <div css={styles.root}>
-      <PageBgColor bgColor="#f8f8f8" />
-      <Navbar style={{ marginBottom: 72 }} />
+      <PageBgColor bgColor="#fff" />
+      <Navbar style={{ marginBottom: 40 }} />
 
       <Container style={{ marginBottom: 100 }} maxWidth="md">
         <ItemIntro
-          style={{ marginBottom: 120 }}
+          style={{ marginBottom: 50 }}
           gallery={product.gallery}
           item={{ type: 'product', ...product }}
           onClickGetQuote={() => setOpenQuote(true)}
@@ -82,7 +82,7 @@ const ProductPage: FC<ProductPageProps> = (props) => {
 
 const useStyles = makeStyles((props: ProductPageProps) => ({
   root: {
-    fontFamily: theme.fonts.secondary,
+    fontFamily: theme.fonts.primary,
   },
 }))
 
