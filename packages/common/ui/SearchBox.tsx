@@ -15,7 +15,7 @@ interface InputProps {
 export const SearchBox: FC<InputProps> = (props) => {
     const styles = useStyles(props)
     return (
-        <div css={styles.inputWrapper}>
+        <>
             <label htmlFor={props.label}>{props.label}</label>
             <input
                 type={props.type}
@@ -28,18 +28,11 @@ export const SearchBox: FC<InputProps> = (props) => {
                 css={styles.input}
             />
             {props.error && <p className="error">Input filed can't be empty!</p>}
-        </div>
+        </>
     )
 }
 
 const useStyles = makeStyles(() => ({
-    inputWrapper: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '74px 0 0 0',
-        background: '#EAF2D1',
-    },
     input: {
         border: '1px solid #3BA83B',
         borderRadius: 5,

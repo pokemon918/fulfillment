@@ -18,32 +18,30 @@ export const HomeBanner: FC<HomeBannerProps> = (props) => {
   const { action = 'products', ...divProps } = props
 
   return (
-    <>
-      <div css={styles.root} {...divProps}>
-        <Navbar css={styles.navbar} mode="dark" />
+    <div css={styles.root} {...divProps}>
+      <Navbar css={styles.navbar} mode="dark" />
 
-        <Container css={styles.content}>
-          <div css={styles.body}>
-            <div css={styles.heading}>
-              <h1 css={styles.heading1}>{homeData.banner.title1}
-                <span css={styles.heading2}>{homeData.banner.title2}</span>
-              </h1>
-            </div>
-            <p css={styles.desc}>{homeData.banner.content}</p>
-
-            <Button
-              href={`/${action}`}
-              variant="outlined"
-              fontColor="#fff"
-              css={styles.browseBtn}
-              rounded
-            >
-              Browse {action === 'investments' ? 'Products' : 'Products'}
-            </Button>
+      <Container css={styles.content}>
+        <div css={styles.body}>
+          <div css={styles.heading}>
+            <h1 css={styles.heading1}>{homeData.banner.title1}
+              <span css={styles.heading2}>{homeData.banner.title2}</span>
+            </h1>
           </div>
-        </Container>
-      </div>
-    </>
+          <p css={styles.desc}>{homeData.banner.content}</p>
+
+          <Button
+            href={`/${action}`}
+            variant="outlined"
+            fontColor="#fff"
+            css={styles.browseBtn}
+            rounded
+          >
+            Browse {action === 'investments' ? 'Products' : 'Products'}
+          </Button>
+        </div>
+      </Container>
+    </div>
   )
 }
 
@@ -70,9 +68,9 @@ const useHomeBannerStyles = makeStyles(() => ({
     flexDirection: 'column',
     width: '100%',
     flexGrow: 1,
-    marginLeft: 96,
+    padding: '0 0 0 96px',
     [`@media (max-width: ${theme.widths.tablet})`]: {
-      marginLeft: 0,
+      padding: 0,
     },
   },
   navbar: {

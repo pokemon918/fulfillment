@@ -16,7 +16,7 @@ export const BlogOverview: FC<BlogOverviewProps> = (props) => {
   return (
     <div css={styles.root} {...divProps}>
       <ScrollView
-        maxWidth="none"
+        maxWidth="md"
         endBlur="linear-gradient(269.92deg, #FFFFFF 0.05%, rgba(255, 255, 255, 0) 99.9%);"
         children={
           <div css={styles.articles}>
@@ -27,7 +27,6 @@ export const BlogOverview: FC<BlogOverviewProps> = (props) => {
                 article={article}
               />
             ))}
-
             <div css={styles.emptyArticle} />
           </div>
         }
@@ -35,38 +34,30 @@ export const BlogOverview: FC<BlogOverviewProps> = (props) => {
           <>
             <div css={styles.view}>
               <div css={styles.mainView}>
-                <div>
-                  <h3 css={styles.heading}>Market Intelligence Update</h3>
-
-                  <p css={styles.desc}>
-                    Our blog is dedicated to exploring
-                    the fascinating and ever-evolving
-                    industry of fresh produce. Here, we
-                    delve into the art of cultivating,
-                    harvesting, and distributing these
-                    colorful treasures of nature.
-                  </p>
-
-                  <Button
-                    href="/blog"
-                    css={styles.deskBtn}
-                    style={{ minWidth: 205 }}
-                  >
-                    See More
-                  </Button>
-                </div>
-
+                <h3 css={styles.heading}>Market Intelligence Update</h3>
+                <p css={styles.desc}>
+                  Our blog is dedicated to exploring
+                  the fascinating and ever-evolving
+                  industry of fresh produce. Here, we
+                  delve into the art of cultivating,
+                  harvesting, and distributing these
+                  colorful treasures of nature.
+                </p>
+                <Button
+                  href="/blog"
+                  css={styles.deskBtn}
+                  style={{ minWidth: 205 }}
+                >
+                  See More
+                </Button>
                 {deskArrows}
               </div>
-
               {scrollView}
             </div>
-
             {mobileArrows}
           </>
         )}
       />
-
       <div css={styles.mobileFooter}>
         <Button href="/blog" style={{ minWidth: 205 }}>
           See More
@@ -83,16 +74,16 @@ const useStyles = makeStyles((props: BlogOverviewProps) => {
       display: 'grid',
       gridTemplateColumns: '355px minmax(0, 1fr)',
       gap: 50,
-      paddingLeft: 16,
+      padding: '0 0 0 96px',
       [`@media (max-width: ${theme.widths.tablet})`]: {
         gridTemplateColumns: 'minmax(0, 1fr)',
         gap: 40,
+        padding: '0 16px',
       },
     },
     heading: {
       fontWeight: 600,
       fontSize: 48,
-      lineHeight: 1.25,
       color: '#3BA83B',
       marginBottom: 16,
       [`@media (max-width: ${theme.widths.tablet})`]: {
@@ -127,7 +118,7 @@ const useStyles = makeStyles((props: BlogOverviewProps) => {
     desc: {
       fontSize: 18,
       fontWeight: 500,
-      marginBottom: 40,
+      marginBottom: 20,
       [`@media (max-width: ${theme.widths.tablet})`]: {
         marginBottom: 0,
         fontSize: 16,

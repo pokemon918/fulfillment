@@ -66,14 +66,13 @@ export const Product: FC<ProductProps> = (originalProps) => {
               <p css={styles.typeValue} style={{ fontWeight: 'bold' }}>{size}</p>
             </div>
           </div>
-
           <div css={styles.detailsContainer}>
             <div css={styles.priceContainer}>
               <span css={styles.priceVal}>${product.price}</span>
               <p css={styles.priceDesc}>Per lB (pound)</p>
             </div>
             <div css={styles.moreContainer}>
-              <span style={{ display: 'inline-flex' }}>In details<img css={styles.angle} src={rightangle.src} /></span>
+              <span style={{ display: 'inline-flex', fontWeight: 'bold' }}>In details<img css={styles.angle} src={rightangle.src} /></span>
             </div>
           </div>
         </div>
