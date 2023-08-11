@@ -20,6 +20,7 @@ import {
 } from 'common'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { FC, useState } from 'react'
+import { useInView } from 'react-intersection-observer';
 
 interface ProductPageProps {
   product: DetailedProduct
@@ -36,19 +37,22 @@ const ProductPage: FC<ProductPageProps> = (props) => {
   const { product, relatedProducts, userProfile } = props
 
   const styles = useStyles(props)
-  const [openQuote, setOpenQuote] = useState(false)
+  const [openQuote, setOpenQuote] = useState(false);
+  const [containerRef, inView] = useInView();
+
 
   return (
     <div css={styles.root}>
-      <PageBgColor bgColor="#f8f8f8" />
-      <Navbar style={{ marginBottom: 72 }} />
+      <PageBgColor bgColor="#fff" />
+      <Navbar style={{ marginBottom: 40 }} />
 
       <Container style={{ marginBottom: 100 }} maxWidth="md">
         <ItemIntro
-          style={{ marginBottom: 120 }}
+          style={{ marginBottom: 50 }}
           gallery={product.gallery}
           item={{ type: 'product', ...product }}
           onClickGetQuote={() => setOpenQuote(true)}
+          buttonRef={containerRef}
         />
 
         <ProductInfo product={product} />
@@ -74,15 +78,19 @@ const ProductPage: FC<ProductPageProps> = (props) => {
           />
         </div>
       </NoSSR>
+{
+  !inView ? (
+    <QuoteSticky onClickGetQuote={() => setOpenQuote(true)} />
 
-      <QuoteSticky onClickGetQuote={() => setOpenQuote(true)} />
+  ) : null
+}
     </div>
   )
 }
 
 const useStyles = makeStyles((props: ProductPageProps) => ({
   root: {
-    fontFamily: theme.fonts.secondary,
+    fontFamily: theme.fonts.primary,
   },
 }))
 
