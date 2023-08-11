@@ -27,7 +27,7 @@ export const Product: FC<ProductProps> = (originalProps) => {
   const splittedSpecs = product.availableSpecs.split("/")
   const type = splittedSpecs[0].trim()
   const quality = splittedSpecs[1].trim()
-  const size = splittedSpecs[2].split(':')[1].trim();
+  const size = splittedSpecs[2].split(':')[1]?.trim();
 
   return (
     <Link href={`/products/${product._id}`} css={styles.mainContainer} {...anchorProps}>
