@@ -25,9 +25,11 @@ export const Product: FC<ProductProps> = (originalProps) => {
   const { product, horizontal, bordered, imgHeight, ...anchorProps } = props
 
   const splittedSpecs = product.availableSpecs.split("/")
-  const type = splittedSpecs[0].trim()
-  const quality = splittedSpecs[1].trim()
+  const type = splittedSpecs[0]?.trim()
+  const quality = splittedSpecs[1]?.trim()
   const size = splittedSpecs[2].split(':')[1]?.trim();
+
+
 
   return (
     <Link href={`/products/${product._id}`} css={styles.mainContainer} {...anchorProps}>
@@ -164,6 +166,7 @@ const useStyles = makeStyles(
       backgroundRepeat: 'no-repeat',
       backgroundSize: 'cover',
       [`@media (max-width: ${theme.widths.tabletXs})`]: {
+        maxHeight: 300,
         height: 'auto',
         width: '100%',
         '::before': {

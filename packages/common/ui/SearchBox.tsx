@@ -3,9 +3,9 @@ import { makeStyles } from '../utils'
 import searchIcon from '../assets/images/search-icon.png'
 
 interface InputProps {
-    type?: 'text' | 'number' | 'email' | 'password'
+    type: 'text' | 'number' | 'email' | 'password'
     label?: string
-    value?: string | number
+    value: string | number
     name?: string
     placeholder?: string
     error?: boolean
@@ -15,13 +15,14 @@ interface InputProps {
 
 export const SearchBox: FC<InputProps> = (props) => {
     const styles = useStyles(props)
+
     return (
         <div css={styles.inputWrapper}>
             <label htmlFor={props.label}>{props.label}</label>
             <input
                 type={props.type}
                 id={props.label}
-                value={props.value}
+                value={props.value || ''}
                 name={props.name}
                 placeholder={props.placeholder}
                 onChange={props.onChange}

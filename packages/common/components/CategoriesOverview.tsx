@@ -17,10 +17,12 @@ export const CategoriesOverview: FC<CategoriesOverviewProps> = (props) => {
   const styles = useStyles(props)
 
   const { categories, itemType = 'product', ...divProps } = props
+  const [inputValue, setInputValue] = React.useState('');
   const [searchedCategories, setSearchedCategories] = React.useState<BaseCategory[]>(categories)
   const user = useUser()
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
     const searchText = e.target.value.toLowerCase().trim();
     const searchResult1 = categories?.filter((category) => category?.name.toLowerCase().trim()?.startsWith(searchText));
     const searchResult2 = categories?.filter((category) => category?.name.toLowerCase().trim()?.includes(searchText));
@@ -48,7 +50,7 @@ export const CategoriesOverview: FC<CategoriesOverviewProps> = (props) => {
         <div css={styles.wrapper} {...divProps}>
           <div css={styles.root}>
             <div css={styles.searchBarWrapper}>
-              <SearchBox placeholder="Search Categories..." onChange={handleChange} />
+              <SearchBox type="text" placeholder="Search Categories..." value={inputValue} onChange={handleChange} />
             </div>
             <Container maxWidth="md">
               <div css={styles.mobileHeader}>

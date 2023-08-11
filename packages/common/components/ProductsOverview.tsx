@@ -15,9 +15,11 @@ export const ProductsOverview: FC<ProductsOverviewProps> = (props) => {
   const styles = useStyles(props)
 
   const { products, ...divProps } = props
-  const [searchedProducts, setSearchedProducts] = React.useState<BaseProduct[]>(products)
+  const [searchedProducts, setSearchedProducts] = React.useState<BaseProduct[]>(products);
+  const [inputValue, setInputValue] = React.useState('');
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
     const searchText = e.target.value.toLowerCase().trim();
     const searchResult1 = products?.filter((product) => product?.name.toLowerCase().trim()?.startsWith(searchText));
     const searchResult2 = products?.filter((product) => product?.name.toLowerCase().trim()?.includes(searchText));
@@ -53,7 +55,7 @@ export const ProductsOverview: FC<ProductsOverviewProps> = (props) => {
               </div>
             </div>
             <div css={styles.searchBarWrapper}>
-              <SearchBox placeholder="Search Products..." onChange={handleChange} />
+              <SearchBox type="text" placeholder="Search Products..." value={inputValue} onChange={handleChange} />
             </div>
             <div css={styles.scrollView}>
               {scrollView}
