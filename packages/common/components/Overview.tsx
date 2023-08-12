@@ -41,13 +41,14 @@ const useStyles = makeStyles((props: OverviewProps) => ({
     zIndex: -1,
     padding: '74px 0 74px 96px',
     background: '#FCFCFC',
+    overflow: 'hidden',
     [`@media (max-width: ${theme.widths.tablet})`]: {
       padding: '50px 16px',
     },
   },
   root: {
     display: 'grid',
-    gridTemplateColumns: '60% 40%',
+    gridTemplateColumns: '65% 35%',
     [`@media (max-width: ${theme.widths.tablet})`]: {
       flexDirection: 'column',
       display: 'flex',
@@ -62,6 +63,7 @@ const useStyles = makeStyles((props: OverviewProps) => ({
     width: '100%',
     fontSize: 18,
     color: '#000',
+    zIndex: 20,
     [`@media (max-width: ${theme.widths.tablet})`]: {
       marginBottom: 24,
     },
@@ -110,21 +112,17 @@ const useStyles = makeStyles((props: OverviewProps) => ({
   desc: {
     fontSize: 18,
     lineHeight: 1.5,
+    zIndex: 1001,
   },
   gifImgWrapper: {
     width: '100%',
-    marginTop: 50,
-    padding: '0 0 0 30px',
-    [`@media (max-width: ${theme.widths.tablet})`]: {
-      padding: 0,
-    },
   },
   imgWrapper: {
     position: 'absolute',
     width: '100%',
     height: 350,
     right: 0,
-    bottom: 20,
+    bottom: 0,
     overflow: 'hidden',
     zIndex: 100,
     display: 'flex',
@@ -135,9 +133,30 @@ const useStyles = makeStyles((props: OverviewProps) => ({
     },
   },
   gifWrapper: {
-    width: '100%',
+    position: 'absolute',
+    top: 200,
+    right: '-10%',
+    width: '50%',
+    height: 'auto',
+    zIndex: 1,
+    [`@media (max-width: 1180px)`]: {
+      position: 'absolute',
+      top: 300,
+    },
+    [`@media (max-width: ${theme.widths.tablet})`]: {
+      width: '100%',
+      height: 'auto',
+      position: 'static',
+      top: 0,
+      right: 0,
+      overflow: 'hidden',
+      transform: 'translateX(-15%)',
+    },
   },
   gif: {
     width: '100%',
+    [`@media (max-width: ${theme.widths.tablet})`]: {
+      width: '130%',
+    },
   },
 }))
