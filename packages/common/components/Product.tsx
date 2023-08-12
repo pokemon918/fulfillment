@@ -36,7 +36,7 @@ export const Product: FC<ProductProps> = (originalProps) => {
       {product.isSustainable && <span css={styles.susTitle}>Sustainable Product</span>}
       <div css={styles.root}>
         <div css={product.isSustainable ? styles.productSusContainer : styles.productMainContainer}>
-          <div css={styles.productImageContainer}>
+          <div css={product.isSustainable ? styles.productSusImgContainer : styles.productImageContainer}>
             <div
               css={styles.imgBackground}
               style={{ backgroundImage: `url(${product.thumbnail})` }}
@@ -109,8 +109,10 @@ export const Product: FC<ProductProps> = (originalProps) => {
 const useStyles = makeStyles(
   ({ horizontal, bordered, imgHeight }: ProductProps) => ({
     mainContainer: {
+      display: 'flex',
+      alignItems: 'center',
       position: 'relative',
-      padding: '40px 0px 0 10px',
+      padding: '40px 0px 20px 10px',
       textDecoration: 'none',
       [`@media (max-width: ${theme.widths.tabletXs})`]: {
         padding: '30px 0px 0 10px',
@@ -156,6 +158,12 @@ const useStyles = makeStyles(
       margin: 'auto',
       height: '250px',
       marginTop: '20px',
+    },
+    productSusImgContainer: {
+      width: '90%',
+      margin: 'auto',
+      height: '250px',
+      marginTop: '10px',
     },
     imgBackground: {
       width: '100%',
