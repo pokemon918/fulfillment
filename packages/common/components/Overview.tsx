@@ -42,7 +42,7 @@ const useStyles = makeStyles((props: OverviewProps) => ({
     padding: '74px 0 74px 96px',
     background: '#FCFCFC',
     [`@media (max-width: ${theme.widths.tablet})`]: {
-      padding: '0 16px',
+      padding: '50px 16px',
     },
   },
   root: {
