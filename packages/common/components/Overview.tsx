@@ -115,6 +115,9 @@ const useStyles = makeStyles((props: OverviewProps) => ({
     width: '100%',
     marginTop: 50,
     padding: '0 0 0 30px',
+    [`@media (max-width: ${theme.widths.tablet})`]: {
+      padding: 0,
+    },
   },
   imgWrapper: {
     position: 'absolute',
