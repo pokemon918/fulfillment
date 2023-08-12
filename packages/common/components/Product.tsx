@@ -110,10 +110,10 @@ const useStyles = makeStyles(
   ({ horizontal, bordered, imgHeight }: ProductProps) => ({
     mainContainer: {
       position: 'relative',
-      paddingTop: 40,
+      padding: '40px 0px 0 10px',
       textDecoration: 'none',
       [`@media (max-width: ${theme.widths.tabletXs})`]: {
-        paddingTop: 30,
+        padding: '30px 0px 0 10px',
       },
     },
     root: {
@@ -122,7 +122,7 @@ const useStyles = makeStyles(
       width: '100%',
       display: 'block',
       gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 0.8fr)',
-      border: '1px solid #E9E9E9',
+      boxShadow: '0px 0px 10px 10px #E9E9E9',
       borderRadius: 16,
       background: '#fff',
       fontWeight: 500,
@@ -166,7 +166,7 @@ const useStyles = makeStyles(
       backgroundRepeat: 'no-repeat',
       backgroundSize: 'cover',
       [`@media (max-width: ${theme.widths.tabletXs})`]: {
-        maxHeight: 300,
+        maxHeight: 250,
         height: 'auto',
         width: '100%',
         '::before': {
@@ -183,9 +183,6 @@ const useStyles = makeStyles(
       display: 'flex',
       marginTop: '20px',
       marginBottom: '20px',
-      [`@media (max-width: ${theme.widths.tabletXs})`]: {
-        marginTop: '70px'
-      }
     },
     productNameContainer: {
       width: '88%',
