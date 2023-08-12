@@ -96,10 +96,10 @@ const useStyles = makeStyles((props: ProductsOverviewProps) => {
       background: "#fff",
       [`@media (max-width: ${theme.widths.tablet})`]: {
         justifyContent: 'center',
-        padding: '60px 0 20px 0px',
+        padding: '60px 16px 20px 16px',
       },
       [`@media (max-width: ${theme.widths.tabletSm})`]: {
-        padding: '40px 0 20px 0px',
+        padding: '40px 16px 20px 16px',
       },
     },
     scrollView: {

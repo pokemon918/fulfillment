@@ -1,5 +1,6 @@
 import { ChangeEvent, FC } from 'react'
 import { makeStyles } from '../utils'
+import { theme } from '../theme'
 import searchIcon from '../assets/images/search-icon.png'
 
 interface InputProps {
@@ -37,6 +38,9 @@ export const SearchBox: FC<InputProps> = (props) => {
 
 const useStyles = makeStyles(() => ({
     inputWrapper: {
+        maxWidth: 300,
+        minWidth: 230,
+        width: '100%',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -45,12 +49,16 @@ const useStyles = makeStyles(() => ({
         background: '#fff',
     },
     input: {
+        width: '100%',
         border: 'none',
         outline: 'none',
         fontSize: 18,
         fontWeight: 500,
         padding: '10px 20px',
         background: 'transparent',
+        [`@media (max-width: ${theme.widths.tabletSm})`]: {
+            padding: '10px 0 10px 20px',
+        },
     },
     icon: {
         width: 25,
