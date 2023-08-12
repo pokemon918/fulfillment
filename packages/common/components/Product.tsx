@@ -234,9 +234,11 @@ const useStyles = makeStyles(
       padding: '20px 0px',
     },
     moreContainer: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
       width: '40%',
       textAlign: 'center',
-      paddingTop: '30px !important',
       background: '#B1DA50',
       padding: '20px 0px'
     },
