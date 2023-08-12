@@ -33,7 +33,7 @@ export default function Home(props: HomeProps) {
         categories={categories}
       />
       <Overview />
-      <ProductsOverview style={{ marginBottom: 162 }} products={products} />
+      <ProductsOverview products={products} />
       <BlogOverview style={{ marginBottom: 122 }} articles={articles} />
       <Footer />
     </>

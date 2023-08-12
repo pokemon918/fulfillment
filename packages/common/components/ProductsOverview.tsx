@@ -83,10 +83,9 @@ const useStyles = makeStyles((props: ProductsOverviewProps) => {
     },
     root: {
       position: 'relative',
-      paddingTop: 74,
-      paddingBottom: 74,
-      [`@media (max-width: ${theme.widths.tabletSm})`]: {
-        paddingBottom: 74 - 32,
+      padding: '74px 0 100px 0',
+      [`@media (max-width: ${theme.widths.tablet})`]: {
+        padding: '42px 0',
       },
     },
     searchBarWrapper: {
