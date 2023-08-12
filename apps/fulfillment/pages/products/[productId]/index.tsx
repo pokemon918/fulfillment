@@ -65,7 +65,7 @@ const ProductPage: FC<ProductPageProps> = (props) => {
             item={{ type: 'product', ...product }}
             onClickGetQuote={() => setOpenQuote(true)}
             buttonRef={containerRef}
-            setShowSmartContract={setShowSmartContract}
+            onShowSmartContract={() => setShowSmartContract(true)}
           />
 
           <ProductInfo product={product} />
