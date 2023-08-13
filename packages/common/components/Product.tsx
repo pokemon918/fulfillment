@@ -115,7 +115,7 @@ const useStyles = makeStyles(
       padding: '40px 0px 20px 10px',
       textDecoration: 'none',
       [`@media (max-width: ${theme.widths.tabletXs})`]: {
-        padding: '30px 0px 0 10px',
+        padding: '30px 0px 20px 10px',
       },
     },
     root: {
