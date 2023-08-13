@@ -24,7 +24,7 @@ const globalStyles = css`
   }
 
   body {
-    font-family: ${theme.fonts.primary};
+    font-family: ${theme.fonts.secondary};
     line-height: 1.3;
     font-size: 16px;
   }

@@ -19,8 +19,8 @@ import {
   faqs,
 } from 'common'
 import { GetStaticPaths, GetStaticProps } from 'next'
-import { FC, useState } from 'react'
-import { useInView } from 'react-intersection-observer';
+import { FC, useEffect, useState } from 'react'
+import { useInView } from 'react-intersection-observer'
 
 interface ProductPageProps {
   product: DetailedProduct
@@ -36,36 +36,51 @@ interface ProductPageProps {
 const ProductPage: FC<ProductPageProps> = (props) => {
   const { product, relatedProducts, userProfile } = props
 
-  const styles = useStyles(props)
-  const [openQuote, setOpenQuote] = useState(false);
-  const [containerRef, inView] = useInView();
+ 
+  const [openQuote, setOpenQuote] = useState(false)
+  const [containerRef, inView] = useInView()
 
+  const [showSmartContract, setShowSmartContract] = useState(false)
 
+  const styles = useStyles(props);
+
+  useEffect(() => {
+    // 👇️ scroll to top on page load
+    window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
+  }, [showSmartContract]);
   return (
-    <div css={styles.root}>
+    <>
+    <div css={{
+    fontFamily: theme.fonts.secondary,
+    display: showSmartContract ? 'none' : 'block'
+  }} >
       <PageBgColor bgColor="#fff" />
-      <Navbar style={{ marginBottom: 40 }} />
+      <Navbar style={{ marginBottom: showSmartContract ? 0 : 40 }} />
 
-      <Container style={{ marginBottom: 100 }} maxWidth="md">
-        <ItemIntro
-          style={{ marginBottom: 50 }}
-          gallery={product.gallery}
-          item={{ type: 'product', ...product }}
-          onClickGetQuote={() => setOpenQuote(true)}
-          buttonRef={containerRef}
+   
+        <Container style={{ marginBottom: 100 }} maxWidth="md">
+          <ItemIntro
+            style={{ marginBottom: 50 }}
+            gallery={product.gallery}
+            item={{ type: 'product', ...product }}
+            onClickGetQuote={() => setOpenQuote(true)}
+            buttonRef={containerRef}
+            onShowSmartContract={() => setShowSmartContract(true)}
+          />
+
+          <ProductInfo product={product} />
+        </Container>
+
+        <RelatedProducts
+          products={relatedProducts}
+          style={{ marginBottom: 122, marginTop: 120 }}
         />
 
-        <ProductInfo product={product} />
-      </Container>
-
-      <RelatedProducts
-        products={relatedProducts}
-        style={{ marginBottom: 122, marginTop: 120 }}
-      />
-
-      <Container style={{ marginBottom: 100 }} maxWidth="sm">
-        <Faq faqs={faqs.dealProductFaqs} />
-      </Container>
+        <Container style={{ marginBottom: 100 }} maxWidth="sm">
+          <Faq faqs={faqs.dealProductFaqs} />
+        </Container>
+  
+   
 
       <Footer />
 
@@ -78,20 +93,30 @@ const ProductPage: FC<ProductPageProps> = (props) => {
           />
         </div>
       </NoSSR>
-{
-  !inView ? (
-    <QuoteSticky onClickGetQuote={() => setOpenQuote(true)} />
-
-  ) : null
-}
+      {!inView && !showSmartContract ? (
+        <QuoteSticky onClickGetQuote={() => setOpenQuote(true)} />
+      ) : null}
     </div>
+       <div
+       css={{
+         background: '#fff',
+height: showSmartContract ? '100vh' : '0',
+transition: '.5s',
+position:'absolute',
+bottom:'0',
+zIndex:9999,
+width: '100%',
+visibility: showSmartContract ? 'visible' : 'hidden'
+       }}
+     >
+       <div css={{height:'1000px'}}><button onClick={() => setShowSmartContract(false)}>Close</button></div>
+     </div>
+     </>
   )
 }
 
 const useStyles = makeStyles((props: ProductPageProps) => ({
-  root: {
-    fontFamily: theme.fonts.primary,
-  },
+ 
 }))
 
 const GET_DATA = gql`
@@ -161,7 +186,7 @@ export const getStaticProps: GetStaticProps<ProductPageProps> = async (ctx) => {
   if (!product) {
     return {
       notFound: true,
-      revalidate: 60
+      revalidate: 60,
     }
   }
 
@@ -191,7 +216,7 @@ export const getStaticProps: GetStaticProps<ProductPageProps> = async (ctx) => {
           availableSpecs: product.availableSpecs.en,
         })),
     },
-    revalidate: 60
+    revalidate: 60,
   }
 }
 

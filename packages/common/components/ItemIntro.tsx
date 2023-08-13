@@ -39,13 +39,14 @@ interface ItemIntroProps extends HTMLAttributes<HTMLDivElement> {
   item: ProductItem | InvestmentItem
   onClickGetQuote: () => void,
   buttonRef: React.RefObject<Element> | any;
+  onShowSmartContract: () => void
 }
 
 export const ItemIntro: FC<ItemIntroProps> = (props) => {
   const user = useUser()
   const styles = useStyles(props)
 
-  const { gallery, item, onClickGetQuote, buttonRef, ...divProps} = props
+  const { gallery, item, onClickGetQuote, buttonRef, onShowSmartContract, ...divProps} = props
 
   const countryName = useMemo(
     () => countries.find((c) => c.code === item.country)?.name,
@@ -390,7 +391,7 @@ margin: '10px 0 45px 0'}}>
                 borderRadius: '0px 0px 10px 10px',
                 marginTop: '15px'
               }}
-              
+              onClick={onShowSmartContract}
             >
               Create Smart Contract
             </Button>
@@ -411,7 +412,7 @@ const useStyles = makeStyles(({ item: { type } }: ItemIntroProps) => ({
     justifyContent: 'space-between',
     gap: '30px',
     [`@media (max-width: ${theme.widths.tablet})`]: {
-      display: 'inline-block',
+      display: 'grid',
       marginTop: '0px',
     },
   },
@@ -449,6 +450,7 @@ const useStyles = makeStyles(({ item: { type } }: ItemIntroProps) => ({
     [`@media (max-width: ${theme.widths.tablet})`]: {
       width: '100%',
       paddingRight: '0px',
+      marginTop:'40px'
     },
   },
   sliderStyle: {
@@ -488,6 +490,9 @@ const useStyles = makeStyles(({ item: { type } }: ItemIntroProps) => ({
     [`@media (max-width: ${theme.widths.tablet})`]: {
       width: '100%',
       height: 'auto',
+      gridRow: '1/2',
+position: 'relative',
+top: '10px'
     },
   },
   sliderHeader: {
