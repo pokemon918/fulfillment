@@ -70,7 +70,7 @@ export const BlogOverview: FC<BlogOverviewProps> = (props) => {
 const useStyles = makeStyles((props: BlogOverviewProps) => {
   return {
     root: {
-      paddingBottom: 122,
+      paddingBottom: 70,
       [`@media (max-width: ${theme.widths.tablet})`]: {
         paddingBottom: 50,
       },
