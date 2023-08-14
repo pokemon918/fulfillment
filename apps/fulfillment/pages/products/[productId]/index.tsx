@@ -17,6 +17,7 @@ import {
   RelatedProducts,
   theme,
   faqs,
+  SmartContractForm
 } from 'common'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { FC, useEffect, useState } from 'react'
@@ -40,7 +41,7 @@ const ProductPage: FC<ProductPageProps> = (props) => {
   const [openQuote, setOpenQuote] = useState(false)
   const [containerRef, inView] = useInView()
 
-  const [showSmartContract, setShowSmartContract] = useState(false)
+  const [showSmartContract, setShowSmartContract] = useState(true)
 
   const styles = useStyles(props);
 
@@ -99,17 +100,19 @@ const ProductPage: FC<ProductPageProps> = (props) => {
     </div>
        <div
        css={{
-         background: '#fff',
+         background: '#F8F8F8',
 height: showSmartContract ? '100vh' : '0',
 transition: '.5s',
 position:'absolute',
 bottom:'0',
 zIndex:9999,
 width: '100%',
-visibility: showSmartContract ? 'visible' : 'hidden'
+visibility: showSmartContract ? 'visible' : 'hidden',
+overflow:'auto'
        }}
      >
-       <div css={{height:'1000px'}}><button onClick={() => setShowSmartContract(false)}>Close</button></div>
+       
+       <SmartContractForm handelClose={() => setShowSmartContract(false)} />
      </div>
      </>
   )

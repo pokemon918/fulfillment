@@ -51,6 +51,7 @@ const InvestmentPage: FC<InvestmentPageProps> = (props) => {
           item={{ type: 'investment', ...investment }}
           onClickGetQuote={() => setOpenQuote(true)}
           buttonRef={''}
+          onShowSmartContract={() => {}}
         />
 
         <ProductInfo product={investment} />
