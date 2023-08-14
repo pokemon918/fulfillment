@@ -41,7 +41,7 @@ const ProductPage: FC<ProductPageProps> = (props) => {
   const [openQuote, setOpenQuote] = useState(false)
   const [containerRef, inView] = useInView()
 
-  const [showSmartContract, setShowSmartContract] = useState(true)
+  const [showSmartContract, setShowSmartContract] = useState(false)
 
   const styles = useStyles(props);
 
