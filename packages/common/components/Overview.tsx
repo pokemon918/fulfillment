@@ -24,7 +24,7 @@ export const Overview: FC<OverviewProps> = (props) => {
                 </div>
                 <div css={styles.gifImgWrapper}>
                     <div css={styles.imgWrapper}>
-                        <img src={curvyDots.src} />
+                        <img css={styles.dotsImage} src={curvyDots.src} />
                     </div>
                     <div css={styles.gifWrapper}>
                         <img css={styles.gif} src={overviewGif.src} alt="" />
@@ -38,7 +38,7 @@ export const Overview: FC<OverviewProps> = (props) => {
 const useStyles = makeStyles((props: OverviewProps) => ({
     wrapper: {
         position: 'relative',
-        padding: '74px 0 74px 96px',
+        padding: '119px 0 175px 96px',
         background: '#FCFCFC',
         overflow: 'hidden',
         [`@media (max-width: ${theme.widths.tablet})`]: {
@@ -50,7 +50,7 @@ const useStyles = makeStyles((props: OverviewProps) => ({
     },
     root: {
         display: 'grid',
-        gridTemplateColumns: '65% 35%',
+        gridTemplateColumns: '59% 41%',
         [`@media (max-width: ${theme.widths.tablet})`]: {
             flexDirection: 'column',
             display: 'flex',
@@ -86,10 +86,10 @@ const useStyles = makeStyles((props: OverviewProps) => ({
         maxWidth: 900,
         fontWeight: 300,
         fontSize: 48,
-        lineHeight: 1.25,
+        lineHeight: '48px',
         textAlign: 'left',
         color: '#3BA83B',
-        paddingBottom: 20,
+        paddingBottom: 30,
         position: 'relative',
         zIndex: 5,
         [`@media (max-width: ${theme.widths.tablet})`]: {
@@ -104,7 +104,7 @@ const useStyles = makeStyles((props: OverviewProps) => ({
         fontWeight: 500,
         fontSize: 36,
         lineHeight: 1.25,
-        marginBottom: 8,
+        paddingBottom: 20,
         [`@media (max-width: ${theme.widths.tablet})`]: {
             textAlign: 'center',
             fontSize: 28,
@@ -115,7 +115,8 @@ const useStyles = makeStyles((props: OverviewProps) => ({
     },
     desc: {
         fontSize: 18,
-        lineHeight: 1.5,
+        lineHeight: '28px',
+        fontWeight: 500,
         zIndex: 1001,
     },
     gifImgWrapper: {
@@ -124,8 +125,8 @@ const useStyles = makeStyles((props: OverviewProps) => ({
     imgWrapper: {
         position: 'absolute',
         width: '100%',
-        height: 350,
-        right: 0,
+        height: 700,
+        right: '-7%',
         bottom: 0,
         overflow: 'hidden',
         zIndex: 100,
@@ -136,11 +137,14 @@ const useStyles = makeStyles((props: OverviewProps) => ({
             display: 'none',
         },
     },
+    dotsImage: {
+        width: '20%',
+    },
     gifWrapper: {
         position: 'absolute',
-        top: 170,
-        right: '-10%',
-        width: '50%',
+        top: 200,
+        right: '-17%',
+        width: '70%',
         height: 'auto',
         zIndex: 1,
         [`@media (max-width: 1180px)`]: {
