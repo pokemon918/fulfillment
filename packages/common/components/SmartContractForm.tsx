@@ -952,6 +952,9 @@ export const SmartContractForm: FC<SmartContractFormProps> = (props) => {
 const useStyles = makeStyles(({}: SmartContractFormProps) => ({
   root: {
     paddingTop: '50px',
+    [`@media (max-width: ${theme.widths.tabletXs})`]: {
+      paddingTop:'80px'
+  }
   },
   prograssBarContainer: {
     background: '#3BA83B',
