@@ -18,11 +18,13 @@ export const revalidatePaths = (appUrl: string, paths: string[]) => {
 interface AppPaths {
   fulfillment?: (string | undefined)[]
   investment?: (string | undefined)[]
+  admin?: (string | undefined)[]
 }
 
 const appUrls = {
   fulfillment: process.env.NEXT_PUBLIC_FULFILLMENT as string,
   investment: process.env.NEXT_PUBLIC_INVESTMENT as string,
+  admin: process.env.NEXT_PUBLIC_ADMIN as string,
 }
 
 export const revalidateCrossPaths = (

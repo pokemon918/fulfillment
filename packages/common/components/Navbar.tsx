@@ -36,6 +36,9 @@ const staticLinks: {
   ]
 
 export const Navbar: FC<NavbarProps> = (originalProps) => {
+
+  if (process.env.NEXT_PUBLIC_APP_TYPE === "admin") return (<></>)
+
   const props = mergeProps(originalProps, {
     mode: 'light',
   })

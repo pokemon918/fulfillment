@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { deleteCookie, APP_TYPE } from "common";
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -32,6 +33,12 @@ const DropdownUser = () => {
     document.addEventListener("keydown", keyHandler);
     return () => document.removeEventListener("keydown", keyHandler);
   });
+
+  const logout = () => {
+    deleteCookie(`${APP_TYPE}_token`)
+    window.localStorage.removeItem(`${APP_TYPE}_user`)
+    window.location.href = '/'
+  }
 
   return (
     <div className="relative">
@@ -69,7 +76,7 @@ const DropdownUser = () => {
           dropdownOpen === true ? "block" : "hidden"
         }`}
       >
-        <button className="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
+        <button className="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base" onClick={logout}>
           <svg
             className="fill-current"
             width="22"

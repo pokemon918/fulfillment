@@ -131,8 +131,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               <li>
                 <Link
                   href="/company/buyers"
-                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 bg-graydark dark:bg-meta-4 ${
-                    pathname.includes("Buyers") &&
+                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                    pathname.includes("buyers") &&
                     "bg-graydark dark:bg-meta-4"
                   }`}
                 >
@@ -146,7 +146,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <Link
                   href="/company/suppliers"
                   className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes("Suppliers") &&
+                    pathname.includes("suppliers") &&
                     "bg-graydark dark:bg-meta-4"
                   }`}
                 >
@@ -169,9 +169,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               {/* <!-- Products --> */}
               <li>
                 <Link
-                  href="/product-management/products"
+                  href="/products"
                   className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes("Products") &&
+                    pathname.includes("products") &&
                     "bg-graydark dark:bg-meta-4"
                   }`}
                 >
@@ -183,9 +183,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               {/* <!-- Categories --> */}
               <li>
                 <Link
-                  href="/product-management/categories"
+                  href="/categories"
                   className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes("Categories") &&
+                    pathname.includes("categories") &&
                     "bg-graydark dark:bg-meta-4"
                   }`}
                 >
@@ -210,7 +210,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <Link
                   href="/deal-management/ongoing-deals"
                   className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes("Products") &&
+                    pathname.includes("ongoing-deals") &&
                     "bg-graydark dark:bg-meta-4"
                   }`}
                 >

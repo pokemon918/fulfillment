@@ -22,6 +22,9 @@ const links = {
 }
 
 export const Footer: FC<FooterProps> = (props) => {
+
+  if (process.env.NEXT_PUBLIC_APP_TYPE === "admin") return (<></>)
+  
   const styles = useStyles(props)
 
   const { ...divProps } = props
