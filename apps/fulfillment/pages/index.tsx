@@ -34,7 +34,7 @@ export default function Home(props: HomeProps) {
       />
       <Overview />
       <ProductsOverview products={products} />
-      <BlogOverview style={{ marginBottom: 122 }} articles={articles} />
+      <BlogOverview articles={articles} />
       <Footer />
     </>
   )
