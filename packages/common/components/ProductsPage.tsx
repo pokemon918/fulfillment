@@ -48,8 +48,14 @@ export function ProductsPage(props: ProductsPageProps) {
             </div>
 
             <div css={styles.products}>
-              {products.map((product) => (
+              {products.map((product,index) => (
+                <>
                 <ProductVertical key={product._id} product={product} />
+                {index % 3 === 2 && <div css={{gridColumn:'1/6',height:'1px',background:'#B1E080',[`@media (max-width: ${theme.widths.tabletSm})`]: {
+      display:'none'
+    },}}></div>}
+                </>
+                
               ))}
             </div>
           </Container>
@@ -76,8 +82,13 @@ const useStyles = makeStyles((props: ProductsPageProps) => ({
     marginBottom: 24,
   },
   heading: {
-    fontSize: 25,
-    fontWeight: 700,
+    fontSize: '48px',
+    fontWeight: '600',
+    color: '#3BA83B',
+    marginBottom: '30px',
+    [`@media (max-width: ${theme.widths.tabletXs})`]: {
+      fontSize:'32px'
+    },
   },
   navbar: {
     flexShrink: 1,
@@ -90,8 +101,8 @@ const useStyles = makeStyles((props: ProductsPageProps) => ({
   },
   products: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(4, 1fr)',
-    gap: '48px 24px',
+    gridTemplateColumns: 'repeat(3, 1fr)',
+    gap: '50px',
     [`@media (max-width: ${theme.widths.tablet})`]: {
       gridTemplateColumns: 'repeat(3, 1fr)',
     },
@@ -101,5 +112,6 @@ const useStyles = makeStyles((props: ProductsPageProps) => ({
     [`@media (max-width: ${theme.widths.mobile})`]: {
       gridTemplateColumns: 'repeat(1, 1fr)',
     },
+   
   },
 }))

@@ -6,9 +6,10 @@ import Cors from 'cors'
 
 const fulfillment = process.env.NEXT_PUBLIC_FULFILLMENT as string
 const investment = process.env.NEXT_PUBLIC_INVESTMENT as string
+const admin = process.env.NEXT_PUBLIC_ADMIN as string
 
 const cors = Cors({
-  origin: [fulfillment, investment],
+  origin: [fulfillment, investment, admin],
   methods: ['POST', 'GET', 'HEAD'],
 })
 

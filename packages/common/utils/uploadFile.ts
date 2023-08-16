@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { getCookie } from './cookies'
+import { APP_TYPE } from "../constants/APP_TYPE";
 
 const endpoint = `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/files/upload`
 
@@ -14,7 +15,10 @@ export const uploadFile = ({
   onUploadProgress,
   relationId,
 }: UploadFileInput) => {
-  const token = getCookie(document.cookie, 'fulfillment_token')
+  let token: string | null = ''
+  if (APP_TYPE === 'fulfillment' || APP_TYPE === 'admin') {
+    token = getCookie(document.cookie, `${APP_TYPE}_token`)
+  }
 
   if (onUploadProgress) onUploadProgress(0)
 

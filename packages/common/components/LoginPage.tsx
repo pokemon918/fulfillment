@@ -34,6 +34,7 @@ const LOGIN = gql`
 const apps = {
   fulfillment: process.env.NEXT_PUBLIC_FULFILLMENT!,
   investment: process.env.NEXT_PUBLIC_INVESTMENT!,
+  admin: process.env.NEXT_PUBLIC_ADMIN!,
 }
 
 export const LoginPage = () => {
@@ -71,9 +72,9 @@ export const LoginPage = () => {
 
       const expireAt = new Date(Date.now() + YEAR)
 
-      const authType = user.role === 'investor' ? 'investment' : 'fulfillment'
+      const acceptType = user.role === 'investor' ? ['investment'] : user.role === 'admin' ? ['admin', 'fulfillment', 'investment'] : ['fulfillment']
 
-      if (APP_TYPE === authType) {
+      if (acceptType.includes(APP_TYPE)) {
         setCookie(`${APP_TYPE}_token`, token, expireAt)
         localStorage.setItem(`${APP_TYPE}_user`, JSON.stringify(user))
         window.location.href = '/'
@@ -104,7 +105,7 @@ export const LoginPage = () => {
                 <StyledLink
                   href={
                     apps[
-                      APP_TYPE === 'fulfillment' ? 'investment' : 'fulfillment'
+                      matchingRole === 'investor' ? 'investment' : matchingRole === 'admin' ? 'admin' : 'fulfillment'
                     ] + '/login'
                   }
                 >

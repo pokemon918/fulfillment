@@ -132,7 +132,7 @@ const useStyles = makeStyles(({ }: ScrollViewProps) => ({
     gridAutoColumns: 258,
     padding: '0 16px',
     gap: 18,
-    fontFamily: theme.fonts.primary,
+    fontFamily: theme.fonts.secondary,
     '@media (max-width: 320px)': {
       gridAutoColumns: 'calc(100% - 32px)',
     },

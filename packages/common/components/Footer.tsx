@@ -22,6 +22,9 @@ const links = {
 }
 
 export const Footer: FC<FooterProps> = (props) => {
+
+  if (process.env.NEXT_PUBLIC_APP_TYPE === "admin") return (<></>)
+  
   const styles = useStyles(props)
 
   const { ...divProps } = props
@@ -98,7 +101,7 @@ const useStyles = makeStyles((props: FooterProps) => {
       color: '#fff',
       fontWeight: 400,
       marginBottom: 8,
-      fontFamily: theme.fonts.primary,
+      fontFamily: theme.fonts.secondary,
     },
     desc: {
       fontSize: 13,
