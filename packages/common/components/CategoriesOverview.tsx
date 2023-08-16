@@ -115,7 +115,11 @@ const useStyles = makeStyles((props: CategoriesOverviewProps) => {
       },
       marginRight: '25px',
 height: '50px',
-width: '220px'
+width: '220px',
+[`@media (max-width: ${theme.widths.tabletSm})`]: {
+  marginRight:'0px'
+  
+},
     },
     root: {
       position: 'relative',
@@ -139,6 +143,7 @@ gap: '20px',
       },
       [`@media (max-width: ${theme.widths.tabletSm})`]: {
         padding: '40px 16px 20px 16px',
+        
       },
     },
     scrollView: {
