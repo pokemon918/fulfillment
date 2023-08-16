@@ -1,1 +1,1 @@
-export const APP_TYPE = process.env.NEXT_PUBLIC_APP_TYPE as 'fulfillment' | 'investment'
+export const APP_TYPE = process.env.NEXT_PUBLIC_APP_TYPE as 'fulfillment' | 'investment' | 'admin'
