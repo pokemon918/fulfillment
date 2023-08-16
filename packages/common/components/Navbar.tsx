@@ -111,7 +111,7 @@ export const Navbar: FC<NavbarProps> = (originalProps) => {
             variant="outlined"
             rounded
             fontColor={fontColor1}
-            href="/"
+            href="https://trumarket.tech/investor"
           >
             Invest now
           </Button>
@@ -172,7 +172,7 @@ export const Navbar: FC<NavbarProps> = (originalProps) => {
             variant="outlined"
             rounded
             fontColor={fontColor1}
-            href="/"
+            href="https://trumarket.tech/investor"
           >
             Invest now
           </Button>
@@ -276,7 +276,6 @@ const useStyles = makeStyles(({ mode }: NavbarProps) => ({
   deskLink: {
     position: 'relative',
     color: 'inherit',
-    fontSize: 14,
     fontFamily: theme.fonts.secondary,
     textDecoration: 'none',
     ':hover': {

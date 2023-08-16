@@ -50,6 +50,7 @@ const InvestmentPage: FC<InvestmentPageProps> = (props) => {
           gallery={investment.gallery}
           item={{ type: 'investment', ...investment }}
           onClickGetQuote={() => setOpenQuote(true)}
+          buttonRef={''}
         />
 
         <ProductInfo product={investment} />
@@ -71,7 +72,7 @@ const InvestmentPage: FC<InvestmentPageProps> = (props) => {
 
 const useStyles = makeStyles((props: InvestmentPageProps) => ({
   root: {
-    fontFamily: theme.fonts.secondary,
+    fontFamily: theme.fonts.primary,
   },
 }))
 

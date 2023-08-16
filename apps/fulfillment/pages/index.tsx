@@ -29,20 +29,12 @@ export default function Home(props: HomeProps) {
   return (
     <>
       <HomeBanner />
-
       <CategoriesOverview
         categories={categories}
-        style={{ marginBottom: 114, position: 'relative' }}
       />
-
-      <Overview style={{ marginBottom: 82 }} />
-
-      <ProductsOverview style={{ marginBottom: 162 }} products={products} />
-
-      <ContainerWide>
-        <BlogOverview style={{ marginBottom: 122 }} articles={articles} />
-      </ContainerWide>
-
+      <Overview />
+      <ProductsOverview products={products} />
+      <BlogOverview articles={articles} />
       <Footer />
     </>
   )
