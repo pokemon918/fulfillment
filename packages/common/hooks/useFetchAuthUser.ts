@@ -47,7 +47,7 @@ export const useFetchAuthUser = () => {
   const tokenName = `${APP_TYPE}_token`
   const storageItemName = `${APP_TYPE}_user`
   const acceptedRoles =
-    APP_TYPE === 'fulfillment' ? ['admin', 'buyer', 'seller'] : ['investor']
+    APP_TYPE === 'fulfillment' ? ['admin', 'buyer', 'seller'] : APP_TYPE === 'admin' ? ['admin'] : ['admin', 'investor']
 
   useEffect(() => {
     const cachedUser = getCachedUser(storageItemName, acceptedRoles)
