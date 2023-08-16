@@ -14,6 +14,11 @@ const secondary = localFont({
     },
     {
       path: './fonts/graphik/Graphik-Semibold.ttf',
+      weight: '600',
+      style: 'normal',
+    },
+    {
+      path: './fonts/graphik/Graphik-Medium.ttf',
       weight: '500',
       style: 'normal',
     },

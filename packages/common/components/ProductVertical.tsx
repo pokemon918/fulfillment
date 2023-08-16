@@ -46,7 +46,7 @@ export const ProductVertical: FC<ProductProps> = (originalProps) => {
         {/* <Button style={{ minWidth: 146 }}>See Details</Button> */}
         <button css={{ border: '0',
 color: '#000',
-fontWeight: '500',
+fontWeight: '600',
 fontSize: '14px',
 padding: '14px 40px',
 cursor: 'pointer',
