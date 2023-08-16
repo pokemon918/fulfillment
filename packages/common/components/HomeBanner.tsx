@@ -66,6 +66,7 @@ const useHomeBannerStyles = makeStyles(() => ({
   content: {
     display: 'flex',
     flexDirection: 'column',
+    maxWidth: 'unset',
     width: '100%',
     flexGrow: 1,
     padding: '55px 0 165px 96px',

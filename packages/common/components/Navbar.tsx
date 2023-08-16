@@ -227,6 +227,7 @@ const useStyles = makeStyles(({ mode }: NavbarProps) => ({
   },
   nav: {
     position: 'relative',
+    maxWidth: 'unset',
     width: '100%',
     display: 'flex',
     justifyContent: 'center',
