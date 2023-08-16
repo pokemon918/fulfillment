@@ -129,7 +129,7 @@ width: '220px'
       display: 'flex',
       alignItems: 'center',
       flexWrap: 'wrap',
-gap: '10px',
+gap: '20px',
       justifyContent: 'space-between',
       padding: '40px 0 30px 96px',
       background: "#EAF2D1",
