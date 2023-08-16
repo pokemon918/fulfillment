@@ -69,7 +69,12 @@ export const BlogOverview: FC<BlogOverviewProps> = (props) => {
 
 const useStyles = makeStyles((props: BlogOverviewProps) => {
   return {
-    root: {},
+    root: {
+      paddingBottom: 70,
+      [`@media (max-width: ${theme.widths.tablet})`]: {
+        paddingBottom: 50,
+      },
+    },
     view: {
       display: 'grid',
       gridTemplateColumns: '355px minmax(0, 1fr)',
@@ -151,7 +156,7 @@ const useStyles = makeStyles((props: BlogOverviewProps) => {
         justifyContent: 'center',
         flexDirection: 'column',
         alignItems: 'center',
-        marginTop: 20,
+        marginTop: 40,
       },
     },
     mobileNavigators: {
