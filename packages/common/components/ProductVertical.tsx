@@ -26,12 +26,12 @@ export const ProductVertical: FC<ProductProps> = (originalProps) => {
 
       <div css={styles.body}>
         <h3 css={styles.heading}>{product.name}</h3>
-        <div css={{width:'150px',height:'1px',background:'#B1E080',marginBottom:'8px'}}></div>
+        <div css={{width:'155px',height:'1px',background:'#B1E080',marginBottom:'8px'}}></div>
 
         <CountryLabel css={styles.flag} countryCode={product.country} />
 
         <div css={styles.specs}>
-          <p css={styles.specsTitle}>AVAILABLE SPECS</p>
+          <p css={styles.specsTitle}>AVAILABLE SPECS:</p>
           <p css={styles.specsDesc}>{product.availableSpecs}</p>
         </div>
 
@@ -103,7 +103,8 @@ const useStyles = makeStyles(({}: ProductProps) => ({
     fontWeight: 400,
     fontSize:'20px',
     '& i':{
-      fontSize:'28px'
+      fontSize: '28px',
+borderRadius: '5px'
     }
   },
   flagIcon: {

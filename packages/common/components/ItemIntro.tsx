@@ -589,7 +589,7 @@ top: '10px'
     fontSize: 14,
     color: '#818181',
     fontWeight: 400,
-    fontFamily: theme.fonts.primary,
+    fontFamily: theme.fonts.secondary,
     marginBottom: '10px',
   },
   price: {

@@ -53,7 +53,7 @@ const useStyles = makeStyles(
     },
   }: PageCaseStudyProps) => ({
     root: {
-      fontFamily: theme.fonts.primary,
+      fontFamily: theme.fonts.secondary,
     },
     cover: {
       width: '100%',

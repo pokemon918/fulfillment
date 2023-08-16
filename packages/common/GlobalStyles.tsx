@@ -27,6 +27,7 @@ const globalStyles = css`
     font-family: ${theme.fonts.secondary};
     line-height: 1.3;
     font-size: 16px;
+    letter-spacing: 0.5px;
   }
 
   :root {

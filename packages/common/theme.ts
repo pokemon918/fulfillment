@@ -8,17 +8,17 @@ const primary = Inter({
 const secondary = localFont({
   src: [
     {
-      path: './fonts/graphik/graphik-regular.otf',
+      path: './fonts/graphik/Graphik-Regular.ttf',
       weight: '400',
       style: 'normal',
     },
     {
-      path: './fonts/graphik/graphik-semibold.otf',
+      path: './fonts/graphik/Graphik-Semibold.ttf',
       weight: '500',
       style: 'normal',
     },
     {
-      path: './fonts/graphik/graphik-bold.otf',
+      path: './fonts/graphik/Graphik-Bold.ttf',
       weight: '700',
       style: 'normal',
     },

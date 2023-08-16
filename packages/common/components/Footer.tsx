@@ -98,7 +98,7 @@ const useStyles = makeStyles((props: FooterProps) => {
       color: '#fff',
       fontWeight: 400,
       marginBottom: 8,
-      fontFamily: theme.fonts.primary,
+      fontFamily: theme.fonts.secondary,
     },
     desc: {
       fontSize: 13,
