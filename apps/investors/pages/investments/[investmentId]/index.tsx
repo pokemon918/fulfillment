@@ -51,6 +51,7 @@ const InvestmentPage: FC<InvestmentPageProps> = (props) => {
           item={{ type: 'investment', ...investment }}
           onClickGetQuote={() => setOpenQuote(true)}
           buttonRef={''}
+          onShowSmartContract={() => {}}
         />
 
         <ProductInfo product={investment} />
@@ -72,7 +73,7 @@ const InvestmentPage: FC<InvestmentPageProps> = (props) => {
 
 const useStyles = makeStyles((props: InvestmentPageProps) => ({
   root: {
-    fontFamily: theme.fonts.primary,
+    fontFamily: theme.fonts.secondary,
   },
 }))
 

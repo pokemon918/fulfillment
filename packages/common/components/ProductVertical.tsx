@@ -26,11 +26,12 @@ export const ProductVertical: FC<ProductProps> = (originalProps) => {
 
       <div css={styles.body}>
         <h3 css={styles.heading}>{product.name}</h3>
+        <div css={{width:'155px',height:'1px',background:'#B1E080',marginBottom:'8px'}}></div>
 
         <CountryLabel css={styles.flag} countryCode={product.country} />
 
         <div css={styles.specs}>
-          <p css={styles.specsTitle}>AVAILABLE SPECS</p>
+          <p css={styles.specsTitle}>AVAILABLE SPECS:</p>
           <p css={styles.specsDesc}>{product.availableSpecs}</p>
         </div>
 
@@ -42,7 +43,15 @@ export const ProductVertical: FC<ProductProps> = (originalProps) => {
           <p css={styles.priceDesc}>per lb (Pound)</p>
         </div>
 
-        <Button style={{ minWidth: 146 }}>See Details</Button>
+        {/* <Button style={{ minWidth: 146 }}>See Details</Button> */}
+        <button css={{ border: '0',
+color: '#000',
+fontWeight: '600',
+fontSize: '14px',
+padding: '14px 40px',
+cursor: 'pointer',
+borderRadius: '13px',
+background: 'linear-gradient(271deg, #B1E183 0%, #B0D950 100%)'}}>See Details</button>
       </div>
     </Link>
   )
@@ -84,14 +93,19 @@ const useStyles = makeStyles(({}: ProductProps) => ({
     alignItems: 'start',
   },
   heading: {
-    fontSize: 20,
+    fontSize: 25,
     fontWeight: 700,
     lineHeight: 1.2,
-    marginBottom: 6,
+    marginBottom: 2,
   },
   flag: {
-    marginBottom: 12,
-    fontWeight: 500,
+    marginBottom: '20px',
+    fontWeight: 400,
+    fontSize:'20px',
+    '& i':{
+      fontSize: '28px',
+borderRadius: '5px'
+    }
   },
   flagIcon: {
     fontSize: 18,
@@ -99,15 +113,17 @@ const useStyles = makeStyles(({}: ProductProps) => ({
   },
   specs: {
     color: 'rgba(5, 5, 5, 0.5)',
-    marginBottom: 16,
+    marginBottom: '5px',
   },
   specsTitle: {
-    fontSize: 10,
-    fontWeight: 700,
-    color: '#000',
+    fontSize: '15px',
+fontWeight: '600',
+color: '#000'
   },
   specsDesc: {
-    fontSize: 13,
+    fontSize: '15px',
+    fontWeight: '400',
+    color: '#000',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
@@ -116,16 +132,20 @@ const useStyles = makeStyles(({}: ProductProps) => ({
     marginBottom: 13,
   },
   priceVal: {
-    fontSize: 25,
+    fontSize: '32px',
+fontWeight: '600',
+color: '#000'
   },
   priceCurrency: {
-    fontSize: 13,
-    color: 'rgba(5, 5, 5, 0.5)',
-    marginRight: 4,
+    fontSize: '15px',
+color: '#646464',
+marginRight: '4px',
+fontWeight: '400'
   },
   priceDesc: {
-    fontSize: 13,
-    color: 'rgba(5, 5, 5, 0.3)',
+    fontSize: '15px',
+color: '#B4B4B4',
+fontWeight: '400'
   },
 }))
 

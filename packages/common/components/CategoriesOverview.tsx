@@ -51,6 +51,15 @@ export const CategoriesOverview: FC<CategoriesOverviewProps> = (props) => {
           <div css={styles.root}>
             <div css={styles.searchBarWrapper}>
               <SearchBox type="text" placeholder="Search Categories..." value={inputValue} onChange={handleChange} />
+              <Button
+            href={`/all-categories`}
+            variant="outlined"
+            fontColor="#fff"
+            css={styles.browseBtn}
+            rounded
+          >
+            Browse Categories
+          </Button>
             </div>
             <Container maxWidth="md">
               <div css={styles.mobileHeader}>
@@ -96,6 +105,18 @@ const useStyles = makeStyles((props: CategoriesOverviewProps) => {
       position: 'relative',
       background: '#EAF2D1',
     },
+    browseBtn: {
+      fontSize: 18,
+      color: '#000',
+      ':hover': {
+        backgroundColor: '#A8EFA8',
+        
+        border: 'none',
+      },
+      marginRight: '25px',
+height: '50px',
+width: '220px'
+    },
     root: {
       position: 'relative',
       paddingTop: 30,
@@ -107,7 +128,9 @@ const useStyles = makeStyles((props: CategoriesOverviewProps) => {
     searchBarWrapper: {
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'flex-start',
+      flexWrap: 'wrap',
+gap: '10px',
+      justifyContent: 'space-between',
       padding: '40px 0 30px 96px',
       background: "#EAF2D1",
       [`@media (max-width: ${theme.widths.tablet})`]: {

@@ -73,7 +73,7 @@ const useStyles = makeStyles(({}: RelatedInvestmentsProps) => ({
     height: 'auto',
     display: 'flex',
     padding: '0 16px',
-    fontFamily: theme.fonts.primary,
+    fontFamily: theme.fonts.secondary,
   },
   product: {
     flexShrink: 0,

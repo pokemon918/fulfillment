@@ -159,7 +159,7 @@ export const QuotePrompt: FC<QuotePromptProps> = (props) => {
 const useStyles = makeStyles(({}: QuotePromptProps) => ({
   dialog: {
     position: 'relative',
-    fontFamily: theme.fonts.primary,
+    fontFamily: theme.fonts.secondary,
   },
   stepHeader: {
     position: 'absolute',
