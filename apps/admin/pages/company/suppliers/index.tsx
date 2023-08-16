@@ -9,6 +9,7 @@ const SupplierPage = (props: BasicCompanyProps) => {
 
   return (
     <>
+      {/* @ts-ignore */}
       <Breadcrumb pageName="Supplier Company" href="/company/suppliers/create" />
 
       <div className="flex flex-col gap-10">
