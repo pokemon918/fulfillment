@@ -115,7 +115,11 @@ const useStyles = makeStyles((props: CategoriesOverviewProps) => {
       },
       marginRight: '25px',
 height: '50px',
-width: '220px'
+width: '220px',
+[`@media (max-width: ${theme.widths.tabletSm})`]: {
+  marginRight:'0px'
+  
+},
     },
     root: {
       position: 'relative',
@@ -129,7 +133,7 @@ width: '220px'
       display: 'flex',
       alignItems: 'center',
       flexWrap: 'wrap',
-gap: '10px',
+gap: '20px',
       justifyContent: 'space-between',
       padding: '40px 0 30px 96px',
       background: "#EAF2D1",
@@ -139,6 +143,7 @@ gap: '10px',
       },
       [`@media (max-width: ${theme.widths.tabletSm})`]: {
         padding: '40px 16px 20px 16px',
+        
       },
     },
     scrollView: {
