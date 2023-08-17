@@ -38,6 +38,7 @@ const ProductCreate = () => {
       },
     ],
     certifications: [],
+    isSustainable: false,
   }
 
   return (

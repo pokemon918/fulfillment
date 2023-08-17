@@ -28,7 +28,10 @@ export const ProductVertical: FC<ProductProps> = (originalProps) => {
         <h3 css={styles.heading}>{product.name}</h3>
         <div css={{width:'155px',height:'1px',background:'#B1E080',marginBottom:'8px'}}></div>
 
-        <CountryLabel css={styles.flag} countryCode={product.country} />
+        <div css={styles.sustainableDiv}>
+          <CountryLabel css={styles.flag} countryCode={product.country} />
+          { product.isSustainable ? <div css={styles.sustainable}>Sustainable Product</div> : <></>}
+        </div>
 
         <div css={styles.specs}>
           <p css={styles.specsTitle}>AVAILABLE SPECS:</p>
@@ -147,5 +150,16 @@ fontWeight: '400'
 color: '#B4B4B4',
 fontWeight: '400'
   },
+  sustainable: {
+    marginBottom: '17px',
+    color: '#3BA83B',
+    fontSize: '19px',
+  },
+  sustainableDiv: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    width: '100%',
+    alignItems: 'center',
+  }
 }))
 

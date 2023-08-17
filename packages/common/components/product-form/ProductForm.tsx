@@ -1,5 +1,5 @@
 import { useForm, useFieldArray } from 'react-hook-form'
-import { TableForm, Paper, Button, StyledLink, Select, Input } from '../../ui'
+import { TableForm, Paper, Button, StyledLink, Select, Input, Checkbox } from '../../ui'
 import { gql } from 'graphql-request'
 import { FC, useRef, useState } from 'react'
 import { CountrySelect } from '../CountrySelect'
@@ -104,6 +104,7 @@ export interface ProductFormValue {
   }[]
   certifications: { src: string }[]
   harvestingMonths: number[]
+  isSustainable: boolean
 }
 
 interface ProductFormProps {
@@ -293,6 +294,13 @@ export const ProductForm: FC<ProductFormProps> = ({
           name="price"
           required
           pattern="[0-9]+(\.[0-9]+)?"
+        />
+
+        <Checkbox
+          style={{ display: 'flex', marginBottom: 20 }}
+          label="Is sustainable?"
+          name="isSustainable"
+          control={control}
         />
 
         <TableForm

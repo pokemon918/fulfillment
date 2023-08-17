@@ -26,6 +26,7 @@ const GET_PRODUCT = gql`
         es
       }
       price
+      isSustainable
       bigTitle {
         en
         es
