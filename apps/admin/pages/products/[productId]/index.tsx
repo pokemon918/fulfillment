@@ -44,6 +44,7 @@ const ProductPage: FC<ProductPageProps> = (props) => {
       <Navbar style={{ marginBottom: 72 }} />
 
       <Container style={{ marginBottom: 100 }} maxWidth="md">
+        {/* @ts-ignore */}
         <ItemIntro
           style={{ marginBottom: 120 }}
           gallery={product.gallery}

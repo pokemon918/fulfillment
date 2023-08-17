@@ -36,7 +36,7 @@ export const Product: FC<ProductProps> = (originalProps) => {
       {product.isSustainable && <span css={styles.susTitle}>Sustainable Product</span>}
       <div css={styles.root}>
         <div css={product.isSustainable ? styles.productSusContainer : styles.productMainContainer}>
-          <div css={styles.productImageContainer}>
+          <div css={product.isSustainable ? styles.productSusImgContainer : styles.productImageContainer}>
             <div
               css={styles.imgBackground}
               style={{ backgroundImage: `url(${product.thumbnail})` }}
@@ -66,14 +66,13 @@ export const Product: FC<ProductProps> = (originalProps) => {
               <p css={styles.typeValue} style={{ fontWeight: 'bold' }}>{size}</p>
             </div>
           </div>
-
           <div css={styles.detailsContainer}>
             <div css={styles.priceContainer}>
               <span css={styles.priceVal}>${product.price}</span>
               <p css={styles.priceDesc}>Per lB (pound)</p>
             </div>
             <div css={styles.moreContainer}>
-              <span style={{ display: 'inline-flex' }}>In details<img css={styles.angle} src={rightangle.src} /></span>
+              <span style={{ display: 'inline-flex', fontWeight: 'bold' }}>In details<img css={styles.angle} src={rightangle.src} /></span>
             </div>
           </div>
         </div>
@@ -110,11 +109,13 @@ export const Product: FC<ProductProps> = (originalProps) => {
 const useStyles = makeStyles(
   ({ horizontal, bordered, imgHeight }: ProductProps) => ({
     mainContainer: {
+      display: 'flex',
+      alignItems: 'center',
       position: 'relative',
-      paddingTop: 40,
+      padding: '40px 0px 20px 10px',
       textDecoration: 'none',
       [`@media (max-width: ${theme.widths.tabletXs})`]: {
-        paddingTop: 30,
+        padding: '30px 0px 20px 10px',
       },
     },
     root: {
@@ -123,7 +124,7 @@ const useStyles = makeStyles(
       width: '100%',
       display: 'block',
       gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 0.8fr)',
-      border: '1px solid #E9E9E9',
+      boxShadow: '0px 0px 10px 10px #E9E9E9',
       borderRadius: 16,
       background: '#fff',
       fontWeight: 500,
@@ -158,6 +159,12 @@ const useStyles = makeStyles(
       height: '250px',
       marginTop: '20px',
     },
+    productSusImgContainer: {
+      width: '90%',
+      margin: 'auto',
+      height: '250px',
+      marginTop: '10px',
+    },
     imgBackground: {
       width: '100%',
       height: '100%',
@@ -167,6 +174,7 @@ const useStyles = makeStyles(
       backgroundRepeat: 'no-repeat',
       backgroundSize: 'cover',
       [`@media (max-width: ${theme.widths.tabletXs})`]: {
+        maxHeight: 250,
         height: 'auto',
         width: '100%',
         '::before': {
@@ -183,9 +191,6 @@ const useStyles = makeStyles(
       display: 'flex',
       marginTop: '20px',
       marginBottom: '20px',
-      [`@media (max-width: ${theme.widths.tabletXs})`]: {
-        marginTop: '70px'
-      }
     },
     productNameContainer: {
       width: '88%',
@@ -237,9 +242,11 @@ const useStyles = makeStyles(
       padding: '20px 0px',
     },
     moreContainer: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
       width: '40%',
       textAlign: 'center',
-      paddingTop: '30px !important',
       background: '#B1DA50',
       padding: '20px 0px'
     },

@@ -4,17 +4,17 @@ import { theme } from '../theme'
 import { BaseCategory, BaseProduct } from '../types'
 import { Button, Container, PageBgColor } from '../ui'
 import { makeStyles } from '../utils'
+import { Category } from './Category'
 import { Footer } from './Footer'
 import { Navbar } from './Navbar'
 import { ProductVertical } from './ProductVertical'
 
-interface ProductsPageProps {
-  category?: BaseCategory
-  products: BaseProduct[]
+interface CategoryPageProps {
+  categorys: BaseCategory[]
 }
 
-export function ProductsPage(props: ProductsPageProps) {
-  const { products, category } = props
+export function CategoryPage(props: CategoryPageProps) {
+  const { categorys } = props
 
   const user = useUser()
 
@@ -33,10 +33,10 @@ export function ProductsPage(props: ProductsPageProps) {
           <Container maxWidth="md">
             <div css={styles.header}>
               <h3 css={styles.heading}>
-                Products {category ? ` / ${category.name}` : null}
+              Categories
               </h3>
 
-              {user?.role === 'admin' && (
+              {/* {user?.role === 'admin' && (
                 <Button
                   style={{ padding: '8px 12px' }}
                   href="/products/create"
@@ -44,19 +44,22 @@ export function ProductsPage(props: ProductsPageProps) {
                 >
                   Create Product
                 </Button>
-              )}
+              )} */}
             </div>
 
             <div css={styles.products}>
-              {products.map((product,index) => (
-                <>
-                <ProductVertical key={product._id} product={product} />
-                {index % 3 === 2 && <div css={{gridColumn:'1/6',height:'1px',background:'#B1E080',[`@media (max-width: ${theme.widths.tabletSm})`]: {
+            {categorys?.map((category,index) => (
+              <>
+ <Category
+              key={category._id}
+              category={category}
+            />
+              {/* {index % 3 === 2 && <div css={{gridColumn:'1/6',height:'1px',background:'#B1E080',[`@media (max-width: ${theme.widths.tabletSm})`]: {
       display:'none'
-    },}}></div>}
-                </>
-                
-              ))}
+    },}}></div>} */}
+              </>
+           
+          ))}
             </div>
           </Container>
 
@@ -69,7 +72,7 @@ export function ProductsPage(props: ProductsPageProps) {
   )
 }
 
-const useStyles = makeStyles((props: ProductsPageProps) => ({
+const useStyles = makeStyles((props: CategoryPageProps) => ({
   root: {
     display: 'flex',
     flexDirection: 'column',

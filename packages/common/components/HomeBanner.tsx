@@ -18,32 +18,30 @@ export const HomeBanner: FC<HomeBannerProps> = (props) => {
   const { action = 'products', ...divProps } = props
 
   return (
-    <>
-      <div css={styles.root} {...divProps}>
-        <Navbar css={styles.navbar} mode="dark" />
+    <div css={styles.root} {...divProps}>
+      <Navbar css={styles.navbar} mode="dark" />
 
-        <Container css={styles.content}>
-          <div css={styles.body}>
-            <div css={styles.heading}>
-              <h1 css={styles.heading1}>{homeData.banner.title1}
-                <span css={styles.heading2}>{homeData.banner.title2}</span>
-              </h1>
-            </div>
-            <p css={styles.desc}>{homeData.banner.content}</p>
-
-            <Button
-              href={`/${action}`}
-              variant="outlined"
-              fontColor="#fff"
-              css={styles.browseBtn}
-              rounded
-            >
-              Browse {action === 'investments' ? 'Products' : 'Products'}
-            </Button>
+      <Container css={styles.content}>
+        <div css={styles.body}>
+          <div css={styles.heading}>
+            <h1 css={styles.heading1}>{homeData.banner.title1}
+              <span css={styles.heading2}>{homeData.banner.title2}</span>
+            </h1>
           </div>
-        </Container>
-      </div>
-    </>
+          <p css={styles.desc}>{homeData.banner.content}</p>
+
+          <Button
+            href={`/${action}`}
+            variant="outlined"
+            fontColor="#fff"
+            css={styles.browseBtn}
+            rounded
+          >
+            Browse {action === 'investments' ? 'Products' : 'Products'}
+          </Button>
+        </div>
+      </Container>
+    </div>
   )
 }
 
@@ -60,7 +58,7 @@ const useHomeBannerStyles = makeStyles(() => ({
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
-    height: 65vh;
+    
     min-height: 620px;
     display: flex;
     flex-direction: column;
@@ -68,11 +66,12 @@ const useHomeBannerStyles = makeStyles(() => ({
   content: {
     display: 'flex',
     flexDirection: 'column',
+    maxWidth: 'unset',
     width: '100%',
     flexGrow: 1,
-    marginLeft: 96,
+    padding: '55px 0 165px 96px',
     [`@media (max-width: ${theme.widths.tablet})`]: {
-      marginLeft: 0,
+      padding: 0,
     },
   },
   navbar: {
@@ -119,7 +118,7 @@ const useHomeBannerStyles = makeStyles(() => ({
   heading2: {
     width: '100%',
     fontSize: '48px',
-    fontWeight: 300,
+    fontWeight: 200,
     marginLeft: 15,
     [`@media (max-width: ${theme.widths.tablet})`]: {
       fontSize: 38,
@@ -132,8 +131,8 @@ const useHomeBannerStyles = makeStyles(() => ({
   desc: {
     width: '100%',
     maxWidth: 680,
-    marginBottom: 15,
-    fontWeight: 500,
+    marginBottom: 40,
+    fontWeight: 400,
     textAlign: 'left',
     fontSize: '18px',
     lineHeight: '28px',
@@ -146,6 +145,13 @@ const useHomeBannerStyles = makeStyles(() => ({
     width: 259,
     height: 59,
     fontSize: 18,
+    border: '3px solid #A8EFA8',
+    ':hover': {
+      backgroundColor: '#A8EFA8',
+      color: '#000',
+      fontWeight: 600,
+      border: 'none',
+    },
     [`@media (max-width: ${theme.widths.tablet})`]: {
       width: 220,
       height: 50,

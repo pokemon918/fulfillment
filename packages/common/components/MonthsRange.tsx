@@ -1,6 +1,7 @@
 import { FC, HTMLAttributes } from 'react'
 import { makeStyles } from '../utils'
 import pickedImg from '../assets/images/picked.png'
+import { theme } from '../theme'
 
 interface MonthsRangeProps extends HTMLAttributes<HTMLDivElement> {
   picked: number[]
@@ -14,14 +15,14 @@ export const MonthsRange: FC<MonthsRangeProps> = (props) => {
 
   return (
     <div css={styles.root} {...divProps}>
-      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+      <div css={styles.headings}>
         {months.map((month, monthIdx) => (
           <div>
             <div key={monthIdx} css={styles.monthHolder}>
               {month}
             </div>
 
-            <div key={monthIdx} css={styles.pickedHolder} style={{background: picked.includes(monthIdx) ? '#B1DA50' : '#E9EBF0'}} >
+            <div key={monthIdx} css={styles.pickedHolder} style={{background: picked.includes(monthIdx) ? '#B1DA50' : '#F8F8F8'}} >
               <img src={pickedImg.src} />
             </div>
           </div>
@@ -61,20 +62,24 @@ const useStyles = makeStyles(({ }: MonthsRangeProps) => ({
     display: 'grid',
     gridTemplateColumns: 'repeat(12, minmax(0, 1fr))',
     fontSize: 10,
+    [`@media (max-width: ${theme.widths.tabletSm})`]: {
+      display:'flex',
+      flexWrap:'wrap'
+    },
   },
   heading: {
     display: 'flex',
     justifyContent: 'center',
   },
   monthHolder: {
-    background: '#E9EBF0',
+    background: '#F8F8F8',
     textAlign: 'center',
     padding: '5px 11px',
     width: 'auto',
     fontSize: '10px',
     marginRight: '3px',
     color: '#828282',
-    border: '1px solid #cecece'
+    border: '1px solid #E9EBF0'
   },
   pickedHolder: {
     margin: '3px 0px',
