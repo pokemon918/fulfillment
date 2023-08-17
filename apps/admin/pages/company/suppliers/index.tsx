@@ -1,6 +1,6 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import CompanyTable, { BasicCompanyProps } from "@/components/Tables/CompanyTable";
-import { gql, graphqlReq } from "common";
+import { gql, graphqlReq, withAuth } from "common";
 import { GetStaticProps } from "next";
 
 const SupplierPage = (props: BasicCompanyProps) => {
@@ -19,7 +19,7 @@ const SupplierPage = (props: BasicCompanyProps) => {
   );
 };
 
-export default SupplierPage;
+export default withAuth(SupplierPage, 'admin');
 
 const GET_DATA = gql`
   query {

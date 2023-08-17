@@ -1,7 +1,7 @@
 import { FC, useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import { gql, graphqlReq, countries, Select } from "common";
+import { gql, graphqlReq, countries, Select, withAuth } from "common";
 import { GetStaticProps, GetStaticPaths } from "next";
 
 interface CompanyPageProps {
@@ -384,7 +384,7 @@ const GET_DATA = gql`
   }
 `
 
-export default CompanyPage
+export default withAuth(CompanyPage, 'admin')
 
 export const getStaticProps: GetStaticProps<CompanyPageProps> = async (ctx) => {
     const companyId = ctx.params?.companyId as string
