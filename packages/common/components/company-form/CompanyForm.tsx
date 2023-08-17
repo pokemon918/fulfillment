@@ -322,7 +322,7 @@ export const CompanyForm: FC<CompanyFormProps> = ({
         </>}
 
         {finalStep && <>
-          {typeOfCompany === "Buyer" ? <CreatableSelect
+          {typeOfCompany === "Buyer" ? <Select
             style={{ marginBottom: '1.5rem' }}
             label="Interest Products"
             placeholder="Interest Products"
@@ -330,7 +330,7 @@ export const CompanyForm: FC<CompanyFormProps> = ({
             control={control}
             options={products}
             isMulti
-          /> : <CreatableSelect
+          /> : <Select
             style={{ marginBottom: '1.5rem' }}
             label="Products"
             placeholder="Products"

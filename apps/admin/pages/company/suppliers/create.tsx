@@ -1,7 +1,8 @@
 import {
     Container,
     SupplierCompanyFormValue,
-    CompanyForm
+    CompanyForm,
+    withAuth
   } from 'common'
   
   const supplierCompanyCreate = () => {
@@ -36,5 +37,5 @@ import {
     )
   }
   
-  export default supplierCompanyCreate
+  export default withAuth(supplierCompanyCreate, 'admin')
   

@@ -2,7 +2,8 @@ import {
     Container,
     CompanyForm,
     gql,
-    graphqlReq
+    graphqlReq,
+    withAuth
   } from 'common'
   import { GetStaticProps, GetStaticPaths } from "next";
 
@@ -76,7 +77,7 @@ import {
     )
   }
   
-  export default CompanyUpdate
+  export default withAuth(CompanyUpdate, 'admin')
   
   
 const GET_DATA = gql`
