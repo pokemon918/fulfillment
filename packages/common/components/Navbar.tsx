@@ -19,6 +19,10 @@ const staticLinks: {
 }[] = [
     {
       title: 'Home',
+      to: 'https://trumarket.tech',
+    },
+    {
+      title: 'Marketplace',
       to: '/',
     },
     {
