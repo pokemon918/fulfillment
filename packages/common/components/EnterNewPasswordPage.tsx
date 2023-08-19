@@ -5,6 +5,7 @@ import { useRouter } from 'next/router'
 import { deleteCookie, graphqlReq, isGqlErrStatus, makeStyles } from '../utils'
 import { Alert, Button, Container, Input, PageBgColor, Paper, StyledLink } from '../ui'
 import { Navbar } from './Navbar'
+import { APP_TYPE } from "../constants/APP_TYPE";
 
 const RESET_PASSWORD = gql`
   mutation ResetPassword($resetToken: String!, $newPassword: String!) {
@@ -39,8 +40,16 @@ const EnterNewPasswordPage = () => {
         newPassword,
       })
 
-      deleteCookie('fulfillment_token')
-      window.localStorage.removeItem('fulfillment_user')
+      if (APP_TYPE === 'fulfillment') {
+        deleteCookie('fulfillment_token')
+        window.localStorage.removeItem('fulfillment_user')
+      } else if (APP_TYPE === 'admin') {
+        deleteCookie('admin_token')
+        window.localStorage.removeItem('admin_user')
+      } else {
+        deleteCookie('fulfillment_token')
+        window.localStorage.removeItem('fulfillment_user')
+      }
 
       window.location.href = '/login'
     } catch (e) {
