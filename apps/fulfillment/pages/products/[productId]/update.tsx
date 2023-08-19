@@ -74,6 +74,7 @@ const GET_PRODUCT = gql`
         gallery
       }
       certifications
+      isSustainable
     }
   }
 `
