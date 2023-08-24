@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { deleteCookie, APP_TYPE } from "common";
+import { deleteCookie, APP_TYPE, useUser } from "common";
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const trigger = useRef<any>(null);
   const dropdown = useRef<any>(null);
+  const user = useUser()
 
   // close on click outside
   useEffect(() => {
@@ -35,9 +36,13 @@ const DropdownUser = () => {
   });
 
   const logout = () => {
-    deleteCookie(`${APP_TYPE}_token`)
-    window.localStorage.removeItem(`${APP_TYPE}_user`)
-    window.location.href = '/'
+    if (user) {
+      deleteCookie(`${APP_TYPE}_token`)
+      window.localStorage.removeItem(`${APP_TYPE}_user`)
+      window.location.href = '/'
+    } else {
+      window.location.href = '/login'
+    }
   }
 
   return (
@@ -115,7 +120,7 @@ const DropdownUser = () => {
               fill=""
             />
           </svg>
-          Log Out
+          { user? "Log Out": "Log In" }
         </button>
       </div>
       {/* <!-- Dropdown End --> */}
