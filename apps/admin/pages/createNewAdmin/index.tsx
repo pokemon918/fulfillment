@@ -1,5 +1,5 @@
 import React, { SyntheticEvent, useRef } from "react";
-import { gql, graphqlReq, isGqlErrStatus } from "common";
+import { gql, graphqlReq, isGqlErrStatus, withAuth } from "common";
 
 const ADDADMIN = gql`
     mutation Addadmin($input: AddAdminInput!) {
@@ -14,7 +14,7 @@ const ADDADMIN = gql`
     }
 `
 
-const SignIn: React.FC = () => {
+const CreateNewAdmin: React.FC = () => {
 
     const sending = useRef(false)
 
@@ -151,4 +151,4 @@ const SignIn: React.FC = () => {
   );
 };
 
-export default SignIn;
+export default withAuth(CreateNewAdmin, 'admin');
