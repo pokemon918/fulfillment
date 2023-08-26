@@ -1,8 +1,29 @@
 import { BaseProduct, graphqlReq, ProductsPage } from 'common'
 import { gql } from 'graphql-request'
 import { GetStaticProps } from 'next'
+import { useEffect } from 'react';
 
 export default function PageProducts(props: PageProductsProps) {
+  // const getContracs = gql`
+  // query {
+  //   contracts(descCreatedAt: true) {
+  //     _id
+  //     description {
+  //       en
+  //     }
+  //   }
+  // }
+  
+  // `;
+  
+
+  // useEffect(() => {
+  //   const getCon = async () => {
+  //     const data1 = await graphqlReq(getContracs);
+  //     console.log(data1)
+  //   }
+  //   getCon()
+  // },[])
   const { products } = props
 
   return <ProductsPage products={products} />
