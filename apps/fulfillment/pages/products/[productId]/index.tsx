@@ -49,6 +49,12 @@ const ProductPage: FC<ProductPageProps> = (props) => {
     // 👇️ scroll to top on page load
     window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
   }, [showSmartContract]);
+
+
+
+  
+
+
   return (
     <>
     <div css={{
@@ -112,7 +118,7 @@ overflow:'auto'
        }}
      >
        
-       <SmartContractForm handelClose={() => setShowSmartContract(false)} />
+       <SmartContractForm product={product} handelClose={() => setShowSmartContract(false)} />
      </div>
      </>
   )

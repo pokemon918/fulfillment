@@ -107,6 +107,58 @@ const globalStyles = css`
 }
 
 
+/* Custom Checkbox Styles */
+.custom-checkbox:checked,
+.custom-checkbox:not(:checked) {
+  position: absolute;
+  left: -9999px;
+}
+
+.custom-checkbox:checked + .custom-label,
+.custom-checkbox:not(:checked) + .custom-label {
+  position: relative;
+  padding-left: 32px;
+  cursor: pointer;
+  line-height: 20px;
+  display: inline-block;
+  color: #666;
+}
+
+.custom-checkbox:checked + .custom-label:before,
+.custom-checkbox:not(:checked) + .custom-label:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #ddd;
+  background: #fff;
+  border-radius:10px;
+}
+
+.custom-checkbox:checked + .custom-label:after,
+.custom-checkbox:not(:checked) + .custom-label:after {
+  content: '';
+  width: 12px;
+  height: 12px;
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  border: 1px solid #ddd; /* You can adjust the border style */
+  background: #3BA83B;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+  border-radius:6px;
+}
+
+.custom-checkbox:not(:checked) + .custom-label:after {
+  opacity: 0;
+}
+
+.custom-checkbox:checked + .custom-label:after {
+  opacity: 1;
+}
 
 
 

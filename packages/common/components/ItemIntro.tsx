@@ -47,7 +47,7 @@ export const ItemIntro: FC<ItemIntroProps> = (props) => {
   const styles = useStyles(props)
 
   const { gallery, item, onClickGetQuote, buttonRef, onShowSmartContract, ...divProps} = props
-
+  
   const countryName = useMemo(
     () => countries.find((c) => c.code === item.country)?.name,
     [item.country]
@@ -380,21 +380,23 @@ margin: '10px 0 45px 0'}}>
               Get a Quote
             </Button>
 
-
-<Button
+{user?.role === "buyer" ? (
+  <Button
            
-              fullWidth
-              style={{
-                fontWeight: 'bold',
-                paddingTop: '20px',
-                paddingBottom: '20px',
-                borderRadius: '0px 0px 10px 10px',
-                marginTop: '15px'
-              }}
-              onClick={onShowSmartContract}
-            >
-              Create Smart Contract
-            </Button>
+           fullWidth
+           style={{
+             fontWeight: 'bold',
+             paddingTop: '20px',
+             paddingBottom: '20px',
+             borderRadius: '0px 0px 10px 10px',
+             marginTop: '15px'
+           }}
+           onClick={onShowSmartContract}
+         >
+           Create Smart Contract
+         </Button>
+) : null}
+
 
             
           </div>
