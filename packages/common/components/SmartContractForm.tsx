@@ -12,6 +12,12 @@ function formatDate(dateString: any) {
   return new Date(dateString).toLocaleDateString(undefined, options)
 }
 
+const NumberFormatter = (value: number) => {
+  return value.toFixed(2); 
+}
+
+
+
 interface SmartContractFormProps {
   handelClose: () => void
   product: any
@@ -75,14 +81,14 @@ export const SmartContractForm: FC<SmartContractFormProps> = (props) => {
       productId: product._id,
       isExisting: false,
       portOfLoading:
-        smartContractData.portOfArrivalInput +
+        smartContractData.portOfLoadingInput +
         ', ' +
-        smartContractData.portOfArrivalSelect,
+        smartContractData.portOfLoadingSelect,
       portOfArrival:
         smartContractData.portOfArrivalInput +
         ', ' +
         smartContractData.portOfArrivalSelect,
-      departureDate: formatDate(smartContractData.departureDate),
+      departureDate: smartContractData.departureDate,
       offerPrice: Number(smartContractData.offerPrice),
       unit: 'kg',
       quantity: Number(smartContractData.quantity),
@@ -100,6 +106,46 @@ export const SmartContractForm: FC<SmartContractFormProps> = (props) => {
 
     const data1 = await graphqlReq(CREATE_SMART_CONTRACT, { input: inputData })
     //console.log(data1)
+  }
+
+  const QuantityFunc = (e:any) => {
+    setSmartContractData({
+      ...smartContractData,
+      quantity: e.target.value,
+      totalPrice: NumberFormatter(Number(e.target.value) * smartContractData.offerPrice),
+      downPayment: NumberFormatter((Number(e.target.value) *
+      smartContractData.offerPrice *
+      smartContractData.downPaymentPercent) /
+    100),
+      cashAgainstDocuments: NumberFormatter((Number(e.target.value) *
+      smartContractData.offerPrice *
+      smartContractData.cashAgainstDocumentsPercent) /
+    100),
+      arrival: NumberFormatter((Number(e.target.value) *
+      smartContractData.offerPrice *
+      smartContractData.arrivalPercent) /
+    100),
+    })
+  }
+
+  const YourOfferFunc = (e:any) => {
+    setSmartContractData({
+      ...smartContractData,
+      offerPrice: e.target.value,
+      totalPrice: NumberFormatter(Number(e.target.value) * smartContractData.quantity),
+      downPayment: NumberFormatter((Number(e.target.value) *
+      smartContractData.quantity *
+      smartContractData.downPaymentPercent) /
+    100),
+      cashAgainstDocuments: NumberFormatter((Number(e.target.value) *
+      smartContractData.quantity *
+      smartContractData.cashAgainstDocumentsPercent) /
+    100),
+      arrival: NumberFormatter((Number(e.target.value) *
+      smartContractData.quantity *
+      smartContractData.arrivalPercent) /
+    100),
+    })
   }
 
   const Step1 = () => (
@@ -316,7 +362,7 @@ export const SmartContractForm: FC<SmartContractFormProps> = (props) => {
           css={{ background: '#B1E080', height: '1px', width: '160px' }}
         ></div>
 
-        {/* <div
+        <div
           css={{
             display: 'grid',
             gridTemplateColumns: '1fr 1fr',
@@ -327,9 +373,7 @@ export const SmartContractForm: FC<SmartContractFormProps> = (props) => {
           <div css={styles.selectContainer}>
             <p css={styles.selectLabel}>Quality:</p>
             <select css={styles.select} name="" id="">
-              <option value="1">Value 1</option>
-              <option value="2">Value 2</option>
-              <option value="3">Value 3</option>
+              <option value="1">{product?.availableSpecs.split(" / ")[1]}</option>
             </select>
           </div>
         </div>
@@ -339,20 +383,16 @@ export const SmartContractForm: FC<SmartContractFormProps> = (props) => {
           <div css={styles.selectContainer}>
             <p css={styles.selectLabel}>Size:</p>
             <select css={styles.select} name="" id="">
-              <option value="1">Value 1</option>
-              <option value="2">Value 2</option>
-              <option value="3">Value 3</option>
+              <option value="1">{product?.availableSpecs.split(" / ")[2]}</option>
             </select>
           </div>
           <div css={styles.selectContainer}>
             <p css={styles.selectLabel}>Presentation:</p>
             <select css={styles.select} name="" id="">
-              <option value="1">Value 1</option>
-              <option value="2">Value 2</option>
-              <option value="3">Value 3</option>
+              <option value="1">{product?.availableSpecs.split(" / ")[0]}</option>
             </select>
           </div>
-        </div> */}
+        </div>
       </div>
     </div>
   )
@@ -517,39 +557,17 @@ export const SmartContractForm: FC<SmartContractFormProps> = (props) => {
       </div>
       <div css={styles.rightContent}>
         <div css={styles.inputContainer}>
-          <p css={styles.inputLabel}>Quantity:</p>
+          <p css={styles.inputLabel}>Quantity (kg):</p>
           <input
             type="number"
             style={{ width: '150px' }}
             placeholder="..."
             css={styles.input}
             defaultValue={smartContractData.quantity}
-            onBlur={(e) =>
-              setSmartContractData({
-                ...smartContractData,
-                quantity: e.target.value,
-                totalPrice:
-                  Number(e.target.value) * smartContractData.offerPrice,
-                downPayment:
-                  (Number(e.target.value) *
-                    smartContractData.offerPrice *
-                    smartContractData.downPaymentPercent) /
-                  100,
-                cashAgainstDocuments:
-                  (Number(e.target.value) *
-                    smartContractData.offerPrice *
-                    smartContractData.cashAgainstDocumentsPercent) /
-                  100,
-                arrival:
-                  (Number(e.target.value) *
-                    smartContractData.offerPrice *
-                    smartContractData.arrivalPercent) /
-                  100,
-              })
-            }
+            onBlur={QuantityFunc}
           />
         </div>
-        <div css={styles.inputBorder}></div>
+        {/* <div css={styles.inputBorder}></div>
         <div css={styles.inputContainer}>
           <p css={styles.inputLabel}>Unit selector:</p>
           <div
@@ -576,7 +594,7 @@ export const SmartContractForm: FC<SmartContractFormProps> = (props) => {
             >
               kg
             </button>
-            {/* <button
+            <button
               css={{
                 fontSize: '16px',
                 fontWeight: '500',
@@ -613,9 +631,9 @@ export const SmartContractForm: FC<SmartContractFormProps> = (props) => {
               }}
             >
               metric tons
-            </button> */}
+            </button> 
           </div>
-        </div>
+        </div> */}
         <div css={styles.inputBorder}></div>
         <div css={styles.inputContainer}>
           <p css={styles.inputLabel}>Your offer:</p>
@@ -624,28 +642,7 @@ export const SmartContractForm: FC<SmartContractFormProps> = (props) => {
             placeholder="..."
             css={styles.input}
             defaultValue={smartContractData.offerPrice}
-            onBlur={(e) =>
-              setSmartContractData({
-                ...smartContractData,
-                offerPrice: e.target.value,
-                totalPrice: Number(e.target.value) * smartContractData.quantity,
-                downPayment:
-                  (Number(e.target.value) *
-                    smartContractData.quantity *
-                    smartContractData.downPaymentPercent) /
-                  100,
-                cashAgainstDocuments:
-                  (Number(e.target.value) *
-                    smartContractData.quantity *
-                    smartContractData.cashAgainstDocumentsPercent) /
-                  100,
-                arrival:
-                  (Number(e.target.value) *
-                    smartContractData.quantity *
-                    smartContractData.arrivalPercent) /
-                  100,
-              })
-            }
+            onBlur={YourOfferFunc}
           />
         </div>
         <div css={styles.inputBorder}></div>
@@ -1073,9 +1070,9 @@ export const SmartContractForm: FC<SmartContractFormProps> = (props) => {
               Port of loading:
             </p>
             <p css={{ fontSize: '20px', color: '#101010', fontWeight: '600' }}>
-              {smartContractData.portOfArrivalInput +
+              {smartContractData.portOfLoadingInput +
                 ', ' +
-                smartContractData.portOfArrivalSelect}
+                smartContractData.portOfLoadingSelect}
             </p>
           </div>
           <div>
@@ -1105,7 +1102,7 @@ export const SmartContractForm: FC<SmartContractFormProps> = (props) => {
               Departure date:
             </p>
             <p css={{ fontSize: '20px', color: '#101010', fontWeight: '600' }}>
-              {formatDate(smartContractData.departureDate && new Date())}
+              {formatDate(smartContractData.departureDate)}
             </p>
           </div>
         </div>
@@ -1424,6 +1421,11 @@ background: certification ? '#fff' : 'none'}}>
       }
       if (!smartContractData.arrival && smartContractData.arrival !== 0) {
         return alert('Arrival Payment is required')
+      }
+      const sumPercent = Number(smartContractData.downPaymentPercent) + Number(smartContractData.cashAgainstDocumentsPercent) + Number(smartContractData.arrivalPercent);
+      if(sumPercent !== 100){
+
+        return alert("The payment terms should be 100% now it have total "+sumPercent+"%")
       }
     }
     if (showStep == 5) {
