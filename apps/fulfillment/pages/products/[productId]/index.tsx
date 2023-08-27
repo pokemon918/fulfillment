@@ -17,7 +17,8 @@ import {
   RelatedProducts,
   theme,
   faqs,
-  SmartContractForm
+  SmartContractForm,
+  useUser
 } from 'common'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { FC, useEffect, useState } from 'react'
@@ -51,6 +52,71 @@ const ProductPage: FC<ProductPageProps> = (props) => {
   }, [showSmartContract]);
 
 
+  // const inputData = {
+  //   productId: product._id,
+  //   isExisting: false,
+  //   portOfLoading:
+  //     smartContractData.portOfLoadingInput +
+  //     ', ' +
+  //     smartContractData.portOfLoadingSelect,
+  //   portOfArrival:
+  //     smartContractData.portOfArrivalInput +
+  //     ', ' +
+  //     smartContractData.portOfArrivalSelect,
+  //   departureDate: smartContractData.departureDate,
+  //   offerPrice: Number(smartContractData.offerPrice),
+  //   unit: 'kg',
+  //   quantity: Number(smartContractData.quantity),
+  //   downPayment: smartContractData.downPayment,
+  //   cashAgainstDocuments: smartContractData.cashAgainstDocuments,
+  //   arrival: smartContractData.arrival,
+  //   description: { en: smartContractData.description, es: '' },
+  //   brandType,
+  //   pluType,
+  //   measure,
+  //   attachment: attachFileUrl && attachFileUrl.data[0],
+  //   certifications: certificationData,
+  // }
+
+ const getContracs = gql`
+  query {
+    contracts(descCreatedAt: true) {
+      _id
+      description {
+        en
+      }
+      productId
+      portOfLoading
+      portOfArrival
+      departureDate
+      offerPrice
+      quantity
+      downPayment
+      cashAgainstDocuments
+      arrival
+      brandType
+      pluType
+      measure
+      certifications
+      updatedAt
+    }
+  }
+  
+  `;
+  const user = useUser()
+  const [previousContract, setPreviousContract] = useState([]);
+
+  useEffect(() => {
+    const getCon = async () => {
+      const data1 = await graphqlReq(getContracs);
+      console.log(data1)
+      setPreviousContract(data1?.contracts)
+    }
+    if(user?.role === "buyer"){
+
+      getCon()
+    }
+  },[user])
 
   
 
@@ -118,7 +184,7 @@ overflow:'auto'
        }}
      >
        
-       <SmartContractForm product={product} handelClose={() => setShowSmartContract(false)} />
+       <SmartContractForm previousContract={previousContract} product={product} handelClose={() => setShowSmartContract(false)} />
      </div>
      </>
   )

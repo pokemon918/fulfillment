@@ -392,7 +392,7 @@ margin: '10px 0 45px 0'}}>
              marginTop: '15px'
            }}
            onClick={() => {
-            if(user?.role !== "buyer") return alert("Create an Account first!")
+            if(user?.role !== "buyer") return alert("Please log in with a  buyer account.")
             onShowSmartContract()
            }}
          >
