@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { gql, graphqlReq, makeStyles, uploadFile } from '../utils'
 import { Container } from '../ui'
 import { EditIcon } from '../icons'
@@ -16,18 +16,29 @@ const NumberFormatter = (value: number) => {
   return value.toFixed(2); 
 }
 
+function formatDateToDayMonth(dateString:any) {
+  const date = new Date(dateString);
+
+  const day = date.getUTCDate().toString().padStart(2, '0');
+  const month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
+
+  const formattedDate = `${day}/${month}`;
+  return formattedDate;
+}
 
 
 interface SmartContractFormProps {
   handelClose: () => void
   product: any
+  previousContract: any
 }
 
 export const SmartContractForm: FC<SmartContractFormProps> = (props) => {
   const styles = useStyles(props)
 
-  const { handelClose, product } = props
+  const { handelClose, product,previousContract } = props
   //console.log(product)
+  const [productData, setProductData] = useState<any>(null);
   const [showStep, setShowStep] = useState(1)
   const [isNewPurchaseChecked, setIsNewPurchaseChecked] = useState(true)
   const [showDarftOrder, setShowDarftOrder] = useState(false)
@@ -35,7 +46,8 @@ export const SmartContractForm: FC<SmartContractFormProps> = (props) => {
   const [smartContractData, setSmartContractData] = useState<any>({
     portOfLoadingSelect: 'Peru',
     portOfArrivalSelect: 'Peru',
-  })
+  });
+  const [previousPurchaseSelect, setpreviousPurchaseSelect] = useState<any>(null);
 
   const [brandType, setbrandType] = useState(true)
   const [pluType, setpluType] = useState(false)
@@ -44,6 +56,8 @@ export const SmartContractForm: FC<SmartContractFormProps> = (props) => {
   const [certificationData, setcertificationData] = useState<any>([]);
   const [attachFile, setAttachFile] = useState<any>(null)
   const [loading, setLoading] = useState(false);
+  const [errorText, setErrorText] = useState("");
+
 
   const handleCheckboxChange = (certificationName: any) => {
     setcertificationData((prevData : any) =>
@@ -61,6 +75,30 @@ export const SmartContractForm: FC<SmartContractFormProps> = (props) => {
       }
     }
   `
+
+  const GET_PRODUCT_DATA = gql`
+  query ($productId: String!) {
+    product(_id: $productId) {
+      _id
+      name {
+        en
+      }
+      price
+      availableSpecs {
+        en
+      }
+     
+    }
+  }
+`
+
+const getProduct = async (id:any) => {
+  setLoading(true);
+  const data2 = await graphqlReq(GET_PRODUCT_DATA, { productId:id });
+  setProductData({name:data2?.product?.name.en,availableSpecs:data2?.product?.availableSpecs.en,price:data2?.product?.price});
+  setLoading(false)
+}
+
 
   const submitSmartConData = async () => {
     setLoading(true)
@@ -106,7 +144,29 @@ export const SmartContractForm: FC<SmartContractFormProps> = (props) => {
 
     const data1 = await graphqlReq(CREATE_SMART_CONTRACT, { input: inputData })
     //console.log(data1)
+    setSmartContractData({
+      portOfLoadingSelect: 'Peru',
+      portOfArrivalSelect: 'Peru',
+    })
   }
+
+
+useEffect(() => {
+  if(previousContract?.length){
+    setpreviousPurchaseSelect(previousContract[0]._id)
+  }
+},[previousContract])
+
+useEffect(() => {
+setProductData(product)
+},[product])
+
+
+
+
+
+
+
 
   const QuantityFunc = (e:any) => {
     setSmartContractData({
@@ -155,15 +215,33 @@ export const SmartContractForm: FC<SmartContractFormProps> = (props) => {
           Getting started
         </h2>
 
+        {/* <input
+              type="checkbox"
+              checked={measure}
+              onChange={(e) => setmeasure(e.target.checked)}
+              className="custom-checkbox"
+              id="test20"
+              name="radio-group"
+            />
+            <label
+              htmlFor="test20"
+              className="custom-label" */}
+
         <p css={{ marginTop: '40px' }}>
           <input
-            type="radio"
+            type="checkbox"
+            className="custom-checkbox"
             checked={isNewPurchaseChecked}
-            onChange={(e) => setIsNewPurchaseChecked(e.target.checked)}
+            onChange={(e) => {
+              
+              setIsNewPurchaseChecked(e.target.checked)
+              setShowDarftOrder(false)
+              setShowPrevioustOrder(false)
+            }}
             name="radio-group"
             id="test2"
           />
-          <label htmlFor="test2" css={{ color: '#101010' }}>
+          <label htmlFor="test2"  className="custom-label" css={{ color: '#101010' }}>
             Create a new Purchase Order
           </label>
         </p>
@@ -192,7 +270,13 @@ export const SmartContractForm: FC<SmartContractFormProps> = (props) => {
               position: 'relative',
               cursor: 'pointer',
             }}
-            onClick={() => setIsNewPurchaseChecked(true)}
+            onClick={() => {
+              
+              setIsNewPurchaseChecked(true);
+              setShowDarftOrder(false)
+              setShowPrevioustOrder(false)
+            }
+            }
           >
             <p css={{ position: 'absolute', left: '15px', top: '-5px' }}>
               <input type="radio" id="test4" name="order_type1" />
@@ -214,7 +298,13 @@ export const SmartContractForm: FC<SmartContractFormProps> = (props) => {
               position: 'relative',
               cursor: 'pointer',
             }}
-            onClick={() => setIsNewPurchaseChecked(true)}
+            onClick={() => {
+              
+              setIsNewPurchaseChecked(true)
+              setShowDarftOrder(false)
+              setShowPrevioustOrder(false)
+            }
+            }
           >
             <p css={{ position: 'absolute', left: '15px', top: '-5px' }}>
               <input type="radio" id="test5" name="order_type1" />
@@ -226,7 +316,7 @@ export const SmartContractForm: FC<SmartContractFormProps> = (props) => {
           </label>
         </div>
 
-        {/* <div
+        <div
           css={{
             display: 'grid',
             gridTemplateColumns: '1fr 1fr',
@@ -239,31 +329,35 @@ export const SmartContractForm: FC<SmartContractFormProps> = (props) => {
         >
           <p>
             <input
-              type="radio"
+              type="checkbox"
               id="test6"
+              className="custom-checkbox"
               name="radio-group"
+              checked={showDarftOrder}
               onChange={(e) => {
-                setShowDarftOrder(true)
+                setShowDarftOrder(e.target.checked)
                 setShowPrevioustOrder(false)
                 setIsNewPurchaseChecked(false)
               }}
             />
-            <label htmlFor="test6" css={{ color: '#101010' }}>
+            <label  className="custom-label" htmlFor="test6" css={{ color: '#101010' }}>
               Edit an existing draft
             </label>
           </p>
           <p onClick={() => setIsNewPurchaseChecked(false)}>
             <input
-              type="radio"
+              type="checkbox"
+              className="custom-checkbox"
               id="test3"
               name="radio-group"
+              checked={showPreviousOrder}
               onChange={(e) => {
                 setShowDarftOrder(false)
-                setShowPrevioustOrder(true)
+                setShowPrevioustOrder(e.target.checked)
                 setIsNewPurchaseChecked(false)
               }}
             />
-            <label htmlFor="test3" css={{ color: '#101010' }}>
+            <label className="custom-label" htmlFor="test3" css={{ color: '#101010' }}>
               Reuse a previous Purchase Order
             </label>
           </p>
@@ -284,9 +378,7 @@ export const SmartContractForm: FC<SmartContractFormProps> = (props) => {
           >
             {showDarftOrder ? (
               <select css={styles.select} name="" id="">
-                <option value="1">Value 1</option>
-                <option value="2">Value 2</option>
-                <option value="3">Value 3</option>
+                <option value="1">None</option>
               </select>
             ) : null}
           </div>
@@ -295,14 +387,18 @@ export const SmartContractForm: FC<SmartContractFormProps> = (props) => {
             style={{ margin: '0', marginLeft: '30px' }}
           >
             {showPreviousOrder ? (
-              <select css={styles.select} name="" id="">
-                <option value="1">Value 1</option>
-                <option value="2">Value 2</option>
-                <option value="3">Value 3</option>
+              <select onChange={e => setpreviousPurchaseSelect(e.target.value)} defaultValue={previousPurchaseSelect} css={styles.select} name="" id="">
+                {
+                  previousContract?.map((v:any)=> (
+                    <option value={v._id}>Purchase Order - {formatDateToDayMonth(v.updatedAt)}</option>
+                  ))
+                }
+               
+               
               </select>
             ) : null}
           </div>
-        </div> */}
+        </div>
       </div>
       <div css={styles.rightContent}></div>
     </div>
@@ -330,7 +426,7 @@ export const SmartContractForm: FC<SmartContractFormProps> = (props) => {
             Product name:
           </p>
           <p css={{ fontSize: '20px', color: '#101010', fontWeight: '600' }}>
-            {product?.name}
+            {productData?.name}
           </p>
         </div>
         <div
@@ -352,7 +448,7 @@ export const SmartContractForm: FC<SmartContractFormProps> = (props) => {
               <p
                 css={{ fontSize: '20px', color: '#101010', fontWeight: '600' }}
               >
-                {product?.availableSpecs}
+                {productData?.availableSpecs}
               </p>
             </div>
             <EditIcon />
@@ -370,28 +466,93 @@ export const SmartContractForm: FC<SmartContractFormProps> = (props) => {
             marginTop: '10px',
           }}
         >
-          <div css={styles.selectContainer}>
+          {/* <div css={styles.selectContainer}>
             <p css={styles.selectLabel}>Quality:</p>
             <select css={styles.select} name="" id="">
-              <option value="1">{product?.availableSpecs.split(" / ")[1]}</option>
+              <option value="1">{productData?.availableSpecs.split(" / ")[1]}</option>
             </select>
-          </div>
+          </div> */}
+         <div>
+         <div css={{ padding: '20px 0' }}>
+          <p
+            css={{
+              fontSize: '20px',
+              color: '#101010',
+              fontWeight: '400',
+              marginBottom: '2px',
+            }}
+          >
+            Quality:
+          </p>
+          <p css={{ fontSize: '20px', color: '#101010', fontWeight: '600' }}>
+          {productData?.availableSpecs.split(" / ")[1]}
+          </p>
+        </div>
+        <div
+          css={{ background: '#B1E080', height: '1px', width: '160px' }}
+        ></div>
+         </div>
         </div>
         <div
           css={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}
         >
-          <div css={styles.selectContainer}>
+          {/* <div css={styles.selectContainer}>
             <p css={styles.selectLabel}>Size:</p>
             <select css={styles.select} name="" id="">
-              <option value="1">{product?.availableSpecs.split(" / ")[2]}</option>
+              <option value="1">{productData?.availableSpecs.split(" / ")[2]}</option>
             </select>
           </div>
           <div css={styles.selectContainer}>
             <p css={styles.selectLabel}>Presentation:</p>
             <select css={styles.select} name="" id="">
-              <option value="1">{product?.availableSpecs.split(" / ")[0]}</option>
+              <option value="1">{productData?.availableSpecs.split(" / ")[0]}</option>
             </select>
+          </div> */}
+
+
+          <div>
+          <div css={{ padding: '20px 0' }}>
+          <p
+            css={{
+              fontSize: '20px',
+              color: '#101010',
+              fontWeight: '400',
+              marginBottom: '2px',
+            }}
+          >
+            Size:
+          </p>
+          <p css={{ fontSize: '20px', color: '#101010', fontWeight: '600' }}>
+          {productData?.availableSpecs.split(" / ")[2]}
+          </p>
+        </div>
+        <div
+          css={{ background: '#B1E080', height: '1px', width: '160px' }}
+        ></div>
           </div>
+
+       <div>
+       <div css={{ padding: '20px 0'}}>
+          <p
+            css={{
+              fontSize: '20px',
+              color: '#101010',
+              fontWeight: '400',
+              marginBottom: '2px',
+            }}
+          >
+            Presentation:
+          </p>
+          <p css={{ fontSize: '20px', color: '#101010', fontWeight: '600' }}>
+          {productData?.availableSpecs.split(" / ")[0]}
+          </p>
+        </div>
+        <div
+          css={{ background: '#B1E080', height: '1px', width: '160px' }}
+        ></div>
+       </div>
+
+
         </div>
       </div>
     </div>
@@ -650,7 +811,7 @@ export const SmartContractForm: FC<SmartContractFormProps> = (props) => {
           <p css={styles.inputLabel}>Unit price:</p>
           <input
             type="number"
-            value={product.price}
+            value={productData?.price}
             readOnly={true}
             placeholder="..."
             css={styles.input}
@@ -682,7 +843,8 @@ export const SmartContractForm: FC<SmartContractFormProps> = (props) => {
                 css={styles.input}
                 style={{ width: '100px' }}
                 defaultValue={smartContractData.downPaymentPercent}
-                onBlur={(e) =>
+                onBlur={(e) => {
+                  setErrorText("")
                   setSmartContractData({
                     ...smartContractData,
                     downPaymentPercent: e.target.value,
@@ -690,6 +852,8 @@ export const SmartContractForm: FC<SmartContractFormProps> = (props) => {
                       (smartContractData.totalPrice * Number(e.target.value)) /
                       100,
                   })
+                }
+                 
                 }
               />
               <p css={{ color: '#BFBEBE', marginLeft: '10px' }}>%</p>
@@ -714,7 +878,8 @@ export const SmartContractForm: FC<SmartContractFormProps> = (props) => {
                 css={styles.input}
                 style={{ width: '100px' }}
                 defaultValue={smartContractData.cashAgainstDocumentsPercent}
-                onBlur={(e) =>
+                onBlur={(e) => {
+                  setErrorText("");
                   setSmartContractData({
                     ...smartContractData,
                     cashAgainstDocumentsPercent: e.target.value,
@@ -722,6 +887,8 @@ export const SmartContractForm: FC<SmartContractFormProps> = (props) => {
                       (smartContractData.totalPrice * Number(e.target.value)) /
                       100,
                   })
+                }
+                 
                 }
               />
               <p css={{ color: '#BFBEBE', marginLeft: '10px' }}>%</p>
@@ -746,7 +913,8 @@ export const SmartContractForm: FC<SmartContractFormProps> = (props) => {
                 css={styles.input}
                 style={{ width: '100px' }}
                 defaultValue={smartContractData.arrivalPercent}
-                onBlur={(e) =>
+                onBlur={(e) => {
+                  setErrorText("");
                   setSmartContractData({
                     ...smartContractData,
                     arrivalPercent: e.target.value,
@@ -754,6 +922,8 @@ export const SmartContractForm: FC<SmartContractFormProps> = (props) => {
                       (smartContractData.totalPrice * Number(e.target.value)) /
                       100,
                   })
+                }
+                  
                 }
               />
               <p css={{ color: '#BFBEBE', marginLeft: '10px' }}>%</p>
@@ -767,6 +937,10 @@ export const SmartContractForm: FC<SmartContractFormProps> = (props) => {
               value={smartContractData.arrival}
             />
           </div>
+        </div>
+        <div css={styles.inputContainer2}>
+          <div></div>
+          <p style={{color:"red"}}>{errorText}</p>
         </div>
       </div>
     </div>
@@ -1391,6 +1565,39 @@ background: certification ? '#fff' : 'none'}}>
   }
 
   const handleNextStep = async () => {
+    if(showStep === 1){
+      if(showPreviousOrder && previousPurchaseSelect){
+        const previousOrderData = previousContract.find((v:any) => v._id === previousPurchaseSelect);
+       await getProduct(previousOrderData.productId);
+       const inputData = {
+        portOfLoadingInput:previousOrderData.portOfLoading.split(', ').slice(0, -1).join(', '),
+        portOfLoadingSelect:previousOrderData.portOfLoading.split(', ').pop(),
+        portOfArrivalInput:previousOrderData.portOfArrival.split(', ').slice(0, -1).join(', '),
+        portOfArrivalSelect:previousOrderData.portOfArrival.split(', ').pop(),
+
+        departureDate: previousOrderData.departureDate,
+        offerPrice: Number(previousOrderData.offerPrice),
+        quantity: Number(previousOrderData.quantity),
+
+        totalPrice: Number(previousOrderData.offerPrice) * Number(previousOrderData.quantity),
+        downPayment: previousOrderData.downPayment,
+        cashAgainstDocuments: previousOrderData.cashAgainstDocuments,
+        arrival: previousOrderData.arrival,
+
+        downPaymentPercent: 100 * previousOrderData.downPayment / (Number(previousOrderData.offerPrice) * Number(previousOrderData.quantity)),
+        cashAgainstDocumentsPercent: 100 * previousOrderData.cashAgainstDocuments / (Number(previousOrderData.offerPrice) * Number(previousOrderData.quantity)),
+        arrivalPercent: 100 * previousOrderData.arrival / (Number(previousOrderData.offerPrice) * Number(previousOrderData.quantity)),
+
+        description: previousOrderData.description.en,
+      }
+      setSmartContractData(inputData);
+      setbrandType(previousOrderData.brandType);
+      setpluType(previousOrderData.pluType);
+      setmeasure(previousOrderData.measure);
+      setcertificationData(previousOrderData.certifications);
+      if(previousOrderData.certifications.length) setcertification(true)
+      }
+    }
     if (showStep === 3) {
       if (!smartContractData.portOfLoadingInput) {
         return alert('Port of Loading is required')
@@ -1401,31 +1608,26 @@ background: certification ? '#fff' : 'none'}}>
       }
     }
     if (showStep == 4) {
+      const sumPercent = Number(smartContractData.downPaymentPercent) + Number(smartContractData.cashAgainstDocumentsPercent) + Number(smartContractData.arrivalPercent);
       if (!smartContractData.quantity) {
         return alert('Quantity is required')
-      }
-      if (!smartContractData.offerPrice) {
+      }else if (!smartContractData.offerPrice) {
         return alert('Offer Price is required')
-      }
-      if (
-        !smartContractData.downPayment &&
-        smartContractData.downPayment !== 0
+      }else if (
+        !smartContractData.downPaymentPercent &&
+        smartContractData.downPaymentPercent !== 0
       ) {
         return alert('Down Payment is required')
-      }
-      if (
-        !smartContractData.cashAgainstDocuments &&
-        smartContractData.cashAgainstDocuments !== 0
+      }else if (
+        !smartContractData.cashAgainstDocumentsPercent &&
+        smartContractData.cashAgainstDocumentsPercent !== 0
       ) {
         return alert('Cash Against Documents Payment is required')
-      }
-      if (!smartContractData.arrival && smartContractData.arrival !== 0) {
+      }else if (!smartContractData.arrivalPercent && smartContractData.arrivalPercent !== 0) {
         return alert('Arrival Payment is required')
-      }
-      const sumPercent = Number(smartContractData.downPaymentPercent) + Number(smartContractData.cashAgainstDocumentsPercent) + Number(smartContractData.arrivalPercent);
-      if(sumPercent !== 100){
+      }else if(sumPercent !== 100){
 
-        return alert("The payment terms should be 100% now it have total "+sumPercent+"%")
+        return setErrorText("The sum should be 100%. Try again.")
       }
     }
     if (showStep == 5) {
@@ -1494,7 +1696,7 @@ background: certification ? '#fff' : 'none'}}>
             disabled={loading}
             style={{ background: loading ? 'gray' : '#A8EFA8' }}
           >
-            {loading ? 'Loading...' : showStep == 6 ? 'Submit' : 'Next Step'}
+            {loading  ? 'Loading...' : showStep == 6 ? 'Submit' : 'Next Step'}
           </button>
         </div>
       </div>
