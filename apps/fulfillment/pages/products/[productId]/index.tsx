@@ -99,22 +99,56 @@ const ProductPage: FC<ProductPageProps> = (props) => {
       measure
       certifications
       updatedAt
+      isExisting
+    }
+  }
+  
+  `;
+ const getContracsDRAFT = gql`
+  query {
+    contracts(descCreatedAt: true, isExisting: true) {
+      _id
+      description {
+        en
+      }
+      productId
+      portOfLoading
+      portOfArrival
+      departureDate
+      offerPrice
+      quantity
+      downPayment
+      cashAgainstDocuments
+      arrival
+      brandType
+      pluType
+      measure
+      certifications
+      updatedAt
+      isExisting
     }
   }
   
   `;
   const user = useUser()
   const [previousContract, setPreviousContract] = useState([]);
-
+  const [previousContractDraft, setPreviousContractDraft] = useState([]);
+  const getCon = async () => {
+    const data1 = await graphqlReq(getContracs);
+    console.log(data1)
+    setPreviousContract(data1?.contracts)
+  }
+  const getConDraft = async () => {
+    const data1 = await graphqlReq(getContracsDRAFT);
+    console.log(data1)
+    setPreviousContractDraft(data1?.contracts)
+  }
   useEffect(() => {
-    const getCon = async () => {
-      const data1 = await graphqlReq(getContracs);
-      console.log(data1)
-      setPreviousContract(data1?.contracts)
-    }
+  
     if(user?.role === "buyer"){
 
-      getCon()
+      getCon();
+      getConDraft();
     }
   },[user])
 
@@ -184,7 +218,7 @@ overflow:'auto'
        }}
      >
        
-       <SmartContractForm previousContract={previousContract} product={product} handelClose={() => setShowSmartContract(false)} />
+       <SmartContractForm getConDraft={getConDraft} getCon={getCon} previousContractDraft={previousContractDraft} previousContract={previousContract} product={product} handelClose={() => setShowSmartContract(false)} />
      </div>
      </>
   )

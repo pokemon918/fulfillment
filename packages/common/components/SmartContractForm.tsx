@@ -31,12 +31,15 @@ interface SmartContractFormProps {
   handelClose: () => void
   product: any
   previousContract: any
+  previousContractDraft: any
+  getCon: () => void
+  getConDraft: () => void
 }
 
 export const SmartContractForm: FC<SmartContractFormProps> = (props) => {
   const styles = useStyles(props)
 
-  const { handelClose, product,previousContract } = props
+  const { handelClose, product,previousContract, getCon,previousContractDraft,getConDraft } = props
   //console.log(product)
   const [productData, setProductData] = useState<any>(null);
   const [showStep, setShowStep] = useState(1)
@@ -48,6 +51,7 @@ export const SmartContractForm: FC<SmartContractFormProps> = (props) => {
     portOfArrivalSelect: 'Peru',
   });
   const [previousPurchaseSelect, setpreviousPurchaseSelect] = useState<any>(null);
+  const [previousDraftSelect, setpreviousDraftSelect] = useState<any>(null);
 
   const [brandType, setbrandType] = useState(true)
   const [pluType, setpluType] = useState(false)
@@ -56,6 +60,7 @@ export const SmartContractForm: FC<SmartContractFormProps> = (props) => {
   const [certificationData, setcertificationData] = useState<any>([]);
   const [attachFile, setAttachFile] = useState<any>(null)
   const [loading, setLoading] = useState(false);
+  const [loadingD, setLoadingD] = useState(false);
   const [errorText, setErrorText] = useState("");
 
 
@@ -100,8 +105,8 @@ const getProduct = async (id:any) => {
 }
 
 
-  const submitSmartConData = async () => {
-    setLoading(true)
+  const submitSmartConData = async (setload:any,isExisting:boolean) => {
+    setload(true)
     let attachFileUrl: any = ''
     if (attachFile) {
       const formData = new FormData()
@@ -117,7 +122,7 @@ const getProduct = async (id:any) => {
 
     const inputData = {
       productId: product._id,
-      isExisting: false,
+      isExisting: isExisting,
       portOfLoading:
         smartContractData.portOfLoadingInput +
         ', ' +
@@ -148,6 +153,10 @@ const getProduct = async (id:any) => {
       portOfLoadingSelect: 'Peru',
       portOfArrivalSelect: 'Peru',
     })
+
+    setload(false);
+    getCon();
+    getConDraft();
   }
 
 
@@ -156,6 +165,11 @@ useEffect(() => {
     setpreviousPurchaseSelect(previousContract[0]._id)
   }
 },[previousContract])
+useEffect(() => {
+  if(previousContractDraft?.length){
+    setpreviousDraftSelect(previousContractDraft[0]._id)
+  }
+},[previousContractDraft])
 
 useEffect(() => {
 setProductData(product)
@@ -377,8 +391,12 @@ setProductData(product)
             style={{ margin: '0', marginLeft: '30px' }}
           >
             {showDarftOrder ? (
-              <select css={styles.select} name="" id="">
-                <option value="1">None</option>
+              <select css={styles.select} name="" id="" onChange={e => setpreviousDraftSelect(e.target.value)} defaultValue={previousContractDraft}>
+                {
+                 previousContractDraft?.length ? previousContractDraft?.map((v:any)=> (
+                    <option value={v._id}>Draft - {formatDateToDayMonth(v.updatedAt)}</option>
+                  )) : <option value=''>Not Found</option>
+                }
               </select>
             ) : null}
           </div>
@@ -389,9 +407,9 @@ setProductData(product)
             {showPreviousOrder ? (
               <select onChange={e => setpreviousPurchaseSelect(e.target.value)} defaultValue={previousPurchaseSelect} css={styles.select} name="" id="">
                 {
-                  previousContract?.map((v:any)=> (
+                  previousContract?.length ? previousContract?.map((v:any)=> (
                     <option value={v._id}>Purchase Order - {formatDateToDayMonth(v.updatedAt)}</option>
-                  ))
+                  )) : <option value=''>Not Found</option>
                 }
                
                
@@ -432,7 +450,18 @@ setProductData(product)
         <div
           css={{ background: '#B1E080', height: '1px', width: '160px' }}
         ></div>
-        <div css={{ padding: '20px 0' }}>
+
+
+<div
+          css={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: '20px',
+            marginTop: '10px',
+          }}
+        >
+<div>
+<div css={{ padding: '20px 0' }}>
           <div css={{ display: 'flex', alignItems: 'start', gap: '10px' }}>
             <div>
               <p
@@ -448,31 +477,18 @@ setProductData(product)
               <p
                 css={{ fontSize: '20px', color: '#101010', fontWeight: '600' }}
               >
-                {productData?.availableSpecs}
+                 {productData?.availableSpecs.split(" / ")[0].toUpperCase()}
               </p>
             </div>
-            <EditIcon />
+            {/* <EditIcon /> */}
           </div>
         </div>
         <div
           css={{ background: '#B1E080', height: '1px', width: '160px' }}
         ></div>
+</div>
 
-        <div
-          css={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: '20px',
-            marginTop: '10px',
-          }}
-        >
-          {/* <div css={styles.selectContainer}>
-            <p css={styles.selectLabel}>Quality:</p>
-            <select css={styles.select} name="" id="">
-              <option value="1">{productData?.availableSpecs.split(" / ")[1]}</option>
-            </select>
-          </div> */}
-         <div>
+<div>
          <div css={{ padding: '20px 0' }}>
           <p
             css={{
@@ -485,14 +501,18 @@ setProductData(product)
             Quality:
           </p>
           <p css={{ fontSize: '20px', color: '#101010', fontWeight: '600' }}>
-          {productData?.availableSpecs.split(" / ")[1]}
+          {productData?.availableSpecs.split(" / ")[1].toUpperCase()}
           </p>
         </div>
         <div
           css={{ background: '#B1E080', height: '1px', width: '160px' }}
         ></div>
          </div>
+
         </div>
+       
+
+       
         <div
           css={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}
         >
@@ -523,7 +543,7 @@ setProductData(product)
             Size:
           </p>
           <p css={{ fontSize: '20px', color: '#101010', fontWeight: '600' }}>
-          {productData?.availableSpecs.split(" / ")[2]}
+          {productData?.availableSpecs.split(" / ")[2].split(':')[1]?.trim()}
           </p>
         </div>
         <div
@@ -544,7 +564,8 @@ setProductData(product)
             Presentation:
           </p>
           <p css={{ fontSize: '20px', color: '#101010', fontWeight: '600' }}>
-          {productData?.availableSpecs.split(" / ")[0]}
+          {/* {productData?.availableSpecs.split(" / ")[0].toUpperCase()} */}
+          2kg box
           </p>
         </div>
         <div
@@ -1564,38 +1585,45 @@ background: certification ? '#fff' : 'none'}}>
     }
   }
 
+  const setupPreData = async (preCon:any,preId:any) => {
+    const previousOrderData = preCon.find((v:any) => v._id === preId);
+    await getProduct(previousOrderData.productId);
+    const inputData = {
+     portOfLoadingInput:previousOrderData.portOfLoading.split(', ').slice(0, -1).join(', '),
+     portOfLoadingSelect:previousOrderData.portOfLoading.split(', ').pop(),
+     portOfArrivalInput:previousOrderData.portOfArrival.split(', ').slice(0, -1).join(', '),
+     portOfArrivalSelect:previousOrderData.portOfArrival.split(', ').pop(),
+
+     departureDate: previousOrderData.departureDate,
+     offerPrice: Number(previousOrderData.offerPrice),
+     quantity: Number(previousOrderData.quantity),
+
+     totalPrice: Number(previousOrderData.offerPrice) * Number(previousOrderData.quantity),
+     downPayment: previousOrderData.downPayment,
+     cashAgainstDocuments: previousOrderData.cashAgainstDocuments,
+     arrival: previousOrderData.arrival,
+
+     downPaymentPercent: 100 * previousOrderData.downPayment / (Number(previousOrderData.offerPrice) * Number(previousOrderData.quantity)),
+     cashAgainstDocumentsPercent: 100 * previousOrderData.cashAgainstDocuments / (Number(previousOrderData.offerPrice) * Number(previousOrderData.quantity)),
+     arrivalPercent: 100 * previousOrderData.arrival / (Number(previousOrderData.offerPrice) * Number(previousOrderData.quantity)),
+
+     description: previousOrderData.description.en,
+   }
+   setSmartContractData(inputData);
+   setbrandType(previousOrderData.brandType);
+   setpluType(previousOrderData.pluType);
+   setmeasure(previousOrderData.measure);
+   setcertificationData(previousOrderData.certifications);
+   if(previousOrderData.certifications.length) setcertification(true);
+  }
+
   const handleNextStep = async () => {
     if(showStep === 1){
       if(showPreviousOrder && previousPurchaseSelect){
-        const previousOrderData = previousContract.find((v:any) => v._id === previousPurchaseSelect);
-       await getProduct(previousOrderData.productId);
-       const inputData = {
-        portOfLoadingInput:previousOrderData.portOfLoading.split(', ').slice(0, -1).join(', '),
-        portOfLoadingSelect:previousOrderData.portOfLoading.split(', ').pop(),
-        portOfArrivalInput:previousOrderData.portOfArrival.split(', ').slice(0, -1).join(', '),
-        portOfArrivalSelect:previousOrderData.portOfArrival.split(', ').pop(),
-
-        departureDate: previousOrderData.departureDate,
-        offerPrice: Number(previousOrderData.offerPrice),
-        quantity: Number(previousOrderData.quantity),
-
-        totalPrice: Number(previousOrderData.offerPrice) * Number(previousOrderData.quantity),
-        downPayment: previousOrderData.downPayment,
-        cashAgainstDocuments: previousOrderData.cashAgainstDocuments,
-        arrival: previousOrderData.arrival,
-
-        downPaymentPercent: 100 * previousOrderData.downPayment / (Number(previousOrderData.offerPrice) * Number(previousOrderData.quantity)),
-        cashAgainstDocumentsPercent: 100 * previousOrderData.cashAgainstDocuments / (Number(previousOrderData.offerPrice) * Number(previousOrderData.quantity)),
-        arrivalPercent: 100 * previousOrderData.arrival / (Number(previousOrderData.offerPrice) * Number(previousOrderData.quantity)),
-
-        description: previousOrderData.description.en,
+       await setupPreData(previousContract,previousPurchaseSelect)
       }
-      setSmartContractData(inputData);
-      setbrandType(previousOrderData.brandType);
-      setpluType(previousOrderData.pluType);
-      setmeasure(previousOrderData.measure);
-      setcertificationData(previousOrderData.certifications);
-      if(previousOrderData.certifications.length) setcertification(true)
+      if(showDarftOrder && previousDraftSelect){
+       await setupPreData(previousContractDraft,previousDraftSelect)
       }
     }
     if (showStep === 3) {
@@ -1638,7 +1666,7 @@ background: certification ? '#fff' : 'none'}}>
     if (showStep == 6) {
       setLoading(true)
       try {
-        await submitSmartConData()
+        await submitSmartConData(setLoading,false)
         setLoading(false)
         return setShowStep((pre) => pre + 1)
       } catch (error) {
@@ -1690,6 +1718,30 @@ background: certification ? '#fff' : 'none'}}>
             </button>
           )}
 
+
+{showStep == 6 ? (
+   <button
+   css={styles.btn}
+   onClick={async () =>{
+
+try {
+  
+  await submitSmartConData(setLoadingD,true);
+  handelClose();
+  setShowStep(1)
+} catch (error) {
+  
+}
+    
+    }
+   } 
+   disabled={loadingD}
+   style={{ background: loadingD ? 'gray' : 'rgb(168 239 168 / 50%)' }}
+ >
+   {loadingD  ? 'Loading...' : 'Save as a draft'}
+ </button>
+) : null}
+         
           <button
             css={styles.btn}
             onClick={handleNextStep}
