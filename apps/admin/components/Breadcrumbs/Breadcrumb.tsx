@@ -14,7 +14,7 @@ const Breadcrumb = ({ pageName, href, update="" }: BreadcrumbProps) => {
       </h2>
 
       <Button
-        style={{ padding: '8px 12px', backgroundColor: 'var(--color-primary)', color: 'black' }}
+        style={{ padding: '8px 12px', backgroundColor: 'var(--color-primary)', color: 'black', display: update }}
         href={href}
         startIcon={<AddIcon />}
       >
