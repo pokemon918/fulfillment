@@ -143,7 +143,8 @@ const getProduct = async (id:any) => {
       measure,
       attachment: attachFileUrl && attachFileUrl.data[0],
       certifications: certificationData,
-      status: "pending",
+      status: "Pending",
+      expirationDate: new Date().toISOString().split('T')[0],
     }
     //console.log(inputData)
 

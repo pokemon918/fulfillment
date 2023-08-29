@@ -1,7 +1,7 @@
 import { FC, useState, useEffect, SyntheticEvent, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import { gql, graphqlReq, countries, Select, withAuth } from "common";
+import { gql, graphqlReq, countries, Select, withAuth, revalidateContract } from "common";
 import { GetStaticProps, GetStaticPaths } from "next";
 
 interface ContractPageProps {
@@ -35,8 +35,9 @@ interface ContractPageProps {
         paymentMethod: string
         fundedDate: Date
         investors: number
-        status: 'pending' | 'Publish' | 'Not funded'
+        status: 'Pending'| "Expired" | 'Rejected' | 'Funded' | 'Approved'
         createdAt: Date
+        expirationDate: Date
     }
 }
 
@@ -50,15 +51,14 @@ const CREATEADMINCONTRACT = gql`
 
 const ContractPage = (props: ContractPageProps) => {
 
-    const expirationDate = new Date(props.contract.createdAt);
-    expirationDate.setDate(expirationDate.getDate() + 30);
-
     const [isSave, setIsSave] = useState(true);
     const sending = useRef(false)
 
     useEffect(() => {
         if (props.contract.duration) setIsSave(false)
     },[])
+
+    const [approvedDate, setApprovedDate] = useState(props.contract.approvedDate? new Date(props.contract.approvedDate).toLocaleDateString(): '')
 
     const onSubmit = async (event: SyntheticEvent) => {
         event.preventDefault();
@@ -80,7 +80,7 @@ const ContractPage = (props: ContractPageProps) => {
             // @ts-ignore
             const nftLink = event.target.nftLink.value;
             // @ts-ignore
-            const approvedDate = event.target.approvedDate.value;
+            const expirationDate = event.target.expirationDate.value;
             // @ts-ignore
             const status = event.target.status.value;
     
@@ -92,14 +92,16 @@ const ContractPage = (props: ContractPageProps) => {
                 requiredAmount,
                 capitalFunded,
                 nftLink,
-                approvedDate,
+                expirationDate,
                 status,
             }
 
             try {
                 sending.current = true
                 await graphqlReq(CREATEADMINCONTRACT, { input })
-                alert('Successfully created')
+                alert('Successfully saved')
+                revalidateContract({_id: props.contract._id})
+                if (status === 'Approved') setApprovedDate(new Date().toLocaleDateString())
             } catch (error) {
                 return alert('Please check your internet connection then try again')
             } finally {
@@ -315,7 +317,63 @@ const ContractPage = (props: ContractPageProps) => {
 
                 <form onSubmit={onSubmit}>
                     <div className="flex flex-col gap-9">
-                    {/* <!-- Admin Management --> */}
+
+                        {/* <!-- Current Status --> */}
+                        <div className="w-full rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+                            <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark justify-between flex items-center">
+                                <h3 className="inline-flex font-medium text-black dark:text-white">
+                                    Current Status
+                                </h3>
+                            </div>
+                            <div className="p-6.5">
+                                <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
+                                    <div className="w-full xl:w-2/3">
+                                        <label className="mb-2.5 block text-black dark:text-white">
+                                            Capital Funded
+                                        </label>
+                                        <input
+                                            type="number"
+                                            required
+                                            readOnly
+                                            name='capitalFunded'
+                                            defaultValue={props.contract.capitalFunded}
+                                            className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                        />
+                                    </div>
+
+                                    <div className="w-full xl:w-1/3">
+                                        <label className="mb-2.5 block text-black dark:text-white">
+                                            # of investors
+                                        </label>
+                                        <input
+                                        type="number"
+                                        value={props.contract.investors? 0: props.contract.investors}
+                                        readOnly
+                                        className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="mb-4.5">
+                                    <label className="mb-3 block text-black dark:text-white">
+                                        Approved Date
+                                    </label>
+                                    <div className="relative">
+                                        <input
+                                            type="text"
+                                            required
+                                            readOnly
+                                            value={approvedDate}
+                                            name='approvedDate'
+                                            className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                        />
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        {/* <!-- Current Status End --> */}
+
+                        {/* <!-- Admin Management --> */}
                         <div className="w-full rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
                             <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark justify-between flex items-center">
                                 <h3 className="inline-flex font-medium text-black dark:text-white">
@@ -335,10 +393,12 @@ const ContractPage = (props: ContractPageProps) => {
                                             Expiration Date
                                         </label>
                                         <input
-                                        type="text"
-                                        value={expirationDate.toLocaleDateString()}
-                                        readOnly
-                                        className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                            type="date"
+                                            required
+                                            readOnly={!isSave}
+                                            defaultValue={new Date(props.contract.expirationDate).toISOString().split('T')[0]}
+                                            name='expirationDate'
+                                            className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                         />
                                     </div>
 
@@ -390,34 +450,6 @@ const ContractPage = (props: ContractPageProps) => {
                                 </div>
 
                                 <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
-                                    <div className="w-full xl:w-2/3">
-                                        <label className="mb-2.5 block text-black dark:text-white">
-                                            Capital Funded
-                                        </label>
-                                        <input
-                                            type="number"
-                                            required
-                                            readOnly
-                                            name='capitalFunded'
-                                            defaultValue={props.contract.capitalFunded}
-                                            className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                                        />
-                                    </div>
-
-                                    <div className="w-full xl:w-1/3">
-                                        <label className="mb-2.5 block text-black dark:text-white">
-                                            # of investors
-                                        </label>
-                                        <input
-                                        type="number"
-                                        value={props.contract.investors? 0: props.contract.investors}
-                                        readOnly
-                                        className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
                                     <div className="w-full xl:w-1/3">
                                         <label className="mb-2.5 block text-black dark:text-white">
                                             Status
@@ -427,9 +459,12 @@ const ContractPage = (props: ContractPageProps) => {
                                           name='status'
                                           disabled={!isSave}
                                           defaultValue={props.contract.status}>
-                                            <option value="pending">pending</option>
-                                            <option value="Publish">publish</option>
-                                            <option value="Not funded">Not funded</option>
+                                            {/* Pending, Expired, Rejected, Funded, Approved. */}
+                                            <option value="Pending">Pending</option>
+                                            <option value="Expired">Expired</option>
+                                            <option value="Rejected">Rejected</option>
+                                            <option value="Funded">Funded</option>
+                                            <option value="Approved">Approved</option>
                                         </select>
                                     </div>
 
@@ -460,24 +495,10 @@ const ContractPage = (props: ContractPageProps) => {
                                         className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                     />
                                 </div>
-
-                                <div className="mb-4.5">
-                                    <label className="mb-3 block text-black dark:text-white">
-                                        Approved Date
-                                    </label>
-                                    <div className="relative">
-                                        <input
-                                            type="date"
-                                            required
-                                            readOnly={!isSave}
-                                            defaultValue={new Date(props.contract.approvedDate).toISOString().split('T')[0]}
-                                            name='approvedDate'
-                                            className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                                        />
-                                </div>
-                                </div>
                             </div>
                         </div>
+                        {/* <!-- Admin Management End --> */}
+
                     </div>
                 </form>
             </div>
@@ -519,6 +540,7 @@ const GET_DATA = gql`
       status
       supplierId
       createdAt
+      expirationDate
 
       product {
         name {
