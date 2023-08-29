@@ -285,8 +285,8 @@ const ContractPage = (props: ContractPageProps) => {
                             </div>
 
                             <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
-                                {props.contract.attachment? 'No ': ''} Attached File Exists.
-                                {props.contract.attachment? <></>: 
+                                {props.contract.attachment? '' :'No '} Attached File Exists.
+                                {props.contract.attachment? 
                                     <button className="hover:text-primary" onClick={() => window.open(props.contract.attachment, '_blank')}>
                                        <svg
                                         className="fill-current"
@@ -306,6 +306,7 @@ const ContractPage = (props: ContractPageProps) => {
                                         />
                                        </svg>
                                     </button>
+                                    : <></>
                                 }
                             </div>
                         </div>
@@ -364,6 +365,7 @@ const ContractPage = (props: ContractPageProps) => {
                                         <select
                                           className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input"
                                           name='risk'
+                                          disabled={!isSave}
                                           defaultValue={props.contract.risk}>
                                             <option value="A">A</option>
                                             <option value="B">B</option>
@@ -423,6 +425,7 @@ const ContractPage = (props: ContractPageProps) => {
                                         <select
                                           className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input"
                                           name='status'
+                                          disabled={!isSave}
                                           defaultValue={props.contract.status}>
                                             <option value="pending">pending</option>
                                             <option value="Publish">publish</option>
