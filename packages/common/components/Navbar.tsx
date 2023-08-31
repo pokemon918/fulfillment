@@ -120,9 +120,22 @@ export const Navbar: FC<NavbarProps> = (originalProps) => {
             Invest now
           </Button>
           {user ? (
-            <Link css={styles.userProfile} href="/profile">
-              {user.fullName}
+           <div className="dropdown">
+           <a style={{cursor:'pointer'}} css={styles.userProfile} className="dropbtn">{user.fullName}</a>
+           <div className="dropdown-content">
+           <Link css={styles.userProfile} href="/profile">
+              Profile
             </Link>
+           <Link css={styles.userProfile} href="/contracts">
+           Contracts
+            </Link>
+           <Link css={styles.userProfile} href="/all-investment">
+           Investments
+            </Link>
+           </div>
+         </div>
+
+
           ) : (
             <div css={styles.deskBtnGroup}>
               <Button
