@@ -205,8 +205,6 @@ export const CompanyForm: FC<CompanyFormProps> = ({
       // @ts-ignore
       input._id = defaultValues._id
     }
-
-    console.log(input)
     
     setSaving(true)
 

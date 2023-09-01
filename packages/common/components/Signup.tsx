@@ -243,8 +243,6 @@ export const Signup: FC<SignupProps> = ({
     try {
       sending.current = true
 
-      console.log(input)
-
       const {
         auth: { token, user },
       } = await graphqlReq(mutation, { input })
