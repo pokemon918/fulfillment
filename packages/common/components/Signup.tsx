@@ -27,7 +27,7 @@ import {
   Radio,
   Select,
 } from '../ui'
-import { graphqlReq, isGqlErrStatus, makeStyles, setCookie } from '../utils'
+import { graphqlReq, isGqlErrStatus, makeStyles, setCookie, revalidateUser, timeout } from '../utils'
 import { CountrySelect } from './CountrySelect'
 import { Navbar } from './Navbar'
 
@@ -246,6 +246,22 @@ export const Signup: FC<SignupProps> = ({
       const {
         auth: { token, user },
       } = await graphqlReq(mutation, { input })
+
+      const callbacks = revalidateUser(
+        {
+          _id: user._id
+        },
+        'create'
+      )
+      const { revalidate } = callbacks;
+      (async () => {
+        try {
+          await revalidate()
+          await timeout(1000)
+        } catch {
+          alert('An error occurred while update caching, please save it again')
+        }
+      })()
 
       if (APP_TYPE !== 'admin') {
         const YEAR = 1000 * 60 * 60 * 24 * 365
