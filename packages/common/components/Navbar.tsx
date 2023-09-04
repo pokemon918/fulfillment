@@ -126,12 +126,19 @@ export const Navbar: FC<NavbarProps> = (originalProps) => {
            <Link css={styles.userProfile} href="/profile">
               Profile
             </Link>
-           <Link css={styles.userProfile} href="/contracts">
-           Contracts
-            </Link>
-           <Link css={styles.userProfile} href="/all-investment">
-           Investments
-            </Link>
+          
+
+            {user?.role === 'buyer' ? (
+ <Link css={styles.userProfile} href="/contracts">
+ Contracts
+  </Link>
+            ) : null}
+            {user?.role === 'investor' ? (
+  <Link css={styles.userProfile} href="/all-investment">
+  Investments
+   </Link>
+            ) : null}
+         
            </div>
          </div>
 

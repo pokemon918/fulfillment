@@ -13,14 +13,21 @@ import SupplierLogo from "../assets/images/supplier_logo.png"
 import BuyerLogo from "../assets/images/buyer_logo.png"
 import {useRouter} from 'next/router'
 
-interface InvestmentDetailsPageProps {}
+interface InvestmentDetailsPageProps {
+  data: any
+}
 
 export function InvestmentDetailsPage(props: InvestmentDetailsPageProps) {
-  const {} = props
+  const {data} = props
 
   const user = useUser()
 const router = useRouter();
   const styles = useStyles(props);
+
+  let totalAmount = data?.quantity * data?.offerPrice;
+  totalAmount = data?.measure ? totalAmount + 200 : totalAmount;
+  const investedAmount = data?.investedAmount ? data?.investedAmount : 0;
+  const mainPrograss = (totalAmount / 100) * investedAmount;
 
   const CheckedStep = ({name} : any) => (
     <div
@@ -89,7 +96,7 @@ const router = useRouter();
                 marginBottom: '20px',
               }}
             >
-             Fresh Bluberries
+             {data?.product.name.en}
             </h2>
 
             <div
@@ -116,7 +123,7 @@ const router = useRouter();
                         height: '100%',
                         borderRadius: '15px',
                       }}
-                      src="https://api.trumarket.tech/files/b734deb018f4bb11d0150db829d5a206d68c30db15b825264621126c4c92144fc9c1dcd0b075e222958589fc52f04867.jpg"
+                      src={data?.product.thumbnail}
                       alt=""
                     />
                   </div>
@@ -130,7 +137,7 @@ const router = useRouter();
                       }}
                     >
                       Product name:{' '}
-                      <span css={{ fontWeight: '600' }}>Fresh Blueberries</span>
+                      <span css={{ fontWeight: '600' }}>{data?.product.name.en}</span>
                     </p>
                     <p
                       css={{
@@ -139,7 +146,7 @@ const router = useRouter();
                         color: '#101010',
                       }}
                     >
-                      Origin: <span css={{ fontWeight: '600' }}>Lima</span>
+                      Origin: <span css={{ fontWeight: '600' }}>{data?.portOfArrival.split(',')[0]}</span>
                     </p>
                     <p
                       css={{
@@ -148,7 +155,7 @@ const router = useRouter();
                         color: '#101010',
                       }}
                     >
-                      Destination: <span css={{ fontWeight: '600' }}>Peru</span>
+                      Destination: <span css={{ fontWeight: '600' }}>{data?.portOfArrival.split(',')[1]}</span>
                     </p>
                   </div>
                 </div>
@@ -170,7 +177,7 @@ const router = useRouter();
                       fontWeight: '600',
                     }}
                   >
-                    W. Murcott / CAT 1 / size: 1X, 2X, 3X
+                    {data?.product.availableSpecs.en}
                   </p>
                 </div>
 
@@ -194,7 +201,7 @@ const router = useRouter();
                       fontWeight: '600',
                     }}
                   >
-                    3 Kg bulk tray
+                    2 Kg
                   </p>
                 </div>
 
@@ -229,7 +236,7 @@ const router = useRouter();
                         fontWeight: '600',
                       }}
                     >
-                      Callao, Peru
+                      {data?.portOfArrival}
                     </p>
                   </div>
                   <div>
@@ -249,7 +256,7 @@ const router = useRouter();
                         fontWeight: '600',
                       }}
                     >
-                      Itaqui, Brazil
+                      {data?.portOfLoading}
                     </p>
                   </div>
                   <div>
@@ -269,7 +276,7 @@ const router = useRouter();
                         fontWeight: '600',
                       }}
                     >
-                      August 14, 2023
+                     {data?.departureDate}
                     </p>
                   </div>
                 </div>
@@ -314,7 +321,7 @@ const router = useRouter();
                 marginLeft: '8px',
               }}
             >
-              40% completed
+              {mainPrograss}% completed
             </span>
           </p>
           <div
@@ -331,7 +338,7 @@ const router = useRouter();
               css={{
                 background: '#B0DA54',
                 position: 'absolute',
-                width:  '40%',
+                width:  mainPrograss+'%',
                 height: '8px',
                 borderRadius: '100px',
               }}
@@ -345,10 +352,10 @@ const router = useRouter();
               marginBottom: '5px',
             }}
           >
-            Amount of contract: 10,000 USD
+            Amount of contract: {totalAmount} USD
           </p>
           <p css={{ fontSize: '15px', fontWeight: '400', color: '#101010' }}>
-            Currently funded: 10,000 USD
+            Currently funded: {investedAmount} USD
           </p>
 
          
@@ -364,7 +371,7 @@ const router = useRouter();
               <p
                 css={{ fontSize: '15px', fontWeight: '400', color: '#101010' }}
               >
-                Duration: 189 days
+                Duration: {data?.duration} weeks
               </p>
 
               <p
@@ -376,7 +383,7 @@ const router = useRouter();
                   paddingLeft: '20px',
                 }}
               >
-                Profit: 9.4%
+                Profit: {data?.return}%
               </p>
 
               <p
@@ -388,7 +395,7 @@ const router = useRouter();
                   paddingLeft: '20px',
                 }}
               >
-                Risk: D
+                Risk: {data?.risk}
               </p>
             </div>
             <p
@@ -410,16 +417,7 @@ const router = useRouter();
                     lineHeight: '28px',
                   }}
                 >
-                  I hope this message finds you well. My name is John,
-                  representing Produce International. We are interested in
-                  establishing a strong partnership with your esteemed company
-                  as we seek a reliable supplier of fresh mandarins in bulk
-                  quantities. Your reputation for providing superior produce
-                  aligns perfectly with our commitment to excellence. We are
-                  impressed by your distribution network's efficiency and timely
-                  deliveries, and we would love to discuss further details and
-                  explore the potential for a fruitful collaboration. Looking
-                  forward to your response.
+                  {data?.description.en}
                 </p>
               </div>
             </div>

@@ -72,7 +72,7 @@ export const LoginPage = () => {
 
       const expireAt = new Date(Date.now() + YEAR)
 
-      const acceptType = user.role === 'investor' ? ['investment'] : user.role === 'admin' ? ['admin', 'fulfillment', 'investment'] : ['fulfillment']
+      const acceptType = user.role === 'investor' ? ['fulfillment'] : user.role === 'admin' ? ['admin', 'fulfillment', 'investment'] : ['fulfillment']
 
       if (acceptType.includes(APP_TYPE)) {
         setCookie(`${APP_TYPE}_token`, token, expireAt)
