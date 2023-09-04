@@ -1,4 +1,4 @@
-import { countries, gql, graphqlReq, revalidateCompany } from "common";
+import { countries, gql, graphqlReq, revalidateCompany, timeout } from "common";
 import { useState } from "react";
 
 interface basicCompanyInfo {
@@ -30,12 +30,23 @@ const CompanyTable = (props: BasicCompanyProps) => {
       .then(() => {
         alert("successfully deleted")
         setCompanies(companies.filter(company => company._id !== _id))
-        revalidateCompany(
+        const callbacks = revalidateCompany(
           {
             _id: _id
           },
           'delete'
         )
+        const { revalidate } = callbacks
+        async () => {
+          try {
+            await revalidate()
+            await timeout(1000)
+            // @ts-ignore
+            if (callbacks.hasOwnProperty('callback')) callbacks.callback()
+          } catch {
+            alert('An error occurred while update caching, please save it again')
+          }
+        }
       })
       .catch(() => alert("an error occurred"))
     }

@@ -7,7 +7,8 @@ import { LangField, BuyerCompany, SupplierCompany } from '../../types'
 import {
   graphqlReq,
   makeStyles,
-  revalidateCompany
+  revalidateCompany,
+  timeout
 } from '../../utils'
 import useHistoryRef from '../../hooks/useHistoryRef'
 
@@ -215,12 +216,23 @@ export const CompanyForm: FC<CompanyFormProps> = ({
       .then((_id) => {
         alert(`Successfully ` + actionType + `d`)
         setSaving(false)
-        revalidateCompany(
+        const callbacks = revalidateCompany(
           {
             _id: _id
           },
           actionType
         )
+        const { revalidate } = callbacks
+        async () => {
+          try {
+            await revalidate()
+            await timeout(1000)
+            // @ts-ignore
+            if (callbacks.hasOwnProperty('callback')) callbacks.callback()
+          } catch {
+            alert('An error occurred while update caching, please save it again')
+          }
+        }
         if (typeOfCompany === "Buyer") {
           window.location.href = '/company/buyers'
         } else {
