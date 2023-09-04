@@ -1540,7 +1540,9 @@ background: certification ? '#fff' : 'none'}}>
       >
         You have successfully submitted your order.
       </p>
-      <button
+      
+      <a
+      href="/contracts"
         css={styles.btn}
         style={{ background: 'transparent' }}
         onClick={() => {
@@ -1551,7 +1553,7 @@ background: certification ? '#fff' : 'none'}}>
         }}
       >
         Go Back
-      </button>
+      </a>
     </div>
   )
 
