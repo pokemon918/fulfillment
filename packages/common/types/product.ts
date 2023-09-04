@@ -12,6 +12,7 @@ export interface BaseProduct {
 export interface DetailedProduct extends BaseProduct {
   harvestingMonths: number[]
   hsCode: string
+  description: string
   gallery: string[]
   traces: {
     title: string

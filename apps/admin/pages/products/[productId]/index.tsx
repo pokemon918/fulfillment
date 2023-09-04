@@ -96,6 +96,9 @@ const GET_DATA = gql`
       }
       thumbnail
       country
+      description {
+        en
+      }
       price
       categoryId
       offerPrices {
@@ -165,6 +168,7 @@ export const getStaticProps: GetStaticProps<ProductPageProps> = async (ctx) => {
         name: product.name.en,
         availableSpecs: product.availableSpecs.en,
         hsCode: product.hsCode.en,
+        description: product.description.en,
         traces: product.traces.map((trace: any) => ({
           ...trace,
           title: trace.title.en,

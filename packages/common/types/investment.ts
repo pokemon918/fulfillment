@@ -10,6 +10,7 @@ export interface BaseInvestment {
 export interface DetailedInvestment extends BaseInvestment {
   hsCode: string
   gallery: string[]
+  description: string
   traces: {
     title: string
     description: string
