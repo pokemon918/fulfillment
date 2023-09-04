@@ -209,6 +209,8 @@ export const ProductForm: FC<ProductFormProps> = ({
       certifications: product.certifications.map((f) => f.src),
     }
 
+    console.log(input)
+
     setSaving(true)
     setSuccess(false)
 
@@ -294,6 +296,16 @@ export const ProductForm: FC<ProductFormProps> = ({
           name="price"
           required
           pattern="[0-9]+(\.[0-9]+)?"
+        />
+
+        <Input
+          style={{ marginBottom: '1.5rem' }}
+          label="Description"
+          placeholder="Description"
+          name="description.en"
+          control={control}
+          multiline
+          rows={5}
         />
 
         <Checkbox

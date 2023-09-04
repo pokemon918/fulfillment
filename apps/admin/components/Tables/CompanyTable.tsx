@@ -1,4 +1,5 @@
-import { countries, gql, graphqlReq } from "common";
+import { countries, gql, graphqlReq, revalidateCompany } from "common";
+import { useState } from "react";
 
 interface basicCompanyInfo {
   _id: string,
@@ -20,13 +21,21 @@ export interface BasicCompanyProps {
 
 const CompanyTable = (props: BasicCompanyProps) => {
 
+  const [companies, setCompanies] = useState(props.companies)
+
   const deleteCompanyInfo = async (_id: string) => {
     let result = confirm("Do you want to proceed?")
     if (result) {
       await graphqlReq(DELETE_COMPANY, { _id })
       .then(() => {
         alert("successfully deleted")
-        props.companies.filter(company => company._id !== _id)
+        setCompanies(companies.filter(company => company._id !== _id))
+        revalidateCompany(
+          {
+            _id: _id
+          },
+          'delete'
+        )
       })
       .catch(() => alert("an error occurred"))
     }
@@ -34,7 +43,7 @@ const CompanyTable = (props: BasicCompanyProps) => {
 
   return (
     <>
-      {props.companies.length? <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
+      {companies.length? <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
         <div className="max-w-full overflow-x-auto">
           <table className="w-full table-auto">
             <thead>
@@ -57,7 +66,7 @@ const CompanyTable = (props: BasicCompanyProps) => {
               </tr>
             </thead>
             <tbody>
-              {props.companies.map((company: any, key: any) => (
+              {companies.map((company: any, key: any) => (
                 <tr key={key}>
                   <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                     <h5 className="font-medium text-black dark:text-white">
@@ -93,9 +102,9 @@ const CompanyTable = (props: BasicCompanyProps) => {
                       <button className="hover:text-primary" onClick={() => window.location.href = '/company/'+company._id}>
                         <svg
                           className="fill-current"
-                          width="18"
-                          height="18"
-                          viewBox="0 0 18 18"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
                           fill="none"
                           xmlns="http://www.w3.org/2000/svg"
                         >
@@ -112,9 +121,9 @@ const CompanyTable = (props: BasicCompanyProps) => {
                       <button className="hover:text-primary" onClick={() => deleteCompanyInfo(company._id)}>
                         <svg
                           className="fill-current"
-                          width="18"
-                          height="18"
-                          viewBox="0 0 18 18"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
                           fill="none"
                           xmlns="http://www.w3.org/2000/svg"
                         >

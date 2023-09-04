@@ -182,10 +182,16 @@ export const Signup: FC<SignupProps> = ({
         const { registered } = await graphqlReq(REGISTERED, { email })
 
         if (registered) {
-          return alert('the account is already registered, please login')
+          if (APP_TYPE === 'admin') {
+            return alert('the account is already registered, please use another email')
+          } else {
+            return alert('the account is already registered, please login')
+          }
         }
 
-        return setFinalStep(true)
+        if (role !== 'admin') {
+          return setFinalStep(true)
+        }
       } catch {
         return alert('Please check your internet connection then try again')
       } finally {
@@ -194,6 +200,7 @@ export const Signup: FC<SignupProps> = ({
     }
 
     if (data.role === 'buyer') {
+      // @ts-ignore
       const cInfo = data.commercialInfo
 
       if (cInfo.buyerType.length === 0)
@@ -208,6 +215,7 @@ export const Signup: FC<SignupProps> = ({
       if (cInfo.marketDestinations.length === 0)
         return alert('Please input the market destinations')
     } else if (data.role === 'seller') {
+      // @ts-ignore
       const cInfo = data.commercialInfo
 
       if (cInfo.fulfillmentProducts.length === 0)
@@ -216,6 +224,7 @@ export const Signup: FC<SignupProps> = ({
       if (cInfo.certifications.length === 0)
         return alert('Please select one certification at least')
     } else if (data.role === 'investor') {
+      // @ts-ignore
       const cInfo = data.commercialInfo
 
       if (!cInfo.interestTicket)
@@ -238,14 +247,18 @@ export const Signup: FC<SignupProps> = ({
         auth: { token, user },
       } = await graphqlReq(mutation, { input })
 
-      const YEAR = 1000 * 60 * 60 * 24 * 365
+      if (APP_TYPE !== 'admin') {
+        const YEAR = 1000 * 60 * 60 * 24 * 365
 
-      const expireAt = new Date(Date.now() + YEAR)
+        const expireAt = new Date(Date.now() + YEAR)
 
-      setCookie(`${APP_TYPE}_token`, token, expireAt)
-      localStorage.setItem(`${APP_TYPE}_user`, JSON.stringify(user))
+        setCookie(`${APP_TYPE}_token`, token, expireAt)
+        localStorage.setItem(`${APP_TYPE}_user`, JSON.stringify(user))
 
-      window.location.href = '/'
+        window.location.href = '/'
+      } else {
+        return alert('successfully created')
+      }
     } catch (e) {
       if (isGqlErrStatus(e, 409)) {
         alert('the account is already registered, please login')
@@ -457,10 +470,10 @@ export const Signup: FC<SignupProps> = ({
             {!finalStep && (
               <>
                 <h2 css={styles.heading}>
-                  {pendingUserToken ? 'Finalize Sign Up' : 'Sign Up'}
+                  {pendingUserToken ? 'Finalize Sign Up' : APP_TYPE === 'admin' ? 'Create New User' : 'Sign Up'}
                 </h2>
 
-                {!pendingUserToken && (
+                {!pendingUserToken && APP_TYPE !== 'admin' && (
                   <>
                     <GoogleAuthButton
                       style={{ marginBottom: 16 }}
@@ -575,8 +588,66 @@ export const Signup: FC<SignupProps> = ({
                   </>
                 )}
 
+                {APP_TYPE === 'admin' && (
+                  <>
+                    <p style={{ fontSize: 14, marginBottom: 8 }}>Role</p>
+                    <div style={{ marginBottom: 24 }}>
+                      <Radio
+                        style={{ marginRight: 16 }}
+                        label="Admin"
+                        name="role"
+                        control={control}
+                        type="radio"
+                        value="admin"
+                        required
+                        onChange={(e) =>
+                          handleRoleChange(e.target.value as SignUpInfo['role'])
+                        }
+                      />
+
+                      <Radio
+                        style={{ marginRight: 16 }}
+                        label="Buyer"
+                        name="role"
+                        control={control}
+                        type="radio"
+                        value="buyer"
+                        required
+                        onChange={(e) =>
+                          handleRoleChange(e.target.value as SignUpInfo['role'])
+                        }
+                      />
+
+                      <Radio
+                        style={{ marginRight: 16 }}
+                        label="Supplier"
+                        name="role"
+                        control={control}
+                        type="radio"
+                        value="seller"
+                        required
+                        onChange={(e) =>
+                          handleRoleChange(e.target.value as SignUpInfo['role'])
+                        }
+                      />
+
+                      <Radio
+                        label="Investor"
+                        name="role"
+                        control={control}
+                        type="radio"
+                        value="investor"
+                        required
+                        onChange={(e) =>
+                          handleRoleChange(e.target.value as SignUpInfo['role'])
+                        }
+                      />
+                    </div>
+                  </>
+                )}
+
                 <Button type="submit" fullWidth fullRounded>
-                  Next
+                  {role === 'admin' ? 'Create Admin' : 'Next'}
                 </Button>
               </>
             )}
@@ -588,7 +659,7 @@ export const Signup: FC<SignupProps> = ({
                 <div style={{ marginBottom: 24 }}>{commercialInfo}</div>
 
                 <Button type="submit" fullWidth fullRounded>
-                  Sign Up
+                  {APP_TYPE === 'admin' ? 'Create ' + role?.replace(/^\w/, (firstLetter) => firstLetter.toUpperCase()) : 'Sign Up'}
                 </Button>
               </>
             )}

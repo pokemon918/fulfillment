@@ -93,3 +93,17 @@ export const revalidateCategory = (
 
   return revalidateCrossPaths(paths)
 }
+
+export const revalidateCompany = (
+  company: { _id: string },
+  action: ChangeAction
+) => {
+  const paths = {
+    admin: [
+      '/company/buyers',
+      '/company/suppliers',
+      `/company/${company._id}`
+    ]
+  }
+  return revalidateCrossPaths(paths)
+}

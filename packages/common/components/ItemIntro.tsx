@@ -234,8 +234,7 @@ margin: '10px 0 45px 0'}}>
               {countryName} - {item.name}
             </h2>
             <p css={styles.subtitle}>
-              Lorum Ipsum Lorum Ipsum Lorum Ipsum Lorum Ipsum Lorum Ipsum Lorum
-              Ipsum Lorum Ipsum Lorum Ipsum Lorum Ipsum Lorum Ipsum
+              {item.description}
             </p>
           </div>
 

@@ -6,7 +6,8 @@ import { CountrySelect } from '../CountrySelect'
 import { LangField, BuyerCompany, SupplierCompany } from '../../types'
 import {
   graphqlReq,
-  makeStyles
+  makeStyles,
+  revalidateCompany
 } from '../../utils'
 import useHistoryRef from '../../hooks/useHistoryRef'
 
@@ -205,17 +206,26 @@ export const CompanyForm: FC<CompanyFormProps> = ({
       // @ts-ignore
       input._id = defaultValues._id
     }
-
-    console.log(input)
     
     setSaving(true)
 
     graphqlReq(actionType === 'update' ? UPDATE_COMPANY : CREATE_COMPANY, {
       input
     })
-      .then(() => {
-        alert(`Successfully ` + actionType + `ed`)
+      .then((_id) => {
+        alert(`Successfully ` + actionType + `d`)
         setSaving(false)
+        revalidateCompany(
+          {
+            _id: _id
+          },
+          actionType
+        )
+        if (typeOfCompany === "Buyer") {
+          window.location.href = '/company/buyers'
+        } else {
+          window.location.href = '/company/suppliers'
+        }
       })
       .catch(() => {
         alert('an error occur please try again')
@@ -322,7 +332,7 @@ export const CompanyForm: FC<CompanyFormProps> = ({
         </>}
 
         {finalStep && <>
-          {typeOfCompany === "Buyer" ? <Select
+          {typeOfCompany === "Buyer" ? <CreatableSelect
             style={{ marginBottom: '1.5rem' }}
             label="Interest Products"
             placeholder="Interest Products"
@@ -330,7 +340,7 @@ export const CompanyForm: FC<CompanyFormProps> = ({
             control={control}
             options={products}
             isMulti
-          /> : <Select
+          /> : <CreatableSelect
             style={{ marginBottom: '1.5rem' }}
             label="Products"
             placeholder="Products"

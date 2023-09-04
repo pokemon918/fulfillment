@@ -76,6 +76,7 @@ export const UserProfile: FC<UserProfileProps> = (props) => {
           name="commercialInfo.buyerType"
           options={buyerTypesOptions}
           required
+          readOnly
         />
 
         <label css={styles.label}>Fulfillment Products</label>
@@ -97,6 +98,7 @@ export const UserProfile: FC<UserProfileProps> = (props) => {
           options={countriesOptions}
           isMulti
           required
+          readOnly
         />
 
         <Select
@@ -108,6 +110,7 @@ export const UserProfile: FC<UserProfileProps> = (props) => {
           options={marketDestinationsOptions}
           isMulti
           required
+          readOnly
         />
 
         <Input
@@ -116,6 +119,7 @@ export const UserProfile: FC<UserProfileProps> = (props) => {
           name="commercialInfo.annualImportVolume"
           control={control}
           required
+          readOnly
         />
       </Fragment>
     )
@@ -139,6 +143,7 @@ export const UserProfile: FC<UserProfileProps> = (props) => {
           label="Owns Fields?"
           name="commercialInfo.ownsFields"
           control={control}
+          disabled
         />
 
         <Checkbox
@@ -146,6 +151,7 @@ export const UserProfile: FC<UserProfileProps> = (props) => {
           label="Owns Packing House?"
           name="commercialInfo.ownsPackingHouse"
           control={control}
+          disabled
         />
 
         <Input
@@ -154,6 +160,7 @@ export const UserProfile: FC<UserProfileProps> = (props) => {
           label="Available Volume"
           name="commercialInfo.availableVolume"
           control={control}
+          readOnly
         />
 
         <Input
@@ -162,6 +169,7 @@ export const UserProfile: FC<UserProfileProps> = (props) => {
           label="FOB$ Exports / year"
           name="commercialInfo.fobExportPerYear"
           control={control}
+          readOnly
         />
 
         <Checkboxes
@@ -184,6 +192,7 @@ export const UserProfile: FC<UserProfileProps> = (props) => {
           label="Investor Size"
           name="commercialInfo.investorSize"
           control={control}
+          readOnly
         />
 
         <Input
@@ -192,6 +201,7 @@ export const UserProfile: FC<UserProfileProps> = (props) => {
           label="Address"
           name="commercialInfo.address"
           control={control}
+          readOnly
         />
 
         <Select
@@ -202,6 +212,7 @@ export const UserProfile: FC<UserProfileProps> = (props) => {
           name="commercialInfo.interestTicket"
           options={interestTicketsOptions}
           required
+          readOnly
         />
 
         <Input
@@ -212,6 +223,7 @@ export const UserProfile: FC<UserProfileProps> = (props) => {
           control={control}
           multiline
           rows={3}
+          readOnly
         />
       </Fragment>
     )
