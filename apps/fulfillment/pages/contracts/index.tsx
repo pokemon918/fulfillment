@@ -46,6 +46,5 @@ export const getServerSideProps: GetServerSideProps<PageContractsProps> = async 
     props: {
        contracts
     },
-    revalidate: 60
   }
 }
