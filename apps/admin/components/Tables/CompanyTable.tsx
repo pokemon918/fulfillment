@@ -36,17 +36,15 @@ const CompanyTable = (props: BasicCompanyProps) => {
           },
           'delete'
         )
-        const { revalidate } = callbacks
-        async () => {
+        const { revalidate } = callbacks;
+        (async () => {
           try {
             await revalidate()
             await timeout(1000)
-            // @ts-ignore
-            if (callbacks.hasOwnProperty('callback')) callbacks.callback()
           } catch {
             alert('An error occurred while update caching, please save it again')
           }
-        }
+        })()
       })
       .catch(() => alert("an error occurred"))
     }

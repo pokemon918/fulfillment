@@ -1,4 +1,4 @@
-import { gql, graphqlReq, BaseUser } from "common";
+import { gql, graphqlReq, BaseUser, revalidateUser, timeout } from "common";
 
 const DELETE_USER = gql`
   mutation ($_id: String!) {
@@ -26,6 +26,21 @@ const UserTable = (props: BasicUserProps) => {
       .then(() => {
         alert("successfully deleted")
         props.users.filter(user => user._id !== _id)
+        const callbacks = revalidateUser(
+          {
+            _id: _id
+          },
+          'delete'
+        )
+        const { revalidate } = callbacks;
+        (async () => {
+          try {
+            await revalidate()
+            await timeout(1000)
+          } catch {
+            alert('An error occurred while update caching, please save it again')
+          }
+        })()
       })
       .catch(() => alert("an error occurred"))
     }

@@ -108,3 +108,16 @@ export const revalidateCompany = (
   }
   return revalidateCrossPaths(paths)
 }
+
+export const revalidateUser = (
+  user: { _id: string },
+  action: ChangeAction
+) => {
+  const paths = {
+    admin: [
+      '/users',
+      `/users/${user._id}`
+    ]
+  }
+  return revalidateCrossPaths(paths)
+}

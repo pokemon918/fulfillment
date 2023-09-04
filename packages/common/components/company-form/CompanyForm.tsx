@@ -222,17 +222,15 @@ export const CompanyForm: FC<CompanyFormProps> = ({
           },
           actionType
         )
-        const { revalidate } = callbacks
-        async () => {
+        const { revalidate } = callbacks;
+        (async () => {
           try {
             await revalidate()
             await timeout(1000)
-            // @ts-ignore
-            if (callbacks.hasOwnProperty('callback')) callbacks.callback()
           } catch {
             alert('An error occurred while update caching, please save it again')
           }
-        }
+        })()
         if (typeOfCompany === "Buyer") {
           window.location.href = '/company/buyers'
         } else {

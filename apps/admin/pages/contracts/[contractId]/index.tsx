@@ -101,17 +101,15 @@ const ContractPage = (props: ContractPageProps) => {
                 await graphqlReq(CREATEADMINCONTRACT, { input })
                 alert('Successfully saved')
                 const callbacks = revalidateContract({_id: props.contract._id})
-                const { revalidate } = callbacks
-                async () => {
-                try {
-                    await revalidate()
-                    await timeout(1000)
-                    // @ts-ignore
-                    if (callbacks.hasOwnProperty('callback')) callbacks.callback()
-                } catch {
-                    alert('An error occurred while update caching, please save it again')
-                }
-                }
+                const { revalidate } = callbacks;
+                (async () => {
+                    try {
+                        await revalidate()
+                        await timeout(1000)
+                    } catch {
+                        alert('An error occurred while update caching, please save it again')
+                    }
+                })()
                 if (status === 'Approved') setApprovedDate(new Date().toLocaleDateString())
             } catch (error) {
                 return alert('Please check your internet connection then try again')
