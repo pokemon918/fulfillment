@@ -1,7 +1,7 @@
 import { FC, useState, useEffect, SyntheticEvent, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import { gql, graphqlReq, countries, Select, withAuth, revalidateContract } from "common";
+import { gql, graphqlReq, countries, Select, withAuth, revalidateContract, timeout } from "common";
 import { GetStaticProps, GetStaticPaths } from "next";
 
 interface ContractPageProps {
@@ -100,7 +100,18 @@ const ContractPage = (props: ContractPageProps) => {
                 sending.current = true
                 await graphqlReq(CREATEADMINCONTRACT, { input })
                 alert('Successfully saved')
-                revalidateContract({_id: props.contract._id})
+                const callbacks = revalidateContract({_id: props.contract._id})
+                const { revalidate } = callbacks
+                async () => {
+                try {
+                    await revalidate()
+                    await timeout(1000)
+                    // @ts-ignore
+                    if (callbacks.hasOwnProperty('callback')) callbacks.callback()
+                } catch {
+                    alert('An error occurred while update caching, please save it again')
+                }
+                }
                 if (status === 'Approved') setApprovedDate(new Date().toLocaleDateString())
             } catch (error) {
                 return alert('Please check your internet connection then try again')

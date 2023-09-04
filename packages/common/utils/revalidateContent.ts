@@ -32,6 +32,7 @@ export const revalidateContract = (
 ) => {
   const paths = {
     admin: [
+      '/contracts',
       `/contracts/${contract._id}`
     ]
   }
