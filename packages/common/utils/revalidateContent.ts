@@ -27,6 +27,18 @@ export const revalidateProduct = (
   return revalidateCrossPaths(paths)
 }
 
+export const revalidateContract = (
+  contract: { _id: string }
+) => {
+  const paths = {
+    admin: [
+      `/contracts/${contract._id}`
+    ]
+  }
+
+  return revalidateCrossPaths(paths)
+}
+
 export const revalidateInvestment = (
   product: { _id: string; categoryIds: (string | undefined)[] },
   action: ChangeAction

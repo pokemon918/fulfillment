@@ -133,7 +133,6 @@ const getProduct = async (id:any) => {
         smartContractData.portOfArrivalSelect,
       departureDate: smartContractData.departureDate,
       offerPrice: Number(smartContractData.offerPrice),
-      unit: 'kg',
       quantity: Number(smartContractData.quantity),
       downPayment: smartContractData.downPayment,
       cashAgainstDocuments: smartContractData.cashAgainstDocuments,
@@ -144,6 +143,8 @@ const getProduct = async (id:any) => {
       measure,
       attachment: attachFileUrl && attachFileUrl.data[0],
       certifications: certificationData,
+      status: "Pending",
+      expirationDate: new Date().toISOString().split('T')[0],
     }
     //console.log(inputData)
 
