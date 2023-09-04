@@ -5,9 +5,10 @@ import { useSameState, useUser } from '../hooks'
 import { MenuIcon } from '../icons'
 import { theme } from '../theme'
 import { Button, Container, IconButton } from '../ui'
-import { makeStyles, mergeProps } from '../utils'
+import { deleteCookie, makeStyles, mergeProps } from '../utils'
 import logoLight from '../assets/images/logo-light.svg'
 import logoDark from '../assets/images/logo-dark.svg'
+import { APP_TYPE } from '../constants'
 
 interface NavbarProps extends HTMLAttributes<HTMLDivElement> {
   mode?: 'light' | 'dark'
@@ -40,6 +41,12 @@ const staticLinks: {
   ]
 
 export const Navbar: FC<NavbarProps> = (originalProps) => {
+
+  const logout = () => {
+    deleteCookie(`${APP_TYPE}_token`)
+    window.localStorage.removeItem(`${APP_TYPE}_user`)
+    window.location.href = '/'
+  }
 
   if (process.env.NEXT_PUBLIC_APP_TYPE === "admin") return (<></>)
 
@@ -138,6 +145,11 @@ export const Navbar: FC<NavbarProps> = (originalProps) => {
   Investments
    </Link>
             ) : null}
+            
+  <a css={styles.userProfile} onClick={logout}>
+  LogOut
+   </a>
+            
          
            </div>
          </div>
@@ -291,6 +303,7 @@ const useStyles = makeStyles(({ mode }: NavbarProps) => ({
   userProfile: {
     color: mode === 'light' ? '#000' : '#fff',
     textDecoration: 'none',
+    cursor:'pointer'
   },
   deskLinks: {
     flexShrink: 0,
