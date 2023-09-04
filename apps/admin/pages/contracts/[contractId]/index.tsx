@@ -35,7 +35,7 @@ interface ContractPageProps {
         paymentMethod: string
         fundedDate: Date
         investors: number
-        status: 'pending' | 'Publish' | 'Not funded'
+        status: 'Pending' | 'Expired' | 'Rejected' | 'Funded' | 'Not Funded' | 'Approved'
         createdAt: Date
     }
 }
@@ -424,9 +424,12 @@ const ContractPage = (props: ContractPageProps) => {
                                           className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input"
                                           name='status'
                                           defaultValue={props.contract.status}>
-                                            <option value="pending">pending</option>
-                                            <option value="Publish">publish</option>
-                                            <option value="Not funded">Not funded</option>
+                                            {/* 'Pending' | 'Expired' | 'Rejected' | 'Funded' | 'Not Funded' | 'Approved' */}
+                                            <option value="Pending">Pending</option>
+                                            <option value="Expired">Expired</option>
+                                            <option value="Rejected">Rejected</option>
+                                            <option value="Not Funded">Not Funded</option>
+                                            <option value="Approved">Approved</option>
                                         </select>
                                     </div>
 

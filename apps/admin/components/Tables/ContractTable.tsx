@@ -75,13 +75,17 @@ const ContractTable = (props: BasicContractProps) => {
                   <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                     <p
                       className={`inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium ${
-                        contract.status === "Publish"
-                          ? "text-success bg-success"
-                          : contract.status === "Not funded"
-                          ? "text-danger bg-danger"
-                          // : "text-danger bg-danger"
-                          // : "text-danger bg-danger"
-                          : "text-warning bg-warning"
+                        contract.status === "Approved"
+                          ? "text-success bg-success" // green
+                          : contract.status === "Rejected"
+                          ? "text-danger bg-danger" // red
+                          : contract.status === "Pending"
+                          ? "text-warning bg-warning" // orange
+                          : contract.status === "Expired"
+                          ? "text-skyblue bg-skyblue" // sky blue
+                          : contract.status === "Funded"
+                          ? "text-blue bg-blue" // blue
+                          : "text-purple bg-purple" // purple
                       }`}
                     >
                       {contract.status}
