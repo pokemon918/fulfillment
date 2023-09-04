@@ -49,6 +49,6 @@ export const getStaticProps: GetStaticProps<PageInvestmentProps> = async () => {
     props: {
        contracts : contracts?.filter((v:any) => v.status === 'Approved')
     },
-    revalidate: 60
+    revalidate: 1
   }
 }
