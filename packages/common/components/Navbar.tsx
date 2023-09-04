@@ -42,11 +42,6 @@ const staticLinks: {
 
 export const Navbar: FC<NavbarProps> = (originalProps) => {
 
-  const logout = () => {
-    deleteCookie(`${APP_TYPE}_token`)
-    window.localStorage.removeItem(`${APP_TYPE}_user`)
-    window.location.href = '/'
-  }
 
   if (process.env.NEXT_PUBLIC_APP_TYPE === "admin") return (<></>)
 
@@ -92,7 +87,13 @@ export const Navbar: FC<NavbarProps> = (originalProps) => {
 
   const logo = mode === 'light' ? logoLight : logoDark
 
-  const Link = user?.role === 'admin' ? 'a' : NextLink
+  const Link = user?.role === 'admin' ? 'a' : NextLink;
+  
+  const logout = () => {
+    deleteCookie(`${APP_TYPE}_token`)
+    window.localStorage.removeItem(`${APP_TYPE}_user`)
+    window.location.href = '/'
+  }
 
   return (
     <div css={styles.root} {...divProps} data-open={open}>
@@ -147,7 +148,7 @@ export const Navbar: FC<NavbarProps> = (originalProps) => {
             ) : null}
             
   <a css={styles.userProfile} onClick={logout}>
-  LogOut
+  Log Out
    </a>
             
          
