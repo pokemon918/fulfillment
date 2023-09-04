@@ -548,7 +548,7 @@ export const Signup: FC<SignupProps> = ({
                         }
                       />
 
-                      <Radio
+                      {/* <Radio
                        style={{ marginRight: 16 }}
                         label="Supplier"
                         name="role"
@@ -559,7 +559,7 @@ export const Signup: FC<SignupProps> = ({
                         onChange={(e) =>
                           handleRoleChange(e.target.value as SignUpInfo['role'])
                         }
-                      />
+                      /> */}
                       <Radio
                         label="Investor"
                         name="role"
