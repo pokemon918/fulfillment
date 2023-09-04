@@ -1,6 +1,6 @@
 import React from 'react'
 import { InvestmentDetailsPage, gql, graphqlReq } from 'common'
-import { GetStaticPaths, GetStaticProps } from 'next';
+import { GetServerSideProps, GetStaticPaths, GetStaticProps } from 'next';
 
 
 function InvestmentDetails(props: InvestmentDetailsProps) {
@@ -54,7 +54,7 @@ const GET_DATA = gql`
   }
 `
 
-export const getStaticProps: GetStaticProps<InvestmentDetailsProps> = async (ctx) => {
+export const getServerSideProps: GetServerSideProps<InvestmentDetailsProps> = async (ctx) => {
   const investmentId = ctx.params?.investmentId as string
 
   const { contract } = await graphqlReq(GET_DATA, { investmentId })
@@ -62,7 +62,6 @@ export const getStaticProps: GetStaticProps<InvestmentDetailsProps> = async (ctx
   if (!contract) {
     return {
       notFound: true,
-      revalidate: 60,
     }
   }
 
@@ -70,7 +69,6 @@ export const getStaticProps: GetStaticProps<InvestmentDetailsProps> = async (ctx
     props: {
       contract : {...contract, departureDate: formatDate(contract.departureDate)}
     },
-    revalidate: 60,
   }
 }
 
