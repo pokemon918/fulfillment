@@ -1,6 +1,6 @@
 import React from 'react';
 import { InvestmentPage, gql, graphqlReq } from 'common'
-import { GetStaticProps } from 'next';
+import { GetServerSideProps, GetStaticProps } from 'next';
 
 
 function InvestmentsAll(props: PageInvestmentProps) {
@@ -42,13 +42,13 @@ const getContracs = gql`
   
   `;
 
-export const getStaticProps: GetStaticProps<PageInvestmentProps> = async () => {
+export const getServerSideProps: GetServerSideProps<PageInvestmentProps> = async () => {
   const {contracts} = await graphqlReq(getContracs)
 
   return {
     props: {
        contracts : contracts?.filter((v:any) => v.status === 'Approved')
     },
-    revalidate: 1
+    
   }
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { ContractsPage, gql, graphqlReq } from 'common'
-import { GetStaticProps } from 'next';
+import { GetServerSideProps, GetStaticProps } from 'next';
 
 
 function Contracts(props: PageContractsProps) {
@@ -39,7 +39,7 @@ const getContracs = gql`
   
   `;
 
-export const getStaticProps: GetStaticProps<PageContractsProps> = async () => {
+export const getServerSideProps: GetServerSideProps<PageContractsProps> = async () => {
   const {contracts} = await graphqlReq(getContracs)
 
   return {
