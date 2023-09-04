@@ -13,11 +13,11 @@ import { ProductVertical } from './ProductVertical'
 import {useRouter} from "next/router"
 
 interface ContractsPageProps {
-  categorys: BaseCategory[]
+  contracts: any
 }
 
 export function ContractsPage(props: ContractsPageProps) {
-  const { categorys } = props
+  const { contracts } = props
 
   const user = useUser()
 const router = useRouter();
@@ -77,17 +77,20 @@ padding: '10px 25px'}}>Completed</button>
 
 
                {showStep === 1 ? (
-                <ContractItem showBottomBorder={true} showButton={false} showPrograss={false} prograss={30} onClick={() => router.push('/contracts/250')} />
+                contracts.map((v: any,index: number) => (
+                  <ContractItem key={index} data={v} showBottomBorder={contracts.length == (index +1) ? false : true} showButton={false} showPrograss={false} prograss={30} onClick={() => router.push('/contracts/'+v._id)} />
+
+                ))
                ) : showStep === 2 ? (
                 <>
-                <ContractItem showBottomBorder={true} showButton={true} showPrograss={true} prograss={100}  onClick={() => router.push({pathname:'/contracts/250',query:{type:'prograss'}})} />
-                <ContractItem showBottomBorder={false} showButton={true} showPrograss={true} prograss={100}  onClick={() => router.push({pathname:'/contracts/250',query:{type:'prograss'}})} />
+                {/* <ContractItem showBottomBorder={true} showButton={true} showPrograss={true} prograss={100}  onClick={() => router.push({pathname:'/contracts/250',query:{type:'prograss'}})} />
+                <ContractItem showBottomBorder={false} showButton={true} showPrograss={true} prograss={100}  onClick={() => router.push({pathname:'/contracts/250',query:{type:'prograss'}})} /> */}
                 </>
                ) : showStep === 3 ? (
               <>
+                {/* <ContractItem showBottomBorder={true} showButton={true} showPrograss={false} prograss={100} onClick={() => router.push({pathname:'/contracts/250',query:{type:'completed'}})} />
                 <ContractItem showBottomBorder={true} showButton={true} showPrograss={false} prograss={100} onClick={() => router.push({pathname:'/contracts/250',query:{type:'completed'}})} />
-                <ContractItem showBottomBorder={true} showButton={true} showPrograss={false} prograss={100} onClick={() => router.push({pathname:'/contracts/250',query:{type:'completed'}})} />
-                <ContractItem showBottomBorder={false} showButton={true} showPrograss={false} prograss={100} onClick={() => router.push({pathname:'/contracts/250',query:{type:'completed'}})} />
+                <ContractItem showBottomBorder={false} showButton={true} showPrograss={false} prograss={100} onClick={() => router.push({pathname:'/contracts/250',query:{type:'completed'}})} /> */}
               </>
                ) : null}
 

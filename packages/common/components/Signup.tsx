@@ -549,11 +549,23 @@ export const Signup: FC<SignupProps> = ({
                       />
 
                       <Radio
+                       style={{ marginRight: 16 }}
                         label="Supplier"
                         name="role"
                         control={control}
                         type="radio"
                         value="seller"
+                        required
+                        onChange={(e) =>
+                          handleRoleChange(e.target.value as SignUpInfo['role'])
+                        }
+                      />
+                      <Radio
+                        label="Investor"
+                        name="role"
+                        control={control}
+                        type="radio"
+                        value="investor"
                         required
                         onChange={(e) =>
                           handleRoleChange(e.target.value as SignUpInfo['role'])

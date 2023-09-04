@@ -10,6 +10,7 @@ type Props = {
   onClick: () => void
   showDuration?: boolean
   showinvestNowBtn?: boolean
+  data?: any
 }
 
 function ContractItem({
@@ -20,8 +21,13 @@ function ContractItem({
   onClick,
   showDuration = false,
   showinvestNowBtn = false,
+  data
 }: Props) {
-  const router = useRouter()
+  const router = useRouter();
+  let totalAmount = data?.quantity * data?.offerPrice;
+  totalAmount = data?.measure ? totalAmount + 200 : totalAmount;
+  const investedAmount = data?.investedAmount ? data?.investedAmount : 0;
+  const mainPrograss = (totalAmount / 100) * investedAmount;
   return (
     <>
       <div
@@ -39,7 +45,7 @@ function ContractItem({
           <div css={{ width: '180px', height: '180px', overflow: 'hidden' }}>
             <img
               css={{ width: '100%', objectFit: 'cover', height: '100%' }}
-              src="https://api.trumarket.tech/files/b734deb018f4bb11d0150db829d5a206d68c30db15b825264621126c4c92144fc9c1dcd0b075e222958589fc52f04867.jpg"
+              src={data?.product.thumbnail}
               alt=""
             />
           </div>
@@ -47,13 +53,13 @@ function ContractItem({
           <div css={{ marginLeft: '55px' }}>
             <p css={{ fontSize: '12px', fontWeight: '400', color: '#101010' }}>
               Product name:{' '}
-              <span css={{ fontWeight: '600' }}>Fresh Blueberries</span>
+              <span css={{ fontWeight: '600' }}>{data?.product.name.en}</span>
             </p>
             <p css={{ fontSize: '12px', fontWeight: '400', color: '#101010' }}>
-              Origin: <span css={{ fontWeight: '600' }}>Lima</span>
+              Origin: <span css={{ fontWeight: '600' }}>{data?.portOfArrival.split(',')[0]}</span>
             </p>
             <p css={{ fontSize: '12px', fontWeight: '400', color: '#101010' }}>
-              Destination: <span css={{ fontWeight: '600' }}>Peru</span>
+              Destination: <span css={{ fontWeight: '600' }}>{data?.portOfArrival.split(',')[1]}</span>
             </p>
 
             {showPrograss && (
@@ -159,7 +165,7 @@ function ContractItem({
                 marginLeft: '8px',
               }}
             >
-              {prograss}% completed
+              {mainPrograss}% completed
             </span>
           </p>
           <div
@@ -176,7 +182,7 @@ function ContractItem({
               css={{
                 background: '#B0DA54',
                 position: 'absolute',
-                width: prograss + '%',
+                width: mainPrograss + '%',
                 height: '8px',
                 borderRadius: '100px',
               }}
@@ -190,10 +196,10 @@ function ContractItem({
               marginBottom: '5px',
             }}
           >
-            Amount of contract: 10,000 USD
+            Amount of contract: {totalAmount} USD
           </p>
           <p css={{ fontSize: '15px', fontWeight: '400', color: '#101010' }}>
-            Currently funded: 10,000 USD
+            Currently funded: {investedAmount} USD
           </p>
 
           {showDuration && (
@@ -209,7 +215,7 @@ function ContractItem({
               <p
                 css={{ fontSize: '15px', fontWeight: '400', color: '#101010' }}
               >
-                Duration: 189 days
+                Duration: {data?.duration} weeks
               </p>
 
               <p
@@ -221,7 +227,7 @@ function ContractItem({
                   paddingLeft: '20px',
                 }}
               >
-                Profit: 9.4%
+                Profit: {data?.return}%
               </p>
 
               <p
@@ -233,7 +239,7 @@ function ContractItem({
                   paddingLeft: '20px',
                 }}
               >
-                Risk: D
+                Risk: {data?.risk}
               </p>
             </div>
           )}

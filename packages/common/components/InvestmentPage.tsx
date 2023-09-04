@@ -13,11 +13,11 @@ import { ProductVertical } from './ProductVertical'
 import {useRouter} from "next/router"
 
 interface InvestmentPageProps {
-  categorys: BaseCategory[]
+  contracts: any
 }
 
 export function InvestmentPage(props: InvestmentPageProps) {
-  const { categorys } = props
+  const { contracts } = props
 
   const user = useUser()
 const router = useRouter();
@@ -77,17 +77,20 @@ paddingBottom: '5px'}}>My Completed Investments</button>
 
 
                {showStep === 1 ? (
-                <ContractItem showBottomBorder={true} showButton={true} showPrograss={false} prograss={30} onClick={() => router.push('/all-investment/250')} showDuration={true} showinvestNowBtn={true} />
+                 contracts.map((v: any,index: number) => (
+                  <ContractItem key={index} data={v} showBottomBorder={contracts.length == (index +1) ? false : true} showButton={true} showPrograss={false} prograss={30} onClick={() => router.push('/all-investment/'+v._id)} showDuration={true} showinvestNowBtn={true} />
+
+                ))
                ) : showStep === 2 ? (
                 <>
-                <ContractItem showBottomBorder={true} showButton={true} showPrograss={true} prograss={100}  onClick={() => router.push({pathname:'/all-investment/250',query:{type:'prograss'}})} showDuration={true} />
-                <ContractItem showBottomBorder={false} showButton={true} showPrograss={true} prograss={100}  onClick={() => router.push({pathname:'/all-investment/250',query:{type:'prograss'}})} showDuration={true} />
+                {/* <ContractItem showBottomBorder={true} showButton={true} showPrograss={true} prograss={100}  onClick={() => router.push({pathname:'/all-investment/250',query:{type:'prograss'}})} showDuration={true} />
+                <ContractItem showBottomBorder={false} showButton={true} showPrograss={true} prograss={100}  onClick={() => router.push({pathname:'/all-investment/250',query:{type:'prograss'}})} showDuration={true} /> */}
                 </>
                ) : showStep === 3 ? (
               <>
+                {/* <ContractItem showBottomBorder={true} showButton={true} showPrograss={false} prograss={100} onClick={() => router.push({pathname:'/all-investment/250',query:{type:'completed'}})} showDuration={true} />
                 <ContractItem showBottomBorder={true} showButton={true} showPrograss={false} prograss={100} onClick={() => router.push({pathname:'/all-investment/250',query:{type:'completed'}})} showDuration={true} />
-                <ContractItem showBottomBorder={true} showButton={true} showPrograss={false} prograss={100} onClick={() => router.push({pathname:'/all-investment/250',query:{type:'completed'}})} showDuration={true} />
-                <ContractItem showBottomBorder={false} showButton={true} showPrograss={false} prograss={100} onClick={() => router.push({pathname:'/all-investment/250',query:{type:'completed'}})} showDuration={true} />
+                <ContractItem showBottomBorder={false} showButton={true} showPrograss={false} prograss={100} onClick={() => router.push({pathname:'/all-investment/250',query:{type:'completed'}})} showDuration={true} /> */}
               </>
                ) : null}
 
