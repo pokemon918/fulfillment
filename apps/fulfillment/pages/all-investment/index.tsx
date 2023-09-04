@@ -22,7 +22,7 @@ const getContracs = gql`
     contracts(descCreatedAt: true) {
       _id
       productId
-      portOfArrival
+      portOfLoading
       offerPrice
       quantity
       measure

@@ -56,10 +56,10 @@ function ContractItem({
               <span css={{ fontWeight: '600' }}>{data?.product.name.en}</span>
             </p>
             <p css={{ fontSize: '12px', fontWeight: '400', color: '#101010' }}>
-              Origin: <span css={{ fontWeight: '600' }}>{data?.portOfArrival.split(',')[0]}</span>
+              Origin: <span css={{ fontWeight: '600' }}>{data?.portOfLoading.split(',')[0]}</span>
             </p>
             <p css={{ fontSize: '12px', fontWeight: '400', color: '#101010' }}>
-              Destination: <span css={{ fontWeight: '600' }}>{data?.portOfArrival.split(',')[1]}</span>
+              Destination: <span css={{ fontWeight: '600' }}>{data?.portOfLoading.split(',')[1]}</span>
             </p>
 
             {showPrograss && (

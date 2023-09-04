@@ -146,7 +146,7 @@ const router = useRouter();
                         color: '#101010',
                       }}
                     >
-                      Origin: <span css={{ fontWeight: '600' }}>{data?.portOfArrival.split(',')[0]}</span>
+                      Origin: <span css={{ fontWeight: '600' }}>{data?.portOfLoading.split(',')[0]}</span>
                     </p>
                     <p
                       css={{
@@ -155,7 +155,7 @@ const router = useRouter();
                         color: '#101010',
                       }}
                     >
-                      Destination: <span css={{ fontWeight: '600' }}>{data?.portOfArrival.split(',')[1]}</span>
+                      Destination: <span css={{ fontWeight: '600' }}>{data?.portOfLoading.split(',')[1]}</span>
                     </p>
                   </div>
                 </div>
