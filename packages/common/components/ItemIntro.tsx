@@ -313,36 +313,26 @@ margin: '10px 0 45px 0'}}>
             </p>
 
             <div css={styles.kgBoxes} >
-              <div css={styles.gradeBox}>
-                <p css={styles.subtitle}>Grade: No.1</p>
-                <div css={styles.gradeDetailContainer}>
-                  <img src={kgImg.src} style={{ marginRight: '5px' }} />
-                  <p
-                    style={{
-                      fontWeight: 'bold',
-                      fontSize: '16px',
-                      paddingTop: '5px',
-                    }}
-                  >
-                    $6/kg
-                  </p>
+            {
+                item.offerPrices.map((v: any,index: number) => (
+                  <div css={styles.gradeBox} key={index}>
+                  <p css={styles.subtitle}>{v.name}</p>
+                  <div css={styles.gradeDetailContainer}>
+                    <img src={kgImg.src} style={{ marginRight: '5px' }} />
+                    <p
+                      style={{
+                        fontWeight: 'bold',
+                        fontSize: '16px',
+                        paddingTop: '5px',
+                      }}
+                    >
+                      {v.value}
+                    </p>
+                  </div>
                 </div>
-              </div>
-              <div css={styles.catBox} >
-                <p css={styles.subtitle}>Cat1 - 2kg box</p>
-                <div css={styles.catDetailContainer}>
-                  <img src={kgImg.src} style={{ marginRight: '5px' }} />
-                  <p
-                    style={{
-                      fontWeight: 'bold',
-                      fontSize: '16px',
-                      paddingTop: '5px',
-                    }}
-                  >
-                    $6/kg
-                  </p>
-                </div>
-              </div>
+                ))
+              }
+              
             </div>
           </div>
 
@@ -492,6 +482,9 @@ const useStyles = makeStyles(({ item: { type } }: ItemIntroProps) => ({
     height: '100%',
     position: 'sticky',
     top: '80px',
+    [`@media (max-height: 860px)`]:{
+      top: '0px'
+    },
     [`@media (max-width: ${theme.widths.tablet})`]: {
       width: '100%',
       height: 'auto',
@@ -515,12 +508,18 @@ top: '10px'
     width: '100%',
     borderBottom: '1px solid rgba(217, 217, 217, 0.5)',
     padding: '20px',
+    [`@media (max-height: 760px)`]:{
+      padding: '5px'
+    },
   },
   specsContainer: {
     width: '100%',
     display: 'flex',
     borderBottom: '1px solid rgba(217, 217, 217, 0.5)',
     padding: '20px',
+    [`@media (max-height: 760px)`]:{
+      padding: '5px'
+    },
   },
   priceContainer: {
     width: '65%',
@@ -536,16 +535,22 @@ top: '10px'
     width: '100%',
     borderBottom: '1px solid rgba(217, 217, 217, 0.5)',
     padding: '20px',
+    [`@media (max-height: 760px)`]:{
+      padding: '5px'
+    },
   },
   kgBoxes: {
     width: '100%',
     display: 'flex',
+    flexWrap:'wrap',
+    gap:'20px',
+    [`@media (max-height: 760px)`]:{
+      gap: '5px'
+    },
   },
   gradeBox: {
-    width: '100%',
   },
   catBox: {
-    width: '100%',
   },
   flagHolder: {
     background: '#E9EBF0',

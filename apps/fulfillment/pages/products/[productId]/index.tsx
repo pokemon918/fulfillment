@@ -42,7 +42,12 @@ const ProductPage: FC<ProductPageProps> = (props) => {
   const [openQuote, setOpenQuote] = useState(false)
   const [containerRef, inView] = useInView()
 
-  const [showSmartContract, setShowSmartContract] = useState(false)
+  const [showSmartContract, setShowSmartContract] = useState(false);
+  const [inViewState, setInViewState] = useState(true);
+
+  useEffect(() => {
+    setInViewState(inView)
+  },[inView])
 
   const styles = useStyles(props);
 
@@ -200,8 +205,8 @@ const ProductPage: FC<ProductPageProps> = (props) => {
           />
         </div>
       </NoSSR>
-      {!inView && !showSmartContract ? (
-        <QuoteSticky onClickGetQuote={() => setOpenQuote(true)} />
+      {!inViewState && !showSmartContract ? (
+        <QuoteSticky setInViewState={() => setInViewState(true)} onClickGetQuote={() => setOpenQuote(true)} />
       ) : null}
     </div>
        <div
