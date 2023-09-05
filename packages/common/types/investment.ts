@@ -5,6 +5,7 @@ export interface BaseInvestment {
   country: string;
   goalAmount: number;
   paidAmount: number;
+  description: string;
 }
 
 export interface DetailedInvestment extends BaseInvestment {
