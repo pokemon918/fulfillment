@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form'
-import { Button, Select, Input, Checkbox, CreatableSelect, Dialog } from '../../ui'
+import { Button, Select, Input, Checkbox, CreatableSelectCompany as CreatableSelect, Dialog } from '../../ui'
 import { gql } from 'graphql-request'
 import { FC, useRef, useState, useEffect } from 'react'
 import { CountrySelect } from '../CountrySelect'
@@ -15,7 +15,7 @@ import { NoSSR } from "../NoSSR";
 import { CloseIcon } from "../../icons";
 import { ProductForm, ProductFormValue } from "../product-form/ProductForm";
 import { theme } from "../../theme";
-import { SharedProvider, SharedContext } from "../../contexts";
+import { SharedProvider } from "../../contexts";
 
 const GET_PRODUCTS = gql`
   {
