@@ -80,15 +80,15 @@ const GET_CONTRACTS = gql`
   }
 `
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  const { contracts } = await graphqlReq(GET_CONTRACTS)
+// export const getStaticPaths: GetStaticPaths = async () => {
+//   const { contracts } = await graphqlReq(GET_CONTRACTS)
 
-  const paths = contracts.map((product: any) => ({
-    params: { investmentId: product._id },
-  }))
+//   const paths = contracts.map((product: any) => ({
+//     params: { investmentId: product._id },
+//   }))
 
-  return {
-    paths: paths,
-    fallback: 'blocking',
-  }
-}
+//   return {
+//     paths: paths,
+//     fallback: 'blocking',
+//   }
+// }
