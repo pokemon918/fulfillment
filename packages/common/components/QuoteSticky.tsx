@@ -7,7 +7,7 @@ import { CloseIcon } from '../icons'
 
 interface QuoteStickyProps {
   onClickGetQuote: () => void
-  setInViewState: () => void
+  setInViewState?: () => void
 }
 
 export const QuoteSticky: FC<QuoteStickyProps> = (props) => {
