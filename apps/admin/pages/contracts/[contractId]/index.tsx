@@ -110,7 +110,7 @@ const ContractPage = (props: ContractPageProps) => {
                         alert('An error occurred while update caching, please save it again')
                     }
                 })().then(() => {
-                    if (status === 'Approved') setApprovedDate(new Date().toLocaleDateString())
+                    window.location.href = '/contracts'
                 })
             } catch (error) {
                 return alert('Please check your internet connection then try again')

@@ -6,7 +6,7 @@ interface basicCompanyInfo {
   name: string,
   country: string,
   website: string,
-  status: string
+  phone: string
 }
 
 const DELETE_COMPANY = gql`
@@ -67,7 +67,7 @@ const CompanyTable = (props: BasicCompanyProps) => {
                   Website
                 </th>
                 <th className="min-w-[20px] py-4 px-4 font-medium text-black dark:text-white">
-                  Status
+                  Phone Number
                 </th>
                 <th className="py-4 px-4 font-medium text-black dark:text-white">
                   Actions
@@ -93,17 +93,8 @@ const CompanyTable = (props: BasicCompanyProps) => {
                     </a>
                   </td>
                   <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                    <p
-                      className={`inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium ${
-                        company.status === "approved"
-                          ? "text-success bg-success"
-                          // : packageItem.status === "Unpaid"
-                          // ? "text-danger bg-danger"
-                          : "text-danger bg-danger"
-                          // : "text-warning bg-warning"
-                      }`}
-                    >
-                      {company.status}
+                    <p className="text-black dark:text-white">
+                      {company.phone}
                     </p>
                   </td>
                   <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">

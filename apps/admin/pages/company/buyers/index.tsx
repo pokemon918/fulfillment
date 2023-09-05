@@ -30,7 +30,7 @@ const GET_DATA = gql`
       }
       country
       website
-      status
+      phone
     }
   }
 `
