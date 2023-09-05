@@ -41,10 +41,12 @@ export const KeywordsSelect: FC<KeywordsSelectProps> = (props) => {
       onCreateOption={async ({ newOption, optionsRef, onChange }) => {
         const optionTempId = genId()
 
-        optionsRef.current = [
-          ...optionsRef.current,
-          { label: newOption, value: optionTempId },
-        ]
+        if(optionsRef){
+          optionsRef.current = [
+            ...optionsRef.current,
+            { label: newOption, value: optionTempId },
+          ]
+        }
 
         onChange([...getValues(), optionTempId])
 
