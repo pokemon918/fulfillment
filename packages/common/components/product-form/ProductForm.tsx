@@ -1,7 +1,7 @@
 import { useForm, useFieldArray } from 'react-hook-form'
 import { TableForm, Paper, Button, StyledLink, Select, Input, Checkbox } from '../../ui'
 import { gql } from 'graphql-request'
-import { FC, useRef, useState } from 'react'
+import { FC, useRef, useState, MutableRefObject } from 'react'
 import { CountrySelect } from '../CountrySelect'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
@@ -110,11 +110,17 @@ export interface ProductFormValue {
 interface ProductFormProps {
   defaultValues: ProductFormValue
   actionType: 'create' | 'update'
+  isDialog?: boolean
+  dialogAction?: () => void
+  successId?: MutableRefObject<string>
 }
 
 export const ProductForm: FC<ProductFormProps> = ({
   defaultValues,
   actionType,
+  isDialog,
+  dialogAction,
+  successId,
 }) => {
   const productId = defaultValues._id
 
@@ -209,8 +215,6 @@ export const ProductForm: FC<ProductFormProps> = ({
       certifications: product.certifications.map((f) => f.src),
     }
 
-    console.log(input)
-
     setSaving(true)
     setSuccess(false)
 
@@ -220,6 +224,7 @@ export const ProductForm: FC<ProductFormProps> = ({
     })
       .then(({ product: { _id, categoryId } }) => {
         setSuccess({ _id })
+        if(successId) successId.current = _id;
         categoryIdRef.append(categoryId)
       })
       .catch(() => {
@@ -498,6 +503,7 @@ export const ProductForm: FC<ProductFormProps> = ({
                     },
                     actionType
                   )}
+                  callback={isDialog? dialogAction: () => {}}
                 />
               )}
             </div>
