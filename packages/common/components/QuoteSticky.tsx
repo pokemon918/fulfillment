@@ -3,16 +3,18 @@ import { useSameState } from '../hooks'
 import { theme } from '../theme'
 import { Button } from '../ui'
 import { makeStyles } from '../utils'
+import { CloseIcon } from '../icons'
 
 interface QuoteStickyProps {
   onClickGetQuote: () => void
+  setInViewState: () => void
 }
 
 export const QuoteSticky: FC<QuoteStickyProps> = (props) => {
   const styles = useStyles(props)
   const [show, setShow] = useSameState(true)
 
-  const { onClickGetQuote } = props
+  const { onClickGetQuote,setInViewState } = props
 
   // useEffect(() => {
   //   const updateShow = () => setShow(window.scrollY > 500)
@@ -29,6 +31,9 @@ export const QuoteSticky: FC<QuoteStickyProps> = (props) => {
         transform: show ? 'translateY(0)' : 'translateY(calc(100% + 35px))',
       }}
     >
+      <button css={styles.dialogBtn} onClick={setInViewState}>
+        <CloseIcon />
+      </button>
       <h2 css={styles.heading}>
         Are you interested in this market? Get a quote now.
       </h2>
@@ -41,6 +46,16 @@ export const QuoteSticky: FC<QuoteStickyProps> = (props) => {
 }
 
 const useStyles = makeStyles(({}: QuoteStickyProps) => ({
+  dialogBtn:{
+    position: 'absolute',
+    left: 8,
+    top: 6,
+    display: 'inline-flex',
+    border: 'none',
+    padding: 6,
+    background: 'transparent',
+    cursor: 'pointer',
+  },
   root: {
     background: '#b1da51',
     color: '#333',
