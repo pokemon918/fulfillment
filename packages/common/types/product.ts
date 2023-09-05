@@ -7,6 +7,7 @@ export interface BaseProduct {
   categoryId: string
   availableSpecs: string
   isSustainable: boolean
+  description: string
 }
 
 export interface DetailedProduct extends BaseProduct {
