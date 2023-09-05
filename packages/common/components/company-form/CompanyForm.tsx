@@ -213,7 +213,7 @@ export const CompanyForm: FC<CompanyFormProps> = ({
     graphqlReq(actionType === 'update' ? UPDATE_COMPANY : CREATE_COMPANY, {
       input
     })
-      .then((_id) => {
+      .then(({ company: { _id }}) => {
         alert(`Successfully ` + actionType + `d`)
         setSaving(false)
         const callbacks = revalidateCompany(
@@ -222,20 +222,25 @@ export const CompanyForm: FC<CompanyFormProps> = ({
           },
           actionType
         )
-        const { revalidate } = callbacks;
+        const { paths, revalidate } = callbacks;
+        console.log(paths);
+        console.log('here');
         (async () => {
           try {
+            console.log('here1');
             await revalidate()
+            console.log('here2');
             await timeout(1000)
+            console.log('here3');
           } catch {
             alert('An error occurred while update caching, please save it again')
           }
-        })()
+        })().then(() => {
         if (typeOfCompany === "Buyer") {
           window.location.href = '/company/buyers'
         } else {
           window.location.href = '/company/suppliers'
-        }
+        }})
       })
       .catch(() => {
         alert('an error occur please try again')

@@ -109,8 +109,9 @@ const ContractPage = (props: ContractPageProps) => {
                     } catch {
                         alert('An error occurred while update caching, please save it again')
                     }
-                })()
-                if (status === 'Approved') setApprovedDate(new Date().toLocaleDateString())
+                })().then(() => {
+                    if (status === 'Approved') setApprovedDate(new Date().toLocaleDateString())
+                })
             } catch (error) {
                 return alert('Please check your internet connection then try again')
             } finally {

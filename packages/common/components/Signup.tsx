@@ -261,20 +261,20 @@ export const Signup: FC<SignupProps> = ({
         } catch {
           alert('An error occurred while update caching, please save it again')
         }
-      })()
-
-      if (APP_TYPE !== 'admin') {
-        const YEAR = 1000 * 60 * 60 * 24 * 365
-
-        const expireAt = new Date(Date.now() + YEAR)
-
-        setCookie(`${APP_TYPE}_token`, token, expireAt)
-        localStorage.setItem(`${APP_TYPE}_user`, JSON.stringify(user))
-
-        window.location.href = '/'
-      } else {
-        return alert('successfully created')
-      }
+      })().then(() => {
+        if (APP_TYPE !== 'admin') {
+          const YEAR = 1000 * 60 * 60 * 24 * 365
+  
+          const expireAt = new Date(Date.now() + YEAR)
+  
+          setCookie(`${APP_TYPE}_token`, token, expireAt)
+          localStorage.setItem(`${APP_TYPE}_user`, JSON.stringify(user))
+  
+          window.location.href = '/'
+        } else {
+          return alert('successfully created')
+        }
+      })      
     } catch (e) {
       if (isGqlErrStatus(e, 409)) {
         alert('the account is already registered, please login')
