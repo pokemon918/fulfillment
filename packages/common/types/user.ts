@@ -11,7 +11,6 @@ export interface BaseUser extends AuthUser {
 export interface DetailedUser extends BaseUser {
   companyName: string
   country: string
-  email: string
   phone: string
   commercialInfo?: { [k: string]: any }
 }

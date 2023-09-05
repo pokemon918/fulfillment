@@ -58,7 +58,7 @@ const useHomeBannerStyles = makeStyles(() => ({
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
-    height: 65vh;
+    
     min-height: 620px;
     display: flex;
     flex-direction: column;
@@ -66,9 +66,10 @@ const useHomeBannerStyles = makeStyles(() => ({
   content: {
     display: 'flex',
     flexDirection: 'column',
+    maxWidth: 'unset',
     width: '100%',
     flexGrow: 1,
-    padding: '0 0 0 96px',
+    padding: '55px 0 165px 96px',
     [`@media (max-width: ${theme.widths.tablet})`]: {
       padding: 0,
     },
@@ -117,7 +118,7 @@ const useHomeBannerStyles = makeStyles(() => ({
   heading2: {
     width: '100%',
     fontSize: '48px',
-    fontWeight: 300,
+    fontWeight: 200,
     marginLeft: 15,
     [`@media (max-width: ${theme.widths.tablet})`]: {
       fontSize: 38,
@@ -130,8 +131,8 @@ const useHomeBannerStyles = makeStyles(() => ({
   desc: {
     width: '100%',
     maxWidth: 680,
-    marginBottom: 50,
-    fontWeight: 500,
+    marginBottom: 40,
+    fontWeight: 400,
     textAlign: 'left',
     fontSize: '18px',
     lineHeight: '28px',
@@ -144,9 +145,11 @@ const useHomeBannerStyles = makeStyles(() => ({
     width: 259,
     height: 59,
     fontSize: 18,
+    border: '3px solid #A8EFA8',
     ':hover': {
       backgroundColor: '#A8EFA8',
       color: '#000',
+      fontWeight: 600,
       border: 'none',
     },
     [`@media (max-width: ${theme.widths.tablet})`]: {

@@ -1,14 +1,21 @@
 import { useForm } from 'react-hook-form'
-import { Button, Select, Input, Checkbox, CreatableSelect } from '../../ui'
+import { Button, Select, Input, Checkbox, CreatableSelectCompany as CreatableSelect, Dialog } from '../../ui'
 import { gql } from 'graphql-request'
 import { FC, useRef, useState, useEffect } from 'react'
 import { CountrySelect } from '../CountrySelect'
 import { LangField, BuyerCompany, SupplierCompany } from '../../types'
 import {
   graphqlReq,
-  makeStyles
+  makeStyles,
+  revalidateCompany,
+  timeout
 } from '../../utils'
 import useHistoryRef from '../../hooks/useHistoryRef'
+import { NoSSR } from "../NoSSR";
+import { CloseIcon } from "../../icons";
+import { ProductForm, ProductFormValue } from "../product-form/ProductForm";
+import { theme } from "../../theme";
+import { SharedProvider } from "../../contexts";
 
 const GET_PRODUCTS = gql`
   {
@@ -69,6 +76,52 @@ export const CompanyForm: FC<CompanyFormProps> = ({
   defaultValues,
   actionType,
 }) => {
+
+  const [myName, setMyName] = useState('');
+
+  const updateName = (newValue: string) => {
+    setMyName(newValue);
+  };
+
+  const [id, setId] = useState('');
+
+  const updateId = (newValue: string) => {
+    setId(newValue);
+  };
+  
+  let productDefaultValues: ProductFormValue = {
+    name: { en: '', es: '' },
+    country: 'PE',
+    hsCode: { en: '', es: '' },
+    price: '',
+    bigTitle: { en: '', es: '' },
+    description: { en: '', es: '' },
+    offerPrices: [],
+    thumbnail: '',
+    gallery: [],
+    specs: [],
+    availableSpecs: { en: '', es: '' },
+    harvestingMonths: [],
+    traces: [
+      {
+        title: { en: 'Field', es: '' },
+        description: { en: '', es: '' },
+        gallery: [],
+      },
+      {
+        title: { en: 'Packing', es: '' },
+        description: { en: '', es: '' },
+        gallery: [],
+      },
+      {
+        title: { en: 'Final Product', es: '' },
+        description: { en: '', es: '' },
+        gallery: [],
+      },
+    ],
+    certifications: [],
+    isSustainable: false,
+  }
   const typeOfCompany = "POC" in defaultValues ? "Buyer" : "PIC" in defaultValues ? "Supplier" : ""
   if (!typeOfCompany) return (<></>)
   let companyTypeProperty = typeOfCompany === "Buyer" ? [{value:'Importer', label:'Importer'}, {value:'Wholesaler', label:'Wholesaler'}] : [{value:'Exporter', label: 'Exporter'}, {value:'Grower', label: 'Grower'}]
@@ -108,6 +161,8 @@ export const CompanyForm: FC<CompanyFormProps> = ({
   const styles = useStyles({})
   const [saving, setSaving] = useState(false)
   const [success, setSuccess] = useState<false | { _id: string }>(false)
+
+  const [openCreateNewProduct, setOpenCreateNewProduct] = useState(false)
 
   const { control, handleSubmit } = useForm({
     defaultValues: {
@@ -205,17 +260,35 @@ export const CompanyForm: FC<CompanyFormProps> = ({
       // @ts-ignore
       input._id = defaultValues._id
     }
-
-    console.log(input)
     
     setSaving(true)
 
     graphqlReq(actionType === 'update' ? UPDATE_COMPANY : CREATE_COMPANY, {
       input
     })
-      .then(() => {
-        alert(`Successfully ` + actionType + `ed`)
+      .then(({ company: { _id }}) => {
+        alert(`Successfully ` + actionType + `d`)
         setSaving(false)
+        const callbacks = revalidateCompany(
+          {
+            _id: _id
+          },
+          actionType
+        )
+        const { paths, revalidate } = callbacks;
+        (async () => {
+          try {
+            await revalidate()
+            await timeout(1000)
+          } catch {
+            alert('An error occurred while update caching, please save it again')
+          }
+        })().then(() => {
+        if (typeOfCompany === "Buyer") {
+          window.location.href = '/company/buyers'
+        } else {
+          window.location.href = '/company/suppliers'
+        }})
       })
       .catch(() => {
         alert('an error occur please try again')
@@ -224,250 +297,280 @@ export const CompanyForm: FC<CompanyFormProps> = ({
       .finally(() => setSaving(false))
   })
 
+  const successId = useRef('')
+  const options_ref = useRef([])
+
+  const onCreateOption = ({newOption, optionsRef, onChange, value}: any) => {
+    updateName(newOption)
+    setOpenCreateNewProduct(true);
+  }
+
+
   return (
-    <div>
-      <h1 style={{ fontSize: 25, marginBottom: '2rem' }}>
-        {actionType === 'create' ? 'Create' : 'Update'} Company
-      </h1>
+    <SharedProvider value={{myName, updateName, id, updateId}}>
+      <div>
+        <h1 style={{ fontSize: 25, marginBottom: '2rem' }}>
+          {actionType === 'create' ? 'Create' : 'Update'} Company
+        </h1>
 
-      <h2 style={{ marginBottom: '1rem' }}>
-        {finalStep ? 'Commercial' : 'Basic'} Information
-      </h2>
+        <h2 style={{ marginBottom: '1rem' }}>
+          {finalStep ? 'Commercial' : 'Basic'} Information
+        </h2>
 
-      <form onSubmit={onSubmit}>
-        {!finalStep && <>
-          <Input
-            style={{ marginBottom: '1.5rem' }}
-            label="Name"
-            placeholder="Name"
-            control={control}
-            name="name.en"
-            required
-          />
+        <form onSubmit={onSubmit}>
+          {!finalStep && <>
+            <Input
+              style={{ marginBottom: '1.5rem' }}
+              label="Name"
+              placeholder="Name"
+              control={control}
+              name="name.en"
+              required
+            />
 
-          <Input
-            style={{ marginBottom: '1.5rem' }}
-            label="TaxID"
-            placeholder="TaxID"
-            control={control}
-            name="TaxID"
-          />
+            <Input
+              style={{ marginBottom: '1.5rem' }}
+              label="TaxID"
+              placeholder="TaxID"
+              control={control}
+              name="TaxID"
+            />
 
-          <Select
-            style={{ marginBottom: '1.5rem' }}
-            label="Company Size"
-            placeholder="Number of employees"
-            name="size"
-            control={control}
-            options={[{value:'1-50', label:'1-50'}, {value:'50-100', label:'50-100'}, {value:'100-250', label: '100-250'}, {value:'more than 250', label: 'more than 250'}]}
-          />
+            <Select
+              style={{ marginBottom: '1.5rem' }}
+              label="Company Size"
+              placeholder="Number of employees"
+              name="size"
+              control={control}
+              options={[{value:'1-50', label:'1-50'}, {value:'50-100', label:'50-100'}, {value:'100-250', label: '100-250'}, {value:'more than 250', label: 'more than 250'}]}
+            />
 
-          <CountrySelect
-            style={{ marginBottom: '1.5rem' }}
-            control={control}
-            name="Country"
-          />
+            <CountrySelect
+              style={{ marginBottom: '1.5rem' }}
+              control={control}
+              name="Country"
+            />
 
-          {typeOfCompany === "Buyer" ? <Input
-            style={{ marginBottom: '1.5rem' }}
-            label="POC"
-            placeholder="POC"
-            control={control}
-            name="POC"
-            required
-          /> : <Input
-            style={{ marginBottom: '1.5rem' }}
-            label="PIC"
-            placeholder="PIC"
-            control={control}
-            name="PIC"
-            required
-          />}
+            {typeOfCompany === "Buyer" ? <Input
+              style={{ marginBottom: '1.5rem' }}
+              label="POC"
+              placeholder="POC"
+              control={control}
+              name="POC"
+              required
+            /> : <Input
+              style={{ marginBottom: '1.5rem' }}
+              label="PIC"
+              placeholder="PIC"
+              control={control}
+              name="PIC"
+              required
+            />}
 
-          <Input
-            style={{ marginBottom: '1.5em' }}
-            label="Phone"
-            type="tel"
-            name="Phone"
-            required
-            control={control}
-          />
-
-          <Input
-            style={{ marginBottom: '1.5rem' }}
-            label="Email"
-            type='email'
-            placeholder="Email"
-            control={control}
-            name="email"
-            required
-          />
-
-          <Input
-            style={{ marginBottom: '1.5rem' }}
-            label="Website"
-            placeholder="Website"
-            control={control}
-            name="website"
-          />
-
-          <Select
-            style={{ marginBottom: '1.5rem' }}
-            label="Type"
-            placeholder="Type"
-            name="type"
-            control={control}
-            options={companyTypeProperty}
-          />
-        </>}
-
-        {finalStep && <>
-          {typeOfCompany === "Buyer" ? <CreatableSelect
-            style={{ marginBottom: '1.5rem' }}
-            label="Interest Products"
-            placeholder="Interest Products"
-            name="interestProductIds"
-            control={control}
-            options={products}
-            isMulti
-          /> : <CreatableSelect
-            style={{ marginBottom: '1.5rem' }}
-            label="Products"
-            placeholder="Products"
-            name="productIds"
-            control={control}
-            options={products}
-            isMulti
-          />}
-
-          {typeOfCompany === "Buyer" ? <Input
-            style={{ marginBottom: '1.5rem' }}
-            label="Yearly Import Volume (tm/ctn) x product"
-            placeholder="Yearly Import Volume (tm/ctn) x product"
-            type='number'
-            control={control}
-            name="yearImportVolume"
-            required
-          /> : <Input
-            style={{ marginBottom: '1.5rem' }}
-            label="Yearly Volume (tm/ctn) x product"
-            placeholder="Yearly Volume (tm/ctn) x product"
-            type='number'
-            control={control}
-            name="yearExportVolume"
-            required
-          />}
-
-          {typeOfCompany === "Buyer" ? <Input
-            style={{ marginBottom: '1.5rem' }}
-            label="Yearly CFR Import (USD) x product"
-            placeholder="Yearly CFR Import (USD) x product"
-            type='number'
-            control={control}
-            name="yearImportCFR"
-            required
-          /> : <Input
-            style={{ marginBottom: '1.5rem' }}
-            label="Yearly FOB Export (USD) x product"
-            placeholder="Yearly FOB Export (USD) x product"
-            type='number'
-            control={control}
-            name="yearFOBExport"
-            required
-          />}
-
-          <Input
-            style={{ marginBottom: '1.5rem' }}
-            label="Preferred PaymentTerm"
-            placeholder="Preferred PaymentTerm"
-            control={control}
-            name="preferredPaymentTerm"
-          />
-          
-          {typeOfCompany === "Supplier" ? <Select
-            style={{ marginBottom: '1.5rem' }}
-            label="Seasonality"
-            placeholder="Seasonality"
-            name="seasonality"
-            control={control}
-            options={HARVESTING_MONTHS as any}
-            isMulti
-          /> : <></>}
-
-          {typeOfCompany === "Buyer" ? <Select
-            style={{ marginBottom: '1.5rem' }}
-            label="Fulfillment origins (continents)"
-            placeholder="Fulfillment origins (continents)"
-            control={control}
-            name="fulfillmentOrigin"
-            options={[{value:'South and Central America', label:'South and Central America'}, {value:'Africa', label:'Africa'}, {value:'Europe', label: 'Europe'}, {value:'Asia', label: 'Asia'}]}
-          /> : <Select
-            style={{ marginBottom: '1.5rem' }}
-            label="Main markets (continents)"
-            placeholder="Main markets (continents)"
-            control={control}
-            name="mainMarket"
-            options={[{value:'North America', label:'North America'}, {value:'Europe', label: 'Europe'}, {value:'Asia', label: 'Asia'}]}
-          />}
-          
-          <CreatableSelect
-            style={{ marginBottom: '1.5rem' }}
-            label="Certifications"
-            placeholder="Certifications"
-            name="certifications"
-            control={control}
-            options={certificatioinOptions}
-            isMulti
-          />
-
-          {typeOfCompany === "Buyer" ? <Input
-            style={{ marginBottom: '1.5rem' }}
-            label="Financial Score"
-            placeholder="Financial Score"
-            type='number'
-            control={control}
-            name="financialScore"
-          /> : <></>}
-
-          {typeOfCompany === "Supplier" ? <>
-            <Checkbox
-              style={{ display: 'flex', marginBottom: 16 }}
-              label="Owns Fields?"
-              name="ownField"
+            <Input
+              style={{ marginBottom: '1.5em' }}
+              label="Phone"
+              type="tel"
+              name="Phone"
+              required
               control={control}
             />
 
-            <Checkbox
-              style={{ display: 'flex', marginBottom: 16 }}
-              label="Owns Packing House?"
-              name="ownPackingHouse"
+            <Input
+              style={{ marginBottom: '1.5rem' }}
+              label="Email"
+              type='email'
+              placeholder="Email"
               control={control}
-            /> </> : <></>}
+              name="email"
+              required
+            />
 
-          {typeOfCompany === "Supplier" ? <Input
-            style={{ marginBottom: '1.5rem' }}
-            label="Industry references"
-            placeholder="Industry references"
-            control={control}
-            name="industryRef"
-          /> : <></>}
-        </>}
-        <div css={styles.footer}>
-          <div>
-            {finalStep && <Button onClick={() => setFinalStep(false)}>
-              Back
-            </Button>}
-          </div>
-          <div>
-            <Button type="submit" disabled={saving}>
-              {!finalStep ? 'Next' : actionType === 'create' ? 'Create' : 'Save'}
-            </Button>
-          </div>
-        </div>
-      </form>
+            <Input
+              style={{ marginBottom: '1.5rem' }}
+              label="Website"
+              placeholder="Website"
+              control={control}
+              name="website"
+            />
 
-      <div style={{ padding: 100 }} />
-    </div>
+            <Select
+              style={{ marginBottom: '1.5rem' }}
+              label="Type"
+              placeholder="Type"
+              name="type"
+              control={control}
+              options={companyTypeProperty}
+            />
+          </>}
+
+          {finalStep && <>
+            {typeOfCompany === "Buyer" ? <CreatableSelect
+              style={{ marginBottom: '1.5rem' }}
+              label="Interest Products"
+              placeholder="Interest Products"
+              name="interestProductIds"
+              control={control}
+              options={products}
+              isMulti
+              onCreateOption={onCreateOption}
+            /> : <CreatableSelect
+              style={{ marginBottom: '1.5rem' }}
+              label="Products"
+              placeholder="Products"
+              name="productIds"
+              control={control}
+              options={products}
+              isMulti
+              onCreateOption={onCreateOption}
+            />}
+
+            {typeOfCompany === "Buyer" ? <Input
+              style={{ marginBottom: '1.5rem' }}
+              label="Yearly Import Volume (tm/ctn) x product"
+              placeholder="Yearly Import Volume (tm/ctn) x product"
+              type='number'
+              control={control}
+              name="yearImportVolume"
+              required
+            /> : <Input
+              style={{ marginBottom: '1.5rem' }}
+              label="Yearly Volume (tm/ctn) x product"
+              placeholder="Yearly Volume (tm/ctn) x product"
+              type='number'
+              control={control}
+              name="yearExportVolume"
+              required
+            />}
+
+            {typeOfCompany === "Buyer" ? <Input
+              style={{ marginBottom: '1.5rem' }}
+              label="Yearly CFR Import (USD) x product"
+              placeholder="Yearly CFR Import (USD) x product"
+              type='number'
+              control={control}
+              name="yearImportCFR"
+              required
+            /> : <Input
+              style={{ marginBottom: '1.5rem' }}
+              label="Yearly FOB Export (USD) x product"
+              placeholder="Yearly FOB Export (USD) x product"
+              type='number'
+              control={control}
+              name="yearFOBExport"
+              required
+            />}
+
+            <Input
+              style={{ marginBottom: '1.5rem' }}
+              label="Preferred PaymentTerm"
+              placeholder="Preferred PaymentTerm"
+              control={control}
+              name="preferredPaymentTerm"
+            />
+            
+            {typeOfCompany === "Supplier" ? <Select
+              style={{ marginBottom: '1.5rem' }}
+              label="Seasonality"
+              placeholder="Seasonality"
+              name="seasonality"
+              control={control}
+              options={HARVESTING_MONTHS as any}
+              isMulti
+            /> : <></>}
+
+            {typeOfCompany === "Buyer" ? <Select
+              style={{ marginBottom: '1.5rem' }}
+              label="Fulfillment origins (continents)"
+              placeholder="Fulfillment origins (continents)"
+              control={control}
+              name="fulfillmentOrigin"
+              options={[{value:'South and Central America', label:'South and Central America'}, {value:'Africa', label:'Africa'}, {value:'Europe', label: 'Europe'}, {value:'Asia', label: 'Asia'}]}
+            /> : <Select
+              style={{ marginBottom: '1.5rem' }}
+              label="Main markets (continents)"
+              placeholder="Main markets (continents)"
+              control={control}
+              name="mainMarket"
+              options={[{value:'North America', label:'North America'}, {value:'Europe', label: 'Europe'}, {value:'Asia', label: 'Asia'}]}
+            />}
+            
+            <CreatableSelect
+              style={{ marginBottom: '1.5rem' }}
+              label="Certifications"
+              placeholder="Certifications"
+              name="certifications"
+              control={control}
+              options={certificatioinOptions}
+              isMulti
+            />
+
+            {typeOfCompany === "Buyer" ? <Input
+              style={{ marginBottom: '1.5rem' }}
+              label="Financial Score"
+              placeholder="Financial Score"
+              type='number'
+              control={control}
+              name="financialScore"
+            /> : <></>}
+
+            {typeOfCompany === "Supplier" ? <>
+              <Checkbox
+                style={{ display: 'flex', marginBottom: 16 }}
+                label="Owns Fields?"
+                name="ownField"
+                control={control}
+              />
+
+              <Checkbox
+                style={{ display: 'flex', marginBottom: 16 }}
+                label="Owns Packing House?"
+                name="ownPackingHouse"
+                control={control}
+              /> </> : <></>}
+
+            {typeOfCompany === "Supplier" ? <Input
+              style={{ marginBottom: '1.5rem' }}
+              label="Industry references"
+              placeholder="Industry references"
+              control={control}
+              name="industryRef"
+            /> : <></>}
+          </>}
+          <div css={styles.footer}>
+            <div>
+              {finalStep && <Button onClick={() => setFinalStep(false)}>
+                Back
+              </Button>}
+            </div>
+            <div>
+              <Button type="submit" disabled={saving}>
+                {!finalStep ? 'Next' : actionType === 'create' ? 'Create' : 'Save'}
+              </Button>
+            </div>
+          </div>
+        </form>
+
+        <div style={{ padding: 100 }} />
+        <NoSSR>
+          <div  css={{ display: openCreateNewProduct ? undefined : 'none' }}>
+          <Dialog css={styles.dialog}>
+            <button css={styles.dialogBtn} onClick={() => {
+                setOpenCreateNewProduct(false);
+                updateName("")
+              }}>
+              <CloseIcon />
+            </button>
+            {myName && <ProductForm defaultValues={{...productDefaultValues, name: { en: myName, es: ''}}} actionType="create" isDialog successId={successId} dialogAction={() => {
+              setOpenCreateNewProduct(false);
+              updateId(successId.current)
+            }} />}
+          </Dialog>
+          </div>
+        </NoSSR>
+
+      </div>
+    </SharedProvider>
   )
 }
 
@@ -489,5 +592,22 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-end',
+  },
+  dialog: {
+    position: 'relative',
+    fontFamily: theme.fonts.secondary,
+    backgroundColor: 'white',
+    padding: '50px 30px 0px',
+    marginTop: '150px'
+  },
+  dialogBtn: {
+    position: 'absolute',
+    left: 8,
+    top: 6,
+    display: 'inline-flex',
+    border: 'none',
+    padding: 6,
+    background: 'transparent',
+    cursor: 'pointer',
   },
 }))

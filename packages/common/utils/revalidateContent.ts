@@ -15,6 +15,26 @@ export const revalidateProduct = (
       ),
       `/products/${product._id}`,
     ],
+    admin: [
+      '/products',
+      ...product.categoryIds.map((categoryId) =>
+        categoryId ? `/categories/${categoryId}/products` : undefined
+      ),
+      `/products/${product._id}`,
+    ],
+  }
+
+  return revalidateCrossPaths(paths)
+}
+
+export const revalidateContract = (
+  contract: { _id: string }
+) => {
+  const paths = {
+    admin: [
+      '/contracts',
+      `/contracts/${contract._id}`
+    ]
   }
 
   return revalidateCrossPaths(paths)
@@ -27,6 +47,13 @@ export const revalidateInvestment = (
   const paths = {
     investment: [
       '/',
+      '/investments',
+      ...product.categoryIds.map((categoryId) =>
+        categoryId ? `/categories/${categoryId}/investments` : undefined
+      ),
+      `/investments/${product._id}`,
+    ],
+    admin: [
       '/investments',
       ...product.categoryIds.map((categoryId) =>
         categoryId ? `/categories/${categoryId}/investments` : undefined
@@ -47,6 +74,7 @@ export const revalidateArticle = (
   const paths = {
     fulfillment: commonPaths,
     investment: commonPaths,
+    admin: commonPaths,
   }
 
   return revalidateCrossPaths(paths)
@@ -61,7 +89,35 @@ export const revalidateCategory = (
   const paths = {
     fulfillment: commonPaths,
     investment: commonPaths,
+    admin: commonPaths,
   }
 
+  return revalidateCrossPaths(paths)
+}
+
+export const revalidateCompany = (
+  company: { _id: string },
+  action: ChangeAction
+) => {
+  const paths = {
+    admin: [
+      '/company/buyers',
+      '/company/suppliers',
+      `/company/${company._id}`
+    ]
+  }
+  return revalidateCrossPaths(paths)
+}
+
+export const revalidateUser = (
+  user: { _id: string },
+  action: ChangeAction
+) => {
+  const paths = {
+    admin: [
+      '/users',
+      `/users/${user._id}`
+    ]
+  }
   return revalidateCrossPaths(paths)
 }

@@ -1,70 +1,40 @@
-import { countries, gql, graphqlReq, revalidateCompany, timeout } from "common";
-import { useState } from "react";
+import { countries, gql, graphqlReq } from "common";
 
-interface basicCompanyInfo {
+interface basicContractInfo {
   _id: string,
-  name: string,
-  country: string,
-  website: string,
-  status: string
+  product: string,
+  portOfLoading: string,
+  portOfArrival: string,
+  quantity: string
 }
 
-const DELETE_COMPANY = gql`
-  mutation ($_id: String!) {
-    deleteCompany(_id: $_id)
-  }
-`
-
-export interface BasicCompanyProps {
-  companies: basicCompanyInfo[]
+export interface BasicContractProps {
+  contracts: basicContractInfo[]
 }
 
-const CompanyTable = (props: BasicCompanyProps) => {
-
-  const [companies, setCompanies] = useState(props.companies)
-
-  const deleteCompanyInfo = async (_id: string) => {
-    let result = confirm("Do you want to proceed?")
-    if (result) {
-      await graphqlReq(DELETE_COMPANY, { _id })
-      .then(() => {
-        alert("successfully deleted")
-        setCompanies(companies.filter(company => company._id !== _id))
-        const callbacks = revalidateCompany(
-          {
-            _id: _id
-          },
-          'delete'
-        )
-        const { revalidate } = callbacks;
-        (async () => {
-          try {
-            await revalidate()
-            await timeout(1000)
-          } catch {
-            alert('An error occurred while update caching, please save it again')
-          }
-        })()
-      })
-      .catch(() => alert("an error occurred"))
-    }
-  }
+const ContractTable = (props: BasicContractProps) => {
 
   return (
     <>
-      {companies.length? <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
+      {props.contracts.length? <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
         <div className="max-w-full overflow-x-auto">
           <table className="w-full table-auto">
             <thead>
               <tr className="bg-gray-2 text-left dark:bg-meta-4">
                 <th className="min-w-[20px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
-                  Company Name
+                  No
+                </th>
+                <th className="min-w-[20px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
+                  Product Name
                 </th>
                 <th className="min-w-[20px] py-4 px-4 font-medium text-black dark:text-white">
-                  Country
+                  Port of Loading
                 </th>
                 <th className="min-w-[20px] py-4 px-4 font-medium text-black dark:text-white">
-                  Website
+                  Port of Arrival
+                </th>
+                <th className="min-w-[20px] py-4 px-4 font-medium text-black dark:text-white">
+                  Volume
                 </th>
                 <th className="min-w-[20px] py-4 px-4 font-medium text-black dark:text-white">
                   Status
@@ -75,40 +45,55 @@ const CompanyTable = (props: BasicCompanyProps) => {
               </tr>
             </thead>
             <tbody>
-              {companies.map((company: any, key: any) => (
+              {props.contracts.map((contract: any, key: any) => (
                 <tr key={key}>
                   <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                     <h5 className="font-medium text-black dark:text-white">
-                      {company.name}
+                      {key+1}
+                    </h5>
+                  </td>
+                  <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                    <h5 className="font-medium text-black dark:text-white">
+                      {contract.product}
                     </h5>
                   </td>
                   <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                     <p className="text-black dark:text-white">
-                      {countries.filter(country => country.code === company.country)[0].name}
+                      {contract.portOfLoading}
                     </p>
                   </td>
                   <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                    <a className="text-black dark:text-white" href={company.website}>
-                      {company.website}
+                    <a className="text-black dark:text-white">
+                    {contract.portOfArrival}
+                    </a>
+                  </td>
+                  <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                    <a className="text-black dark:text-white">
+                    {contract.quantity + " kg"}
                     </a>
                   </td>
                   <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                     <p
                       className={`inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium ${
-                        company.status === "approved"
-                          ? "text-success bg-success"
-                          // : packageItem.status === "Unpaid"
-                          // ? "text-danger bg-danger"
-                          : "text-danger bg-danger"
-                          // : "text-warning bg-warning"
+                        contract.status === "Approved"
+                          ? "text-success bg-success" // green
+                          : contract.status === "Rejected"
+                          ? "text-danger bg-danger" // red
+                          : contract.status === "Pending"
+                          ? "text-warning bg-warning" // orange
+                          : contract.status === "Expired"
+                          ? "text-skyblue bg-skyblue" // sky blue
+                          : contract.status === "Funded"
+                          ? "text-blue bg-blue" // blue
+                          : "text-purple bg-purple" // purple
                       }`}
                     >
-                      {company.status}
+                      {contract.status}
                     </p>
                   </td>
                   <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                     <div className="flex items-center space-x-3.5">
-                      <button className="hover:text-primary" onClick={() => window.location.href = '/company/'+company._id}>
+                      <button className="hover:text-primary" onClick={() => window.location.href = '/contracts/'+contract._id}>
                         <svg
                           className="fill-current"
                           width="24"
@@ -127,12 +112,12 @@ const CompanyTable = (props: BasicCompanyProps) => {
                           />
                         </svg>
                       </button>
-                      <button className="hover:text-primary" onClick={() => deleteCompanyInfo(company._id)}>
+                      {/* <button className="hover:text-primary">
                         <svg
                           className="fill-current"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
+                          width="18"
+                          height="18"
+                          viewBox="0 0 30 30"
                           fill="none"
                           xmlns="http://www.w3.org/2000/svg"
                         >
@@ -153,7 +138,7 @@ const CompanyTable = (props: BasicCompanyProps) => {
                             fill=""
                           />
                         </svg>
-                      </button>
+                      </button> */}
                     </div>
                   </td>
                 </tr>
@@ -166,4 +151,4 @@ const CompanyTable = (props: BasicCompanyProps) => {
   );
 };
 
-export default CompanyTable
+export default ContractTable

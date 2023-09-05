@@ -206,39 +206,24 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           {/* <!-- Deal management --> */}
           <div>
             <h3 className="mb-4 ml-4 text-sm font-semibold text-bodydark2">
-              Deal management
+              Smart Contract management
             </h3>
             <ul className="mb-6 flex flex-col gap-1.5">
 
-              {/* <!-- Ongoing deals --> */}
+              {/* <!-- Contracts --> */}
               <li>
                 <Link
-                  href="/deal-management/ongoing-deals"
+                  href="/contracts"
                   className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
                     // @ts-ignore
-                    pathname.includes("ongoing-deals") &&
+                    pathname.includes("contract") &&
                     "bg-graydark dark:bg-meta-4"
                   }`}
                 >
-                  Products
+                  Contracts
                 </Link>
               </li>
-              {/* <!-- Ongoing deals End --> */}
-
-              {/* <!-- Requirements --> */}
-              <li>
-                <Link
-                  href="/deal-management/requirements"
-                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    // @ts-ignore
-                    pathname.includes("requirements") &&
-                    "bg-graydark dark:bg-meta-4"
-                  }`}
-                >
-                  Requirements
-                </Link>
-              </li>
-              {/* <!-- Requirements End --> */}
+              {/* <!-- Contracts End --> */}
 
             </ul>
           </div>
@@ -250,6 +235,37 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               Intelligence
             </h3>
             <ul className="mb-6 flex flex-col gap-1.5">
+
+              {/* <!-- Users --> */}
+              <li>
+                <Link
+                  href="/users"
+                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                    // @ts-ignore
+                    pathname.includes("users") &&
+                    "bg-graydark dark:bg-meta-4"
+                  }`}
+                >
+                  Users
+                </Link>
+              </li>
+              {/* <!-- Users End --> */}
+
+              {/* <!-- Blog --> */}
+              <li>
+                <Link
+                  href="/blog"
+                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                    // @ts-ignore
+                    pathname.includes("blog") &&
+                    "bg-graydark dark:bg-meta-4"
+                  }`}
+                >
+                  Blogs
+                </Link>
+              </li>
+              {/* <!-- Blog End --> */}
+
             </ul>
           </div>
           {/* <!-- Intelligence End --> */}

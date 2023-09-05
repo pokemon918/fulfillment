@@ -264,6 +264,7 @@ const useStyles = makeStyles(({ mode }: NavbarProps) => ({
   },
   nav: {
     position: 'relative',
+    maxWidth: 'unset',
     width: '100%',
     display: 'flex',
     justifyContent: 'center',
@@ -363,7 +364,7 @@ const useStyles = makeStyles(({ mode }: NavbarProps) => ({
     minWidth: 116,
     height: 47,
     fontSize: 14,
-    fontWeight: 400,
+    fontWeight: 500,
     '&:not(:last-of-type)': {
       marginRight: 20,
     },

@@ -6,7 +6,7 @@ export interface SignUpMainInfo {
   country: string
   phone: string
   website?: string
-  role?: 'buyer' | 'seller' | 'investor'
+  role?: 'buyer' | 'seller' | 'investor' | 'admin'
 }
 
 export interface BuyerSignUpInfo extends SignUpMainInfo {
@@ -46,3 +46,4 @@ export type SignUpInfo =
   | BuyerSignUpInfo
   | SupplierSignupInfo
   | InvestorSignupInfo
+  | SignUpMainInfo

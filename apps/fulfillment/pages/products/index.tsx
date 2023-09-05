@@ -28,6 +28,7 @@ const GET_PRODUCTS = gql`
       availableSpecs {
         en
       }
+      isSustainable
     }
   }
 `

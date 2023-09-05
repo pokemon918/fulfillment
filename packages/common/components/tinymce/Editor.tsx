@@ -31,7 +31,7 @@ export const Editor: FC<EditorProps> = (props) => {
             control={control}
             render={({ field: { value, onChange } }) => (
               <TinyEditor
-                apiKey="88t9ob1nrbza2aeszg9wzsc8tq5r07vqhotqw6aqownedn88"
+                apiKey="xo2ks1waqfabtkycxluchdm9e5n73fb3dvlgyu9kugghhvoo"
                 value={value}
                 onEditorChange={(editorContent) => onChange(editorContent)}
                 init={{

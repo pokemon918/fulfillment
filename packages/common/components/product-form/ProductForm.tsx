@@ -1,7 +1,7 @@
 import { useForm, useFieldArray } from 'react-hook-form'
-import { TableForm, Paper, Button, StyledLink, Select, Input } from '../../ui'
+import { TableForm, Paper, Button, StyledLink, Select, Input, Checkbox } from '../../ui'
 import { gql } from 'graphql-request'
-import { FC, useRef, useState } from 'react'
+import { FC, useRef, useState, MutableRefObject } from 'react'
 import { CountrySelect } from '../CountrySelect'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
@@ -104,16 +104,23 @@ export interface ProductFormValue {
   }[]
   certifications: { src: string }[]
   harvestingMonths: number[]
+  isSustainable: boolean
 }
 
 interface ProductFormProps {
   defaultValues: ProductFormValue
   actionType: 'create' | 'update'
+  isDialog?: boolean
+  dialogAction?: () => void
+  successId?: MutableRefObject<string>
 }
 
 export const ProductForm: FC<ProductFormProps> = ({
   defaultValues,
   actionType,
+  isDialog,
+  dialogAction,
+  successId,
 }) => {
   const productId = defaultValues._id
 
@@ -217,6 +224,7 @@ export const ProductForm: FC<ProductFormProps> = ({
     })
       .then(({ product: { _id, categoryId } }) => {
         setSuccess({ _id })
+        if(successId) successId.current = _id;
         categoryIdRef.append(categoryId)
       })
       .catch(() => {
@@ -293,6 +301,23 @@ export const ProductForm: FC<ProductFormProps> = ({
           name="price"
           required
           pattern="[0-9]+(\.[0-9]+)?"
+        />
+
+        <Input
+          style={{ marginBottom: '1.5rem' }}
+          label="Description"
+          placeholder="Description"
+          name="description.en"
+          control={control}
+          multiline
+          rows={5}
+        />
+
+        <Checkbox
+          style={{ display: 'flex', marginBottom: 20 }}
+          label="Is sustainable?"
+          name="isSustainable"
+          control={control}
         />
 
         <TableForm
@@ -478,6 +503,7 @@ export const ProductForm: FC<ProductFormProps> = ({
                     },
                     actionType
                   )}
+                  callback={isDialog? dialogAction: () => {}}
                 />
               )}
             </div>

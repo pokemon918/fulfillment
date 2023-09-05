@@ -41,6 +41,12 @@ const useStyles = makeStyles((props: OverviewProps) => ({
         padding: '119px 0 175px 96px',
         background: '#FCFCFC',
         overflow: 'hidden',
+        [`@media (max-width: 1180px)`]: {
+            padding: '119px 0 50px 96px',
+        },
+        [`@media (max-width: 1080px)`]: {
+            padding: '119px 0 50px 96px',
+        },
         [`@media (max-width: ${theme.widths.tablet})`]: {
             padding: '50px 16px',
         },
@@ -125,31 +131,54 @@ const useStyles = makeStyles((props: OverviewProps) => ({
     imgWrapper: {
         position: 'absolute',
         width: '100%',
-        height: 700,
-        right: '-7%',
-        bottom: 0,
+        height: 'auto',
+        right: -70,
+        bottom: -50,
         overflow: 'hidden',
         zIndex: 100,
         display: 'flex',
         justifyContent: 'flex-end',
         pointerEvents: 'none',
+        [`@media (max-width: 1180px)`]: {
+            right: -70,
+            bottom: -20,
+        },
+        [`@media (max-width: 1080px)`]: {
+            right: -70,
+            bottom: -10,
+        },
         [`@media (max-width: ${theme.widths.tablet})`]: {
             display: 'none',
         },
     },
     dotsImage: {
-        width: '20%',
+        width: '300px',
+        [`@media (max-width: 1180px)`]: {
+            width: '200px',
+            height: 'auto',
+        },
+        [`@media (max-width: 1080px)`]: {
+            width: '180px',
+        },
     },
     gifWrapper: {
         position: 'absolute',
-        top: 200,
-        right: '-17%',
-        width: '70%',
+        bottom: 0,
+        right: -250,
+        width: '1000px',
         height: 'auto',
         zIndex: 1,
         [`@media (max-width: 1180px)`]: {
-            position: 'absolute',
-            top: 300,
+            width: '800px',
+            height: 'auto',
+            right: -200,
+            bottom: 0,
+        },
+        [`@media (max-width: 1080px)`]: {
+            width: '700px',
+            height: 'auto',
+            right: -170,
+            bottom: 0,
         },
         [`@media (max-width: ${theme.widths.tablet})`]: {
             width: '100%',

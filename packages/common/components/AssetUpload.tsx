@@ -73,7 +73,7 @@ export const AssetUpload: FC<AssetUploadProps> = ({
       <input
         type="file"
         style={{ display: 'none' }}
-        accept="image/*, video/*"
+        accept="image/*, video/*, application/pdf, application/msword"
         onChange={handleChange}
         multiple={!single}
       />
