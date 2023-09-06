@@ -16,7 +16,7 @@ interface ProductsPageProps {
 
 export function ProductsPage(props: ProductsPageProps) {
   const { products, category } = props
-  toast("hello")
+  //toast("hello")
   const user = useUser()
 
   const styles = useStyles(props)
