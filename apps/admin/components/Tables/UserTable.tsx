@@ -1,4 +1,5 @@
 import { gql, graphqlReq, BaseUser, revalidateUser, timeout } from "common";
+import { toast } from "react-toastify";
 
 const DELETE_USER = gql`
   mutation ($_id: String!) {
@@ -24,7 +25,7 @@ const UserTable = (props: BasicUserProps) => {
     if (result) {
       await graphqlReq(DELETE_USER, { _id })
       .then(() => {
-        alert("successfully deleted")
+        toast("successfully deleted")
         props.users.filter(user => user._id !== _id)
         const callbacks = revalidateUser(
           {
@@ -38,11 +39,11 @@ const UserTable = (props: BasicUserProps) => {
             await revalidate()
             await timeout(1000)
           } catch {
-            alert('An error occurred while update caching, please save it again')
+            toast('An error occurred while update caching, please save it again')
           }
         })()
       })
-      .catch(() => alert("an error occurred"))
+      .catch(() => toast("an error occurred"))
     }
   }
 

@@ -1,5 +1,6 @@
 import React, { SyntheticEvent, useRef } from "react";
 import { gql, graphqlReq, isGqlErrStatus, withAuth } from "common";
+import { toast } from "react-toastify";
 
 const ADDADMIN = gql`
     mutation Addadmin($input: AddAdminInput!) {
@@ -41,13 +42,13 @@ const CreateNewAdmin: React.FC = () => {
             sending.current = true
 
             await graphqlReq(ADDADMIN, { input })
-            alert('Successfully created')
+            toast('Successfully created')
 
         } catch (e) {
             if (isGqlErrStatus(e, 409)) {
-                alert('the account is already registered')
+                toast('the account is already registered')
             } else {
-                return alert('Please check your internet connection then try again')
+                return toast('Please check your internet connection then try again')
             }
         } finally {
             sending.current = false

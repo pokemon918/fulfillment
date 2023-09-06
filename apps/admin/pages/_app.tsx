@@ -5,7 +5,8 @@ import '@/styles/satoshi.css'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import { RootLayout } from "@/components/Layout";
-
+import { ToastContainer, toast } from 'react-toastify';
+  import 'react-toastify/dist/ReactToastify.css';
 import { useFetchAuthUser, UserProvider, GlobalStyles } from 'common'
 
 const TrumarketApp = ({ Component, pageProps }: AppProps) => {
@@ -38,7 +39,7 @@ const TrumarketApp = ({ Component, pageProps }: AppProps) => {
         <div className="app-root" style={appRootStyles}>
           <UserProvider value={user}>
             <GlobalStyles />
-
+            <ToastContainer theme="dark" />
             <RootLayout>
                 <Component {...pageProps} />
             </RootLayout>
