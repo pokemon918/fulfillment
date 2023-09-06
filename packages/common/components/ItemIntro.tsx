@@ -23,6 +23,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 
 // Import Swiper styles
 import 'swiper/css'
+import { toast } from 'react-toastify'
 
 
 
@@ -383,7 +384,7 @@ margin: '10px 0 45px 0'}}>
              marginTop: '15px'
            }}
            onClick={() => {
-            if(user?.role !== "buyer") return alert("Please log in with a  buyer account.")
+            if(user?.role !== "buyer") return toast("Please log in with a  buyer account.")
             onShowSmartContract()
            }}
          >

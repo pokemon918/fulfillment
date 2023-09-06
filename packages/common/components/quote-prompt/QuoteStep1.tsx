@@ -9,6 +9,7 @@ import { makeStyles } from '../../utils'
 import { QuoteInput, QuoteProduct } from './quote.types'
 import { QuoteEvaluate } from './QuoteEvaluate'
 import quoteBlockchain from 'common/assets/images/quote-blockchain.png'
+import { toast } from 'react-toastify'
 
 interface QuoteStep1Props extends HTMLAttributes<HTMLFormElement> {
   product: QuoteProduct
@@ -41,7 +42,7 @@ export const QuoteStep1: FC<QuoteStep1Props> = (props) => {
     const { phone } = getValues()
 
     if (phone.length < 6) {
-      alert('Please enter a valid phone number')
+      toast('Please enter a valid phone number')
     } else {
       setEvaluating(true)
       // onNextStep()

@@ -16,6 +16,7 @@ import {
 } from '../ui'
 import { graphqlReq, isGqlErrStatus, makeStyles, setCookie } from '../utils'
 import { Navbar } from './Navbar'
+import { toast } from 'react-toastify'
 
 const LOGIN = gql`
   mutation Login($input: LoginInput!) {
@@ -83,7 +84,7 @@ export const LoginPage = () => {
       }
     } catch (e) {
       if (isGqlErrStatus(e, 401)) {
-        alert('password or email is incorrect')
+        toast('password or email is incorrect')
       }
     }
   })

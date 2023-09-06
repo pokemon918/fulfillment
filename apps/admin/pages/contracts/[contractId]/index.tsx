@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { gql, graphqlReq, countries, Select, withAuth, revalidateContract, timeout } from "common";
 import { GetStaticProps, GetStaticPaths } from "next";
+import { toast } from 'react-toastify';
 
 interface ContractPageProps {
     contract: {
@@ -99,7 +100,7 @@ const ContractPage = (props: ContractPageProps) => {
             try {
                 sending.current = true
                 await graphqlReq(CREATEADMINCONTRACT, { input })
-                alert('Successfully saved')
+                toast('Successfully saved')
                 const callbacks = revalidateContract({_id: props.contract._id})
                 const { revalidate } = callbacks;
                 (async () => {
@@ -107,13 +108,13 @@ const ContractPage = (props: ContractPageProps) => {
                         await revalidate()
                         await timeout(1000)
                     } catch {
-                        alert('An error occurred while update caching, please save it again')
+                        toast('An error occurred while update caching, please save it again')
                     }
                 })().then(() => {
                     window.location.href = '/contracts'
                 })
             } catch (error) {
-                return alert('Please check your internet connection then try again')
+                return toast('Please check your internet connection then try again')
             } finally {
                 sending.current = false
             }

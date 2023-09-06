@@ -18,6 +18,7 @@ import { countries } from '../../data'
 import { AddIcon, EmailIcon, PhoneIcon } from '../../icons'
 import { theme } from '../../theme'
 import { QuoteFeatures } from './QuoteFeatures'
+import { toast } from 'react-toastify'
 
 export interface Step2Values {}
 
@@ -127,7 +128,7 @@ export const QuoteStep2: FC<QuoteStep2Props> = (props) => {
     )
 
     if (totalPercent !== 100) {
-      return alert('The total paid percent of all milestones must be 100%')
+      return toast('The total paid percent of all milestones must be 100%')
     }
 
     isSaving.current = true

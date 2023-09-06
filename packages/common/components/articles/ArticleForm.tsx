@@ -10,6 +10,7 @@ import { Editor } from '../tinymce'
 import { KeywordsSelect } from '../KeywordsSelect'
 import { RevalidateIndictor } from '../RevalidateIndictor'
 import { ItemDeleteButton } from '../ItemDeleteButton'
+import { toast } from 'react-toastify'
 
 const CREATE_ARTICLE = gql`
   mutation CreateArticle($input: CreateArticleInput!, $filenames: [String!]!) {
@@ -103,7 +104,7 @@ export const ArticleForm: FC<ArticleFormProps> = ({
         setSuccess({ _id })
       })
       .catch(() => {
-        alert('an error occur please try again')
+        toast('an error occur please try again')
       })
       .finally(() => {
         setSaving(false)

@@ -1,6 +1,7 @@
 import { ChangeEventHandler, FC, useState } from 'react'
 import { AddIcon } from '../icons'
 import { makeStyles, uploadFile } from '../utils'
+import { toast } from 'react-toastify'
 
 interface AssetUploadCommonProps {
   className?: string
@@ -46,9 +47,8 @@ export const AssetUpload: FC<AssetUploadProps> = ({
       .then((res) => {
         onUploaded(single ? res.data[0] : res.data)
       })
-      .catch((e) => {
-        console.log(e)
-        alert('an error occurred while uploading...')
+      .catch(() => {
+        toast('an error occurred while uploading...')
       })
       .finally(() => {
         setUploadProgress(null)

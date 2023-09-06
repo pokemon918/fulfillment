@@ -1,5 +1,6 @@
 import { countries, gql, graphqlReq, revalidateCompany, timeout } from "common";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 interface basicCompanyInfo {
   _id: string,
@@ -28,7 +29,7 @@ const CompanyTable = (props: BasicCompanyProps) => {
     if (result) {
       await graphqlReq(DELETE_COMPANY, { _id })
       .then(() => {
-        alert("successfully deleted")
+        toast("successfully deleted")
         setCompanies(companies.filter(company => company._id !== _id))
         const callbacks = revalidateCompany(
           {
@@ -42,11 +43,11 @@ const CompanyTable = (props: BasicCompanyProps) => {
             await revalidate()
             await timeout(1000)
           } catch {
-            alert('An error occurred while update caching, please save it again')
+            toast('An error occurred while update caching, please save it again')
           }
         })()
       })
-      .catch(() => alert("an error occurred"))
+      .catch(() => toast("an error occurred"))
     }
   }
 

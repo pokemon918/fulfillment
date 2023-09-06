@@ -18,6 +18,7 @@ import { GalleryForm } from '../gallery/GalleryForm'
 import { RevalidateIndictor } from '../RevalidateIndictor'
 import { ItemDeleteButton } from '../ItemDeleteButton'
 import useHistoryRef from '../../hooks/useHistoryRef'
+import { toast } from 'react-toastify'
 
 const GET_CATEGORIES = gql`
   {
@@ -228,7 +229,7 @@ export const ProductForm: FC<ProductFormProps> = ({
         categoryIdRef.append(categoryId)
       })
       .catch(() => {
-        alert('an error occur please try again')
+        toast('an error occur please try again')
         setSaving(false)
       })
       .finally(() => setSaving(false))
