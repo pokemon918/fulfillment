@@ -114,7 +114,8 @@ const ContractPage = (props: ContractPageProps) => {
                     window.location.href = '/contracts'
                 })
             } catch (error) {
-                return toast('Please check your internet connection then try again')
+                 toast('Please check your internet connection then try again');
+                 return
             } finally {
                 sending.current = false
             }

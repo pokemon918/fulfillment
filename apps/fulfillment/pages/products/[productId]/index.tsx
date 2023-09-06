@@ -216,7 +216,7 @@ height: showSmartContract ? '100vh' : '0',
 transition: '.5s',
 position:'absolute',
 bottom:'0',
-zIndex:9999,
+zIndex:9,
 width: '100%',
 visibility: showSmartContract ? 'visible' : 'hidden',
 overflow:'auto'

@@ -128,7 +128,8 @@ export const QuoteStep2: FC<QuoteStep2Props> = (props) => {
     )
 
     if (totalPercent !== 100) {
-      return toast('The total paid percent of all milestones must be 100%')
+       toast('The total paid percent of all milestones must be 100%');
+       return
     }
 
     isSaving.current = true

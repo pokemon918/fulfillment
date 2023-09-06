@@ -48,7 +48,8 @@ const CreateNewAdmin: React.FC = () => {
             if (isGqlErrStatus(e, 409)) {
                 toast('the account is already registered')
             } else {
-                return toast('Please check your internet connection then try again')
+                 toast('Please check your internet connection then try again');
+                 return
             }
         } finally {
             sending.current = false

@@ -1,3 +1,4 @@
+import { toast } from 'react-toastify'
 import { useUser } from '../hooks'
 import { AddIcon } from '../icons'
 import { theme } from '../theme'
@@ -15,7 +16,7 @@ interface ProductsPageProps {
 
 export function ProductsPage(props: ProductsPageProps) {
   const { products, category } = props
-
+  toast("hello")
   const user = useUser()
 
   const styles = useStyles(props)
