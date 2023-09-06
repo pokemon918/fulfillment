@@ -38,7 +38,7 @@ export function TrumarketApp({ Component, pageProps }: AppProps) {
         <div className="app-root" style={appRootStyles}>
           <UserProvider value={user}>
             <GlobalStyles />
-            <ToastContainer theme="dark" />
+            <ToastContainer position="top-center" theme="dark" />
             <NavigatingIndicator />
 
             <Component {...pageProps} />
