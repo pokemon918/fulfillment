@@ -7,7 +7,7 @@ const DELETE_USER = gql`
   }
 `
 
-interface myuser {
+export interface myuser {
   _id: string,
   fullName: string,
   role: string,
@@ -16,11 +16,10 @@ interface myuser {
 
 export interface BasicUserProps {
   users: myuser[]
+  func: ( users:myuser[] ) => void
 }
 
 const UserTable = (props: BasicUserProps) => {
-
-  const [users, setUsers] = useState(props.users)
 
   const deleteUserInfo = async (_id: string) => {
     let result = confirm("Do you want to proceed?")
@@ -28,7 +27,7 @@ const UserTable = (props: BasicUserProps) => {
       await graphqlReq(DELETE_USER, { _id })
       .then(() => {
         alert("successfully deleted")
-        setUsers(users.filter(user => user._id !== _id))
+        props.func(props.users.filter(user => user._id !== _id))
         const callbacks = revalidateUser(
           {
             _id: _id
@@ -51,7 +50,7 @@ const UserTable = (props: BasicUserProps) => {
 
   return (
     <>
-      {users.length? <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
+      {props.users.length? <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
         <div className="max-w-full overflow-x-auto">
           <table className="w-full table-auto">
             <thead>
@@ -74,7 +73,7 @@ const UserTable = (props: BasicUserProps) => {
               </tr>
             </thead>
             <tbody>
-              {users.map((user: any, key: any) => (
+              {props.users.map((user: any, key: any) => (
                 <tr key={key}>
                   <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                     <h5 className="font-medium text-black dark:text-white">

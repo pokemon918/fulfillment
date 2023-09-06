@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import UserTable from "@/components/Tables/UserTable";
+import UserTable, {myuser} from "@/components/Tables/UserTable";
 import { gql, graphqlReq, withAuth } from "common";
 
 const UserPage = () => {
-  const [users, setUsers] = useState([])
+  const [users, setUsers] = useState<myuser[]>([])
 
   useEffect(() => {
     ;(async () => {
@@ -21,7 +21,7 @@ const UserPage = () => {
       <Breadcrumb pageName="Users" href="/users/create" />
 
       <div className="flex flex-col gap-10">
-        <UserTable users={users} />
+        <UserTable users={users} func={(users) => setUsers(users)} />
       </div>
     </>
   );
