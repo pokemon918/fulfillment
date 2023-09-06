@@ -1632,39 +1632,49 @@ background: certification ? '#fff' : 'none'}}>
     }
     if (showStep === 3) {
       if (!smartContractData.portOfLoadingInput) {
-        return toast('Port of Loading is required')
+         toast('Port of Loading is required');
+         return
       } else if (!smartContractData.portOfArrivalInput) {
-        return toast('Port of Destination is required')
+         toast('Port of Destination is required');
+         return
       } else if (!smartContractData.departureDate) {
-        return toast('Date is required')
+         toast('Date is required');
+         return
       }
     }
     if (showStep == 4) {
       const sumPercent = Number(smartContractData.downPaymentPercent) + Number(smartContractData.cashAgainstDocumentsPercent) + Number(smartContractData.arrivalPercent);
       if (!smartContractData.quantity) {
-        return toast('Quantity is required')
+         toast('Quantity is required');
+         return
       }else if (!smartContractData.offerPrice) {
-        return toast('Offer Price is required')
+         toast('Offer Price is required');
+         return
       }else if (
         !smartContractData.downPaymentPercent &&
         smartContractData.downPaymentPercent !== 0
       ) {
-        return toast('Down Payment is required')
+         toast('Down Payment is required');
+         return
       }else if (
         !smartContractData.cashAgainstDocumentsPercent &&
         smartContractData.cashAgainstDocumentsPercent !== 0
       ) {
-        return toast('Cash Against Documents Payment is required')
+         toast('Cash Against Documents Payment is required');
+         return
       }else if (!smartContractData.arrivalPercent && smartContractData.arrivalPercent !== 0) {
-        return toast('Arrival Payment is required')
+         toast('Arrival Payment is required');
+         return
       }else if(sumPercent !== 100){
 
-        return setErrorText("The sum should be 100%. Try again.")
+         setErrorText("The sum should be 100%. Try again.");
+         return
       }
     }
     if (showStep == 5) {
       if (!smartContractData.description) {
-        return toast('Description is required')
+         toast('Description is required');
+         return
       }
     }
     if (showStep == 6) {
@@ -1675,7 +1685,8 @@ background: certification ? '#fff' : 'none'}}>
         return setShowStep((pre) => pre + 1)
       } catch (error) {
         setLoading(false)
-        return toast('Something went wrong please try again')
+         toast('Something went wrong please try again');
+         return
       }
     }
     return setShowStep((pre) => pre + 1)

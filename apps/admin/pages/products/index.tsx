@@ -5,7 +5,7 @@ import { toast } from 'react-toastify'
 
 export default function PageProducts(props: PageProductsProps) {
   const { products } = props
-//toast("hello")
+
   return <ProductsPage products={products} />
 }
 

@@ -171,7 +171,8 @@ export const Signup: FC<SignupProps> = ({
     if (sending.current) return
 
     if (data.phone.length < 6) {
-      return toast('Please enter a valid phone number')
+       toast('Please enter a valid phone number');
+       return
     }
 
     const { email, password, ...info } = data
@@ -184,9 +185,11 @@ export const Signup: FC<SignupProps> = ({
 
         if (registered) {
           if (APP_TYPE === 'admin') {
-            return toast('the account is already registered, please use another email')
+             toast('the account is already registered, please use another email');
+             return
           } else {
-            return toast('the account is already registered, please login')
+             toast('the account is already registered, please login');
+             return
           }
         }
 
@@ -194,7 +197,8 @@ export const Signup: FC<SignupProps> = ({
           return setFinalStep(true)
         }
       } catch {
-        return toast('Please check your internet connection then try again')
+         toast('Please check your internet connection then try again');
+         return
       } finally {
         sending.current = false
       }
@@ -205,31 +209,38 @@ export const Signup: FC<SignupProps> = ({
       const cInfo = data.commercialInfo
 
       if (cInfo.buyerType.length === 0)
-        return toast('Please input the buyer type')
+         toast('Please input the buyer type');
+         return
 
       if (cInfo.fulfillmentProducts.length === 0)
-        return toast('Please input the fulfillment products')
+         toast('Please input the fulfillment products');
+         return
 
       if (cInfo.fulfillmentCountries.length === 0)
-        return toast('Please input the fulfillment countries')
+         toast('Please input the fulfillment countries');
+         return
 
       if (cInfo.marketDestinations.length === 0)
-        return toast('Please input the market destinations')
+         toast('Please input the market destinations');
+         return
     } else if (data.role === 'seller') {
       // @ts-ignore
       const cInfo = data.commercialInfo
 
       if (cInfo.fulfillmentProducts.length === 0)
-        return toast('Please input the fulfillment products')
+         toast('Please input the fulfillment products');
+         return
 
       if (cInfo.certifications.length === 0)
-        return toast('Please select one certification at least')
+         toast('Please select one certification at least');
+         return
     } else if (data.role === 'investor') {
       // @ts-ignore
       const cInfo = data.commercialInfo
 
       if (!cInfo.interestTicket)
-        return toast('Please input the ticket of interest')
+         toast('Please input the ticket of interest');
+         return
     }
 
     const mutation = pendingUserToken ? FINALIZE_SIGNUP : SIGNUP
@@ -273,14 +284,16 @@ export const Signup: FC<SignupProps> = ({
   
           window.location.href = '/'
         } else {
-          return toast('successfully created')
+           toast('successfully created');
+           return
         }
       })      
     } catch (e) {
       if (isGqlErrStatus(e, 409)) {
         toast('the account is already registered, please login')
       } else {
-        return toast('Please check your internet connection then try again')
+         toast('Please check your internet connection then try again');
+         return
       }
     } finally {
       sending.current = false
