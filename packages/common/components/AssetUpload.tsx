@@ -46,7 +46,8 @@ export const AssetUpload: FC<AssetUploadProps> = ({
       .then((res) => {
         onUploaded(single ? res.data[0] : res.data)
       })
-      .catch(() => {
+      .catch((e) => {
+        console.log(e)
         alert('an error occurred while uploading...')
       })
       .finally(() => {

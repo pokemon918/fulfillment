@@ -272,7 +272,8 @@ export const Signup: FC<SignupProps> = ({
   
           window.location.href = '/'
         } else {
-          return alert('successfully created')
+          alert('successfully created')
+          return window.location.href = '/users'
         }
       })      
     } catch (e) {
