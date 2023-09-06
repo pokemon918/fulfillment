@@ -229,6 +229,10 @@ const globalStyles = css`
 .dropdown:hover .dropdown-content {display: block;}
 
 .dropdown:hover .dropbtn {color: #B0D950;}
+
+.Toastify__progress-bar-theme--dark {
+  background: #3BA83B;
+}
 `
 
 export const GlobalStyles = () => {
