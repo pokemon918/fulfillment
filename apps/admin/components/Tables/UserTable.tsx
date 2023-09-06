@@ -7,7 +7,7 @@ const DELETE_USER = gql`
   }
 `
 
-interface myuser {
+export interface myuser {
   _id: string,
   fullName: string,
   role: string,
@@ -16,6 +16,7 @@ interface myuser {
 
 export interface BasicUserProps {
   users: myuser[]
+  func: ( users:myuser[] ) => void
 }
 
 const UserTable = (props: BasicUserProps) => {
@@ -25,7 +26,7 @@ const UserTable = (props: BasicUserProps) => {
     if (result) {
       await graphqlReq(DELETE_USER, { _id })
       .then(() => {
-        toast("successfully deleted")
+        alert("successfully deleted")
         props.users.filter(user => user._id !== _id)
         const callbacks = revalidateUser(
           {
