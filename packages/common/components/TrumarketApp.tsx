@@ -5,6 +5,8 @@ import { useFetchAuthUser } from '../hooks'
 import { UserProvider } from '../contexts'
 import { GlobalStyles } from '../GlobalStyles'
 import { NavigatingIndicator } from './NavigatingIndicator'
+import { ToastContainer, toast } from 'react-toastify';
+  import 'react-toastify/dist/ReactToastify.css';
 
 export function TrumarketApp({ Component, pageProps }: AppProps) {
   const user = useFetchAuthUser()
@@ -36,7 +38,7 @@ export function TrumarketApp({ Component, pageProps }: AppProps) {
         <div className="app-root" style={appRootStyles}>
           <UserProvider value={user}>
             <GlobalStyles />
-
+            <ToastContainer theme="dark" />
             <NavigatingIndicator />
 
             <Component {...pageProps} />

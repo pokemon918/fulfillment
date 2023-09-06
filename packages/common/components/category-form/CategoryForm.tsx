@@ -9,6 +9,7 @@ import { ThumbnailInput } from '../../components/ThumbnailInput'
 import { Button, StyledLink } from '../../ui'
 import { RevalidateIndictor } from '../RevalidateIndictor'
 import { ItemDeleteButton } from '../ItemDeleteButton'
+import { toast } from 'react-toastify'
 
 const CREATE_CATEGORY = gql`
   mutation CreateCategory(
@@ -90,7 +91,7 @@ export const CategoryForm: FC<CategoryFormProps> = ({
         setSuccess(_id)
       })
       .catch(() => {
-        alert('an error occur please try again')
+        toast('an error occur please try again')
       })
       .finally(() => {
         setSaving(false)

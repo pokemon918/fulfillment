@@ -30,6 +30,7 @@ import {
 import { graphqlReq, isGqlErrStatus, makeStyles, setCookie, revalidateUser, timeout } from '../utils'
 import { CountrySelect } from './CountrySelect'
 import { Navbar } from './Navbar'
+import { toast } from 'react-toastify'
 
 const FINALIZE_SIGNUP = gql`
   mutation FinalizeSignup($input: FinalizeSignupInput!) {
@@ -170,7 +171,7 @@ export const Signup: FC<SignupProps> = ({
     if (sending.current) return
 
     if (data.phone.length < 6) {
-      return alert('Please enter a valid phone number')
+      return toast('Please enter a valid phone number')
     }
 
     const { email, password, ...info } = data
@@ -183,9 +184,9 @@ export const Signup: FC<SignupProps> = ({
 
         if (registered) {
           if (APP_TYPE === 'admin') {
-            return alert('the account is already registered, please use another email')
+            return toast('the account is already registered, please use another email')
           } else {
-            return alert('the account is already registered, please login')
+            return toast('the account is already registered, please login')
           }
         }
 
@@ -193,7 +194,7 @@ export const Signup: FC<SignupProps> = ({
           return setFinalStep(true)
         }
       } catch {
-        return alert('Please check your internet connection then try again')
+        return toast('Please check your internet connection then try again')
       } finally {
         sending.current = false
       }
@@ -204,31 +205,31 @@ export const Signup: FC<SignupProps> = ({
       const cInfo = data.commercialInfo
 
       if (cInfo.buyerType.length === 0)
-        return alert('Please input the buyer type')
+        return toast('Please input the buyer type')
 
       if (cInfo.fulfillmentProducts.length === 0)
-        return alert('Please input the fulfillment products')
+        return toast('Please input the fulfillment products')
 
       if (cInfo.fulfillmentCountries.length === 0)
-        return alert('Please input the fulfillment countries')
+        return toast('Please input the fulfillment countries')
 
       if (cInfo.marketDestinations.length === 0)
-        return alert('Please input the market destinations')
+        return toast('Please input the market destinations')
     } else if (data.role === 'seller') {
       // @ts-ignore
       const cInfo = data.commercialInfo
 
       if (cInfo.fulfillmentProducts.length === 0)
-        return alert('Please input the fulfillment products')
+        return toast('Please input the fulfillment products')
 
       if (cInfo.certifications.length === 0)
-        return alert('Please select one certification at least')
+        return toast('Please select one certification at least')
     } else if (data.role === 'investor') {
       // @ts-ignore
       const cInfo = data.commercialInfo
 
       if (!cInfo.interestTicket)
-        return alert('Please input the ticket of interest')
+        return toast('Please input the ticket of interest')
     }
 
     const mutation = pendingUserToken ? FINALIZE_SIGNUP : SIGNUP
@@ -259,7 +260,7 @@ export const Signup: FC<SignupProps> = ({
           await revalidate()
           await timeout(1000)
         } catch {
-          alert('An error occurred while update caching, please save it again')
+          toast('An error occurred while update caching, please save it again')
         }
       })().then(() => {
         if (APP_TYPE !== 'admin') {
@@ -272,14 +273,14 @@ export const Signup: FC<SignupProps> = ({
   
           window.location.href = '/'
         } else {
-          return alert('successfully created')
+          return toast('successfully created')
         }
       })      
     } catch (e) {
       if (isGqlErrStatus(e, 409)) {
-        alert('the account is already registered, please login')
+        toast('the account is already registered, please login')
       } else {
-        return alert('Please check your internet connection then try again')
+        return toast('Please check your internet connection then try again')
       }
     } finally {
       sending.current = false

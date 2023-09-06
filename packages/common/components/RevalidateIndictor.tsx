@@ -1,5 +1,6 @@
 import { FC, useEffect, useRef, useState } from 'react'
 import { timeout } from '../utils'
+import { toast } from 'react-toastify'
 
 export interface RevalidateInfo {
   revalidate: () => Promise<void>
@@ -25,7 +26,7 @@ export const RevalidateIndictor: FC<RevalidateIndictorProps> = ({
         setUpdated(true)
         if (callback) callback()
       } catch {
-        alert('An error occurred while update caching, please save it again')
+        toast('An error occurred while update caching, please save it again')
       }
     })()
   }, [])

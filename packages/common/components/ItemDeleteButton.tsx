@@ -3,6 +3,7 @@ import { Button } from '../ui'
 import { useRouter } from 'next/router'
 import { RevalidateIndictor, RevalidateInfo } from './RevalidateIndictor'
 import { graphqlReq, makeStyles } from '../utils'
+import { toast } from 'react-toastify'
 
 interface ItemDeleteButtonProps extends HTMLAttributes<HTMLDivElement> {
   itemId: string
@@ -48,7 +49,7 @@ export const ItemDeleteButton: FC<ItemDeleteButtonProps> = (props) => {
         const formatted = errorFormatter
           ? errorFormatter(e)
           : 'Please check your internet connection'
-        alert(formatted)
+        toast(formatted)
         setDeleting(false)
       }
     })()

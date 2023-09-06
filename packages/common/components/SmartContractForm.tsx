@@ -6,6 +6,7 @@ import { AttachIcon } from '../icons/AttachIcon'
 import { theme } from '../theme'
 import { AssetUpload } from './AssetUpload'
 import { countries } from '../data'
+import { toast } from 'react-toastify'
 
 function formatDate(dateString: any) {
   const options: any = { year: 'numeric', month: 'long', day: 'numeric' }
@@ -1631,31 +1632,31 @@ background: certification ? '#fff' : 'none'}}>
     }
     if (showStep === 3) {
       if (!smartContractData.portOfLoadingInput) {
-        return alert('Port of Loading is required')
+        return toast('Port of Loading is required')
       } else if (!smartContractData.portOfArrivalInput) {
-        return alert('Port of Destination is required')
+        return toast('Port of Destination is required')
       } else if (!smartContractData.departureDate) {
-        return alert('Date is required')
+        return toast('Date is required')
       }
     }
     if (showStep == 4) {
       const sumPercent = Number(smartContractData.downPaymentPercent) + Number(smartContractData.cashAgainstDocumentsPercent) + Number(smartContractData.arrivalPercent);
       if (!smartContractData.quantity) {
-        return alert('Quantity is required')
+        return toast('Quantity is required')
       }else if (!smartContractData.offerPrice) {
-        return alert('Offer Price is required')
+        return toast('Offer Price is required')
       }else if (
         !smartContractData.downPaymentPercent &&
         smartContractData.downPaymentPercent !== 0
       ) {
-        return alert('Down Payment is required')
+        return toast('Down Payment is required')
       }else if (
         !smartContractData.cashAgainstDocumentsPercent &&
         smartContractData.cashAgainstDocumentsPercent !== 0
       ) {
-        return alert('Cash Against Documents Payment is required')
+        return toast('Cash Against Documents Payment is required')
       }else if (!smartContractData.arrivalPercent && smartContractData.arrivalPercent !== 0) {
-        return alert('Arrival Payment is required')
+        return toast('Arrival Payment is required')
       }else if(sumPercent !== 100){
 
         return setErrorText("The sum should be 100%. Try again.")
@@ -1663,7 +1664,7 @@ background: certification ? '#fff' : 'none'}}>
     }
     if (showStep == 5) {
       if (!smartContractData.description) {
-        return alert('Description is required')
+        return toast('Description is required')
       }
     }
     if (showStep == 6) {
@@ -1674,7 +1675,7 @@ background: certification ? '#fff' : 'none'}}>
         return setShowStep((pre) => pre + 1)
       } catch (error) {
         setLoading(false)
-        return alert('Something went wrong please try again')
+        return toast('Something went wrong please try again')
       }
     }
     return setShowStep((pre) => pre + 1)

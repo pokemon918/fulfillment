@@ -16,6 +16,7 @@ import { CloseIcon } from "../../icons";
 import { ProductForm, ProductFormValue } from "../product-form/ProductForm";
 import { theme } from "../../theme";
 import { SharedProvider } from "../../contexts";
+import { toast } from 'react-toastify'
 
 const GET_PRODUCTS = gql`
   {
@@ -267,7 +268,7 @@ export const CompanyForm: FC<CompanyFormProps> = ({
       input
     })
       .then(({ company: { _id }}) => {
-        alert(`Successfully ` + actionType + `d`)
+        toast(`Successfully ` + actionType + `d`)
         setSaving(false)
         const callbacks = revalidateCompany(
           {
@@ -281,7 +282,7 @@ export const CompanyForm: FC<CompanyFormProps> = ({
             await revalidate()
             await timeout(1000)
           } catch {
-            alert('An error occurred while update caching, please save it again')
+            toast('An error occurred while update caching, please save it again')
           }
         })().then(() => {
         if (typeOfCompany === "Buyer") {
@@ -291,7 +292,7 @@ export const CompanyForm: FC<CompanyFormProps> = ({
         }})
       })
       .catch(() => {
-        alert('an error occur please try again')
+        toast('an error occur please try again')
         setSaving(false)
       })
       .finally(() => setSaving(false))
