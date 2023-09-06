@@ -104,7 +104,7 @@ export const ArticleForm: FC<ArticleFormProps> = ({
         setSuccess({ _id })
       })
       .catch(() => {
-        toast('an error occur please try again')
+        toast('An error occurred, please try again.')
       })
       .finally(() => {
         setSaving(false)

@@ -233,7 +233,7 @@ export const InvestmentForm: FC<InvestmentFormProps> = ({
         categoryIdRef.append(categoryId)
       })
       .catch(() => {
-        toast('an error occur please try again')
+        toast('An error occurred, please try again.')
         setSaving(false)
       })
       .finally(() => setSaving(false))
