@@ -34,6 +34,10 @@ export const revalidateContract = (
     admin: [
       '/contracts',
       `/contracts/${contract._id}`
+    ],
+    fulfillment: [
+      '/contracts',
+      `/contracts/${contract._id}`
     ]
   }
 

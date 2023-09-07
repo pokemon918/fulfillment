@@ -83,9 +83,8 @@ const ContractTable = (props: BasicContractProps) => {
                           ? "text-warning bg-warning" // orange
                           : contract.status === "Expired"
                           ? "text-skyblue bg-skyblue" // sky blue
-                          : contract.status === "Funded"
-                          ? "text-blue bg-blue" // blue
-                          : "text-purple bg-purple" // purple
+                          // : contract.status === "Funded"
+                          : "text-blue bg-blue" // blue
                       }`}
                     >
                       {contract.status}

@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from 'react'
-import { gql, graphqlReq, makeStyles, uploadFile } from '../utils'
+import { gql, graphqlReq, makeStyles, uploadFile, revalidateContract, timeout } from '../utils'
 import { Container } from '../ui'
 import { EditIcon } from '../icons'
 import { AttachIcon } from '../icons/AttachIcon'
@@ -151,6 +151,18 @@ const getProduct = async (id:any) => {
 
     const data1 = await graphqlReq(CREATE_SMART_CONTRACT, { input: inputData })
     //console.log(data1)
+    const callbacks = revalidateContract({_id: data1._id})
+    const { revalidate } = callbacks;
+    (async () => {
+        try {
+            await revalidate()
+            await timeout(1000)
+        } catch {
+            alert('An error occurred while update caching, please save it again')
+        }
+    })().then(() => {
+        window.location.href = '/contracts'
+    })
     setSmartContractData({
       portOfLoadingSelect: 'Peru',
       portOfArrivalSelect: 'Peru',

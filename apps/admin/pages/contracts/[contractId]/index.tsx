@@ -36,7 +36,7 @@ interface ContractPageProps {
         paymentMethod: string
         fundedDate: Date
         investors: number
-        status: 'Pending' | 'Expired' | 'Rejected' | 'Funded' | 'Not Funded' | 'Approved'
+        status: 'Pending' | 'Expired' | 'Rejected' | 'Funded' | 'Approved'
         createdAt: Date
         expirationDate: Date
     }
@@ -471,12 +471,11 @@ const ContractPage = (props: ContractPageProps) => {
                                           name='status'
                                           disabled={!isSave}
                                           defaultValue={props.contract.status}>
-                                            {/* 'Pending' | 'Expired' | 'Rejected' | 'Funded' | 'Not Funded' | 'Approved' */}
+                                            {/* 'Pending' | 'Expired' | 'Rejected' | 'Funded' | 'Approved' */}
                                             <option value="Pending">Pending</option>
                                             <option value="Expired">Expired</option>
                                             <option value="Rejected">Rejected</option>
                                             <option value="Funded">Funded</option>
-                                            <option value="Not Funded">Not Funded</option>
                                             <option value="Approved">Approved</option>
                                         </select>
                                     </div>
