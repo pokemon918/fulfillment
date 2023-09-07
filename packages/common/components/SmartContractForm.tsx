@@ -158,7 +158,7 @@ const getProduct = async (id:any) => {
             await revalidate()
             await timeout(1000)
         } catch {
-            alert('An error occurred while update caching, please save it again')
+            toast('An error occurred while update caching, please save it again')
         }
     })().then(() => {
         window.location.href = '/contracts'

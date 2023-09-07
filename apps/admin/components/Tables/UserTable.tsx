@@ -26,7 +26,7 @@ const UserTable = (props: BasicUserProps) => {
     if (result) {
       await graphqlReq(DELETE_USER, { _id })
       .then(() => {
-        alert("successfully deleted")
+        toast("successfully deleted")
         props.users.filter(user => user._id !== _id)
         const callbacks = revalidateUser(
           {
