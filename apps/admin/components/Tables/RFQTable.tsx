@@ -1,20 +1,5 @@
-import { gql, graphqlReq } from "common";
 
-interface basicRFQInfo {
-  _id: string,
-  product: string,
-  portOfLoading: string,
-  portOfArrival: string,
-  quantity: string,
-  price: number,
-  status: string
-}
-
-export interface BasicRFQProps {
-  rfqs: basicRFQInfo[]
-}
-
-const RFQTable = (props: BasicRFQProps) => {
+const RFQTable = (props: any) => {
 
   return (
     <>
