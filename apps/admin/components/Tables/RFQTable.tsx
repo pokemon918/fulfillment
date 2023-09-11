@@ -1,5 +1,20 @@
+import { gql, graphqlReq } from "common";
 
-const RFQTable = (props: any) => {
+interface basicRFQInfo {
+  _id: string,
+  product: string,
+  portOfLoading: string,
+  portOfArrival: string,
+  quantity: string,
+  price: number,
+  status: string
+}
+
+export interface BasicRFQProps {
+  rfqs: basicRFQInfo[]
+}
+
+const RFQTable = (props: BasicRFQProps) => {
 
   return (
     <>
@@ -63,6 +78,11 @@ const RFQTable = (props: any) => {
                     </a>
                   </td>
                   <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                    <a className="text-black dark:text-white">
+                    {rfq.price + " kg"}
+                    </a>
+                  </td>
+                  <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                     <p
                       className={`inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium ${
                         rfq.status === "Approved"
@@ -71,8 +91,6 @@ const RFQTable = (props: any) => {
                           ? "text-danger bg-danger" // red
                           : rfq.status === "Pending"
                           ? "text-warning bg-warning" // orange
-                          : rfq.status === "Expired"
-                          ? "text-skyblue bg-skyblue" // sky blue
                           : "text-blue bg-blue" // blue
                       }`}
                     >
