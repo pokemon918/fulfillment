@@ -1,7 +1,3 @@
-import { gql } from 'graphql-request'
-import { GetStaticProps } from 'next'
-import { toast } from 'react-toastify'
-
 import RFQTable  from "@/components/Tables/RFQTable";
 
 
