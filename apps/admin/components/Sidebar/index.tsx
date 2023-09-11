@@ -229,6 +229,32 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           </div>
           {/* <!-- Deal management End --> */}
 
+          {/* <!-- RFQ management --> */}
+          <div>
+            <h3 className="mb-4 ml-4 text-sm font-semibold text-bodydark2">
+              RFQ management
+            </h3>
+            <ul className="mb-6 flex flex-col gap-1.5">
+
+              {/* <!-- RFQ --> */}
+              <li>
+                <Link
+                  href="/rfq"
+                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                    // @ts-ignore
+                    pathname.includes("rfq") &&
+                    "bg-graydark dark:bg-meta-4"
+                  }`}
+                >
+                  RFQ
+                </Link>
+              </li>
+              {/* <!-- RFQ End --> */}
+
+            </ul>
+          </div>
+          {/* <!-- RFQ management End --> */}
+
           {/* <!-- Intelligence --> */}
           <div>
             <h3 className="mb-4 ml-4 text-sm font-semibold text-bodydark2">
