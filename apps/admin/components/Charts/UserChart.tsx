@@ -1,10 +1,10 @@
 import { ApexOptions } from "apexcharts";
-import React, { useState } from "react";
+import React from "react";
 import dynamic from "next/dynamic";
 // @ts-ignore
 const ReactApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
-interface UserChartState {
+export interface UserChartState {
   series: number[];
 }
 
@@ -50,10 +50,9 @@ const options: ApexOptions = {
   ],
 };
 
-const UserChart: React.FC = () => {
-  const [state, setState] = useState<UserChartState>({
-    series: [30, 50, 20],
-  });
+const UserChart: React.FC<UserChartState> = ({
+  series
+}) => {
 
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-4">
@@ -70,37 +69,37 @@ const UserChart: React.FC = () => {
           <ReactApexChart
 // @ts-ignore
             options={options}
-            series={state.series}
+            series={series}
             type="donut"
           />
         </div>
       </div>
 
       <div className="-mx-8 flex flex-wrap items-center justify-center gap-y-3">
-        <div className="w-full px-8 sm:w-1/2">
+        <div className="w-full px-3 sm:w-1/3">
           <div className="flex w-full items-center">
-            <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-primary"></span>
+            <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#375e83]"></span>
             <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
               <span> Buyer </span>
-              <span> 30% </span>
+              <span> {(series[0] * 100 / series.reduce((acc, curr) => acc + curr, 0) ).toFixed(1) } % </span>
             </p>
           </div>
         </div>
-        <div className="w-full px-8 sm:w-1/2">
+        <div className="w-full px-3 sm:w-1/3">
           <div className="flex w-full items-center">
-            <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#6577F3]"></span>
+            <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#259ae6]"></span>
             <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
               <span> Supplier </span>
-              <span> 50% </span>
+              <span> {(series[1] * 100 / series.reduce((acc, curr) => acc + curr, 0) ).toFixed(1) } % </span>
             </p>
           </div>
         </div>
-        <div className="w-full px-8 sm:w-1/2">
+        <div className="w-full px-3 sm:w-1/3">
           <div className="flex w-full items-center">
-            <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#8FD0EF]"></span>
+            <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#ffa70b]"></span>
             <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
               <span> Investors </span>
-              <span> 20% </span>
+              <span> {(series[2] * 100 / series.reduce((acc, curr) => acc + curr, 0) ).toFixed(1) } % </span>
             </p>
           </div>
         </div>
