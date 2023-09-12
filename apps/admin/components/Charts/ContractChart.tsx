@@ -81,7 +81,7 @@ const ContractChart: React.FC<ContractState> = ({
             <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#10B981]"></span>
             <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
               <span> Pending </span>
-              <span> { (series[0] * 100 / series.reduce((acc, curr) => acc + curr, 0) ).toFixed(2) } % </span>
+              <span> { series[0] } </span>
             </p>
           </div>
         </div>
@@ -90,7 +90,7 @@ const ContractChart: React.FC<ContractState> = ({
             <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#375E83]"></span>
             <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
               <span> Expired </span>
-              <span> { (series[1] * 100 / series.reduce((acc, curr) => acc + curr, 0) ).toFixed(2) } % </span>
+              <span> { series[1] } </span>
             </p>
           </div>
         </div>
@@ -99,7 +99,7 @@ const ContractChart: React.FC<ContractState> = ({
             <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#259AE6]"></span>
             <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
               <span> Rejected </span>
-              <span> { (series[2] * 100 / series.reduce((acc, curr) => acc + curr, 0) ).toFixed(2) } % </span>
+              <span> { series[2] } </span>
             </p>
           </div>
         </div>
@@ -108,7 +108,7 @@ const ContractChart: React.FC<ContractState> = ({
             <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#FFA70B]"></span>
             <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
               <span> Funded </span>
-              <span> { (series[3] * 100 / series.reduce((acc, curr) => acc + curr, 0) ).toFixed(2) } % </span>
+              <span> { series[3] } </span>
             </p>
           </div>
         </div>
