@@ -194,10 +194,12 @@ export const Signup: FC<SignupProps> = ({
         }
 
         if (role !== 'admin') {
+          sending.current = false
           return setFinalStep(true)
         }
       } catch {
          toast('Please check your internet connection then try again');
+         sending.current = false
          return
       } finally {
         sending.current = false
@@ -281,10 +283,11 @@ export const Signup: FC<SignupProps> = ({
   
           setCookie(`${APP_TYPE}_token`, token, expireAt)
           localStorage.setItem(`${APP_TYPE}_user`, JSON.stringify(user))
-  
+          sending.current = false
           window.location.href = '/'
         } else {
            toast('successfully created');
+           sending.current = false
            return
         }
       })      
@@ -293,6 +296,7 @@ export const Signup: FC<SignupProps> = ({
         toast('the account is already registered, please login')
       } else {
          toast('Please check your internet connection then try again');
+         sending.current = false
          return
       }
     } finally {

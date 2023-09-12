@@ -81,7 +81,7 @@ const CompanyChart: React.FC<CompanyChartState> = ({
             <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#10b981]"></span>
             <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
               <span> Buyer </span>
-              <span> { (series[0] * 100 / series.reduce((acc, curr) => acc + curr, 0) ).toFixed(2) } % </span>
+              <span> { series[0] } </span>
             </p>
           </div>
         </div>
@@ -90,7 +90,7 @@ const CompanyChart: React.FC<CompanyChartState> = ({
             <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#375e83]"></span>
             <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
               <span> Supplier </span>
-              <span> { (series[1] * 100 / series.reduce((acc, curr) => acc + curr, 0) ).toFixed(2) } % </span>
+              <span> { series[1] } </span>
             </p>
           </div>
         </div>
