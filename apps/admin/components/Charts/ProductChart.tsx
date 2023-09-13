@@ -22,6 +22,11 @@ const ProductChart: React.FC<ProductChartProps> = ({
           </h5>
           <br />
         </div>
+        <div>
+          <h5 className="text-xl font-semibold text-black dark:text-white">
+            Total: {products.map((product) => product.count).reduce((acc, curr) => acc + curr, 0)}
+          </h5>
+        </div>
       </div>
 
       {products.length?<div className="-mx-8 flex flex-wrap items-center justify-center gap-y-3">
