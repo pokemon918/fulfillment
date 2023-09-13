@@ -62,6 +62,11 @@ const ContractChart: React.FC<ContractState> = ({
             Contracts
           </h5>
         </div>
+        <div>
+          <h5 className="text-xl font-semibold text-black dark:text-white">
+            Total: {series.reduce((acc, curr) => acc + curr, 0)}
+          </h5>
+        </div>
       </div>
 
       <div className="mb-2">
