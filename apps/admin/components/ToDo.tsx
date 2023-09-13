@@ -95,7 +95,7 @@ const ToDoList: React.FC<props> = ({
                           />
                         </g>
                       </svg>
-                      <p>Click here to User dashboard</p>
+                      <p>Click here to visit Users Accounts dashboard</p>
                     </div>
                   </label>
                 </div>
