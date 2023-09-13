@@ -1,5 +1,6 @@
 import { gql, graphqlReq, BaseUser, revalidateUser, timeout } from "common";
 import { toast } from "react-toastify";
+import InvestorStatusModal from "../Modal/InvestorStatusModal";
 
 const DELETE_USER = gql`
   mutation ($_id: String!) {
@@ -152,6 +153,7 @@ const UserTable = (props: BasicUserProps) => {
                           />
                         </svg>
                       </button>
+                      {user.role === 'investor' ? <InvestorStatusModal id={user._id} status="user.status" />: <></>}
                     </div>
                   </td>
                 </tr>
