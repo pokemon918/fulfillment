@@ -27,6 +27,11 @@ const SEND_MAIL = gql`
     sendContactMail(input: $input)
   }
 `
+const CREATE_QUOTE = gql`
+  mutation ($input: CreateQuoteInput!) {
+    createQuote(input: $input){_id}
+  }
+`
 
 interface QuoteStep2Props extends HTMLAttributes<HTMLFormElement> {
   product: QuoteProduct
@@ -104,15 +109,43 @@ export const QuoteStep2: FC<QuoteStep2Props> = (props) => {
         `${title} - ${paidPercent}% - ${calcAmount(total, paidPercent)}`
     )
 
-    return (
+    const termsStore = paymentTerms.map(
+      ({ title, paidPercent }) => ({title,paidPercent,total: calcAmount(total, paidPercent)})
+    )
+
+    const infoText =
       'Quote Request' +
       '\n\n' +
       baseInfo.join('\n') +
       '\n\n\n' +
       'Payment Terms:' +
       '\n' +
-      terms.join('\n')
-    )
+      terms.join('\n');
+
+      const storeData = {
+        productId: product._id,
+        companyName: company,
+        name,
+        email,
+        phone,
+        portOfLoading: {
+          shippingType: loadingPort.shippingType,
+          name: loadingPort.name,
+          country: loadingCountry
+        },
+        portOfArrival: {
+          shippingType: destinationPort.shippingType,
+          name: destinationPort.name,
+          country: destCountry
+        },
+        paymentTerms: {
+          data: termsStore
+        },
+        volume: Number(purchaseVolume),
+        SpecifyDetails: needs
+      }
+
+      return {infoText, storeData}
   }
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
@@ -134,7 +167,7 @@ export const QuoteStep2: FC<QuoteStep2Props> = (props) => {
 
     isSaving.current = true
 
-    const infoText = stringifyInfo()
+    const {infoText, storeData} = stringifyInfo()
 
     try {
       await graphqlReq(SEND_MAIL, {
@@ -144,6 +177,11 @@ export const QuoteStep2: FC<QuoteStep2Props> = (props) => {
           replyTo: email,
         },
       })
+      await graphqlReq(CREATE_QUOTE, {
+        input: storeData
+      })
+
+     // console.log(storeData)
 
       setCompleted(true)
     } catch {
