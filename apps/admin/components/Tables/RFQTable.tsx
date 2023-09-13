@@ -1,7 +1,32 @@
+import { graphqlReq } from "common";
+import { useEffect } from "react";
 
 const RFQTable = (props: any) => {
 
+  const GET_FQL = `
+  query {
+    quotes(productId: "") {
+      _id
+      companyName
+      name
+      email
+      phone
+      rfqStatus
+  	}
+  }
+  `;
+
+  const getData = async () => {
+    await graphqlReq(GET_FQL);
+  }
+
+  useEffect(() => {
+    getData()
+  },[]);
+
   return (
+
+   
     <>
       <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
         <div className="max-w-full overflow-x-auto">
@@ -35,7 +60,7 @@ const RFQTable = (props: any) => {
               </tr>
             </thead>
             <tbody>
-              {props.rfqs.map((rfq: any, key: any) => (
+              {/* {props.rfqs.map((rfq: any, key: any) => (
                 <tr key={key}>
                   <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                     <h5 className="font-medium text-black dark:text-white">
@@ -83,7 +108,7 @@ const RFQTable = (props: any) => {
                     </p>
                   </td>
                 </tr>
-              ))}
+              ))} */}
             </tbody>
           </table>
         </div>

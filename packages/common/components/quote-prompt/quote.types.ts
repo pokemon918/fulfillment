@@ -21,6 +21,7 @@ export interface QuoteInput {
 }
 
 export interface QuoteProduct {
+  _id: string
   name: string
   thumbnail: string
   country: string
