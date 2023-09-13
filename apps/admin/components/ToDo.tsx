@@ -35,7 +35,6 @@ const ToDoList: React.FC<props> = ({
                 <h5 className="mb-4 text-lg font-medium text-black dark:text-white">
                   Pending Contracts
                 </h5>
-                <p># of Pending Contracts: {pending_contracts}</p>
                 <br></br>
 
                 <div className="flex flex-col gap-2">
@@ -56,7 +55,7 @@ const ToDoList: React.FC<props> = ({
                           />
                         </g>
                       </svg>
-                      <p>Click here to contract dashboard</p>
+                      <p>Pending Contracts: {pending_contracts}</p>
                     </div>
                   </label>
                 </div>
@@ -73,10 +72,10 @@ const ToDoList: React.FC<props> = ({
             >
               <div>
                 <h5 className="mb-4 text-lg font-medium text-black dark:text-white">
-                  Investors Status
+                  Investors Account Status
                 </h5>
-                <p># of Pending Investors: {pending_investors}</p> <br />
-                <p># of Validating Investors: {validating_investors}</p><br />
+                <p># of Pending Investors account: {pending_investors}</p> <br />
+                <p># of Validating Investors account: {validating_investors}</p><br />
 
                 <div className="flex flex-col gap-2">
                   <label htmlFor="taskCheckbox1" className="cursor-pointer">
