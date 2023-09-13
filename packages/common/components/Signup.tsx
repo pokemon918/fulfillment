@@ -1,5 +1,4 @@
 import { gql } from 'graphql-request'
-import { useRouter } from 'next/router'
 import { FC, Fragment, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { APP_TYPE } from '../constants'
@@ -194,12 +193,10 @@ export const Signup: FC<SignupProps> = ({
         }
 
         if (role !== 'admin') {
-          sending.current = false
           return setFinalStep(true)
         }
       } catch {
          toast('Please check your internet connection then try again');
-         sending.current = false
          return
       } finally {
         sending.current = false
@@ -210,39 +207,39 @@ export const Signup: FC<SignupProps> = ({
       // @ts-ignore
       const cInfo = data.commercialInfo
 
-      if (cInfo.buyerType.length === 0)
+      if (cInfo.buyerType.length === 0){
          toast('Please input the buyer type');
-         return
+         return}
 
-      if (cInfo.fulfillmentProducts.length === 0)
+      if (cInfo.fulfillmentProducts.length === 0){
          toast('Please input the fulfillment products');
-         return
+         return}
 
-      if (cInfo.fulfillmentCountries.length === 0)
+      if (cInfo.fulfillmentCountries.length === 0){
          toast('Please input the fulfillment countries');
-         return
+         return}
 
-      if (cInfo.marketDestinations.length === 0)
+      if (cInfo.marketDestinations.length === 0){
          toast('Please input the market destinations');
-         return
+         return}
     } else if (data.role === 'seller') {
       // @ts-ignore
       const cInfo = data.commercialInfo
 
-      if (cInfo.fulfillmentProducts.length === 0)
+      if (cInfo.fulfillmentProducts.length === 0){
          toast('Please input the fulfillment products');
-         return
+         return}
 
-      if (cInfo.certifications.length === 0)
+      if (cInfo.certifications.length === 0){
          toast('Please select one certification at least');
-         return
+         return}
     } else if (data.role === 'investor') {
       // @ts-ignore
       const cInfo = data.commercialInfo
 
-      if (!cInfo.interestTicket)
+      if (!cInfo.interestTicket){
          toast('Please input the ticket of interest');
-         return
+         return}
     }
 
     const mutation = pendingUserToken ? FINALIZE_SIGNUP : SIGNUP
@@ -287,7 +284,6 @@ export const Signup: FC<SignupProps> = ({
           window.location.href = '/'
         } else {
            toast('successfully created');
-           sending.current = false
            return
         }
       })      
@@ -296,7 +292,6 @@ export const Signup: FC<SignupProps> = ({
         toast('the account is already registered, please login')
       } else {
          toast('Please check your internet connection then try again');
-         sending.current = false
          return
       }
     } finally {
@@ -557,6 +552,7 @@ export const Signup: FC<SignupProps> = ({
                       label="Password"
                       name="password"
                       control={control}
+                      minLength={8}
                       required
                     />
                   </>
