@@ -5,7 +5,7 @@ import UserChart, { UserChartState } from "@/components/Charts/UserChart";
 import ContractChart, { ContractState } from "@/components/Charts/ContractChart";
 import ProductChart, { ProductChartState } from "@/components/Charts/ProductChart";
 import ToDo from "@/components/ToDo";
-import { gql, graphqlReq } from "common";
+import { gql, graphqlReq, withAuth } from "common";
 
 const GET_COMPANY_STATISTICS = gql`
   query {
@@ -54,7 +54,7 @@ const GET_VALIDATING_INVESTORS = gql`
   }
 `
 
-const ECommerce: React.FC = () => {
+const DashboardPage: React.FC = () => {
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -126,4 +126,4 @@ const ECommerce: React.FC = () => {
   );
 };
 
-export default ECommerce;
+export default withAuth(DashboardPage, 'admin');

@@ -29,6 +29,8 @@ const ProductChart: React.FC<ProductChartProps> = ({
         </div>
       </div>
 
+      <br /><br />
+
       {products.length?<div className="-mx-8 flex flex-wrap items-center justify-center gap-y-3">
         {products.map((product: any) => (
             <div className="w-full px-8 sm:w-1/2">
