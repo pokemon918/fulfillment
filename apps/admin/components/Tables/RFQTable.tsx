@@ -1,5 +1,7 @@
 import { graphqlReq } from "common";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
+import RfqDetailsModal from "../Modal/RfqDetailsModal";
+import RfqSupStatusModal from "../Modal/RfqSupStatusModal";
 
 const RFQTable = (props: any) => {
 
@@ -7,18 +9,47 @@ const RFQTable = (props: any) => {
   query {
     quotes(productId: "") {
       _id
-      companyName
+      productId
+      product {
+        name {
+          en
+        }
+      }
+      volume
+      companyName                                                                                                                                     
       name
       email
       phone
+      portOfLoading
+      portOfArrival
+      paymentTerms
       rfqStatus
+      SpecifyDetails
+      createdAt
   	}
   }
   `;
 
+  const triggerDetails = useRef<any>(null);
+  const triggerStatus = useRef<any>(null);
+  const [data, setData] = useState([]);
+  const [detailsData, setDetailsData] = useState<any>({})
+  const [statusData, setStatusData] = useState<any>({})
+  const [DetailsModalOpen, setDetailsModalOpen] = useState<any>(false)
+  const [StatusModalOpen, setStatusModalOpen] = useState<any>(false)
+
   const getData = async () => {
-    await graphqlReq(GET_FQL);
+   const res = await graphqlReq(GET_FQL);
+  // console.log('res',res)
+   setData(res?.quotes);
   }
+
+  function formatDate(dateString: any) {
+    const options: any = { year: 'numeric', month: 'long', day: 'numeric' }
+    return new Date(dateString).toLocaleDateString(undefined, options)
+  }
+
+
 
   useEffect(() => {
     getData()
@@ -34,9 +65,6 @@ const RFQTable = (props: any) => {
             <thead>
               <tr className="bg-gray-2 text-left dark:bg-meta-4">
                 <th className="min-w-[20px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
-                  No
-                </th>
-                <th className="min-w-[20px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
                   Product Name
                 </th>
                 <th className="min-w-[20px] py-4 px-4 font-medium text-black dark:text-white">
@@ -49,70 +77,100 @@ const RFQTable = (props: any) => {
                   Volume
                 </th>
                 <th className="min-w-[20px] py-4 px-4 font-medium text-black dark:text-white">
-                  Price
-                </th>
-                <th className="min-w-[20px] py-4 px-4 font-medium text-black dark:text-white">
                   CreatedAt
                 </th>
                 <th className="min-w-[20px] py-4 px-4 font-medium text-black dark:text-white">
-                  Status
+                  Details
+                </th>
+                <th className="min-w-[20px] py-4 px-4 font-medium text-black dark:text-white">
+                  Suppliers Status
                 </th>
               </tr>
             </thead>
             <tbody>
-              {/* {props.rfqs.map((rfq: any, key: any) => (
+              {data?.map((rfq: any, key: any) => (
                 <tr key={key}>
                   <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                     <h5 className="font-medium text-black dark:text-white">
-                      {key+1}
-                    </h5>
-                  </td>
-                  <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                    <h5 className="font-medium text-black dark:text-white">
-                      {rfq.product}
+                      {rfq.product.name.en}
                     </h5>
                   </td>
                   <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                     <p className="text-black dark:text-white">
-                      {rfq.portOfLoading}
+                      {rfq.portOfLoading.name}, {rfq.portOfLoading.country}
                     </p>
                   </td>
                   <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                     <a className="text-black dark:text-white">
-                    {rfq.portOfArrival}
+                    {rfq.portOfArrival.name}, {rfq.portOfArrival.country}
                     </a>
                   </td>
                   <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                     <a className="text-black dark:text-white">
-                    {rfq.quantity + " kg"}
+                    {rfq.volume + " kg"}
                     </a>
                   </td>
                   <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                     <a className="text-black dark:text-white">
-                    {rfq.price + " kg"}
+                    {formatDate(rfq.createdAt)}
                     </a>
                   </td>
                   <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                    <p
-                      className={`inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium ${
-                        rfq.status === "Approved"
-                          ? "text-success bg-success" // green
-                          : rfq.status === "Rejected"
-                          ? "text-danger bg-danger" // red
-                          : rfq.status === "Pending"
-                          ? "text-warning bg-warning" // orange
-                          : "text-blue bg-blue" // blue
-                      }`}
-                    >
-                      {rfq.status}
-                    </p>
+                  <button className="hover:text-primary" onClick={() => {
+                    setDetailsData(data.find((v:any) => v._id == rfq._id));
+                    setDetailsModalOpen(true)
+                  }} ref={triggerDetails}>
+                        <svg
+                          className="fill-current"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M8.99981 14.8219C3.43106 14.8219 0.674805 9.50624 0.562305 9.28124C0.47793 9.11249 0.47793 8.88749 0.562305 8.71874C0.674805 8.49374 3.43106 3.20624 8.99981 3.20624C14.5686 3.20624 17.3248 8.49374 17.4373 8.71874C17.5217 8.88749 17.5217 9.11249 17.4373 9.28124C17.3248 9.50624 14.5686 14.8219 8.99981 14.8219ZM1.85605 8.99999C2.4748 10.0406 4.89356 13.5562 8.99981 13.5562C13.1061 13.5562 15.5248 10.0406 16.1436 8.99999C15.5248 7.95936 13.1061 4.44374 8.99981 4.44374C4.89356 4.44374 2.4748 7.95936 1.85605 8.99999Z"
+                            fill=""
+                          />
+                          <path
+                            d="M9 11.3906C7.67812 11.3906 6.60938 10.3219 6.60938 9C6.60938 7.67813 7.67812 6.60938 9 6.60938C10.3219 6.60938 11.3906 7.67813 11.3906 9C11.3906 10.3219 10.3219 11.3906 9 11.3906ZM9 7.875C8.38125 7.875 7.875 8.38125 7.875 9C7.875 9.61875 8.38125 10.125 9 10.125C9.61875 10.125 10.125 9.61875 10.125 9C10.125 8.38125 9.61875 7.875 9 7.875Z"
+                            fill=""
+                          />
+                        </svg>
+                      </button>
+                  </td>
+                  <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                  <button className="hover:text-primary" ref={triggerStatus} onClick={() => {
+                     setStatusData(data.find((v:any) => v._id == rfq._id));
+                    setStatusModalOpen(true)
+                  }}>
+                        <svg
+                          className="fill-current"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M8.99981 14.8219C3.43106 14.8219 0.674805 9.50624 0.562305 9.28124C0.47793 9.11249 0.47793 8.88749 0.562305 8.71874C0.674805 8.49374 3.43106 3.20624 8.99981 3.20624C14.5686 3.20624 17.3248 8.49374 17.4373 8.71874C17.5217 8.88749 17.5217 9.11249 17.4373 9.28124C17.3248 9.50624 14.5686 14.8219 8.99981 14.8219ZM1.85605 8.99999C2.4748 10.0406 4.89356 13.5562 8.99981 13.5562C13.1061 13.5562 15.5248 10.0406 16.1436 8.99999C15.5248 7.95936 13.1061 4.44374 8.99981 4.44374C4.89356 4.44374 2.4748 7.95936 1.85605 8.99999Z"
+                            fill=""
+                          />
+                          <path
+                            d="M9 11.3906C7.67812 11.3906 6.60938 10.3219 6.60938 9C6.60938 7.67813 7.67812 6.60938 9 6.60938C10.3219 6.60938 11.3906 7.67813 11.3906 9C11.3906 10.3219 10.3219 11.3906 9 11.3906ZM9 7.875C8.38125 7.875 7.875 8.38125 7.875 9C7.875 9.61875 8.38125 10.125 9 10.125C9.61875 10.125 10.125 9.61875 10.125 9C10.125 8.38125 9.61875 7.875 9 7.875Z"
+                            fill=""
+                          />
+                        </svg>
+                      </button>
                   </td>
                 </tr>
-              ))} */}
+              ))}
             </tbody>
           </table>
         </div>
       </div>
+      <RfqDetailsModal modalOpen={DetailsModalOpen} handelClose={() => setDetailsModalOpen(false)} trigger={triggerDetails} data={detailsData} />
+      <RfqSupStatusModal modalOpen={StatusModalOpen} handelClose={() => setStatusModalOpen(false)} trigger={triggerStatus} data={statusData} />
     </>
   );
 };
