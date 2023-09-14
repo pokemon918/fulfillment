@@ -7,7 +7,7 @@ import { Navbar } from './Navbar'
 
 const BEGIN_RESET_PASSWORD = gql`
   mutation BeginResetPassword($email: String!) {
-    beginResetPassword(email: $email)
+    beginResetPassword(email: $email, newPassword:"")
   }
 `
 
