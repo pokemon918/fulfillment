@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
+import { withAuth } from "common";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -302,4 +303,4 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   );
 };
 
-export default Sidebar;
+export default withAuth(Sidebar, 'admin');

@@ -15,8 +15,7 @@ const options: ApexOptions = {
   colors: ["#10B981", "#375E83"],
   labels: ["Buyer", "Supplier"],
   legend: {
-    show: true,
-    position: "bottom",
+    show: false,
   },
 
   plotOptions: {
@@ -79,6 +78,8 @@ const CompanyChart: React.FC<CompanyChartState> = ({
           />
         </div>
       </div>
+
+      <br /><br />
 
       <div className="-mx-8 flex flex-wrap items-center justify-center gap-y-3">
         <div className="w-full px-8 sm:w-1/2">

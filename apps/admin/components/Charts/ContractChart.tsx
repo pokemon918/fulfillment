@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 // @ts-ignore
 const ReactApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
+
 export interface ContractState {
   series: number[];
 }
@@ -12,11 +13,10 @@ const options: ApexOptions = {
   chart: {
     type: "donut",
   },
-  colors: ["#10B981", "#375E83", "#259AE6", "#FFA70B"],
-  labels: ["Pending", "Expired", "Rejected", "Funded"],
+  colors: ["#FFA70B", "#87CEEB", "#D34053", "#0000FF", "#219653"],
+  labels: ["Pending", "Expired", "Rejected", "Funded", "Approved"],
   legend: {
-    show: true,
-    position: "bottom",
+    show: false,
   },
 
   plotOptions: {
@@ -83,7 +83,7 @@ const ContractChart: React.FC<ContractState> = ({
       <div className="-mx-8 flex flex-wrap items-center justify-center gap-y-3">
         <div className="w-full px-8 sm:w-1/2">
           <div className="flex w-full items-center">
-            <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#10B981]"></span>
+            <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#FFA70B]"></span>
             <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
               <span> Pending </span>
               <span> { series[0] } </span>
@@ -92,7 +92,7 @@ const ContractChart: React.FC<ContractState> = ({
         </div>
         <div className="w-full px-8 sm:w-1/2">
           <div className="flex w-full items-center">
-            <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#375E83]"></span>
+            <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#87CEEB]"></span>
             <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
               <span> Expired </span>
               <span> { series[1] } </span>
@@ -101,7 +101,7 @@ const ContractChart: React.FC<ContractState> = ({
         </div>
         <div className="w-full px-8 sm:w-1/2">
           <div className="flex w-full items-center">
-            <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#259AE6]"></span>
+            <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#D34053]"></span>
             <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
               <span> Rejected </span>
               <span> { series[2] } </span>
@@ -110,10 +110,19 @@ const ContractChart: React.FC<ContractState> = ({
         </div>
         <div className="w-full px-8 sm:w-1/2">
           <div className="flex w-full items-center">
-            <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#FFA70B]"></span>
+            <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#0000FF]"></span>
             <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
               <span> Funded </span>
               <span> { series[3] } </span>
+            </p>
+          </div>
+        </div>
+        <div className="w-full px-8 sm:w-1/2">
+          <div className="flex w-full items-center">
+            <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#219653]"></span>
+            <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
+              <span> Approved </span>
+              <span> { series[4] } </span>
             </p>
           </div>
         </div>
