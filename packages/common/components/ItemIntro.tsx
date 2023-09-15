@@ -77,7 +77,7 @@ export const ItemIntro: FC<ItemIntroProps> = (props) => {
   };
 
   function isVideo(url:any) {
-    const videoExtensions = ['mp4', 'avi', 'mov', 'mkv', 'wmv', 'flv'];
+    const videoExtensions = ['mp4', 'avi', 'mov', 'mkv', 'wmv', 'flv','webm'];
     return videoExtensions.includes(url?.split('.').pop().toLowerCase());
   }
   
