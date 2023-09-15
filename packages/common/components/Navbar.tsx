@@ -118,7 +118,7 @@ export const Navbar: FC<NavbarProps> = (originalProps) => {
         </div>
 
         <div css={styles.deskButtons}>
-          <Button
+          {/* <Button
             css={styles.deskButton}
             variant="outlined"
             rounded
@@ -126,7 +126,7 @@ export const Navbar: FC<NavbarProps> = (originalProps) => {
             href="https://trumarket.tech/investor"
           >
             Invest now
-          </Button>
+          </Button> */}
           {user ? (
            <div className="dropdown">
            <a style={{cursor:'pointer'}} css={styles.userProfile} className="dropbtn">{user.fullName}</a>
@@ -204,7 +204,7 @@ export const Navbar: FC<NavbarProps> = (originalProps) => {
             </Link>
           ))}
 
-          <Button
+          {/* <Button
             css={styles.mobileButton}
             variant="outlined"
             rounded
@@ -212,7 +212,7 @@ export const Navbar: FC<NavbarProps> = (originalProps) => {
             href="https://trumarket.tech/investor"
           >
             Invest now
-          </Button>
+          </Button> */}
 
           {user ? (
             <Link css={styles.userProfile} href="/profile">
@@ -267,10 +267,10 @@ const useStyles = makeStyles(({ mode }: NavbarProps) => ({
     maxWidth: 'unset',
     width: '100%',
     display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-    height: 176,
-    paddingTop: 45,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    // height: 85,
+    // padding: 15,
     color: mode === 'light' ? '#000' : '#fff',
     [`@media (max-width: ${theme.widths.tablet})`]: {
       justifyContent: 'space-between',
@@ -281,12 +281,12 @@ const useStyles = makeStyles(({ mode }: NavbarProps) => ({
     },
   },
   logoWrapper: {
-    position: 'absolute',
-    left: 0,
-    top: 15,
-    height: '100%',
-    display: 'flex',
-    alignItems: 'flex-start',
+    // position: 'absolute',
+    // left: 0,
+    // top: 15,
+    // height: '100%',
+    // display: 'flex',
+    // alignItems: 'flex-start',
     [`@media (max-width: ${theme.widths.tablet})`]: {
       position: 'static',
       height: 'initial',
@@ -345,7 +345,7 @@ const useStyles = makeStyles(({ mode }: NavbarProps) => ({
     flexDirection: 'column',
     alignItems: 'flex-end',
     gap: '20px',
-    position: 'absolute',
+    // position: 'absolute',
     right: 0,
     top: 30,
     height: '100%',

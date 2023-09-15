@@ -61,7 +61,7 @@ return `${day.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}/
   }
 
 
-  const header = ["No","Date", "Company Name",  "Product Name", "Port of Loading", "Port of Arrival", "Volume KG", "Price USD", "Down Payment %", "CAD %", "On Arrival %","Needs", "Name", "Email", "Phone", "Payment Terms"];
+  const header = ["No","Date", "Company Name",  "Product Name", "Port of Loading", "Port of Arrival", "Volume KG", "Price USD", "Down Payment %", "CAD %", "On Arrival %","Needs", "Name", "Email", "Phone"];
   const body2 = data.map((v:any, index:number) => [
     `${index+1}`,
     formatDate(v.createdAt),
@@ -79,10 +79,10 @@ return `${day.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}/
     v.email,
     v.phone,
     
-    v.paymentTerms?.data.map(
-      (v: any) =>
-        `${v.title || 'N/A'} - ${v.paidPercent || 'N/A'}% - ${v.total || 'N/A'}`
-    )
+    // v.paymentTerms?.data.map(
+    //   (v: any) =>
+    //     `${v.title || 'N/A'} - ${v.paidPercent || 'N/A'}% - ${v.total || 'N/A'}`
+    // )
   ])
 
   function handleDownloadExcel() {
@@ -167,9 +167,9 @@ return `${day.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}/
                 <th className="min-w-[20px] py-4 px-4 font-medium text-black dark:text-white">
                 CRM
                 </th>
-                <th className="min-w-[20px] py-4 px-4 font-medium text-black dark:text-white">
+                {/* <th className="min-w-[20px] py-4 px-4 font-medium text-black dark:text-white">
                   Action
-                </th>
+                </th> */}
               </tr>
             </thead>
             <tbody>
@@ -263,7 +263,7 @@ return `${day.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}/
                         </svg>
                       </button>
                   </td>
-                  <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                  {/* <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
   <button
     className="hover:text-red-500"
    onClick={() => {
@@ -295,7 +295,7 @@ return `${day.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}/
     />
   </svg>
   </button>
-</td>
+</td> */}
                 </tr>
               ))}
             </tbody>
