@@ -1,4 +1,6 @@
+import { Button } from 'common';
 import React, { useEffect, useRef } from 'react';
+import { useDownloadExcel } from 'react-export-table-to-excel';
 
 interface Prop {
   modalOpen: boolean;
@@ -11,32 +13,15 @@ const RfqSupStatusModal: React.FC<Prop> = ({ modalOpen, handelClose, trigger, da
   
   const modal = useRef<any>(null);
 
-  // close on click outside
-  useEffect(() => {
-    const clickHandler = ({ target }: MouseEvent) => {
-      if (!modal.current) return;
-      if (!modalOpen || modal.current.contains(target) || trigger.current.contains(target)) return;
-      handelClose();
-    };
+   const tableRef = useRef(null);
 
-    document.addEventListener('click', clickHandler);
-    return () => {
-      document.removeEventListener('click', clickHandler);
-    };
-  }, [modalOpen, handelClose]);
+  const { onDownload } = useDownloadExcel({
+      currentTableRef: tableRef.current,
+      filename: 'Suppliers Status',
+      sheet: 'Suppliers Status'
+  })
 
-  // close if the esc key is pressed
-  useEffect(() => {
-    const keyHandler = ({ keyCode }: KeyboardEvent) => {
-      if (!modalOpen || keyCode !== 27) return;
-      handelClose();
-    };
-
-    document.addEventListener('keydown', keyHandler);
-    return () => {
-      document.removeEventListener('keydown', keyHandler);
-    };
-  }, [modalOpen, handelClose]);
+   
 
 
   
@@ -54,8 +39,28 @@ const RfqSupStatusModal: React.FC<Prop> = ({ modalOpen, handelClose, trigger, da
     >
       <div
         ref={modal}
+        style={{position:'relative'}}
         className="w-auto rounded-lg bg-white  px-8 py-8 text-center dark:bg-boxdark"
       >
+         <button
+          onClick={handelClose}
+          className="absolute top-4 right-4 text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white cursor-pointer"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            className="h-6 w-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
         <h3 className="pb-2 text-xl font-bold text-black dark:text-white sm:text-2xl">
         Suppliers
         </h3>
@@ -65,21 +70,26 @@ const RfqSupStatusModal: React.FC<Prop> = ({ modalOpen, handelClose, trigger, da
 
           <div className='flex flex-col gap-10'>
           <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
+          <Button
+        style={{ padding: '8px 12px', backgroundColor: 'var(--color-primary)', color: 'black', }}
+        onClick={onDownload}
+       // startIcon={<AddIcon />}
+      >
+        Export Data
+      </Button>
         <div className="max-w-full overflow-x-auto">
-          <table className="w-full table-auto">
+          <table ref={tableRef} className="w-full table-auto">
             <thead>
               <tr className="bg-gray-2 text-left dark:bg-meta-4">
               <th className="min-w-[20px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
                   Name
                 </th>
+               
                 <th className="min-w-[20px] py-4 px-4 font-medium text-black dark:text-white">
-                  Email
-                </th>
-                <th className="min-w-[20px] py-4 px-4 font-medium text-black dark:text-white">
-                  Phone
+                  Offer Send
                 </th>
                 <th className="py-4 px-4 font-medium text-black dark:text-white">
-                  Status
+                Interested
                 </th>
               </tr>
             </thead>
@@ -94,19 +104,15 @@ const RfqSupStatusModal: React.FC<Prop> = ({ modalOpen, handelClose, trigger, da
                             {v.name.en}
                           </h5>
                         </td>
+                       
                         <td className="border-b border-[#eee] py-4 px-4  dark:border-strokedark ">
                           <h5 className="font-medium text-black dark:text-white">
-                            {v.email}
-                          </h5>
-                        </td>
-                        <td className="border-b border-[#eee] py-4 px-4  dark:border-strokedark ">
-                          <h5 className="font-medium text-black dark:text-white">
-                            {v.phone}
+                            Yes
                           </h5>
                         </td>
                         <td className="border-b border-[#eee] py-4 px-4 dark:border-strokedark ">
                           <h5 className="font-medium text-black dark:text-white">
-                            {v.smsStatus}
+                          
                           </h5>
                         </td>
                       </tr>
