@@ -10,7 +10,7 @@ const LogsPage = (props: BasicLogProps) => {
   return (
     <>
       {/* @ts-ignore */}
-      <Breadcrumb pageName="Logs" />
+      <Breadcrumb pageName="Logs" update="none"/>
 
       <div className="flex flex-col gap-10">
         <LogTable logs={logs} />
