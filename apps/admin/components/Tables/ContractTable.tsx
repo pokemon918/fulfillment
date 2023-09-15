@@ -1,5 +1,3 @@
-import { countries, gql, graphqlReq } from "common";
-
 interface basicContractInfo {
   _id: string,
   product: string,

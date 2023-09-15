@@ -1,6 +1,7 @@
 import { countries, gql, graphqlReq, revalidateCompany, timeout } from "common";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import { useUser } from "common";
 
 interface basicCompanyInfo {
   _id: string,
@@ -16,6 +17,14 @@ const DELETE_COMPANY = gql`
   }
 `
 
+const CREATE_LOG = gql`
+  mutation createLog($input: CreateLogInput!) {
+    createLog(input: $input)  {
+      _id
+    }
+  }
+`
+
 export interface BasicCompanyProps {
   companies: basicCompanyInfo[]
 }
@@ -23,6 +32,7 @@ export interface BasicCompanyProps {
 const CompanyTable = (props: BasicCompanyProps) => {
 
   const [companies, setCompanies] = useState(props.companies)
+  const user = useUser()
 
   const deleteCompanyInfo = async (_id: string) => {
     let result = confirm("Do you want to proceed?")
@@ -30,6 +40,15 @@ const CompanyTable = (props: BasicCompanyProps) => {
       await graphqlReq(DELETE_COMPANY, { _id })
       .then(() => {
         toast("successfully deleted")
+        graphqlReq(CREATE_LOG, {
+          input: {
+            "userId": user?._id,
+            "description": {
+              "en": "Delete company "+_id,
+              "es": ""
+            }
+          }
+        })
         setCompanies(companies.filter(company => company._id !== _id))
         const callbacks = revalidateCompany(
           {

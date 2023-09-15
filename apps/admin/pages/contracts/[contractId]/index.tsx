@@ -1,7 +1,6 @@
-import { FC, useState, useEffect, SyntheticEvent, useRef } from 'react'
-import { useForm } from 'react-hook-form'
+import { useState, useEffect, SyntheticEvent, useRef } from 'react'
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import { gql, graphqlReq, countries, Select, withAuth, revalidateContract, timeout } from "common";
+import { gql, graphqlReq, withAuth, revalidateContract, timeout, useUser } from "common";
 import { GetStaticProps, GetStaticPaths } from "next";
 import { toast } from 'react-toastify';
 
@@ -50,7 +49,16 @@ const CREATEADMINCONTRACT = gql`
   }
 `
 
+const CREATE_LOG = gql`
+  mutation createLog($input: CreateLogInput!) {
+    createLog(input: $input)  {
+      _id
+    }
+  }
+`
+
 const ContractPage = (props: ContractPageProps) => {
+    const user = useUser()
 
     const [isSave, setIsSave] = useState(true);
     const sending = useRef(false)
@@ -101,6 +109,15 @@ const ContractPage = (props: ContractPageProps) => {
                 sending.current = true
                 await graphqlReq(CREATEADMINCONTRACT, { input })
                 toast('Successfully saved')
+                await graphqlReq(CREATE_LOG, {
+                    input: {
+                      "userId": user?._id,
+                      "description": {
+                        "en": "Update contract "+input._id,
+                        "es": ""
+                      }
+                    }
+                  })
                 const callbacks = revalidateContract({_id: props.contract._id})
                 const { revalidate } = callbacks;
                 (async () => {

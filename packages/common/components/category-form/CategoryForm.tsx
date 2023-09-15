@@ -10,6 +10,7 @@ import { Button, StyledLink } from '../../ui'
 import { RevalidateIndictor } from '../RevalidateIndictor'
 import { ItemDeleteButton } from '../ItemDeleteButton'
 import { toast } from 'react-toastify'
+import { useUser } from "../../hooks";
 
 const CREATE_CATEGORY = gql`
   mutation CreateCategory(
@@ -47,6 +48,14 @@ const DELETE_FILES = gql`
   }
 `
 
+const CREATE_LOG = gql`
+  mutation createLog($input: CreateLogInput!) {
+    createLog(input: $input)  {
+      _id
+    }
+  }
+`
+
 export interface CategoryFormValue {
   _id?: string
   name: LangField
@@ -63,6 +72,7 @@ export const CategoryForm: FC<CategoryFormProps> = ({
   actionType,
 }) => {
   const styles = useStyles({})
+  const user = useUser()
 
   const [success, setSuccess] = useState<{ _id: string } | false>(false)
   const [saving, setSaving] = useState(false)
@@ -89,6 +99,15 @@ export const CategoryForm: FC<CategoryFormProps> = ({
     })
       .then(({ category: { _id } }) => {
         setSuccess(_id)
+        graphqlReq(CREATE_LOG, {
+          input: {
+            "userId": user?._id,
+            "description": {
+              "en": actionType === 'update' ? "Update category "+_id : "Create category "+_id,
+              "es": ""
+            }
+          }
+        })
       })
       .catch(() => {
         toast('An error occurred, please try again.')

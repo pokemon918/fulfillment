@@ -293,6 +293,21 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               </li>
               {/* <!-- Blog End --> */}
 
+              {/* <!-- Log --> */}
+              <li>
+                <Link
+                  href="/logs"
+                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                    // @ts-ignore
+                    pathname.includes("logs") &&
+                    "bg-graydark dark:bg-meta-4"
+                  }`}
+                >
+                  Logs
+                </Link>
+              </li>
+              {/* <!-- Log End --> */}
+
             </ul>
           </div>
           {/* <!-- Intelligence End --> */}

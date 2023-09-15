@@ -32,6 +32,14 @@ const LOGIN = gql`
   }
 `
 
+const CREATE_LOG = gql`
+  mutation createLog($input: CreateLogInput!) {
+    createLog(input: $input)  {
+      _id
+    }
+  }
+`
+
 const apps = {
   fulfillment: process.env.NEXT_PUBLIC_FULFILLMENT!,
   investment: process.env.NEXT_PUBLIC_INVESTMENT!,
@@ -78,6 +86,18 @@ export const LoginPage = () => {
       if (acceptType.includes(APP_TYPE)) {
         setCookie(`${APP_TYPE}_token`, token, expireAt)
         localStorage.setItem(`${APP_TYPE}_user`, JSON.stringify(user))
+        if (user.role === 'admin' && APP_TYPE === 'admin') {
+          toast("sdf")
+          await graphqlReq(CREATE_LOG, {
+            input: {
+              "userId": user?._id,
+              "description": {
+                "en": "Log In",
+                "es": ""
+              }
+            }
+          })
+        }
         window.location.href = '/'
       } else {
         setMismatchingRole(user.role)
