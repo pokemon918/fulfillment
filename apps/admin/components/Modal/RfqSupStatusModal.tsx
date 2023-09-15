@@ -65,12 +65,12 @@ const RfqSupStatusModal: React.FC<Prop> = ({ modalOpen, handelClose, trigger, da
         CRM
         </h3>
         <Button
-        style={{backgroundColor: 'var(--color-primary)',
-        color: 'black',
+        style={{color: 'var(--color-primary)',
         padding: '5px',
         minWidth: 'auto',
         position: 'absolute',
-        right: '32px'}}
+        right: '32px',
+        background: 'transparent'}}
         onClick={onDownload}
        // startIcon={<AddIcon />}
       >

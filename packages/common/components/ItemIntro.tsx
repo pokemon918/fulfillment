@@ -76,6 +76,12 @@ export const ItemIntro: FC<ItemIntroProps> = (props) => {
     setPaginationIndex(swiper.realIndex);
   };
 
+  function isVideo(url:any) {
+    const videoExtensions = ['mp4', 'avi', 'mov', 'mkv', 'wmv', 'flv'];
+    return videoExtensions.includes(url?.split('.').pop().toLowerCase());
+  }
+  
+
   return (
     <div {...divProps}>
       <div css={styles.header}>
@@ -174,15 +180,31 @@ margin: '10px 0 45px 0'}}>
             return (
               <div>
                 <div style={{ position: 'relative' }}>
-                  <img
-                    src={item.gallery[0]}
-                    style={{
-                      width: '100%',
-                      objectFit: 'cover',
-                      borderRadius: '10px',
-                      aspectRatio: '2/1'
-                    }}
-                  />
+                {isVideo(item.gallery[0]) ? (
+  <video
+    controls
+    style={{
+      width: '100%',
+      borderRadius: '10px',
+      aspectRatio: '2/1'
+    }}
+  >
+    <source src={item.gallery[0]} type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+) : (
+  <img
+    src={item.gallery[0]}
+    alt="Image"
+    style={{
+      width: '100%',
+      objectFit: 'cover',
+      borderRadius: '10px',
+      aspectRatio: '2/1'
+    }}
+  />
+)}
+
                   <div
                     style={{
                       position: 'absolute',
