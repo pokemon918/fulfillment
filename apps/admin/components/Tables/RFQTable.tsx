@@ -1,7 +1,8 @@
-import { graphqlReq } from "common";
+import { Button, gql, graphqlReq } from "common";
 import { useEffect, useRef, useState } from "react";
 import RfqDetailsModal from "../Modal/RfqDetailsModal";
 import RfqSupStatusModal from "../Modal/RfqSupStatusModal";
+import { downloadExcel } from "react-export-table-to-excel";
 
 const RFQTable = (props: any) => {
 
@@ -30,6 +31,8 @@ const RFQTable = (props: any) => {
   }
   `;
 
+  
+
   const triggerDetails = useRef<any>(null);
   const triggerStatus = useRef<any>(null);
   const [data, setData] = useState([]);
@@ -50,6 +53,50 @@ const RFQTable = (props: any) => {
   }
 
 
+  const header = ["Date", "Product Name", "Port of Loading", "Port of Arrival", "Volume", "Price", "Company Name", "Name", "Email", "Phone", "Needs", "Payment Terms"];
+  const body2 = data.map((v:any, index:number) => [
+    formatDate(v.createdAt),
+    v.product.name.en,
+    `${v.portOfLoading.name}, ${v.portOfLoading.country}`,
+    `${v.portOfArrival.name}, ${v.portOfArrival.country}`,
+    v.volume + " kg",
+    `${v.paymentTerms.data.reduce((a:any,b:any) => a + b.total,0)}$`,
+    v.companyName,
+    v.name,
+    v.email,
+    v.phone,
+    v.SpecifyDetails,
+    v.paymentTerms?.data.map(
+      (v: any) =>
+        `${v.title || 'N/A'} - ${v.paidPercent || 'N/A'}% - ${v.total || 'N/A'}`
+    )
+  ])
+
+  function handleDownloadExcel() {
+    downloadExcel({
+      fileName: "rfq-data",
+      sheet: "rfq-data",
+      tablePayload: {
+        header,
+        // accept two different data structures
+        body: body2,
+      },
+    });
+  };
+
+  const DELETE_QUOTE = gql`
+  mutation ($id: String!) {
+    deleteQuote(_id: $id)
+  }
+`
+
+
+
+ async function deleteRfq(id:string){
+    await graphqlReq(DELETE_QUOTE,{id});
+    getData()
+  }
+
 
   useEffect(() => {
     getData()
@@ -59,11 +106,30 @@ const RFQTable = (props: any) => {
 
    
     <>
+     <div className=" flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <h2 className="text-title-md2 font-semibold text-black dark:text-white">
+        RFQ
+      </h2>
+
+      <Button
+        style={{ padding: '8px 12px', backgroundColor: 'var(--color-primary)', color: 'black', }}
+        onClick={handleDownloadExcel}
+       // startIcon={<AddIcon />}
+      >
+        Export Data
+      </Button>
+    </div>
       <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
         <div className="max-w-full overflow-x-auto">
           <table className="w-full table-auto">
             <thead>
               <tr className="bg-gray-2 text-left dark:bg-meta-4">
+                <th className="min-w-[20px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
+                  No
+                </th>
+                <th className="min-w-[20px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
+                  Date
+                </th>
                 <th className="min-w-[20px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
                   Product Name
                 </th>
@@ -77,7 +143,7 @@ const RFQTable = (props: any) => {
                   Volume
                 </th>
                 <th className="min-w-[20px] py-4 px-4 font-medium text-black dark:text-white">
-                  CreatedAt
+                  Price
                 </th>
                 <th className="min-w-[20px] py-4 px-4 font-medium text-black dark:text-white">
                   Details
@@ -85,11 +151,24 @@ const RFQTable = (props: any) => {
                 <th className="min-w-[20px] py-4 px-4 font-medium text-black dark:text-white">
                   Suppliers Status
                 </th>
+                <th className="min-w-[20px] py-4 px-4 font-medium text-black dark:text-white">
+                  Action
+                </th>
               </tr>
             </thead>
             <tbody>
               {data?.map((rfq: any, key: any) => (
                 <tr key={key}>
+                  <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                    <h5 className="font-medium text-black dark:text-white">
+                      {key+1}
+                    </h5>
+                  </td>
+                  <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                    <h5 className="font-medium text-black dark:text-white">
+                    {formatDate(rfq.createdAt)}
+                    </h5>
+                  </td>
                   <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                     <h5 className="font-medium text-black dark:text-white">
                       {rfq.product.name.en}
@@ -112,7 +191,7 @@ const RFQTable = (props: any) => {
                   </td>
                   <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                     <a className="text-black dark:text-white">
-                    {formatDate(rfq.createdAt)}
+                    {rfq.paymentTerms.data.reduce((a:any,b:any) => a + b.total,0)}$
                     </a>
                   </td>
                   <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
@@ -163,6 +242,29 @@ const RFQTable = (props: any) => {
                         </svg>
                       </button>
                   </td>
+                  <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+  <button
+    className="hover:text-red-500"
+   onClick={() => {
+    if(confirm("Are you sure delete this data")){
+      deleteRfq(rfq._id)
+    }
+   }}
+  >
+    <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className="h-5 w-5"
+    viewBox="0 0 20 20"
+    fill="currentColor"
+  >
+    <path
+      fillRule="evenodd"
+      d="M5.293 5.293a1 1 0 011.414 0L10 8.586l3.293-3.293a1 1 0 111.414 1.414L11.414 10l3.293 3.293a1 1 0 01-1.414 1.414L10 11.414l-3.293 3.293a1 1 0 01-1.414-1.414L8.586 10 5.293 6.707a1 1 0 010-1.414z"
+      clipRule="evenodd"
+    />
+  </svg>
+  </button>
+</td>
                 </tr>
               ))}
             </tbody>

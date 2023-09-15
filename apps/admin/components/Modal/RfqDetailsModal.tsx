@@ -11,32 +11,7 @@ const RfqDetailsModal: React.FC<Prop> = ({ modalOpen, handelClose, trigger, data
   
   const modal = useRef<any>(null);
 
-  // close on click outside
-  useEffect(() => {
-    const clickHandler = ({ target }: MouseEvent) => {
-      if (!modal.current) return;
-      if (!modalOpen || modal.current.contains(target) || trigger.current.contains(target)) return;
-      handelClose();
-    };
-
-    document.addEventListener('click', clickHandler);
-    return () => {
-      document.removeEventListener('click', clickHandler);
-    };
-  }, [modalOpen, handelClose]);
-
-  // close if the esc key is pressed
-  useEffect(() => {
-    const keyHandler = ({ keyCode }: KeyboardEvent) => {
-      if (!modalOpen || keyCode !== 27) return;
-      handelClose();
-    };
-
-    document.addEventListener('keydown', keyHandler);
-    return () => {
-      document.removeEventListener('keydown', keyHandler);
-    };
-  }, [modalOpen, handelClose]);
+  
 
 
   const baseInfo = [
@@ -73,8 +48,28 @@ const RfqDetailsModal: React.FC<Prop> = ({ modalOpen, handelClose, trigger, data
     >
       <div
         ref={modal}
+        style={{position:'relative'}}
         className="w-full max-w-142.5 rounded-lg bg-white py-12 px-8 text-center dark:bg-boxdark md:py-15 md:px-17.5"
       >
+        <button
+          onClick={handelClose}
+          className="absolute top-4 right-4 text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white cursor-pointer"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            className="h-6 w-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
         <h3 className="pb-2 text-xl font-bold text-black dark:text-white sm:text-2xl">
           Details
         </h3>
