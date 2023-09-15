@@ -4,7 +4,7 @@ interface BreadcrumbProps {
   pageName: string;
   href?: string;
   update: string;
-  action: () => void;
+  action?: () => void;
 }
 
 const Breadcrumb = ({ pageName, href, update="", action }: BreadcrumbProps) => {
