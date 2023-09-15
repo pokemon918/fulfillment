@@ -87,7 +87,6 @@ export const LoginPage = () => {
         setCookie(`${APP_TYPE}_token`, token, expireAt)
         localStorage.setItem(`${APP_TYPE}_user`, JSON.stringify(user))
         if (user.role === 'admin' && APP_TYPE === 'admin') {
-          toast("sdf")
           await graphqlReq(CREATE_LOG, {
             input: {
               "userId": user?._id,
