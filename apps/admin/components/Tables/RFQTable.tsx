@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import RfqDetailsModal from "../Modal/RfqDetailsModal";
 import RfqSupStatusModal from "../Modal/RfqSupStatusModal";
 import { downloadExcel } from "react-export-table-to-excel";
+import { confirmAlert } from "react-confirm-alert";
 
 const RFQTable = (props: any) => {
 
@@ -35,7 +36,7 @@ const RFQTable = (props: any) => {
 
   const triggerDetails = useRef<any>(null);
   const triggerStatus = useRef<any>(null);
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<any>([]);
   const [detailsData, setDetailsData] = useState<any>({})
   const [statusData, setStatusData] = useState<any>({})
   const [DetailsModalOpen, setDetailsModalOpen] = useState<any>(false)
@@ -48,24 +49,36 @@ const RFQTable = (props: any) => {
   }
 
   function formatDate(dateString: any) {
-    const options: any = { year: 'numeric', month: 'long', day: 'numeric' }
-    return new Date(dateString).toLocaleDateString(undefined, options)
+    const dateObject = new Date(dateString);
+
+// Extract day, month, and year components
+const day = dateObject.getUTCDate();
+const month = dateObject.getUTCMonth() + 1; // Month is 0-based, so add 1
+const year = dateObject.getUTCFullYear();
+
+// Format the components as DD/MM/YYYY
+return `${day.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}/${year}`;
   }
 
 
-  const header = ["Date", "Product Name", "Port of Loading", "Port of Arrival", "Volume", "Price", "Company Name", "Name", "Email", "Phone", "Needs", "Payment Terms"];
+  const header = ["No","Date", "Company Name",  "Product Name", "Port of Loading", "Port of Arrival", "Volume KG", "Price USD", "Down Payment %", "CAD %", "On Arrival %","Needs", "Name", "Email", "Phone", "Payment Terms"];
   const body2 = data.map((v:any, index:number) => [
+    `${index+1}`,
     formatDate(v.createdAt),
+    v.companyName,
     v.product.name.en,
     `${v.portOfLoading.name}, ${v.portOfLoading.country}`,
     `${v.portOfArrival.name}, ${v.portOfArrival.country}`,
-    v.volume + " kg",
-    `${v.paymentTerms.data.reduce((a:any,b:any) => a + b.total,0)}$`,
-    v.companyName,
+    v.volume,
+    v.paymentTerms.data.reduce((a:any,b:any) => a + b.total,0),
+    v.paymentTerms?.data[0].paidPercent+'%',
+    v.paymentTerms?.data[1].paidPercent+'%',
+    v.paymentTerms?.data[2].paidPercent+'%',
+    v.SpecifyDetails,
     v.name,
     v.email,
     v.phone,
-    v.SpecifyDetails,
+    
     v.paymentTerms?.data.map(
       (v: any) =>
         `${v.title || 'N/A'} - ${v.paidPercent || 'N/A'}% - ${v.total || 'N/A'}`
@@ -131,6 +144,9 @@ const RFQTable = (props: any) => {
                   Date
                 </th>
                 <th className="min-w-[20px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
+                Company Name
+                </th>
+                <th className="min-w-[20px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
                   Product Name
                 </th>
                 <th className="min-w-[20px] py-4 px-4 font-medium text-black dark:text-white">
@@ -149,7 +165,7 @@ const RFQTable = (props: any) => {
                   Details
                 </th>
                 <th className="min-w-[20px] py-4 px-4 font-medium text-black dark:text-white">
-                  Suppliers Status
+                CRM
                 </th>
                 <th className="min-w-[20px] py-4 px-4 font-medium text-black dark:text-white">
                   Action
@@ -167,6 +183,11 @@ const RFQTable = (props: any) => {
                   <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                     <h5 className="font-medium text-black dark:text-white">
                     {formatDate(rfq.createdAt)}
+                    </h5>
+                  </td>
+                  <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                    <h5 className="font-medium text-black dark:text-white">
+                    {rfq.companyName}
                     </h5>
                   </td>
                   <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
@@ -246,9 +267,19 @@ const RFQTable = (props: any) => {
   <button
     className="hover:text-red-500"
    onClick={() => {
-    if(confirm("Are you sure delete this data")){
-      deleteRfq(rfq._id)
-    }
+   
+  confirmAlert({
+    title:"Are you sure delete this data",
+    buttons:[
+      {
+        label: "Yes",
+        onClick: () =>  deleteRfq(rfq._id)
+      },
+      {
+        label: "No"
+      }
+    ]
+  })
    }}
   >
     <svg

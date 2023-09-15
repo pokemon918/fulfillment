@@ -48,7 +48,7 @@ const RfqDetailsModal: React.FC<Prop> = ({ modalOpen, handelClose, trigger, data
     >
       <div
         ref={modal}
-        style={{position:'relative'}}
+        style={{position:'relative',overflow:'auto'}}
         className="w-full max-w-142.5 rounded-lg bg-white py-12 px-8 text-center dark:bg-boxdark md:py-15 md:px-17.5"
       >
         <button
