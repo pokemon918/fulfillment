@@ -7,6 +7,7 @@ import Head from 'next/head'
 import { RootLayout } from "@/components/Layout";
 import { ToastContainer, toast } from 'react-toastify';
   import 'react-toastify/dist/ReactToastify.css';
+  import 'react-confirm-alert/src/react-confirm-alert.css';
 import { useFetchAuthUser, UserProvider, GlobalStyles } from 'common'
 
 const TrumarketApp = ({ Component, pageProps }: AppProps) => {
