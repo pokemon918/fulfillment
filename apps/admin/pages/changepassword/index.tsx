@@ -1,5 +1,5 @@
 import React, { SyntheticEvent, useRef } from "react";
-import { gql, graphqlReq, isGqlErrStatus, withAuth } from "common";
+import { gql, graphqlReq, isGqlErrStatus, withAuth, useUser } from "common";
 import { toast } from "react-toastify";
 
 const LOGIN = gql`
@@ -19,6 +19,14 @@ const LOGIN = gql`
 const BEGIN_RESET_PASSWORD = gql`
   mutation BeginResetPassword($email: String!, $newPassword: String!) {
     beginResetPassword(email: $email, newPassword:$newPassword)
+  }
+`
+
+const CREATE_LOG = gql`
+  mutation createLog($input: CreateLogInput!) {
+    createLog(input: $input)  {
+      _id
+    }
   }
 `
 
@@ -66,6 +74,16 @@ const ChangePassword: React.FC = () => {
               }).then((result) => {
                 if (result) {
                   toast('Successfully Updated');
+                  const existinguser = useUser()
+                  graphqlReq(CREATE_LOG, {
+                    input: {
+                      "userId": existinguser?._id,
+                      "description": {
+                        "en": "Change password",
+                        "es": ""
+                      }
+                    }
+                  })
                   return
                 }
               })

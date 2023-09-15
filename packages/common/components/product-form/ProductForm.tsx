@@ -19,6 +19,7 @@ import { RevalidateIndictor } from '../RevalidateIndictor'
 import { ItemDeleteButton } from '../ItemDeleteButton'
 import useHistoryRef from '../../hooks/useHistoryRef'
 import { toast } from 'react-toastify'
+import { useUser } from "../../hooks";
 
 const GET_CATEGORIES = gql`
   {
@@ -60,6 +61,14 @@ const DELETE_PRODUCT = gql`
 const DELETE_FILES = gql`
   mutation ($filenames: [String!]!) {
     deleteFiles(filenames: $filenames)
+  }
+`
+
+const CREATE_LOG = gql`
+  mutation createLog($input: CreateLogInput!) {
+    createLog(input: $input)  {
+      _id
+    }
   }
 `
 
@@ -131,6 +140,7 @@ export const ProductForm: FC<ProductFormProps> = ({
   const [success, setSuccess] = useState<false | { _id: string }>(false)
   const categoryIdRef = useHistoryRef(defaultValues.categoryId)
   const router = useRouter()
+  const user = useUser()
 
   const savedFilenames = useRef(
     (() => {
@@ -227,6 +237,15 @@ export const ProductForm: FC<ProductFormProps> = ({
         setSuccess({ _id })
         if(successId) successId.current = _id;
         categoryIdRef.append(categoryId)
+        graphqlReq(CREATE_LOG, {
+          input: {
+            "userId": user?._id,
+            "description": {
+              "en": actionType === 'update' ? "Update product "+_id : "Create product "+_id,
+              "es": ""
+            }
+          }
+        })
       })
       .catch(() => {
         toast('An error occurred, please try again.')

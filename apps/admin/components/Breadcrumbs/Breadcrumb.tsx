@@ -13,13 +13,13 @@ const Breadcrumb = ({ pageName, href, update="" }: BreadcrumbProps) => {
         {pageName}
       </h2>
 
-      <Button
+      {href ? <Button
         style={{ padding: '8px 12px', backgroundColor: 'var(--color-primary)', color: 'black', display: update }}
         href={href}
         startIcon={<AddIcon />}
       >
         {update === "" ? "Create" : update}
-      </Button>
+      </Button> : <></>}
     </div>
   );
 };

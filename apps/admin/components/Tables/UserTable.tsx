@@ -1,10 +1,18 @@
-import { gql, graphqlReq, BaseUser, revalidateUser, timeout } from "common";
+import { gql, graphqlReq, useUser, revalidateUser, timeout } from "common";
 import { toast } from "react-toastify";
 import InvestorStatusModal from "../Modal/InvestorStatusModal";
 
 const DELETE_USER = gql`
   mutation ($_id: String!) {
     deleteUser(_id: $_id)
+  }
+`
+
+const CREATE_LOG = gql`
+  mutation createLog($input: CreateLogInput!) {
+    createLog(input: $input)  {
+      _id
+    }
   }
 `
 
@@ -21,6 +29,7 @@ export interface BasicUserProps {
 }
 
 const UserTable = (props: BasicUserProps) => {
+  const user = useUser()
 
   const deleteUserInfo = async (_id: string) => {
     let result = confirm("Do you want to proceed?")
@@ -28,6 +37,15 @@ const UserTable = (props: BasicUserProps) => {
       await graphqlReq(DELETE_USER, { _id })
       .then(() => {
         toast("successfully deleted")
+        graphqlReq(CREATE_LOG, {
+          input: {
+            "userId": user?._id,
+            "description": {
+              "en": "Delete User "+_id,
+              "es": ""
+            }
+          }
+        })
         props.func(props.users.filter(user => user._id !== _id))
         const callbacks = revalidateUser(
           {

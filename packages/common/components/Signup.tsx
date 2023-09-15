@@ -9,7 +9,7 @@ import {
   interestTickets,
   marketDestinations,
 } from '../data'
-import { useGql } from '../hooks'
+import { useGql, useUser } from '../hooks'
 import { ArrowBackIcon } from '../icons'
 import { SignUpInfo } from '../types'
 import {
@@ -73,6 +73,14 @@ const GET_PRODUCTS = gql`
 const REGISTERED = gql`
   mutation Registered($email: String!) {
     registered(email: $email)
+  }
+`
+
+const CREATE_LOG = gql`
+  mutation createLog($input: CreateLogInput!) {
+    createLog(input: $input)  {
+      _id
+    }
   }
 `
 
@@ -255,12 +263,25 @@ export const Signup: FC<SignupProps> = ({
       sending.current = true
 
       const {
-        auth: { token, user },
+        auth: { token, createduser },
       } = await graphqlReq(mutation, { input })
+
+      if (APP_TYPE !== 'admin') {
+        const user = useUser()
+        await graphqlReq(CREATE_LOG, {
+          input: {
+            "userId": user?._id,
+            "description": {
+              "en": "Create new " + data.role + " " +createduser._id,
+              "es": ""
+            }
+          }
+        })
+      }
 
       const callbacks = revalidateUser(
         {
-          _id: user._id
+          _id: createduser._id
         },
         'create'
       )
@@ -279,7 +300,7 @@ export const Signup: FC<SignupProps> = ({
           const expireAt = new Date(Date.now() + YEAR)
   
           setCookie(`${APP_TYPE}_token`, token, expireAt)
-          localStorage.setItem(`${APP_TYPE}_user`, JSON.stringify(user))
+          localStorage.setItem(`${APP_TYPE}_user`, JSON.stringify(createduser))
           sending.current = false
           window.location.href = '/'
         } else {

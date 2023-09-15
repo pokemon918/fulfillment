@@ -1,6 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { deleteCookie, APP_TYPE, useUser } from "common";
+import { deleteCookie, APP_TYPE, useUser, gql, graphqlReq } from "common";
+
+const CREATE_LOG = gql`
+  mutation createLog($input: CreateLogInput!) {
+    createLog(input: $input)  {
+      _id
+    }
+  }
+`
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -35,11 +43,21 @@ const DropdownUser = () => {
     return () => document.removeEventListener("keydown", keyHandler);
   });
 
-  const logout = () => {
+  const logout = async () => {
     if (user) {
-      deleteCookie(`${APP_TYPE}_token`)
-      window.localStorage.removeItem(`${APP_TYPE}_user`)
-      window.location.href = '/'
+      await graphqlReq(CREATE_LOG, {
+        input: {
+          "userId": user?._id,
+          "description": {
+            "en": "Log out",
+            "es": ""
+          }
+        }
+      }).then(() => {
+        deleteCookie(`${APP_TYPE}_token`)
+        window.localStorage.removeItem(`${APP_TYPE}_user`)
+        window.location.href = '/'
+      })
     } else {
       window.location.href = '/login'
     }

@@ -1,9 +1,19 @@
 import { FC, HTMLAttributes, useState } from 'react'
+import { gql } from 'graphql-request'
 import { Button } from '../ui'
 import { useRouter } from 'next/router'
 import { RevalidateIndictor, RevalidateInfo } from './RevalidateIndictor'
 import { graphqlReq, makeStyles } from '../utils'
 import { toast } from 'react-toastify'
+import { useUser } from "../hooks";
+
+const CREATE_LOG = gql`
+  mutation createLog($input: CreateLogInput!) {
+    createLog(input: $input)  {
+      _id
+    }
+  }
+`
 
 interface ItemDeleteButtonProps extends HTMLAttributes<HTMLDivElement> {
   itemId: string
@@ -17,6 +27,7 @@ interface ItemDeleteButtonProps extends HTMLAttributes<HTMLDivElement> {
 export const ItemDeleteButton: FC<ItemDeleteButtonProps> = (props) => {
   const [deleting, setDeleting] = useState(false)
   const [deleted, setDeleted] = useState(false)
+  const user = useUser()
 
   const styles = useStyles(props)
   const router = useRouter()
@@ -45,6 +56,15 @@ export const ItemDeleteButton: FC<ItemDeleteButtonProps> = (props) => {
       try {
         await graphqlReq(mutation, { _id: itemId })
         setDeleted(true)
+        await graphqlReq(CREATE_LOG, {
+          input: {
+            "userId": user?._id,
+            "description": {
+              "en": "Delete "+itemType+" "+itemId,
+              "es": ""
+            }
+          }
+        })
       } catch (e: any) {
         const formatted = errorFormatter
           ? errorFormatter(e)

@@ -11,6 +11,7 @@ import { KeywordsSelect } from '../KeywordsSelect'
 import { RevalidateIndictor } from '../RevalidateIndictor'
 import { ItemDeleteButton } from '../ItemDeleteButton'
 import { toast } from 'react-toastify'
+import { useUser } from "../../hooks";
 
 const CREATE_ARTICLE = gql`
   mutation CreateArticle($input: CreateArticleInput!, $filenames: [String!]!) {
@@ -53,6 +54,14 @@ const GET_KEYWORDS = gql`
   }
 `
 
+const CREATE_LOG = gql`
+  mutation createLog($input: CreateLogInput!) {
+    createLog(input: $input)  {
+      _id
+    }
+  }
+`
+
 export interface ArticleFormValue {
   _id?: string
   title: LangField
@@ -72,7 +81,7 @@ export const ArticleForm: FC<ArticleFormProps> = ({
   actionType,
 }) => {
   const styles = useStyles({})
-
+  const user = useUser()
   const articleId = defaultValues._id
 
   const [success, setSuccess] = useState<{ _id: string } | false>(false)
@@ -102,6 +111,15 @@ export const ArticleForm: FC<ArticleFormProps> = ({
     })
       .then(({ article: { _id } }) => {
         setSuccess({ _id })
+        graphqlReq(CREATE_LOG, {
+          input: {
+            "userId": user?._id,
+            "description": {
+              "en": actionType === 'update' ? "Update article "+_id : "Create article"+_id,
+              "es": ""
+            }
+          }
+        })
       })
       .catch(() => {
         toast('An error occurred, please try again.')

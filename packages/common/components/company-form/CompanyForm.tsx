@@ -17,6 +17,7 @@ import { ProductForm, ProductFormValue } from "../product-form/ProductForm";
 import { theme } from "../../theme";
 import { SharedProvider } from "../../contexts";
 import { toast } from 'react-toastify'
+import { useUser } from "../../hooks";
 
 const GET_PRODUCTS = gql`
   {
@@ -40,6 +41,14 @@ const CREATE_COMPANY = gql`
 const UPDATE_COMPANY = gql`
   mutation UpdateCompany($input: UpdateCompanyInput!) {
     company: updateCompany(input: $input) {
+      _id
+    }
+  }
+`
+
+const CREATE_LOG = gql`
+  mutation createLog($input: CreateLogInput!) {
+    createLog(input: $input)  {
       _id
     }
   }
@@ -79,6 +88,7 @@ export const CompanyForm: FC<CompanyFormProps> = ({
 }) => {
 
   const [myName, setMyName] = useState('');
+  const user = useUser()
 
   const updateName = (newValue: string) => {
     setMyName(newValue);
@@ -270,6 +280,15 @@ export const CompanyForm: FC<CompanyFormProps> = ({
       .then(({ company: { _id }}) => {
         toast(`Successfully ` + actionType + `d`)
         setSaving(false)
+        graphqlReq(CREATE_LOG, {
+          input: {
+            "userId": user?._id,
+            "description": {
+              "en": actionType === 'update' ? "Update company "+_id : "Create company "+_id,
+              "es": ""
+            }
+          }
+        })
         const callbacks = revalidateCompany(
           {
             _id: _id
