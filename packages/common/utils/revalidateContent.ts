@@ -80,7 +80,7 @@ export const revalidateArticle = (
   const paths = {
     fulfillment: commonPaths,
     investment: commonPaths,
-    admin: [...commonPaths, '/logs',],
+    admin: ['/blog', `/blog/${article._id}`, '/logs',],
   }
 
   return revalidateCrossPaths(paths)

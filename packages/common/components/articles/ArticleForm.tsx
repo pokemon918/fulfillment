@@ -115,7 +115,7 @@ export const ArticleForm: FC<ArticleFormProps> = ({
           input: {
             "userId": user?._id,
             "description": {
-              "en": actionType === 'update' ? "Update article "+_id : "Create article"+_id,
+              "en": actionType === 'update' ? "Update article "+_id : "Create article "+_id,
               "es": ""
             }
           }

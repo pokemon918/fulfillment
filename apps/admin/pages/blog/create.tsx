@@ -1,8 +1,7 @@
-import { ArticleForm, ArticleFormValue, Container, makeStyles, PageLayout } from 'common'
+import { ArticleForm, ArticleFormValue, Container, PageLayout } from 'common'
 import { FC } from 'react'
 
-const PageArticleCreate: FC<Props> = (props) => {
-  const styles = useStyles(props)
+const PageArticleCreate: FC = () => {
 
   const defaultValues: ArticleFormValue = {
     title: { en: '', es: '' },
@@ -22,8 +21,3 @@ const PageArticleCreate: FC<Props> = (props) => {
 }
 
 export default PageArticleCreate
-
-interface Props {}
-
-// styles
-const useStyles = makeStyles(() => ({}))
