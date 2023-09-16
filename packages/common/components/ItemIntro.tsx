@@ -84,7 +84,7 @@ export const ItemIntro: FC<ItemIntroProps> = (props) => {
 
   return (
     <div {...divProps}>
-      <div css={styles.header}>
+      {/* <div css={styles.header}>
         <Link css={styles.back} href="/">
           <BackIcon style={{ marginRight: 0, color: '#90AF47' }} />
           <span>Back to homepage</span>
@@ -107,7 +107,7 @@ export const ItemIntro: FC<ItemIntroProps> = (props) => {
             >{`${countryName}-${item.name}`}</span>
           </Link>
         )}
-      </div>
+      </div> */}
 
       <div css={styles.megaContainer}>
         <div css={styles.scrollContainer}>
@@ -361,7 +361,7 @@ margin: '10px 0 45px 0'}}>
           </div>
 
           <div css={styles.harvestingContainer}>
-            <div style={{ padding: '20px' }}>
+            <div style={{ padding: '20px',paddingBottom:'0' }}>
               <p
                 style={{
                   fontWeight: 'bold',
@@ -540,7 +540,7 @@ top: '10px'
     width: '100%',
     display: 'flex',
     borderBottom: '1px solid rgba(217, 217, 217, 0.5)',
-    padding: '20px',
+    padding: '10px 20px',
     [`@media (max-height: 760px)`]:{
       padding: '5px'
     },
@@ -637,7 +637,7 @@ top: '10px'
   },
   gradeDetailContainer: {
     textAlign: 'center',
-    padding: '25px',
+    padding: '10px',
     display: 'flex',
     justifyContent: 'center',
     background: '#F8F8F8',

@@ -38,6 +38,10 @@ const staticLinks: {
       title: 'Contact us',
       to: 'https://trumarket.tech/contactus',
     },
+    {
+      title: 'Invest now',
+      to: 'https://trumarket.tech/investor',
+    },
   ]
 
 export const Navbar: FC<NavbarProps> = (originalProps) => {
