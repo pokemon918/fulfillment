@@ -233,7 +233,7 @@ export const ProductForm: FC<ProductFormProps> = ({
       input,
       filenames: deletedFilenames.current,
     })
-      .then(({ product: { _id, categoryId, name } }) => {
+      .then(({ product: { _id, categoryId } }) => {
         setSuccess({ _id })
         if(successId) successId.current = _id;
         categoryIdRef.append(categoryId)
@@ -241,7 +241,7 @@ export const ProductForm: FC<ProductFormProps> = ({
           input: {
             "userId": user?._id,
             "description": {
-              "en": actionType === 'update' ? "Update product "+name.en : "Create product "+name.en,
+              "en": actionType === 'update' ? "Update product "+product.name.en : "Create product "+product.name.en,
               "es": ""
             }
           }

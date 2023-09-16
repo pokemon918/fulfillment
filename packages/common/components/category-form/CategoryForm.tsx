@@ -97,19 +97,20 @@ export const CategoryForm: FC<CategoryFormProps> = ({
       input: category,
       filenames: deletedFilenames.current,
     })
-      .then(({ category: { _id, name } }) => {
+      .then(({ category: { _id } }) => {
         setSuccess(_id)
         graphqlReq(CREATE_LOG, {
           input: {
             "userId": user?._id,
             "description": {
-              "en": actionType === 'update' ? "Update category "+name.en : "Create category "+name.en,
+              "en": actionType === 'update' ? "Update category "+category.name.en : "Create category "+category.name.en,
               "es": ""
             }
           }
         })
       })
-      .catch(() => {
+      .catch((e) => {
+        console.log(e)
         toast('An error occurred, please try again.')
       })
       .finally(() => {

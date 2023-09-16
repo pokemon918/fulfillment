@@ -109,13 +109,13 @@ export const ArticleForm: FC<ArticleFormProps> = ({
       input: article,
       filenames: deletedFilenames.current,
     })
-      .then(({ article: { _id, title } }) => {
+      .then(({ article: { _id } }) => {
         setSuccess({ _id })
         graphqlReq(CREATE_LOG, {
           input: {
             "userId": user?._id,
             "description": {
-              "en": actionType === 'update' ? "Update article "+title.en : "Create article "+title.en,
+              "en": actionType === 'update' ? "Update article "+article.title.en : "Create article "+article.title.en,
               "es": ""
             }
           }

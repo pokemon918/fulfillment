@@ -277,14 +277,14 @@ export const CompanyForm: FC<CompanyFormProps> = ({
     graphqlReq(actionType === 'update' ? UPDATE_COMPANY : CREATE_COMPANY, {
       input
     })
-      .then(({ company: { _id, name }}) => {
+      .then(({ company: { _id }}) => {
         toast(`Successfully ` + actionType + `d`)
         setSaving(false)
         graphqlReq(CREATE_LOG, {
           input: {
             "userId": user?._id,
             "description": {
-              "en": actionType === 'update' ? "Update company "+name.en : "Create company "+name.en,
+              "en": actionType === 'update' ? "Update company "+company.name.en : "Create company "+company.name.en,
               "es": ""
             }
           }

@@ -88,6 +88,7 @@ export const Signup: FC<SignupProps> = ({
   pendingUserToken,
   defaultFullName,
 }) => {
+  const existinguser = useUser()
   const styles = useStyles({})
 
   const [finalStep, setFinalStep] = useState(false)
@@ -263,25 +264,12 @@ export const Signup: FC<SignupProps> = ({
       sending.current = true
 
       const {
-        auth: { token, createduser }, // createduser is only for admin, normally, it is signed user
+        auth: { token, user },
       } = await graphqlReq(mutation, { input })
-
-      if (APP_TYPE !== 'admin') {
-        const user = useUser()
-        await graphqlReq(CREATE_LOG, {
-          input: {
-            "userId": user?._id,
-            "description": {
-              "en": "Create new " + data.role + " " +createduser.fullName,
-              "es": ""
-            }
-          }
-        })
-      }
 
       const callbacks = revalidateUser(
         {
-          _id: createduser._id
+          _id: user._id
         },
         'create'
       )
@@ -300,10 +288,19 @@ export const Signup: FC<SignupProps> = ({
           const expireAt = new Date(Date.now() + YEAR)
   
           setCookie(`${APP_TYPE}_token`, token, expireAt)
-          localStorage.setItem(`${APP_TYPE}_user`, JSON.stringify(createduser))
+          localStorage.setItem(`${APP_TYPE}_user`, JSON.stringify(user))
           sending.current = false
           window.location.href = '/'
         } else {
+            graphqlReq(CREATE_LOG, {
+              input: {
+                "userId": existinguser?._id,
+                "description": {
+                  "en": "Create new " + user.role + " " +user.fullName,
+                  "es": ""
+                }
+              }
+            })
            toast('successfully created');
            return
         }
