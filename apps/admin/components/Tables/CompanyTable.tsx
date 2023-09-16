@@ -44,7 +44,7 @@ const CompanyTable = (props: BasicCompanyProps) => {
           input: {
             "userId": user?._id,
             "description": {
-              "en": "Delete company "+_id,
+              "en": "Delete company "+companies.filter(company => company._id === _id)[0].name,
               "es": ""
             }
           }

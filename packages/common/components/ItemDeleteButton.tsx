@@ -20,6 +20,7 @@ interface ItemDeleteButtonProps extends HTMLAttributes<HTMLDivElement> {
   mutation: string
   redirect: string
   itemType: string
+  log_name: string
   getRevalidateInfo: () => RevalidateInfo
   errorFormatter?: (e: any) => string
 }
@@ -36,6 +37,7 @@ export const ItemDeleteButton: FC<ItemDeleteButtonProps> = (props) => {
     itemId,
     mutation,
     itemType,
+    log_name,
     redirect,
     getRevalidateInfo,
     errorFormatter,
@@ -60,7 +62,7 @@ export const ItemDeleteButton: FC<ItemDeleteButtonProps> = (props) => {
           input: {
             "userId": user?._id,
             "description": {
-              "en": "Delete "+itemType+" "+itemId,
+              "en": "Delete "+itemType+" "+log_name,
               "es": ""
             }
           }

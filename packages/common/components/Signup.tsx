@@ -263,7 +263,7 @@ export const Signup: FC<SignupProps> = ({
       sending.current = true
 
       const {
-        auth: { token, createduser },
+        auth: { token, createduser }, // createduser is only for admin, normally, it is signed user
       } = await graphqlReq(mutation, { input })
 
       if (APP_TYPE !== 'admin') {
@@ -272,7 +272,7 @@ export const Signup: FC<SignupProps> = ({
           input: {
             "userId": user?._id,
             "description": {
-              "en": "Create new " + data.role + " " +createduser._id,
+              "en": "Create new " + data.role + " " +createduser.fullName,
               "es": ""
             }
           }

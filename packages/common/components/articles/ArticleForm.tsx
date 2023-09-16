@@ -109,13 +109,13 @@ export const ArticleForm: FC<ArticleFormProps> = ({
       input: article,
       filenames: deletedFilenames.current,
     })
-      .then(({ article: { _id } }) => {
+      .then(({ article: { _id, title } }) => {
         setSuccess({ _id })
         graphqlReq(CREATE_LOG, {
           input: {
             "userId": user?._id,
             "description": {
-              "en": actionType === 'update' ? "Update article "+_id : "Create article "+_id,
+              "en": actionType === 'update' ? "Update article "+title.en : "Create article "+title.en,
               "es": ""
             }
           }
@@ -238,6 +238,7 @@ export const ArticleForm: FC<ArticleFormProps> = ({
               css={styles.deleteBtnSection}
               mutation={DELETE_ARTICLE}
               itemId={articleId}
+              log_name={defaultValues.title.en}
               getRevalidateInfo={() =>
                 revalidateArticle({ _id: articleId }, 'delete')
               }

@@ -41,7 +41,7 @@ const UserTable = (props: BasicUserProps) => {
           input: {
             "userId": user?._id,
             "description": {
-              "en": "Delete User "+_id,
+              "en": "Delete User "+props.users.filter(user => user._id === _id)[0].fullName,
               "es": ""
             }
           }

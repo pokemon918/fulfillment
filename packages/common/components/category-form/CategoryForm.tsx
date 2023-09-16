@@ -97,13 +97,13 @@ export const CategoryForm: FC<CategoryFormProps> = ({
       input: category,
       filenames: deletedFilenames.current,
     })
-      .then(({ category: { _id } }) => {
+      .then(({ category: { _id, name } }) => {
         setSuccess(_id)
         graphqlReq(CREATE_LOG, {
           input: {
             "userId": user?._id,
             "description": {
-              "en": actionType === 'update' ? "Update category "+_id : "Create category "+_id,
+              "en": actionType === 'update' ? "Update category "+name.en : "Create category "+name.en,
               "es": ""
             }
           }
@@ -183,6 +183,7 @@ export const CategoryForm: FC<CategoryFormProps> = ({
               getRevalidateInfo={() =>
                 revalidateCategory({ _id: categoryId }, 'delete')
               }
+              log_name={defaultValues.name.en}
               redirect="/categories"
               itemType="category"
               errorFormatter={() => 'Cannot delete this category because it has associated products'}
