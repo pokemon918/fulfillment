@@ -554,6 +554,7 @@ export const InvestmentForm: FC<InvestmentFormProps> = ({
                     'delete'
                   )
                 }
+                log_name='investment'
                 redirect={`/investments`}
                 itemType="investment"
               />
